@@ -1,0 +1,1001 @@
+openapi: 3.0.3
+info:
+  title: UniSat Wallet - OpenAPI
+  version: 1.0.4
+  description: To use the OpenAPI, please register and log in at the UniSat Developer Center (https://developer.unisat.io). Once registered, you can directly obtain a free-plan API key through the developer center.
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+  - url: https://open-api-testnet.unisat.io
+  - url: https://open-api-testnet4.unisat.io
+  - url: https://open-api-signet.unisat.io
+  - url: https://open-api-fractal.unisat.io
+  - url: https://open-api-fractal-testnet.unisat.io
+tags:
+  - name: Blocks
+    description: Blocks
+  - name: Transactions
+    description: Transactions
+  - name: Addresses
+    description: Addresses
+
+paths:
+  /v1/indexer/blockchain/info:
+    get:
+      tags:
+        - Blocks
+      summary: >
+        Get blockchain info.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      chain:
+                        type: string
+                      blocks:
+                        type: integer
+                      headers:
+                        type: integer
+                      bestBlockHash:
+                        type: string
+                      prevBlockHash:
+                        type: string
+                      medianTime:
+                        type: integer
+                      chainwork:
+                        type: string
+        "401":
+          description: Invalid API Key
+  /v1/indexer/fees/recommended:
+    get:
+      tags:
+        - Blocks
+      summary: >
+        Get Recommended Fees. (sat/vB)
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      fastestFee:
+                        type: integer
+                      halfHourFee:
+                        type: integer
+                      hourFee:
+                        type: integer
+                      economyFee:
+                        type: integer
+                      minimumFee:
+                        type: integer
+                      updateTime:
+                        type: integer
+        "401":
+          description: Invalid API Key
+  /v1/indexer/height/{height}/block:
+    get:
+      tags:
+        - Blocks
+      summary: Get block info by block height.
+      parameters:
+        - name: height
+          description: Block height
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 1
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/BlockInfo"
+        "401":
+          description: Invalid API Key
+  /v1/indexer/block/id/{blockid}:
+    get:
+      tags:
+        - Blocks
+      summary: Get block info by blockid.
+      parameters:
+        - name: blockid
+          description: Block id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/BlockInfo"
+        "401":
+          description: Invalid API Key
+  /v1/indexer/block/{height}/txs:
+    get:
+      tags:
+        - Blocks
+      summary: Get tx history by block height.
+      parameters:
+        - name: height
+          description: Block height
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 800000
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/TxHistoryItem"
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+  /v1/indexer/tx/{txid}:
+    get:
+      tags:
+        - Transactions
+      summary: Get the summary info of a tx.
+      parameters:
+        - name: txid
+          description: Tx id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/TxHistoryItem"
+        "401":
+          description: Invalid API Key
+  /v1/indexer/tx/{txid}/ins:
+    get:
+      tags:
+        - Transactions
+      summary: Get the inputs of a tx.
+      parameters:
+        - name: txid
+          description: Tx id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      address:
+                        type: string
+                      codeType:
+                        description: >-
+                          0~3: Reserved , 4: CodeType_P2PK, 5: CodeType_P2PKH,
+                          6: CodeType_P2SH, 7: CodeType_P2WPKH, 8:
+                          CodeType_P2WSH, 9: CodeType_P2TR
+                        type: integer
+                        enum:
+                          - 0
+                          - 1
+                          - 2
+                          - 3
+                          - 4
+                          - 5
+                          - 6
+                          - 7
+                          - 8
+                          - 9
+                      inscriptions:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/InscriptionItem"
+                      satoshi:
+                        type: integer
+                      scriptPk:
+                        type: string
+                      scriptSig:
+                        type: string
+                      scriptType:
+                        type: string
+                      scriptWits:
+                        type: string
+                      sequence:
+                        type: integer
+                      height:
+                        type: integer
+                      txid:
+                        type: string
+                      idx:
+                        type: integer
+                      heightTxo:
+                        type: integer
+                      utxid:
+                        type: string
+                      vout:
+                        type: integer
+        "401":
+          description: Invalid API Key
+  /v1/indexer/tx/{txid}/outs:
+    get:
+      tags:
+        - Transactions
+      summary: Get the outputs of a tx.
+      parameters:
+        - name: txid
+          description: Tx id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      address:
+                        type: string
+                      codeType:
+                        type: integer
+                      inscriptions:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/InscriptionItem"
+                      satoshi:
+                        type: integer
+                      scriptPk:
+                        type: string
+                      scriptType:
+                        type: string
+                      height:
+                        type: integer
+                      txid:
+                        type: string
+                      idx:
+                        type: integer
+                      heightSpent:
+                        type: integer
+                      txidSpent:
+                        type: string
+                      vout:
+                        type: integer
+        "401":
+          description: Invalid API Key
+  /v1/indexer/rawtx/{txid}:
+    get:
+      tags:
+        - Transactions
+      summary: Get a rawtx
+      parameters:
+        - name: txid
+          description: Tx id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: string
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/utxo/{txid}/{index}:
+    get:
+      tags:
+        - Transactions
+      summary: Get the utxo info
+      parameters:
+        - name: txid
+          description: Tx id
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: index
+          description: Tx id
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      txid:
+                        type: string
+                      vout:
+                        type: integer
+                        example: 0
+                      satoshi:
+                        type: integer
+                        example: 10000
+                      scriptType:
+                        type: string
+                      scriptPk:
+                        type: string
+                      codeType:
+                        type: integer
+                      address:
+                        type: string
+                      height:
+                        type: integer
+                      idx:
+                        type: integer
+                      inscriptions:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/InscriptionItem"
+                      isOpInRBF:
+                        type: boolean
+                        example: false
+                      isSpent:
+                        type: boolean
+                        example: false
+
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/local_pushtx:
+    post:
+      tags:
+        - Transactions
+      summary: Push rawtx to bitcoin node.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LocalPushParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: string
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/local_pushtxs:
+    post:
+      tags:
+        - Transactions
+      summary: Push multiple rawtxs to bitcoin node.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LocalPushtxsParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: array
+                    items:
+                      type: string
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/address/{address}/balance:
+    get:
+      tags:
+        - Addresses
+      description: Get balance by address.
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      address:
+                        type: string
+                      satoshi:
+                        type: integer
+                      pendingSatoshi:
+                        type: integer
+                      utxoCount:
+                        type: integer
+                      btcSatoshi:
+                        type: integer
+                      btcPendingSatoshi:
+                        type: integer
+                      btcUtxoCount:
+                        type: integer
+                      inscriptionSatoshi:
+                        type: integer
+                      inscriptionPendingSatoshi:
+                        type: integer
+                      inscriptionUtxoCount:
+                        type: integer
+        "401":
+          description: Invalid API Key
+  /v1/indexer/address/{address}/history:
+    get:
+      tags:
+        - Addresses
+      description: Get the tx history by address.
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/TxHistoryItem"
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+  /v1/indexer/address/{address}/utxo-data:
+    get:
+      tags:
+        - Addresses
+      summary: Get non inscription UTXO list by address
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      cursor:
+                        type: integer
+                      total:
+                        type: integer
+                      totalConfirmed:
+                        type: integer
+                      totalUnconfirmed:
+                        type: integer
+                      totalUnconfirmedSpend:
+                        type: integer
+                      utxo:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/UTXO"
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/address/{address}/available-balance:
+    get:
+      tags:
+        - Addresses
+      description: Get available balance by address.
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      totalBalance:
+                        type: integer
+                      totalUtxoCount:
+                        type: integer
+                      availableBalance:
+                        type: integer
+                      availableUtxoCount:
+                        type: integer
+                      unavailableBalance:
+                        type: integer
+                      unavailableUtxoCount:
+                        type: integer
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/address/{address}/available-utxo-data:
+    get:
+      tags:
+        - Addresses
+      summary: Get available UTXO list by address (unlocked by utxo-tools and larger than 600 satoshis)
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      cursor:
+                        type: integer
+                      total:
+                        type: integer
+                      totalConfirmed:
+                        type: integer
+                      totalUnconfirmed:
+                        type: integer
+                      totalUnconfirmedSpend:
+                        type: integer
+                      utxo:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/UTXO"
+        "401":
+          description: Invalid API Key
+
+components:
+  schemas:
+    BlockInfo:
+      type: object
+      properties:
+        height:
+          type: integer
+        version:
+          type: string
+        auxpow:
+          type: boolean
+        id:
+          type: string
+        prev:
+          type: string
+        next:
+          type: string
+        merkle:
+          type: string
+        ntx:
+          type: integer
+        inSatoshi:
+          type: integer
+        outSatoshi:
+          type: integer
+        coinbaseOut:
+          type: number
+        timestamp:
+          type: integer
+        bits:
+          type: number
+        size:
+          type: integer
+    LocalPushParams:
+      type: object
+      properties:
+        txHex:
+          type: string
+          description: rawtx
+          example: ""
+        maxFeeRate:
+          type: number
+          description: maxfeerate (optional)
+          example: 1000
+    LocalPushtxsParams:
+      type: object
+      properties:
+        txsHex:
+          type: array
+          items:
+            type: string
+            description: rawtx
+            example: ""
+        maxFeeRate:
+          type: number
+          description: maxfeerate (optional)
+          example: 1000
+    TxHistoryItem:
+      type: object
+      properties:
+        txid:
+          type: string
+        nIn:
+          type: integer
+        nOut:
+          type: integer
+        inSatoshi:
+          type: integer
+        outSatoshi:
+          type: integer
+        locktime:
+          type: integer
+        size:
+          type: integer
+        witOffset:
+          type: integer
+        height:
+          type: integer
+        idx:
+          type: integer
+        blkid:
+          type: string
+        confirmations:
+          type: integer
+        timestamp:
+          type: integer
+    UTXO:
+      type: object
+      properties:
+        address:
+          type: string
+        codeType:
+          type: integer
+        height:
+          type: integer
+        idx:
+          type: integer
+        inscriptions:
+          type: array
+          items:
+            $ref: "#/components/schemas/InscriptionItem"
+        isOpInRBF:
+          type: boolean
+          example: false
+        satoshi:
+          type: integer
+          example: 10000
+        scriptPk:
+          type: string
+        scriptType:
+          type: string
+        txid:
+          type: string
+        vout:
+          type: integer
+          example: 0
+    InscriptionItem:
+      type: object
+      properties:
+        inscriptionId:
+          type: string
+        inscriptionNumber:
+          type: integer
+        isBRC20:
+          type: boolean
+        moved:
+          type: boolean
+        offset:
+          type: integer
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

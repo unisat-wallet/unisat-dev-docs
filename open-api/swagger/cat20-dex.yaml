@@ -1,0 +1,177 @@
+openapi: 3.0.3
+info:
+  title: CAT20 DEX API
+  version: 1.0.4
+  description: >-
+    This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel
+    free to send us an email, and we will provide you with an API KEY.
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api-fractal.unisat.io
+tags:
+  - name: CAT20-DEX
+    description: CAT20 DEX Service
+paths:
+  /v1/cat20-dex/getTokenPrice:
+    get:
+      tags:
+        - CAT20-DEX
+      summary: Get token price
+      parameters:
+        - name: tokenId
+          description: tokenId
+          in: query
+          required: true
+          schema:
+            type: string
+          example: 45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      askPrice:
+                        type: number
+                      bidPrice:
+                        type: number
+                      latestTradePrice:
+                        type: number
+                      timestamp:
+                        type: string
+                      height:
+                        type: integer
+        "401":
+          description: Invalid API Key
+  /v1/cat20-dex/getMarketStats:
+    get:
+      tags:
+        - CAT20-DEX
+      summary: Get the market stats
+      description: >-
+        Retrieves the market stats for all tokens which have trades in the last
+        30 days
+      parameters:
+        - name: sortField
+          description: >-
+            The field to sort by ('volume', 'volume30d', 'volume7d',
+            'volume24h', 'volume6h')
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - volume
+              - volume30d
+              - volume7d
+              - volume24h
+              - volume6h
+        - name: tokenId
+          description: tokenId
+          in: query
+          required: false
+          schema:
+            type: string
+          example: 45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0
+        - name: offset
+          description: The offset to start from
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          description: The limit of the stats (default 20, max 100)
+          in: query
+          required: false
+          schema:
+            type: integer
+            example: 20
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      tokenStats:
+                        $ref: "#/components/schemas/CAT20TokenStats"
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+components:
+  schemas:
+    CAT20TokenStats:
+      type: object
+      properties:
+        tokenId:
+          type: string
+        volume:
+          type: string
+        volume30d:
+          type: string
+        volume24h:
+          type: string
+        volume7d:
+          type: string
+        volume6h:
+          type: string
+        price:
+          type: number
+        price6h:
+          type: number
+        price24h:
+          type: number
+        price7d:
+          type: number
+        price30d:
+          type: number
+        name:
+          type: string
+        symbol:
+          type: string
+        decimals:
+          type: integer
+        max:
+          type: integer
+        volumeToken:
+          type: string
+        volumeToken30d:
+          type: string
+        volumeToken24h:
+          type: string
+        volumeToken7d:
+          type: string
+        volumeToken6h:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

@@ -1,0 +1,34 @@
+openapi: 3.0.3
+info:
+  title: UniSat Wallet - OpenAPI
+  version: 1.0.0
+  description: To use the OpenAPI, please register and log in at the UniSat Developer Center (https://developer.unisat.io). Once registered, you can directly obtain a free-plan API key through the developer center.
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+    description: Bitcoin Mainnet endpoint for public.
+  - url: https://open-api-testnet.unisat.io
+    description: Bitcoin Testnet endpoint for public.
+  - url: https://open-api-testnet4.unisat.io
+    description: Bitcoin Testnet4 endpoint for public.
+  - url: https://open-api-signet.unisat.io
+    description: Bitcoin Signet endpoint for public.
+  - url: https://open-api-fractal.unisat.io
+    description: Fractal Mainnet endpoint for public.
+  - url: https://open-api-fractal-testnet.unisat.io
+    description: Fractal Testnet endpoint for public.
+tags: []
+paths: []
+components:
+  schemas: {}
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

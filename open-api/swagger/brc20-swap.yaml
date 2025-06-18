@@ -1,0 +1,2562 @@
+openapi: 3.0.3
+info:
+  title: BRC20 Swap API
+  version: 1.0.4
+  description: >-
+    This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel
+    free to send us an email, and we will provide you with an API KEY.
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+  - url: https://open-api-fractal.unisat.io
+  - url: https://open-api-fractal-testnet.unisat.io
+tags:
+  - name: brc20-swap
+    description: BRC20 Swap and PizzaSwap Service
+paths:
+  /v1/brc20-swap/config:
+    get:
+      summary: Swap's global configuration information.
+      tags:
+        - brc20-swap
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      moduleId:
+                        type: string
+                      serviceGasTick:
+                        description: The tick used for the second layer gas.
+                        type: string
+                      pendingDepositDirectNum:
+                        description: Number of confirmations required for direct deposit.
+                        type: number
+                      pendingDepositMatchingNum:
+                        description: Number of confirmations required for matching deposit.
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/balance:
+    get:
+      summary: Gets the balance for the specified address and tick.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      balance:
+                        type: object
+                        properties:
+                          module:
+                            description: Confirmed module balance.
+                            type: string
+                          swap:
+                            description: Confirmed swap balance.
+                            type: string
+                          pendingSwap:
+                            description: The balance converted from pending to swap.
+                            type: string
+                          pendingAvailable:
+                            description: The balance converted from pending to module.
+                            type: string
+                        additionalProperties: false
+                      decimal:
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pool_info:
+    get:
+      summary: Get Pool information based on trade pair.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      existed:
+                        description: Is the pool existed
+                        type: boolean
+                      addLiq:
+                        description: Has LP been added to the pool
+                        type: boolean
+                      tick0:
+                        type: string
+                      tick1:
+                        type: string
+                      lp:
+                        description: Quantity of pool lp
+                        type: string
+                      tvl:
+                        type: string
+                      volume24h:
+                        type: string
+                      volume7d:
+                        type: string
+                      reward0:
+                        type: string
+                      reward1:
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/select:
+    get:
+      summary: Select the tick information that you can use based on the address.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: search
+          required: false
+          description: Fuzzy matching
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        tick:
+                          type: string
+                        decimal:
+                          type: string
+                        brc20Balance:
+                          description: Module balance (not participate in swap calculations)
+                          type: string
+                        swapBalance:
+                          description: Swap balance
+                          type: string
+                      additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pre_deploy_pool:
+    get:
+      summary:
+        /deploy_pool interface pre-load, get the signature content, gas and
+        byte information.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: true
+          description: Timestamp (seconds)
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+          description: Tick used as fee
+        - schema:
+            type: string
+          in: query
+          name: payType
+          required: false
+          description: "Pay Type: tick, freeQuota"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - ids
+                      - signMsgs
+                    type: object
+                    properties:
+                      ids:
+                        description: User signature id
+                        type: array
+                        items:
+                          type: string
+                      signMsgs:
+                        description: User signature information
+                        type: array
+                        items:
+                          type: string
+                      feeAmount:
+                        description: The fee that the user needs to pay
+                        type: string
+                      feeTickPrice:
+                        description: The price of fee tick
+                        type: string
+                      feeBalance:
+                        description: The user's fee tick balance
+                        type: string
+                      usdPrice:
+                        description: The dollar value of the fee
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/deploy_pool:
+    post:
+      summary: Deploy the pool operation.
+      tags:
+        - brc20-swap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - address
+                - tick0
+                - tick1
+                - ts
+                - feeTick
+                - feeAmount
+                - feeTickPrice
+              type: object
+              properties:
+                address:
+                  type: string
+                tick0:
+                  type: string
+                tick1:
+                  type: string
+                ts:
+                  description: Timestamp (seconds)
+                  type: number
+                feeTick:
+                  description: Tick used as fee
+                  type: string
+                feeAmount:
+                  description: The fee that the user needs to pay
+                  type: string
+                feeTickPrice:
+                  description: The price of fee tick
+                  type: string
+                sigs:
+                  description: User signature
+                  type: array
+                  items:
+                    type: string
+                payType:
+                  type: string
+                rememberPayType:
+                  type: boolean
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pre_add_liq:
+    get:
+      summary:
+        /add_liq interface pre-load, get the signature content, gas and byte
+        information.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: amount0
+          required: true
+          description: Input amount of tick0
+        - schema:
+            type: string
+          in: query
+          name: amount1
+          required: true
+          description: Input amount of tick1
+        - schema:
+            type: string
+          in: query
+          name: lp
+          required: true
+          description: Expect amount of lp
+        - schema:
+            type: string
+          in: query
+          name: slippage
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: true
+          description: Timestamp (seconds)
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+          description: Tick used as fee
+        - schema:
+            type: string
+          in: query
+          name: payType
+          required: false
+          description: "Pay Type: tick, freeQuota"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - ids
+                      - signMsgs
+                    type: object
+                    properties:
+                      ids:
+                        description: User signature id
+                        type: array
+                        items:
+                          type: string
+                      signMsgs:
+                        description: User signature information
+                        type: array
+                        items:
+                          type: string
+                      feeAmount:
+                        description: The fee that the user needs to pay
+                        type: string
+                      feeTickPrice:
+                        description: The price of fee tick
+                        type: string
+                      feeBalance:
+                        description: The user's fee tick balance
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/add_liq:
+    post:
+      summary: Add the liquidity operation.
+      tags:
+        - brc20-swap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - address
+                - tick0
+                - tick1
+                - amount0
+                - amount1
+                - lp
+                - slippage
+                - ts
+                - feeTick
+                - feeAmount
+                - feeTickPrice
+              type: object
+              properties:
+                address:
+                  type: string
+                tick0:
+                  type: string
+                tick1:
+                  type: string
+                amount0:
+                  description: Input amount of tick0
+                  type: string
+                amount1:
+                  description: Input amount of tick1
+                  type: string
+                lp:
+                  type: string
+                slippage:
+                  type: string
+                ts:
+                  description: Timestamp (seconds)
+                  type: number
+                feeTick:
+                  description: Tick used as fee
+                  type: string
+                feeAmount:
+                  description: The fee that the user needs to pay
+                  type: string
+                feeTickPrice:
+                  description: The price of fee tick
+                  type: string
+                sigs:
+                  description: User signature
+                  type: array
+                  items:
+                    type: string
+                payType:
+                  type: string
+                rememberPayType:
+                  type: boolean
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - amount0
+                      - amount1
+                    type: object
+                    properties:
+                      id:
+                        description: Function id
+                        type: string
+                      rollupInscriptionId:
+                        description: The rollup inscription id where the function is located
+                        type: string
+                      address:
+                        type: string
+                      type:
+                        type: string
+                      tick0:
+                        type: string
+                      tick1:
+                        type: string
+                      amount0:
+                        description: Input amount of tick0
+                        type: string
+                      amount1:
+                        description: Input amount of tick1
+                        type: string
+                      lp:
+                        type: string
+                      ts:
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pre_remove_liq:
+    get:
+      summary:
+        /remove_liq interface pre-load, get the signature content, gas and byte
+        information.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: amount0
+          required: true
+          description: Input amount of tick0
+        - schema:
+            type: string
+          in: query
+          name: amount1
+          required: true
+          description: Input amount of tick1
+        - schema:
+            type: string
+          in: query
+          name: lp
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: slippage
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+          description: Tick used as fee
+        - schema:
+            type: string
+          in: query
+          name: payType
+          required: false
+          description: "Pay Type: tick, freeQuota"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - ids
+                      - signMsgs
+                    type: object
+                    properties:
+                      ids:
+                        description: User signature id
+                        type: array
+                        items:
+                          type: string
+                      signMsgs:
+                        description: User signature information
+                        type: array
+                        items:
+                          type: string
+                      feeAmount:
+                        description: The fee that the user needs to pay
+                        type: string
+                      feeTickPrice:
+                        description: The price of fee tick
+                        type: string
+                      feeBalance:
+                        description: The user's fee tick balance
+                        type: string
+                      usdPrice:
+                        description: The dollar value of the fee
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/remove_liq:
+    post:
+      summary: Remove the liquidity operation
+      tags:
+        - brc20-swap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - address
+                - tick0
+                - tick1
+                - lp
+                - amount0
+                - amount1
+                - slippage
+                - ts
+                - feeTick
+                - feeAmount
+                - feeTickPrice
+              type: object
+              properties:
+                address:
+                  type: string
+                tick0:
+                  type: string
+                tick1:
+                  type: string
+                lp:
+                  type: string
+                amount0:
+                  description: Input amount of tick0
+                  type: string
+                amount1:
+                  description: Input amount of tick1
+                  type: string
+                slippage:
+                  type: string
+                ts:
+                  description: Timestamp (seconds)
+                  type: number
+                feeTick:
+                  description: Tick used as fee
+                  type: string
+                feeAmount:
+                  description: The fee that the user needs to pay
+                  type: string
+                feeTickPrice:
+                  description: The price of fee tick
+                  type: string
+                sigs:
+                  description: User signature
+                  type: array
+                  items:
+                    type: string
+                payType:
+                  type: string
+                rememberPayType:
+                  type: boolean
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - amount0
+                      - amount1
+                    type: object
+                    properties:
+                      id:
+                        description: Function id
+                        type: string
+                      rollupInscriptionId:
+                        description: The rollup inscription id where the function is located
+                        type: string
+                      address:
+                        type: string
+                      type:
+                        type: string
+                      tick0:
+                        type: string
+                      tick1:
+                        type: string
+                      amount0:
+                        description: Input amount of tick0
+                        type: string
+                      amount1:
+                        description: Input amount of tick1
+                        type: string
+                      lp:
+                        type: string
+                      ts:
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pre_send:
+    get:
+      summary: /send interface pre-load, get the signature content, gas and byte
+        information.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: true
+          description: Send tick
+        - schema:
+            type: string
+          in: query
+          name: amount
+          required: true
+          description: The amount of send tick
+        - schema:
+            type: string
+          in: query
+          name: to
+          required: true
+          description: The receiver of send tick
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: true
+          description: Timestamp (seconds)
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+          description: Tick used as fee
+        - schema:
+            type: string
+          in: query
+          name: payType
+          required: false
+          description: "Pay Type: tick, freeQuota"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - ids
+                      - signMsgs
+                    type: object
+                    properties:
+                      ids:
+                        description: User signature id
+                        type: array
+                        items:
+                          type: string
+                      signMsgs:
+                        description: User signature information
+                        type: array
+                        items:
+                          type: string
+                      feeAmount:
+                        description: The fee that the user needs to pay
+                        type: string
+                      feeTickPrice:
+                        description: The price of fee tick
+                        type: string
+                      feeBalance:
+                        description: The user's fee tick balance
+                        type: string
+                      usdPrice:
+                        description: The dollar value of the fee
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pre_batch_send:
+    post:
+      summary: /batch_send interface pre-load, get the signature content, gas and byte information.
+      tags:
+        - brc20-swap
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                address:
+                  type: string
+                  required: true
+                tick:
+                  type: string
+                  required: true
+                  description: Send tick
+                amount:
+                  type: string
+                  required: true
+                  description: The amount of send tick
+                to:
+                  type: array
+                  items:
+                    type: string
+                  required: true
+                  description: The receiver of send tick
+                ts:
+                  type: number
+                  required: true
+                  description: Timestamp (seconds)
+                feeTick:
+                  type: string
+                  required: true
+                  description: Tick used as fee
+                payType:
+                  type: string
+                  required: false
+                  description: "Pay Type: tick, freeQuota"
+              required:
+                - address
+                - tick
+                - amount
+                - to
+                - ts
+                - feeTick
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - ids
+                      - signMsgs
+                    type: object
+                    properties:
+                      ids:
+                        description: User signature id
+                        type: array
+                        items:
+                          type: string
+                      signMsgs:
+                        description: User signature information
+                        type: array
+                        items:
+                          type: string
+                      feeAmount:
+                        description: The fee that the user needs to pay
+                        type: string
+                      feeTickPrice:
+                        description: The price of fee tick
+                        type: string
+                      feeBalance:
+                        description: The user's fee tick balance
+                        type: string
+                      usdPrice:
+                        description: The dollar value of the fee
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pre_swap:
+    get:
+      summary: /swap interface pre-load, get the signature content and gas information.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tickIn
+          required: true
+          description: Input tick
+        - schema:
+            type: string
+          in: query
+          name: tickOut
+          required: true
+          description: Output tick
+        - schema:
+            type: string
+          in: query
+          name: amountIn
+          required: true
+          description: The amount of input tick
+        - schema:
+            type: string
+          in: query
+          name: amountOut
+          required: true
+          description: The amount of output tick
+        - schema:
+            type: string
+          in: query
+          name: slippage
+          required: true
+        - schema:
+            enum:
+              - exactIn
+              - exactOut
+            type: string
+            example: exactIn
+          in: query
+          name: exactType
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: true
+          description: Timestamp(seconds)
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+          description: Tick used as fee
+        - schema:
+            type: string
+          in: query
+          name: payType
+          required: false
+          description: "Pay Type: tick, freeQuota"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - ids
+                      - signMsgs
+                    type: object
+                    properties:
+                      ids:
+                        description: User signature id
+                        type: array
+                        items:
+                          type: string
+                      signMsgs:
+                        description: User signature information
+                        type: array
+                        items:
+                          type: string
+                      feeAmount:
+                        description: The fee that the user needs to pay
+                        type: string
+                      feeTickPrice:
+                        description: The price of fee tick
+                        type: string
+                      feeBalance:
+                        description: The user's fee tick balance
+                        type: string
+                      usdPrice:
+                        description: The dollar value of the fee
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/send:
+    post:
+      summary: The send operation.
+      tags:
+        - brc20-swap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - address
+                - tick
+                - amount
+                - to
+                - ts
+                - feeTick
+                - feeAmount
+                - feeTickPrice
+              type: object
+              properties:
+                address:
+                  type: string
+                tick:
+                  description: Send tick
+                  type: string
+                amount:
+                  description: The amount of send tick
+                  type: string
+                to:
+                  description: The receiver of send tick
+                  type: string
+                ts:
+                  description: Timestamp (seconds)
+                  type: number
+                feeTick:
+                  description: Tick used as fee
+                  type: string
+                feeAmount:
+                  description: The fee that the user needs to pay
+                  type: string
+                feeTickPrice:
+                  description: The price of fee tick
+                  type: string
+                sigs:
+                  description: User signature
+                  type: array
+                  items:
+                    type: string
+                payType:
+                  type: string
+                rememberPayType:
+                  type: boolean
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/batch_send:
+    post:
+      summary: The batch send operation.
+      tags:
+        - brc20-swap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - address
+                - tick
+                - amount
+                - to
+                - ts
+                - feeTick
+                - feeAmount
+                - feeTickPrice
+              type: object
+              properties:
+                address:
+                  type: string
+                tick:
+                  description: Send tick
+                  type: string
+                amount:
+                  description: The amount of send tick
+                  type: string
+                to:
+                  type: array
+                  items:
+                    type: string
+                  required: true
+                  description: The receiver of send tick
+                ts:
+                  description: Timestamp (seconds)
+                  type: number
+                feeTick:
+                  description: Tick used as fee
+                  type: string
+                feeAmount:
+                  description: The fee that the user needs to pay
+                  type: string
+                feeTickPrice:
+                  description: The price of fee tick
+                  type: string
+                sigs:
+                  description: User signature
+                  type: array
+                  items:
+                    type: string
+                payType:
+                  type: string
+                rememberPayType:
+                  type: boolean
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/swap:
+    post:
+      summary: The swap operation.
+      tags:
+        - brc20-swap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - address
+                - tickIn
+                - tickOut
+                - amountIn
+                - amountOut
+                - feeTick
+                - slippage
+                - exactType
+                - ts
+                - feeAmount
+                - feeTickPrice
+              type: object
+              properties:
+                address:
+                  type: string
+                tickIn:
+                  description: Input tick
+                  type: string
+                tickOut:
+                  description: Output tick
+                  type: string
+                amountIn:
+                  description: The amount of input tick
+                  type: string
+                amountOut:
+                  description: The amount of output tick
+                  type: string
+                feeTick:
+                  type: string
+                slippage:
+                  type: string
+                exactType:
+                  enum:
+                    - exactIn
+                    - exactOut
+                  type: string
+                ts:
+                  description: Timestamp (seconds)
+                  type: number
+                feeAmount:
+                  description: The fee that the user needs to pay
+                  type: string
+                feeTickPrice:
+                  description: The price of fee tick
+                  type: string
+                sigs:
+                  description: User signature
+                  type: array
+                  items:
+                    type: string
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        description: Function id
+                        type: string
+                      rollupInscriptionId:
+                        description: The rollup inscription id where the function is located
+                        type: string
+                      address:
+                        type: string
+                      tickIn:
+                        type: string
+                      tickOut:
+                        type: string
+                      amountIn:
+                        type: string
+                      amountOut:
+                        type: string
+                      exactType:
+                        type: string
+                      ts:
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pool_list:
+    get:
+      summary: Gets the pool list information.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: search
+          required: false
+          description: Fuzzy matching
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            tick0:
+                              type: string
+                            tick1:
+                              type: string
+                            lp:
+                              type: string
+                            tvl:
+                              description: Total pool value
+                              type: string
+                            volume24h:
+                              type: string
+                            volume7d:
+                              type: string
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/my_pool_list:
+    get:
+      summary: Gets the pool list information by address.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: false
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          required:
+                            - amount0
+                            - amount1
+                          type: object
+                          properties:
+                            lp:
+                              type: string
+                            shareOfPool:
+                              type: string
+                            tick0:
+                              type: string
+                            tick1:
+                              type: string
+                            amount0:
+                              description: Amount of tick0
+                              type: string
+                            amount1:
+                              description: Amount of tick1
+                              type: string
+                            claimedReward0:
+                              type: string
+                            claimedReward1:
+                              type: string
+                            unclaimedReward0:
+                              type: string
+                            unclaimedReward1:
+                              type: string
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/my_pool:
+    get:
+      summary: Gets the user pool information for the specified pair.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - amount0
+                      - amount1
+                    type: object
+                    properties:
+                      lp:
+                        type: string
+                      shareOfPool:
+                        type: string
+                      tick0:
+                        type: string
+                      tick1:
+                        type: string
+                      amount0:
+                        description: Amount of tick0
+                        type: string
+                      amount1:
+                        description: Amount of tick1
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/overview:
+    get:
+      summary: An overview of swap information
+      tags:
+        - brc20-swap
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      liquidity:
+                        description: Total value of all pools
+                        type: string
+                      volume7d:
+                        description: 7 days volume
+                        type: string
+                      volume24h:
+                        description: 24 hours volume
+                        type: string
+                      transactions:
+                        description: Number of transactions in 24 hours
+                        type: number
+                      pairs:
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/gas_history:
+    get:
+      summary: Gets the gas consumption records for a user aggregation operation.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: false
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            maximum: 100
+            exclusiveMaximum: true
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            funcType:
+                              description: Function type
+                              type: string
+                              example: swap
+                            tickA:
+                              type: string
+                            tickB:
+                              type: string
+                            gas:
+                              type: string
+                            ts:
+                              type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/send_history:
+    get:
+      summary: Gets the history of send transaction.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: false
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            maximum: 100
+            exclusiveMaximum: true
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            tick:
+                              type: string
+                            amount:
+                              type: string
+                            to:
+                              type: string
+                            ts:
+                              type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/liq_history:
+    get:
+      summary: Gets the history of a pair addition pool.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: type
+          required: false
+          description: "Optional: add, remove"
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            maximum: 100
+            exclusiveMaximum: true
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            type:
+                              type: string
+                            tick0:
+                              type: string
+                            tick1:
+                              type: string
+                            amount0:
+                              type: string
+                            amount1:
+                              type: string
+                            lp:
+                              type: string
+                            ts:
+                              type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/swap_history:
+    get:
+      summary: Gets the history of swap.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: false
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            maximum: 100
+            exclusiveMaximum: true
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          required:
+                            - tickIn
+                            - tickOut
+                            - amountIn
+                            - amountOut
+                          type: object
+                          properties:
+                            tickIn:
+                              description: Input tick
+                              type: string
+                            tickOut:
+                              description: Output tick
+                              type: string
+                            amountIn:
+                              description: The amount of input tick
+                              type: string
+                            amountOut:
+                              description: The amount of output tick
+                              type: string
+                            exactType:
+                              type: string
+                            ts:
+                              type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/rollup_history:
+    get:
+      summary: Get chain history of rollup inscription.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            maximum: 100
+            exclusiveMaximum: true
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            maximum: 1000
+            exclusiveMaximum: true
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            txid:
+                              type: string
+                            height:
+                              type: number
+                            transactionNum:
+                              description: Number of transactions in the inscription
+                              type: number
+                            inscriptionId:
+                              description: Rollup inscription id
+                              type: string
+                            inscriptionNumber:
+                              description: Rollup inscription number
+                              type: number
+                            ts:
+                              type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/deposit_list:
+    get:
+      summary: Gets the deposit list for a user.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: false
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            tick:
+                              type: string
+                            amount:
+                              type: string
+                            cur:
+                              description: Current number of confirmations
+                              type: number
+                            sum:
+                              description: Total number of confirmations
+                              type: number
+                            ts:
+                              type: number
+                            txid:
+                              type: string
+                            type:
+                              type: string
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/create_deposit:
+    get:
+      summary: Create a deposit psbt to be signed by the user.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: inscriptionId
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: pubkey
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      psbt:
+                        type: string
+                      type:
+                        description: Direct or matching
+                        type: string
+                      expiredTimestamp:
+                        type: number
+                      recommendDeposit:
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/confirm_deposit:
+    post:
+      summary: User signature deposit psbt, submit confirmation.
+      tags:
+        - brc20-swap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - psbt
+                - inscriptionId
+              type: object
+              properties:
+                psbt:
+                  type: string
+                inscriptionId:
+                  type: string
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/system_status:
+    get:
+      summary: Gets the current system state.
+      tags:
+        - brc20-swap
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      committing:
+                        description: Is rollup inscription committing
+                        type: boolean
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/withdraw_history:
+    get:
+      summary: Gets the user withdrawal history.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: limit
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            tick:
+                              type: string
+                            totalAmount:
+                              description: Total amount withdrawal
+                              type: string
+                            completedAmount:
+                              description: The number of withdrawal completed
+                              type: string
+                            ts:
+                              type: number
+                            totalConfirmedNum:
+                              description: The current number of confirmations
+                              type: number
+                            totalNum:
+                              description: The total number of confirmations
+                              type: number
+                            status:
+                              type: string
+                            type:
+                              type: string
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/create_retry_withdraw:
+    get:
+      summary: Retry create a withdraw psbt to be signed by the user.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: id
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: pubkey
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      paymentPsbt:
+                        description: The user psbt with payment
+                        type: string
+                      approvePsbt:
+                        description: The user psbt with approve insctiption
+                        type: string
+                      networkFee:
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/confirm_retry_withdraw:
+    post:
+      summary: User signature withdraw psbt, submit confirmation.
+      tags:
+        - brc20-swap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - id
+                - paymentPsbt
+                - approvePsbt
+              type: object
+              properties:
+                id:
+                  description: The withdraw order id
+                  type: string
+                paymentPsbt:
+                  type: string
+                approvePsbt:
+                  type: string
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/create_withdraw:
+    get:
+      summary: Create a withdraw psbt to be signed by the user.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: pubkey
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: amount
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/confirm_withdraw:
+    post:
+      summary: User signature withdraw psbt, submit confirmation.
+      tags:
+        - brc20-swap
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - id
+                - paymentPsbt
+                - approvePsbt
+                - feeTick
+              type: object
+              properties:
+                id:
+                  description: The withdraw order id
+                  type: string
+                paymentPsbt:
+                  type: string
+                approvePsbt:
+                  type: string
+                feeTick:
+                  type: string
+                feeAmount:
+                  description: The fee that the user needs to pay
+                  type: string
+                feeTickPrice:
+                  description: The price of fee tick
+                  type: string
+                sigs:
+                  description: User signature
+                  type: array
+                  items:
+                    type: string
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/withdraw_process:
+    get:
+      summary: Gets the withdrawal progress for the specified ID.
+      tags:
+        - brc20-swap
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: id
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      id:
+                        type: string
+                      tick:
+                        type: string
+                      amount:
+                        type: string
+                      ts:
+                        type: number
+                      status:
+                        type: string
+                      totalConfirmedNum:
+                        type: number
+                      totalNum:
+                        description: Total number of confirmations (rollUp + approve)
+                        type: number
+                      rollUpConfirmNum:
+                        type: number
+                      rollUpTotalNum:
+                        description: Total number of rollUp confirmations
+                        type: number
+                      approveConfirmNum:
+                        type: number
+                      approveTotalNum:
+                        description: Total number of approve confirmations
+                        type: number
+                      cancelConfirmedNum:
+                        type: number
+                      cancelTotalNum:
+                        type: number
+                      rollUpTxid:
+                        description:
+                          Decrease operation is required to withdraw, which in rollup
+                          inscription
+                        type: string
+                      paymentTxid:
+                        type: string
+                      inscribeTxid:
+                        type: string
+                      approveTxid:
+                        type: string
+                      completedAmount:
+                        type: string
+                      matchHistory:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            approveInscriptionId:
+                              description: Withdraw inscription
+                              type: string
+                            transferInscriptionId:
+                              description: Deposit inscription
+                              type: string
+                            tick:
+                              type: string
+                            consumeAmount:
+                              type: string
+                            remainAmount:
+                              description: Residual cash withdrawal
+                              type: string
+                            approveAddress:
+                              description: Withdraw user address
+                              type: string
+                            transferAddress:
+                              description: Deposit user address
+                              type: string
+                            txid:
+                              description: Matching txid
+                              type: string
+                            ts:
+                              type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+components:
+  schemas:
+    CAT20TokenStats:
+      type: object
+      properties:
+        tokenId:
+          type: string
+        volume:
+          type: string
+        volume30d:
+          type: string
+        volume24h:
+          type: string
+        volume7d:
+          type: string
+        volume6h:
+          type: string
+        price:
+          type: number
+        price6h:
+          type: number
+        price24h:
+          type: number
+        price7d:
+          type: number
+        price30d:
+          type: number
+        name:
+          type: string
+        symbol:
+          type: string
+        decimals:
+          type: integer
+        max:
+          type: integer
+        volumeToken:
+          type: string
+        volumeToken30d:
+          type: string
+        volumeToken24h:
+          type: string
+        volumeToken7d:
+          type: string
+        volumeToken6h:
+          type: string
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

@@ -1,0 +1,1212 @@
+openapi: 3.0.3
+info:
+  title: BRC-20 API
+  version: 1.0.4
+  description: >-
+    This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel
+    free to send us an email, and we will provide you with an API KEY.
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+  - url: https://open-api-testnet.unisat.io
+  - url: https://open-api-testnet4.unisat.io
+  - url: https://open-api-signet.unisat.io
+  - url: https://open-api-fractal.unisat.io
+  - url: https://open-api-fractal-testnet.unisat.io
+tags:
+  - name: BRC-20
+    description: BRC-20 (https://domo-2.gitbook.io/brc-20-experiment)
+paths:
+  /v1/indexer/brc20/bestheight:
+    get:
+      tags:
+        - BRC-20
+      summary: Get the best block height of BRC20 data.
+      description: >-
+        Get the best block height of BRC20 data. This value will be consistent
+        with the latest block height a short time after the block has been
+        confirmed.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      height:
+                        description: best block height of brc20
+                        type: integer
+                      total:
+                        description: total number of brc20 tickers
+                        type: integer
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/brc20/list:
+    get:
+      tags:
+        - BRC-20
+      description: Get the tiker list of BRC20 token.
+      parameters:
+        - name: start
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of inscriptions returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      detail:
+                        items:
+                          type: string
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+  /v1/indexer/brc20/status:
+    get:
+      tags:
+        - BRC-20
+      description: >-
+        Obtain BRC20 list status
+      parameters:
+        - name: start
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of inscriptions returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+        - name: sort
+          description: sort by (holders/deploy/minted/transactions)
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - holders
+              - deploy
+              - minted
+              - transactions
+          example: "deploy"
+        - name: complete
+          description: filter by (completed or not)
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - yes
+              - no
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      height:
+                        type: integer
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/BRC20InfoItem"
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/brc20/{ticker}/info:
+    get:
+      tags:
+        - BRC-20
+      description: Get the infomation of BRC20 by ticker.
+      parameters:
+        - name: ticker
+          description: Token ticker
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/BRC20InfoItem"
+
+        "401":
+          description: Invalid API Key
+  /v1/indexer/brc20/{ticker}/holders:
+    get:
+      tags:
+        - BRC-20
+      description: Get the holders of BRC20 by ticker.
+      parameters:
+        - name: ticker
+          description: Token ticker
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: start
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: object
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            address:
+                              type: string
+                            availableBalance:
+                              type: string
+                            overallBalance:
+                              type: string
+                            transferableBalance:
+                              type: string
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+  /v1/indexer/brc20/{ticker}/history:
+    get:
+      tags:
+        - BRC-20
+      description: Get the full history of BRC20.
+      parameters:
+        - name: ticker
+          description: Token ticker
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: type
+          description: Filter by history type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - inscribe-deploy
+              - inscribe-mint
+              - inscribe-transfer
+              - transfer
+              - send
+              - receive
+        - name: height
+          description: Block height
+          in: query
+          required: true
+          schema:
+            type: integer
+        - name: start
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of inscriptions returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/BRC20HistoryItem"
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+  /v1/indexer/brc20/{ticker}/tx/{txid}/history:
+    get:
+      tags:
+        - BRC-20
+      description: Get the full history of BRC20 by address.
+      parameters:
+        - name: ticker
+          description: Token ticker
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: txid
+          description: txid
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: type
+          description: Filter by history type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - inscribe-deploy
+              - inscribe-mint
+              - inscribe-transfer
+              - transfer
+              - send
+              - receive
+        - name: start
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of inscriptions returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/BRC20HistoryItem"
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+  /v1/indexer/brc20/history-by-height/{height}:
+    get:
+      tags:
+        - BRC-20
+      description: Get the tiker list of BRC20 token.
+      parameters:
+        - name: height
+          description: Block Height
+          in: path
+          required: true
+          schema:
+            type: integer
+          example: 818698
+        - name: start
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of inscriptions returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      height:
+                        type: number
+                      total:
+                        type: integer
+                      start:
+                        type: integer
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/BRC20HistoryItem"
+
+        "401":
+          description: Invalid API Key
+  /v1/indexer/address/{address}/brc20/summary:
+    get:
+      tags:
+        - BRC-20
+      description: >-
+        Obtain BRC20 token summary by address, including available balance,
+        transferable balance
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: start
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of inscriptions returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+        - name: tick_filter
+          description: "Filter by tick type (8 Filter ticks with selfMint set to false, 16 Filter ticks with selfMint set to true, 24 Return all ticks regardless of selfMint.)"
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - 8
+              - 16
+              - 24
+          example: 24
+        - name: exclude_zero
+          description: Exclude zero balance
+          in: query
+          required: false
+          schema:
+            type: boolean
+          example: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      height:
+                        type: integer
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+                      detail:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            ticker:
+                              type: string
+                            overallBalance:
+                              type: string
+                            transferableBalance:
+                              type: string
+                            availableBalance:
+                              type: string
+        "401":
+          description: Invalid API Key
+  /v1/indexer/address/{address}/brc20/summary-by-height/{height}:
+    get:
+      tags:
+        - BRC-20
+      description: >-
+        Obtain BRC20 token summary by address, including available balance,
+        transferable balance
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: height
+          description: Block Height
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: start
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of inscriptions returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      height:
+                        type: integer
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+                      detail:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            ticker:
+                              type: string
+                            overallBalance:
+                              type: string
+                            transferableBalance:
+                              type: string
+                            availableBalance:
+                              type: string
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/address/{address}/brc20/{ticker}/info:
+    get:
+      tags:
+        - BRC-20
+      description: >-
+        Obtain BRC20 token infomation by address, including available balance,
+        transferable balance, number of transferable inscriptions, the first few
+        Inscriptions, etc.
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: ticker
+          description: Token ticker
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      ticker:
+                        type: string
+                      overallBalance:
+                        type: string
+                      availableBalance:
+                        type: string
+                      availableBalanceSafe:
+                        type: string
+                      availableBalanceUnSafe:
+                        type: string
+                      transferableBalance:
+                        type: string
+                      historyCount:
+                        type: integer
+                      historyInscriptions:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/BRC20HistoryInscription"
+                      transferableCount:
+                        type: integer
+                      transferableInscriptions:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/BRC20HistoryInscription"
+        "401":
+          description: Invalid API Key
+  /v1/indexer/address/{address}/brc20/history:
+    get:
+      tags:
+        - BRC-20
+      description: Get the full history of BRC20 by address.
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: start
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of inscriptions returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/BRC20HistoryItem"
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/address/{address}/brc20/{ticker}/history:
+    get:
+      tags:
+        - BRC-20
+      description: Get the full history of BRC20 by address.
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: ticker
+          description: Token ticker
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: type
+          description: Filter by history type
+          in: query
+          required: true
+          schema:
+            type: string
+            enum:
+              - inscribe-deploy
+              - inscribe-mint
+              - inscribe-transfer
+              - transfer
+              - send
+              - receive
+        - name: start
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of inscriptions returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/BRC20HistoryItem"
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+  /v1/indexer/address/{address}/brc20/{ticker}/transferable-inscriptions:
+    get:
+      tags:
+        - BRC-20
+      description: Get the transferable inscriptions list of BRC20 by address.
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: ticker
+          description: Token ticker
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: start
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of inscriptions returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      detail:
+                        properties:
+                          inscriptionNumber:
+                            type: integer
+                          inscriptionId:
+                            type: string
+                          satoshi:
+                            type: integer
+                          confirmations:
+                            type: integer
+                          data:
+                            properties:
+                              op:
+                                type: string
+                              tick:
+                                type: string
+                              lim:
+                                type: string
+                              amt:
+                                type: string
+                              decimal:
+                                type: string
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+  /v1/indexer/brc20-module/{module}/history:
+    get:
+      tags:
+        - BRC-20
+      description: Get the history of BRC20 Module.
+      parameters:
+        - name: module
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+          example: fd5bd482bed1b62d0702e2f19a1e3bdd4fb755fa5c9bed5d8d0f219a3219ee95i0
+        - name: start
+          description: Start height
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: end
+          description: End height
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: cursor
+          description: Start Offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of events returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/ModuleHistoryItem"
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/brc20-module/withdraw-history:
+    get:
+      tags:
+        - BRC-20
+      description: Get the withdraw history of BRC20.
+      parameters:
+        - name: start
+          description: Start height
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: end
+          description: End height
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: cursor
+          description: Start Offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of events returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/ModuleHistoryItem"
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+
+components:
+  schemas:
+    BRC20InfoItem:
+      type: object
+      properties:
+        ticker:
+          type: string
+        creator:
+          type: string
+        totalMinted:
+          type: string
+        confirmedMinted:
+          type: string
+        confirmedMinted1h:
+          type: string
+        confirmedMinted24h:
+          type: string
+        completeBlocktime:
+          type: integer
+        completeHeight:
+          type: integer
+        inscriptionNumberEnd:
+          type: integer
+        inscriptionNumberStart:
+          type: integer
+        minted:
+          type: string
+        mintTimes:
+          type: integer
+        historyCount:
+          type: integer
+        holdersCount:
+          type: integer
+        txid:
+          type: string
+        deployHeight:
+          type: integer
+        deployBlocktime:
+          type: integer
+        inscriptionId:
+          type: string
+        inscriptionNumber:
+          type: integer
+        max:
+          type: string
+        decimal:
+          type: integer
+        limit:
+          type: string
+    BRC20HistoryInscription:
+      type: object
+      properties:
+        confirmations:
+          type: integer
+        data:
+          type: object
+          properties:
+            amt:
+              type: string
+            decimal:
+              type: string
+            lim:
+              type: string
+            max:
+              type: string
+            minted:
+              type: string
+            op:
+              type: string
+            tick:
+              type: string
+            to:
+              type: string
+        inscriptionId:
+          type: string
+        inscriptionNumber:
+          type: integer
+    BRC20HistoryItem:
+      type: object
+      properties:
+        valid:
+          type: boolean
+        type:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        amount:
+          type: string
+        overallBalance:
+          type: string
+        availableBalance:
+          type: string
+        transferBalance:
+          type: string
+        inscriptionId:
+          type: string
+        inscriptionNumber:
+          type: integer
+        height:
+          type: integer
+        blockhash:
+          type: string
+        blocktime:
+          type: integer
+        txIdx:
+          type: integer
+        txid:
+          type: string
+        satoshi:
+          type: integer
+        offset:
+          type: integer
+    ModuleHistoryItem:
+      type: object
+      properties:
+        type:
+          type: string
+        valid:
+          type: boolean
+        txid:
+          type: string
+        idx:
+          type: number
+        vout:
+          type: number
+        offset:
+          type: integer
+        inscriptionNumber:
+          type: integer
+        inscriptionId:
+          type: string
+        contentType:
+          type: string
+        contentBody:
+          type: string
+        oldSatPoint:
+          type: string
+        newSatPoint:
+          type: string
+        from:
+          type: string
+        to:
+          type: string
+        satoshi:
+          type: integer
+        data:
+          type: object
+          properties:
+            tick:
+              type: string
+            amount:
+              type: string
+        height:
+          type: integer
+        txidx:
+          type: integer
+        blockhash:
+          type: string
+        blocktime:
+          type: integer
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

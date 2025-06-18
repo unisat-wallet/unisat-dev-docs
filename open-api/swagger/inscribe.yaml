@@ -1,0 +1,1015 @@
+openapi: 3.0.3
+info:
+  title: Inscribe API
+  version: 1.0.0
+  description: >-
+    This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel
+    free to send us an email, and we will provide you with an API KEY.
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+  - url: https://open-api-testnet.unisat.io
+  - url: https://open-api-testnet4.unisat.io
+  - url: https://open-api-signet.unisat.io
+  - url: https://open-api-fractal.unisat.io
+  - url: https://open-api-fractal-testnet.unisat.io
+tags:
+  - name: Inscribe
+    description: Inscribe Service
+paths:
+  /v2/inscribe/order/summary:
+    get:
+      tags:
+        - Inscribe
+      summary: Get order summary of current apikey
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/OrderSummary"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/list:
+    get:
+      tags:
+        - Inscribe
+      description: Get order list of current apikey
+      parameters:
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+        - name: sort
+          description: Sort by (asc/desc)
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          example: asc
+        - name: status
+          description: Status of order
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - pending
+              - inscribing
+              - minted
+              - closed
+              - refunded
+        - name: receiveAddress
+          description: ReceiveAddress of order
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: clientId
+          description: ClientId of order
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: withFiles
+          description: Whether to include files
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Order"
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+
+  /v2/inscribe/order/{orderId}:
+    get:
+      tags:
+        - Inscribe
+      summary: Search an order by orderId
+      description: |-
+        It's recommended to query the latest status every 10 seconds.
+
+        _amount = outputValue*count + minerFee + serviceFee + devFee_
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create:
+    post:
+      tags:
+        - Inscribe
+      summary: Create an order
+      description: Create an order to inscribe something
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create/brc20-deploy:
+    post:
+      tags:
+        - Inscribe
+      summary: Create an order to inscribe BRC-20 DEPLOY
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateBRC20DeployParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create/brc20-mint:
+    post:
+      tags:
+        - Inscribe
+      summary: Create an order to inscribe BRC-20 MINT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateBRC20MintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create/brc20-transfer:
+    post:
+      tags:
+        - Inscribe
+      summary: Create an order to inscribe BRC-20 TRANSFER
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateBRC20TransferParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create/brc20-5byte-mint:
+    post:
+      tags:
+        - Inscribe
+      summary: Create an order to inscribe BRC-20 MINT
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/request-commit/brc20-5byte-mint:
+    post:
+      tags:
+        - Inscribe
+      summary: Request commit txs of brc20-5byte-mint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderRequestCommitBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/OrderRequestCommitBRC205ByteMintResponse"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/sign-commit/brc20-5byte-mint:
+    post:
+      tags:
+        - Inscribe
+      summary: Sign commit txs of brc20-5byte-mint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderSignCommitBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/OrderSignCommitBRC205ByteMintResponse"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/sign-reveal/brc20-5byte-mint:
+    post:
+      tags:
+        - Inscribe
+      summary: Sign reveal txs of brc20-5byte-mint
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderSignRevealBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/OrderSignRevealBRC205ByteMintResponse"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create/runes-etch:
+    post:
+      tags:
+        - Inscribe
+      summary: Create an order to etch Runes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateRunesEtchParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create/runes-mint:
+    post:
+      tags:
+        - Inscribe
+      summary: Create an order to mint Runes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateRunesMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+
+  /v2/inscribe/order/{orderId}/refund:
+    post:
+      tags:
+        - Inscribe
+      summary: Process a refund for an order.
+      description: >-
+        When the amount paid by the user includes inscriptions, inscribing
+        cannot be performed. Refund can be requested through this method.
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refundFeeRate:
+                  type: number
+                  format: float
+                  example: 1
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      txid:
+                        type: string
+                        description: txid of refunded transaction
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/{orderId}/refund-estimate:
+    post:
+      tags:
+        - Inscribe
+      summary: Estimate the size of the refund transaction
+      description: >-
+        RefundAmount = PaidAmount - RefundTxSize * RefundFeeRate. This value
+        must be greater than SafeRefundAmount, otherwise there's a risk of
+        losing inscriptions used for payment due to errors.
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      paidAmount:
+                        type: integer
+                        format: int32
+                      refundTxSize:
+                        type: integer
+                        format: int32
+                        description: The refund amount = size * refundFeeRate
+                      safeRefundAmount:
+                        type: integer
+                        format: int32
+        "401":
+          description: Invalid API Key
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        orderId:
+          type: string
+          example: ""
+        status:
+          type: string
+          description: Order Status
+          example: pending
+          enum:
+            - pending
+            - inscribing
+            - minted
+        payAddress:
+          type: string
+          description: Pay to this address to start inscribing
+          example: ""
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        amount:
+          type: integer
+          description: The BTC amount (in satoshis) need to pay
+          example: 3000
+        paidAmount:
+          type: integer
+          description: The paid BTC amount (in satoshis)
+        outputValue:
+          type: integer
+          description: The outputValue of each inscription
+        feeRate:
+          type: number
+          description: The feeRate of inscribing transactions
+        minerFee:
+          type: number
+          description: The miner fee of this order
+        serviceFee:
+          type: number
+          description: The service fee of this order
+        devFee:
+          type: number
+          description: The developer fee of this order
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              filename:
+                type: string
+                example: 10000.sats
+              inscriptionId:
+                type: string
+                example: ""
+              status:
+                type: string
+                enum:
+                  - pending
+                  - unconfirmed
+                  - confirmed
+        count:
+          type: integer
+          example: 1
+          description: The total inscriptions count
+        pendingCount:
+          type: integer
+          description: The pending inscriptions count
+          example: 1
+        unconfirmedCount:
+          type: integer
+          format: int32
+          description: The unconfirmed inscriptions count
+          example: 0
+        confirmedCount:
+          type: integer
+          format: int32
+          description: The confirmed inscriptions count
+          example: 0
+        createTime:
+          type: integer
+          example: 1693439128100
+        refundTxid:
+          type: string
+          example: ""
+        refundAmount:
+          type: integer
+        refundFeeRate:
+          type: number
+    OrderSummary:
+      type: object
+      properties:
+        orderCount:
+          type: object
+          properties:
+            total:
+              type: integer
+            pendingCount:
+              type: integer
+            inscribingCount:
+              type: integer
+            mintedCount:
+              type: integer
+            closedCount:
+              type: integer
+            refundedCount:
+              type: integer
+
+    OrderCreateParams:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              filename:
+                type: string
+              dataURL:
+                type: string
+          example:
+            - filename: 1000.sats
+              dataURL: >-
+                data:text/plain;charset=utf-8;base64,eyJwIjoic25zIiwib3AiOiJyZWciLCJuYW1lIjoiMTAwMDAuc2F0cyJ9
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+    OrderCreateBRC20DeployParams:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+          example: ""
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+        brc20Ticker:
+          type: string
+          description: tick in brc20-deploy
+          example: ""
+        brc20Max:
+          type: string
+          description: max in brc20-deploy
+          example: ""
+        brc20Limit:
+          type: string
+          description: lim in brc20-deploy
+          example: ""
+    OrderCreateBRC20MintParams:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+          example: ""
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+        brc20Ticker:
+          type: string
+          description: tick in brc20-mint
+          example: ""
+        brc20Amount:
+          type: string
+          description: amt in brc20-mint
+          example: ""
+        count:
+          type: integer
+          format: int32
+          description: Repetition count
+          example: 1
+    OrderCreateBRC20TransferParams:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+          example: ""
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+        brc20Ticker:
+          type: string
+          description: tick in brc20-transfer
+          example: ""
+        brc20Amount:
+          type: string
+          description: amt in brc20-transfer
+          example: ""
+    OrderCreateBRC205ByteMintParams:
+      type: object
+      properties:
+        deployerAddress:
+          type: string
+          description: The deployer address that deployed the ticker
+          example: ""
+        deployerPubkey:
+          type: string
+          description: The deployer pubkey that deployed the ticker
+          example: ""
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+          example: ""
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+        brc20Ticker:
+          type: string
+          description: tick in brc20-mint
+          example: ""
+        brc20Amount:
+          type: string
+          description: amt in brc20-mint
+          example: ""
+    OrderRequestCommitBRC205ByteMintParams:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: orderId
+          example: ""
+    OrderRequestCommitBRC205ByteMintResponse:
+      type: object
+      properties:
+        psbtHex:
+          type: string
+          description: psbt hex string
+          example: ""
+        inputsToSign:
+          type: array
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+              signingIndexes:
+                type: array
+                items:
+                  type: integer
+    OrderSignCommitBRC205ByteMintParams:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: orderId
+          example: ""
+        psbt:
+          type: string
+          description: psbt hex string
+          example: ""
+    OrderSignCommitBRC205ByteMintResponse:
+      type: object
+      properties:
+        psbtHex:
+          type: string
+          description: psbt hex string
+          example: ""
+        inputsToSign:
+          type: array
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+              signingIndexes:
+                type: array
+                items:
+                  type: integer
+    OrderSignRevealBRC205ByteMintParams:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: orderId
+          example: ""
+        psbt:
+          type: string
+          description: psbt hex string
+          example: ""
+    OrderSignRevealBRC205ByteMintResponse:
+      type: object
+      properties:
+        inscriptionId:
+          type: string
+          description: inscriptionId
+          example: ""
+    OrderCreateRunesEtchParams:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              filename:
+                type: string
+              dataURL:
+                type: string
+              runes_etch:
+                type: object
+                properties:
+                  etching:
+                    type: object
+                    properties:
+                      spacedRune:
+                        type: string
+                      symbol:
+                        type: string
+                      divisibility:
+                        type: integer
+                      premine:
+                        type: string
+                      terms:
+                        type: object
+                        properties:
+                          amount:
+                            type: string
+                          cap:
+                            type: string
+                          height:
+                            type: array
+                            items:
+                              type: integer
+                          offset:
+                            type: array
+                            items:
+                              type: integer
+
+          example:
+            - filename: logo
+              dataURL: >-
+                data:text/plain;charset=utf-8;base64,eyJwIjoic25zIiwib3AiOiJyZWciLCJuYW1lIjoiMTAwMDAuc2F0cyJ9
+              runes_etch:
+                etching:
+                  spacedRune: AAAABBBBB
+                  symbol: G
+                  divisibility: 0
+                  premine: 100
+                  terms:
+                    amount: 1000
+                    cap: 21000000
+                    height: [840000, 880000]
+                    offset: [0, 10000]
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+    OrderCreateRunesMintParams:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        runeid:
+          type: string
+          example: 848484:10
+        count:
+          type: integer
+          example: 2
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []

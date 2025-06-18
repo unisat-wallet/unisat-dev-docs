@@ -1,0 +1,218 @@
+# marketplace-errors.yaml
+version: "1.0"
+service: marketplace
+errors:
+  - code: -1
+    key: _1
+    message: "Unknown error"
+
+  - code: -100
+    key: auction_not_exist
+    message: "Order not exist"
+
+  - code: -101
+    key: auction_status_error
+    message: "Order status error"
+
+  - code: -102
+    key: bid_not_exist
+    message: "Resource not available, please try again"
+
+  - code: -104
+    key: not_avaiable_utxo
+    message: "Available balance not enough"
+
+  - code: -105
+    key: auction_create_error
+    message: "Auction creation failed"
+
+  - code: -106
+    key: maintain
+    message: "The system is under maintenance"
+
+  - code: -107
+    key: nft_invalid
+    message: "Invalid NFT"
+
+  - code: -109
+    key: inscription_not_found
+    message: "Inscription not found, please try again later"
+
+  - code: -110
+    key: inscription_invalid
+    message: "Invalid inscription"
+
+  - code: -111
+    key: inscription_info_fail
+    message: "Failed to get inscription info"
+
+  - code: -112
+    key: sign_error
+    message: "Sign error"
+
+  - code: -113
+    key: bind_error
+    message: "If you use the receive address, you need to bind first"
+
+  - code: -114
+    key: domain_char_limit
+    message: "The domain name contains temporarily unsupported characters"
+
+  - code: -115
+    key: domain_sats_verify_error
+    message: "Verify domain name error"
+
+  - code: -116
+    key: readonly
+    message: "The marketplace is currently not operational"
+
+  - code: -118
+    key: transaction_not_found
+    message: "Transaction not found"
+
+  - code: -119
+    key: indexer_api_error
+    message: "Indexer error, please try again later"
+
+  - code: -122
+    key: fee_rate_too_low
+    message: "Fee rate too low"
+
+  - code: -124
+    key: address_type_not_supoort
+    message: "Address type not supported"
+
+  - code: -126
+    key: invalid_nft_multi_inscriptions
+    message: "Invalid NFT: multi inscriptions"
+
+  - code: -127
+    key: invalid_nft_not_confirmed
+    message: "Invalid NFT: not confirmed"
+
+  - code: -131
+    key: buyers_sellers_is_same
+    message: "Buyer and seller cannot be the same one"
+
+  - code: -132
+    key: minimum_selling_price
+    message: "The lowest listing amount of satoshis is {value}"
+    has_variable: true
+
+  - code: -133
+    key: highest_selling_price
+    message: "The highest listing amount of satoshis is {value}"
+    has_variable: true
+
+  - code: -137
+    key: first_bid_price_error
+    message: "First bid price error"
+
+  - code: -138
+    key: bid_price_too_low
+    message: "Bid price too low"
+
+  - code: -139
+    key: fixed_price_error
+    message: "The price has updated by the seller. Please refresh the page and try again"
+
+  - code: -141
+    key: not_support_in_fixed_price_mode
+    message: "Not supported in fixed price mode"
+
+  - code: -144
+    key: auction_is_started
+    message: "The listing is not available anymore"
+
+  - code: -145
+    key: repeat_bid
+    message: "Repeated operation"
+
+  - code: -147
+    key: not_allowed_to_proceed
+    message: "You are not allowed to proceed"
+
+  - code: -148
+    key: blacklist_tip
+    message: "System has detected malicious behavior, contact Discord admin"
+
+  - code: -150
+    key: confirmations_num_to_be_traded
+    message: "Inscription needs more confirmations to be traded"
+
+  - code: -151
+    key: confirmations_num_to_be_listed
+    message: "Inscription needs more confirmations to be listed"
+
+  - code: -152
+    key: invalid_nft_unknown_type
+    message: "Invalid NFT: unknown type"
+
+  - code: -153
+    key: server_busy
+    message: "The service is busy, please wait"
+
+  - code: -154
+    key: indexer_timeout
+    message: "Request indexer timeout, please retry"
+
+  - code: -155
+    key: seller_less_than_dust
+    message: "Inscription value below min threshold (dust)"
+
+  - code: -156
+    key: user_params_error
+    message: "User params error: {details}"
+    has_variable: true
+
+  - code: -157
+    key: batch_bid_not_support
+    message: "Bulk purchase not supported"
+
+  - code: -158
+    key: atomicals_api_error
+    message: "Atomicals API error"
+
+  - code: -159
+    key: buyer_less_than_dust
+    message: "This address cannot receive the inscription because it is less than dust, please try another address"
+
+  - code: -160
+    key: inscription_listed
+    message: "Inscription is already listed on the market"
+
+  - code: -161
+    key: service_updated_try_again
+    message: "The service is being updated, please try again"
+
+  - code: -162
+    key: invalid_utxo
+    message: "Invalid UTXO"
+
+  - code: -163
+    key: public_address_inconsistent
+    message: "The public key and address do not match"
+
+  - code: -164
+    key: runes_api_error
+    message: "Runes API error"
+
+  - code: -165
+    key: invalid_runes
+    message: "Invalid runes"
+
+  - code: -166
+    key: batch_listing_not_support
+    message: "Bulk listing does not yet support this type of NFT"
+
+  - code: -167
+    key: dummy_utxo_not_enough
+    message: "The number of UTXO is not enough"
+
+  - code: -168
+    key: dummy_split_only_support
+    message: "Splitting UTXO currently only supports p2tr, p2sh, p2wpkh address types"
+
+  - code: -169
+    key: alkanes_api_error
+    message: "Alkanes API error"

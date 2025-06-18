@@ -1,0 +1,652 @@
+openapi: 3.0.3
+info:
+  title: Runes Indexer API
+  version: 1.0.0
+  description: >-
+    This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel
+    free to send us an email, and we will provide you with an API KEY.
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+  - url: https://open-api-testnet.unisat.io
+  - url: https://open-api-testnet4.unisat.io
+  - url: https://open-api-signet.unisat.io
+  - url: https://open-api-fractal.unisat.io
+  - url: https://open-api-fractal-testnet.unisat.io
+tags:
+  - name: Runes
+    description: Runes (https://docs.ordinals.com/runes.html)
+paths:
+  /v1/indexer/runes/status:
+    get:
+      tags:
+        - Runes
+      summary: Get runes status
+      description: "Get runes global status"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/RuneStatus"
+
+  /v1/indexer/runes/info-list:
+    get:
+      tags:
+        - Runes
+      summary: Get runes list
+      description: ""
+      parameters:
+        - name: rune
+          in: query
+          description: "search by rune spacedRune"
+          required: false
+          schema:
+            type: string
+            example: 0
+        - name: sort
+          in: query
+          description: "by (holders/transactions/timestamp)"
+          required: false
+          schema:
+            type: string
+            example: timestamp
+        - name: complete
+          in: query
+          description: "complete type(yes/no)"
+          required: false
+          schema:
+            type: string
+            example: no
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "required,min=1,max=500,default=10"
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/RuneEntry"
+
+  /v1/indexer/runes/{runeid}/info:
+    get:
+      tags:
+        - Runes
+      summary: Get rune info by runeid
+      description: ""
+      parameters:
+        - name: runeid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/RuneEntry"
+
+  /v1/indexer/runes/{runeid}/holders:
+    get:
+      tags:
+        - Runes
+      summary: Get runes holders by runeid
+      description: ""
+      parameters:
+        - name: runeid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          description: Start offset
+          in: query
+          required: false
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of inscriptions returned
+          in: query
+          required: false
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 1
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/RuneHolder"
+
+  /v1/indexer/address/{address}/runes/balance-list:
+    get:
+      tags:
+        - Runes
+      summary: Get runes balance list by address
+      description: ""
+      parameters:
+        - name: address
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          description: Start offset
+          in: query
+          required: false
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of items returned
+          in: query
+          required: false
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    properties:
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/RunesBalance"
+
+  /v1/indexer/address/{address}/runes/{runeid}/balance:
+    get:
+      tags:
+        - Runes
+      summary: Get runes balance by address and runeid
+      description: ""
+      parameters:
+        - name: address
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: runeid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/RunesBalance"
+
+  /v1/indexer/runes/utxo/{txid}/{index}/balance:
+    get:
+      tags:
+        - Runes
+      summary: Get runes balance by utxo
+      description: ""
+      parameters:
+        - name: txid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: index
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/RunesBalance"
+
+  /v1/indexer/address/{address}/runes/{runeid}/utxo:
+    get:
+      tags:
+        - Runes
+      summary: Get utxo runes balance by address and runeid
+      description: ""
+      parameters:
+        - name: address
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: runeid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "required,min=1,max=500,default=10"
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    properties:
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+                      utxo:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/RuneUtxo"
+
+  /v1/indexer/runes/event:
+    get:
+      tags:
+        - Runes
+      description: Get the full history events of Runes.
+      parameters:
+        - name: rune
+          description: Filter by rune
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: type
+          description: Filter by history type
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - etch
+              - mint
+              - burn
+              - receive
+              - send
+        - name: address
+          description: Filter by address
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: height
+          description: Filter by block height
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: txid
+          description: Filter by tx
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: start
+          description: Start offset
+          in: query
+          required: false
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: Number of inscriptions returned
+          in: query
+          required: false
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/RunesEventItem"
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+components:
+  schemas:
+    RuneUtxo:
+      type: object
+      properties:
+        address:
+          type: string
+        satoshi:
+          type: integer
+          example: 10000
+        scriptPk:
+          type: string
+        txid:
+          type: string
+        vout:
+          type: integer
+          example: 0
+        runes:
+          type: array
+          items:
+            $ref: "#/components/schemas/RunesBalance"
+    RunesEventItem:
+      type: object
+      properties:
+        type:
+          type: string
+          enum:
+            - etch
+            - mint
+            - burn
+            - send
+            - receive
+        address:
+          type: string
+        amount:
+          type: string
+        height:
+          type: integer
+        txidx:
+          type: integer
+        txid:
+          type: string
+        timestamp:
+          type: integer
+        rune:
+          type: string
+        runeid:
+          type: string
+    RunesBalance:
+      type: object
+      properties:
+        amount:
+          type: string
+          example: "10000"
+        runeid:
+          type: string
+          example: "2584327:44"
+        rune:
+          type: string
+          example: "AAAAAAAAAAAAAB"
+        spacedRune:
+          type: string
+          example: "AAAAA•AAA•AAAAA•B"
+        symbol:
+          type: string
+          example: "G"
+        divisibility:
+          type: integer
+          example: 0
+    RuneHolder:
+      type: object
+      properties:
+        address:
+          type: string
+        amount:
+          type: string
+          example: "10000"
+    RuneEntry:
+      type: object
+      properties:
+        runeid:
+          type: string
+          example: "2583283:1333"
+        rune:
+          type: string
+          example: "UNCOMMONGOODS"
+        spacedRune:
+          type: string
+          example: "UNCOMMON•GOODS"
+        number:
+          type: integer
+          format: uint64
+          example: 0
+        height:
+          type: integer
+          format: uint64
+          example: 2583283
+        txidx:
+          type: integer
+          format: uint64
+          example: 1333
+        timestamp:
+          type: integer
+          example: 1623423423
+        divisibility:
+          type: integer
+          format: uint8
+          example: 2
+        symbol:
+          type: string
+          format: Option<char>
+          example: "G"
+        etching:
+          type: string
+          example: "7cd19fef13aa2924d4446b1a86c1904e02e46d16630370bc6de86f769692e242"
+        premine:
+          type: string
+          example: "10000"
+        terms:
+          type: object
+          properties:
+            amount:
+              type: string
+              example: "1000000"
+            cap:
+              type: string
+              example: "234000"
+            heightStart:
+              type: integer
+              example: 245000
+            heightEnd:
+              type: integer
+              example: 2480000
+            offsetStart:
+              type: integer
+              example: null
+            offsetEnd:
+              type: integer
+              example: null
+
+        mints:
+          type: string
+          example: "500"
+        burned:
+          type: string
+          format: u128
+          example: "1000"
+        holders:
+          type: integer
+          example: 1000
+        transactions:
+          type: integer
+          example: 1000
+        supply:
+          type: string
+          example: "500010000"
+        start:
+          type: integer
+        end:
+          type: integer
+        mintable:
+          type: boolean
+        remaining:
+          type: string
+    RuneStatus:
+      type: object
+      properties:
+        bestHeight:
+          type: integer
+        runes:
+          type: integer
+          example: 100
+        minimumRune:
+          type: string
+          example: "AAAAAAAAAAAA"
+        halvingBlockCount:
+          type: integer
+          example: 100
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

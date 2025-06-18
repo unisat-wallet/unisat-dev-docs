@@ -1,0 +1,14 @@
+{
+  "name": "unisat-dev-support",
+  "version": "1.0.0",
+  "license": "MIT",
+  "scripts": {
+    "build": "npm run build:openapi-swagger && npm run build:error-codes",
+    "build:openapi-swagger": "node tools/build-swagger.js",
+    "build:error-codes": "node tools/build-error.js",
+    "prepare": "npm run build"
+  },
+  "dependencies": {
+    "js-yaml": "^4.1.0"
+  }
+}

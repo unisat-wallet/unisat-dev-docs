@@ -1,0 +1,146 @@
+openapi: 3.0.3
+info:
+  title: Fractal Only API
+  version: 1.0.4
+  description: >-
+    This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel
+    free to send us an email, and we will provide you with an API KEY.
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api-fractal.unisat.io
+  - url: https://open-api-fractal-testnet.unisat.io
+tags:
+  - name: Fractal
+    description: Fractal Only
+paths:
+  /v1/public/fractal/supply:
+    get:
+      tags:
+        - Fractal
+      summary: Get circulating FB in fractal mainnet
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/FractalSupply"
+        "401":
+          description: Invalid API Key
+  /v1/public/fractal/total-supply:
+    get:
+      tags:
+        - Fractal
+      summary: Get total supply FB in fractal mainnet
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/FractalSupply"
+        "401":
+          description: Invalid API Key
+  /v1/public/address/total:
+    get:
+      tags:
+        - Fractal
+      summary: Get total address
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: number
+        "401":
+          description: Invalid API Key
+  /v1/public/address/rich-list:
+    get:
+      tags:
+        - Fractal
+      summary: Return the address list in descending order of amount.
+      parameters:
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned (Max 10000)
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/AddressBalance"
+        "401":
+          description: Invalid API Key
+components:
+  schemas:
+    FractalSupply:
+      type: object
+      properties:
+        blocks:
+          type: number
+        supply:
+          type: number
+    AddressBalance:
+      type: array
+      items:
+        properties:
+          address:
+            type: string
+          balance:
+            type: number
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

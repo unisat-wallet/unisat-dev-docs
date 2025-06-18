@@ -1,0 +1,423 @@
+openapi: 3.0.3
+info:
+  title: Inscription Indexer API
+  version: 1.0.0
+  description: This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free to send us an email, and we will provide you with an API KEY.
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+  - url: https://open-api-testnet.unisat.io
+  - url: https://open-api-testnet4.unisat.io
+  - url: https://open-api-signet.unisat.io
+  - url: https://open-api-fractal.unisat.io
+  - url: https://open-api-fractal-testnet.unisat.io
+tags:
+  - name: Inscriptions
+    description: Inscriptions (https://docs.ordinals.com/inscriptions.html)
+
+paths:
+  /v1/indexer/inscription/info/{inscriptionId}:
+    get:
+      tags:
+        - Inscriptions
+      summary: Get inscription info by inscriptionId
+      parameters:
+        - name: inscriptionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/InscriptionData"
+        "401":
+          description: Invalid API Key
+  /v1/indexer/inscription/content/{inscriptionId}:
+    get:
+      tags:
+        - Inscriptions
+      summary: Get inscription content info by inscriptionId
+      parameters:
+        - name: inscriptionId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content: {}
+        "401":
+          description: Invalid API Key
+  /v1/indexer/inscription/events:
+    get:
+      tags:
+        - Inscriptions
+      summary: Get inscription events
+      parameters:
+        - name: start
+          description: Start blockheight
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: end
+          description: End blockheight (0 represents the inclusion of mempool data.)
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      cursor:
+                        type: integer
+                      total:
+                        type: integer
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/InscriptionEvent"
+        "401":
+          description: Invalid API Key
+  /v1/indexer/address/{address}/inscription-data:
+    get:
+      tags:
+        - Inscriptions
+      summary: Get inscription UTXO list by address
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      cursor:
+                        type: integer
+                      total:
+                        type: integer
+                      totalConfirmed:
+                        type: integer
+                      totalUnconfirmed:
+                        type: integer
+                      totalUnconfirmedSpend:
+                        type: integer
+                      inscription:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/InscriptionData"
+        "401":
+          description: Invalid API Key
+  /v1/indexer/address/{address}/inscription-utxo-data:
+    get:
+      tags:
+        - Inscriptions
+      summary: Get inscription UTXO list by address
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      cursor:
+                        type: integer
+                      total:
+                        type: integer
+                      totalConfirmed:
+                        type: integer
+                      totalUnconfirmed:
+                        type: integer
+                      totalUnconfirmedSpend:
+                        type: integer
+                      utxo:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/UTXO"
+        "401":
+          description: Invalid API Key
+
+components:
+  schemas:
+    InscriptionItem:
+      type: object
+      properties:
+        inscriptionId:
+          type: string
+        inscriptionNumber:
+          type: integer
+        isBRC20:
+          type: boolean
+        moved:
+          type: boolean
+        offset:
+          type: integer
+    InscriptionData:
+      type: object
+      properties:
+        address:
+          type: string
+        offset:
+          type: integer
+        inscriptionIndex:
+          type: integer
+        inscriptionId:
+          type: string
+        inscriptionNumber:
+          type: integer
+        hasPointer:
+          type: boolean
+        hasParent:
+          type: boolean
+        hasDeligate:
+          type: boolean
+        hasMetaProtocal:
+          type: boolean
+        hasContentEncoding:
+          type: boolean
+        pointer:
+          type: integer
+        parent:
+          type: string
+        deligate:
+          type: string
+        metaprotocol:
+          type: string
+        metadata:
+          type: string
+        contentEncoding:
+          type: string
+        contentType:
+          type: string
+        contentLength:
+          type: integer
+        height:
+          type: integer
+        timestamp:
+          type: integer
+        inSatoshi:
+          type: integer
+        outSatoshi:
+          type: integer
+        brc20:
+          description: Only BRC20 transfer have this value
+          type: object
+          properties:
+            amt:
+              type: string
+            decimal:
+              type: string
+            lim:
+              type: string
+            max:
+              type: string
+            minted:
+              type: string
+            op:
+              type: string
+            tick:
+              type: string
+            to:
+              type: string
+        utxo:
+          $ref: "#/components/schemas/UTXO"
+    InscriptionEvent:
+      type: object
+      properties:
+        isTransfer:
+          type: boolean
+          description: "false: a mint event; true: a transfer event"
+        inscriptionId:
+          type: string
+        inscriptionNumber:
+          type: integer
+        address:
+          type: string
+          description: current address
+        contentBody:
+          type: string
+          description: only present when it's a mint event
+        contentType:
+          type: string
+          description: only present when it's a mint event
+        inSatoshi:
+          type: integer
+          description: total input satoshi in tx
+        outSatoshi:
+          type: integer
+          description: total output satoshi in tx
+        pkScript:
+          type: string
+        satoshi:
+          type: integer
+          description: satoshi in inscription
+        timestamp:
+          type: integer
+          description: block timestamp
+        txid:
+          type: string
+          description: inscription genesis txid
+        i:
+          type: integer
+          description: inscription genesis vout
+        vout:
+          type: integer
+          description: tx vout
+        sequence:
+          type: integer
+        height:
+          type: integer
+        txidx:
+          type: integer
+          description: tx index in block
+    UTXO:
+      type: object
+      properties:
+        address:
+          type: string
+        codeType:
+          type: integer
+        height:
+          type: integer
+        idx:
+          type: integer
+        inscriptions:
+          type: array
+          items:
+            $ref: "#/components/schemas/InscriptionItem"
+        isOpInRBF:
+          type: boolean
+          example: false
+        satoshi:
+          type: integer
+          example: 10000
+        scriptPk:
+          type: string
+        scriptType:
+          type: string
+        txid:
+          type: string
+        vout:
+          type: integer
+          example: 0
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
