@@ -9,25 +9,25 @@ Basic Indexer API is a RESTful API for accessing Bitcoin blockchain data. It pro
 ## 📑 Table of Contents
 
 - [Blocks](#blocks)
-  - [Get Blockchain Info](#get-blockchain-info)
-  - [Get Recommended Fees](#get-recommended-fees)
-  - [Get block info by height](#get-block-info-by-height)
-  - [Get block info by blockid](#get-block-info-by-blockid)
-  - [Get txs by block height.](#get-txs-by-block-height)
+  - [/v1/indexer/blockchain/info (Get Blockchain Info) ](#get-blockchain-info)
+  - [/v1/indexer/fees/recommended (Get Recommended Fees) ](#get-recommended-fees)
+  - [/v1/indexer/height/{height}/block (Get block info by height) ](#get-block-info-by-height)
+  - [/v1/indexer/block/id/{blockid} (Get block info by blockid) ](#get-block-info-by-blockid)
+  - [/v1/indexer/block/{height}/txs (Get txs by block height.) ](#get-txs-by-block-height)
 - [Transactions](#transactions)
-  - [Get tx info by txid](#get-tx-info-by-txid)
-  - [Get the inputs of a tx](#get-the-inputs-of-a-tx)
-  - [Get the outputs of a tx](#get-the-outputs-of-a-tx)
-  - [Get the raw tx by txid](#get-the-raw-tx-by-txid)
-  - [Get the UTXO by txid and index](#get-the-utxo-by-txid-and-index)
-  - [Push rawtx to bitcoin node.](#push-rawtx-to-bitcoin-node)
-  - [Push rawtxs to bitcoin node.](#push-rawtxs-to-bitcoin-node)
+  - [/v1/indexer/tx/{txid} (Get tx info by txid) ](#get-tx-info-by-txid)
+  - [/v1/indexer/tx/{txid}/ins (Get the inputs of a tx) ](#get-the-inputs-of-a-tx)
+  - [/v1/indexer/tx/{txid}/outs (Get the outputs of a tx) ](#get-the-outputs-of-a-tx)
+  - [/v1/indexer/rawtx/{txid} (Get the raw tx by txid) ](#get-the-raw-tx-by-txid)
+  - [/v1/indexer/utxo/{txid}/{index} (Get the UTXO by txid and index) ](#get-the-utxo-by-txid-and-index)
+  - [/v1/indexer/local_pushtx (Push rawtx to bitcoin node.) ](#push-rawtx-to-bitcoin-node)
+  - [/v1/indexer/local_pushtxs (Push rawtxs to bitcoin node.) ](#push-rawtxs-to-bitcoin-node)
 - [Addresses](#addresses)
-  - [Get the balance by address](#get-the-balance-by-address)
-  - [Get transaction history by address](#get-transaction-history-by-address)
-  - [Get UTXO list by address](#get-utxo-list-by-address)
-  - [Get available balance by address](#get-available-balance-by-address)
-  - [Get available UTXO list by address](#get-available-utxo-list-by-address)
+  - [/v1/indexer/address/{address}/balance (Get the balance by address) ](#get-the-balance-by-address)
+  - [/v1/indexer/address/{address}/history (Get transaction history by address) ](#get-transaction-history-by-address)
+  - [/v1/indexer/address/{address}/utxo-data (Get UTXO list by address) ](#get-utxo-list-by-address)
+  - [/v1/indexer/address/{address}/available-balance (Get available balance by address) ](#get-available-balance-by-address)
+  - [/v1/indexer/address/{address}/available-utxo-data (Get available UTXO list by address) ](#get-available-utxo-list-by-address)
 
 ---
 
@@ -217,7 +217,109 @@ Get the UTXO by txid and index.
 
 ### Notes
 
-@@
+The return result of this UTXO interface will have three scenarios:
+
+1. When UTXO has not been spent, it will return the information of this UTXO, and isSpent will be set to false.
+
+   ![image](./p1.png)
+
+2. When UTXO has been spent, but the transaction that spent it has not yet been confirmed, it will return the information of this UTXO, and isSpent will be set to true.
+
+   ![image](./p2.avif)
+
+3. When UTXO has been spent and the transacted spend has been confirmed, it will return null.
+   ![image](./p3.avif)
+
+#### This endpoint was updated on 2025-05-20
+
+BRC20 inscriptions of type TRANSFER (those that have undergone transfers) and MINT inscriptions, which no longer hold value, will no longer be available for query after this update.
+**Before Upgrade:**
+
+```JSON
+{
+  "code": 0,
+  "msg": "ok",
+  "data": {
+    "txid": "...",
+    "vout": 0,
+    "satoshi": 546,
+    "scriptType": "5120",
+    "scriptPk": "...",
+    "codeType": 9,
+    "address": "...",
+    "height": 815539,
+    "idx": 2516,
+    "isOpInRBF": false,
+    "isSpent": false,
+    "inscriptionsCount": 2,
+    "inscriptions": [
+      {
+        "inscriptionNumber": 38012882,
+        "inscriptionId": "...",
+        "offset": 0,
+        "moved": false,
+        "sequence": 0,
+        "isCursed": false,
+        "isVindicate": false,
+        "isBRC20Ext": false,
+        "isBRC20": true
+      },
+      {
+        "inscriptionNumber": 38012883,
+        "inscriptionId": "....",
+        "offset": 0,
+        "moved": false,
+        "sequence": 0,
+        "isCursed": false,
+        "isVindicate": false,
+        "isBRC20Ext": false,
+        "isBRC20": false
+      }
+    ]
+  }
+}
+```
+
+**After Upgrade:**
+
+```JSON
+{
+  "code": 0,
+  "msg": "ok",
+  "data": {
+    "txid": "...",
+    "vout": 0,
+    "satoshi": 546,
+    "scriptType": "5120",
+    "scriptPk": "...",
+    "codeType": 9,
+    "address": "...",
+    "height": 815539,
+    "idx": 2516,
+    "isOpInRBF": false,
+    "isSpent": false,
+    "inscriptionsCount": 2,
+    "inscriptions": [
+    {
+        "inscriptionNumber": 38012883,
+        "inscriptionId": "....",
+        "offset": 0,
+        "moved": false,
+        "sequence": 0,
+        "isCursed": false,
+        "isVindicate": false,
+        "isBRC20Ext": false,
+        "isBRC20": false
+      }
+     ]
+  }
+}
+```
+
+Migration Guidance:
+
+- The inscriptionsCount (no changes required)
+- The inscriptions array will eventually be removed for useless brc20 Inscriptions
 
 ---
 

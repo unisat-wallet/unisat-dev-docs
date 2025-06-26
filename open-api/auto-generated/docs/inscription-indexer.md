@@ -9,11 +9,11 @@ Inscription Indexer API is a RESTful API for accessing and managing inscriptions
 ## 📑 Table of Contents
 
 - [Inscriptions](#inscriptions)
-  - [Get inscription info by inscriptionId](#get-inscription-info-by-inscriptionid)
-  - [Get inscription content info by inscriptionId](#get-inscription-content-info-by-inscriptionid)
-  - [Get inscription events](#get-inscription-events)
-  - [Get inscription UTXO list by address](#get-inscription-utxo-list-by-address)
-  - [Get inscription UTXO list by address](#get-inscription-utxo-list-by-address)
+  - [/v1/indexer/inscription/info/{inscriptionId} (Get inscription info by inscriptionId) ](#get-inscription-info-by-inscriptionid)
+  - [/v1/indexer/inscription/content/{inscriptionId} (Get inscription content info by inscriptionId) ](#get-inscription-content-info-by-inscriptionid)
+  - [/v1/indexer/inscription/events (Get inscription events) ](#get-inscription-events)
+  - [/v1/indexer/address/{address}/inscription-data (Get inscription UTXO list by address) ](#get-inscription-utxo-list-by-address)
+  - [/v1/indexer/address/{address}/inscription-utxo-data (Get inscription UTXO list by address) ](#get-inscription-utxo-list-by-address)
 
 ---
 

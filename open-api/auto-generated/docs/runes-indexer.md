@@ -9,15 +9,15 @@ This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free
 ## 📑 Table of Contents
 
 - [Runes](#runes)
-  - [Get runes status](#get-runes-status)
-  - [Get runes list](#get-runes-list)
-  - [Get rune info by runeid](#get-rune-info-by-runeid)
-  - [Get runes holders by runeid](#get-runes-holders-by-runeid)
-  - [Get runes balance list by address](#get-runes-balance-list-by-address)
-  - [Get runes balance by address and runeid](#get-runes-balance-by-address-and-runeid)
-  - [Get runes balance by utxo](#get-runes-balance-by-utxo)
-  - [Get utxo runes balance by address and runeid](#get-utxo-runes-balance-by-address-and-runeid)
-  - [Get Runes Events](#get-runes-events)
+  - [/v1/indexer/runes/status (Get runes status) ](#get-runes-status)
+  - [/v1/indexer/runes/info-list (Get runes list) ](#get-runes-list)
+  - [/v1/indexer/runes/{runeid}/info (Get rune info by runeid) ](#get-rune-info-by-runeid)
+  - [/v1/indexer/runes/{runeid}/holders (Get runes holders by runeid) ](#get-runes-holders-by-runeid)
+  - [/v1/indexer/address/{address}/runes/balance-list (Get runes balance list by address) ](#get-runes-balance-list-by-address)
+  - [/v1/indexer/address/{address}/runes/{runeid}/balance (Get runes balance by address and runeid) ](#get-runes-balance-by-address-and-runeid)
+  - [/v1/indexer/runes/utxo/{txid}/{index}/balance (Get runes balance by utxo) ](#get-runes-balance-by-utxo)
+  - [/v1/indexer/address/{address}/runes/{runeid}/utxo (Get utxo runes balance by address and runeid) ](#get-utxo-runes-balance-by-address-and-runeid)
+  - [/v1/indexer/runes/event (Get Runes Events) ](#get-runes-events)
 
 ---
 
@@ -41,6 +41,15 @@ Get runes global status
   - `runes` (integer):  (example: `100`)
   - `minimumRune` (string):  (example: `AAAAAAAAAAAA`)
   - `halvingBlockCount` (integer):  (example: `100`)
+
+### Notes
+
+- bestHeight : The latest height of the data being processed by the current index
+- runes: The total count of Runes
+- minimumRune: The minimumRune can be edicted
+- halvingBlockCount: The number of blocks remaining until the next halving
+
+![image](./runes_p1.avif)
 
 ---
 

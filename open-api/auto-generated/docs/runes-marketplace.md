@@ -9,35 +9,38 @@ This API provides endpoints for runes marketplace services
 ## 📑 Table of Contents
 
 - [MarketPlace-Runes](#marketplace-runes)
-  - [Get statistical data, price, market capitalization, etc. for runes.](#get-statistical-data-price-market-capitalization-etc-for-runes)
-  - [Get statistical data, price, market capitalization, etc. for Runes.](#get-statistical-data-price-market-capitalization-etc-for-runes)
-  - [Retrieve the list information of the market.](#retrieve-the-list-information-of-the-market)
-  - [Get information on listings, delistings, and sales.](#get-information-on-listings-delistings-and-sales)
-  - [Create listing order.](#create-listing-order)
-  - [Confirm listing order.](#confirm-listing-order)
-  - [Return params before creating purchase order.](#return-params-before-creating-purchase-order)
-  - [Create purchase order.](#create-purchase-order)
-  - [Confirm purchase order.](#confirm-purchase-order)
-  - [Create delisting order.](#create-delisting-order)
-  - [Confirm delisting order.](#confirm-delisting-order)
-  - [Create the order for price adjustment.](#create-the-order-for-price-adjustment)
-  - [Confirm the order for price adjustment.](#confirm-the-order-for-price-adjustment)
-  - [Create batch listing order.](#create-batch-listing-order)
-  - [Confirm batch listing order.](#confirm-batch-listing-order)
-  - [Return params before creating purchase order.](#return-params-before-creating-purchase-order)
-  - [Create purchase order.](#create-purchase-order)
-  - [Confirm purchase order.](#confirm-purchase-order)
+  - [/v3/market/runes/auction/runes_types (Get statistical data.) ](#get-statistical-data)
+  - [/v3/market/runes/auction/runes_types_specified (Get statistical data for specified runes.) ](#get-statistical-data-for-specified-runes)
+  - [/v3/market/runes/auction/list (Retrieve the list information of the market.) ](#retrieve-the-list-information-of-the-market)
+  - [/v3/market/runes/auction/actions (Get information on listings, delistings, and sales.) ](#get-information-on-listings-delistings-and-sales)
+  - [/v3/market/runes/auction/create_put_on (Create listing order.) ](#create-listing-order)
+  - [/v3/market/runes/auction/confirm_put_on (Confirm listing order.) ](#confirm-listing-order)
+  - [/v3/market/runes/auction/create_bid_prepare (Return params before creating purchase order.) ](#return-params-before-creating-purchase-order)
+  - [/v3/market/runes/auction/create_bid (Create purchase order.) ](#create-purchase-order)
+  - [/v3/market/runes/auction/confirm_bid (Confirm purchase order.) ](#confirm-purchase-order)
+  - [/v3/market/runes/auction/create_put_off (Create delisting order.) ](#create-delisting-order)
+  - [/v3/market/runes/auction/confirm_put_off (Confirm delisting order.) ](#confirm-delisting-order)
+  - [/v3/market/runes/auction/create_modify_price (Create the order for price adjustment.) ](#create-the-order-for-price-adjustment)
+  - [/v3/market/runes/auction/confirm_modify_price (Confirm the order for price adjustment.) ](#confirm-the-order-for-price-adjustment)
+  - [/v3/market/runes/auction/create_batch_put_on (Create batch listing order.) ](#create-batch-listing-order)
+  - [/v3/market/runes/auction/confirm_batch_put_on (Confirm batch listing order.) ](#confirm-batch-listing-order)
+  - [/v3/market/runes/auction/create_batch_bid_prepare (Return params before creating purchase order.) ](#return-params-before-creating-purchase-order)
+  - [/v3/market/runes/auction/create_batch_bid (Create purchase order.) ](#create-purchase-order)
+  - [/v3/market/runes/auction/confirm_batch_bid (Confirm purchase order.) ](#confirm-purchase-order)
 
 ---
 
 ## MarketPlace-Runes
 
-### Get statistical data, price, market capitalization, etc. for runes.
-<a id="get-statistical-data-price-market-capitalization-etc-for-runes"></a>
+### Get statistical data.
+<a id="get-statistical-data"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/runes_types`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/getRunesTypes)  
+
+#### Description
+Get statistical data, price, market capitalization, etc. for runes.
 
 #### Response (200)
 - `code` (number): 
@@ -57,12 +60,15 @@ This API provides endpoints for runes marketplace services
 
 ---
 
-### Get statistical data, price, market capitalization, etc. for Runes.
-<a id="get-statistical-data-price-market-capitalization-etc-for-runes"></a>
+### Get statistical data for specified runes.
+<a id="get-statistical-data-for-specified-runes"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/runes_types_specified`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/getRunesTypesSpecified)  
+
+#### Description
+Get statistical data, price, market capitalization, etc. for Runes.
 
 #### Response (200)
 - `code` (number): 

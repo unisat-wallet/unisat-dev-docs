@@ -9,14 +9,14 @@ This is the API for collections. Currently, it only indexes a single whitelisted
 ## 📑 Table of Contents
 
 - [Collection-Indexer](#collection-indexer)
-  - [Return the overall information of the collection service](#return-the-overall-information-of-the-collection-service)
-  - [Return the details of the specified collection](#return-the-details-of-the-specified-collection)
-  - [Return the owner information of a specific collection](#return-the-owner-information-of-a-specific-collection)
-  - [Return the collection summary for the specified address.](#return-the-collection-summary-for-the-specified-address)
-  - [Return the list of inscriptions for a specific collection.](#return-the-list-of-inscriptions-for-a-specific-collection)
-  - [Return the summary of a specific collection for the designated address.](#return-the-summary-of-a-specific-collection-for-the-designated-address)
-  - [Get the list of inscriptions for a specific collection at a designated address.](#get-the-list-of-inscriptions-for-a-specific-collection-at-a-designated-address)
-  - [Get inscription collection list](#get-inscription-collection-list)
+  - [/v1/collection-indexer/collection/status (Return the overall information of the collection service) ](#return-the-overall-information-of-the-collection-service)
+  - [/v1/collection-indexer/collection/{collectionId}/info (Return the details of the specified collection) ](#return-the-details-of-the-specified-collection)
+  - [/v1/collection-indexer/collection/{collectionId}/holders (Return the owner information of a specific collection) ](#return-the-owner-information-of-a-specific-collection)
+  - [/v1/collection-indexer/address/{address}/collection/list (Return the collection summary for the specified address.) ](#return-the-collection-summary-for-the-specified-address)
+  - [/v1/collection-indexer/collection/{collectionId}/items (Return the list of inscriptions for a specific collection.) ](#return-the-list-of-inscriptions-for-a-specific-collection)
+  - [/v1/collection-indexer/address/{address}/collection/{collectionId}/summary (Return the summary of a specific collection for the designated address.) ](#return-the-summary-of-a-specific-collection-for-the-designated-address)
+  - [/v1/collection-indexer/address/{address}/collection/{collectionId}/items (Get the list of inscriptions for a specific collection at a designated address.) ](#get-the-list-of-inscriptions-for-a-specific-collection-at-a-designated-address)
+  - [/v1/collection-indexer/inscription/{inscriptionId}/collection/list (Get inscription collection list) ](#get-inscription-collection-list)
 
 ---
 

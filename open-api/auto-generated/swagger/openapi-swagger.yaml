@@ -99,20 +99,6 @@ tags:
       - https://open-api-testnet.unisat.io
       - https://open-api-fractal.unisat.io
       - https://open-api-fractal-testnet.unisat.io
-  - name: MarketPlace-Collection
-    description: Collection MarketPlace Service
-    urls:
-      - https://open-api.unisat.io
-      - https://open-api-testnet.unisat.io
-      - https://open-api-fractal.unisat.io
-      - https://open-api-fractal-testnet.unisat.io
-  - name: MarketPlace-Domain
-    description: Domain MarketPlace Service
-    urls:
-      - https://open-api.unisat.io
-      - https://open-api-testnet.unisat.io
-      - https://open-api-fractal.unisat.io
-      - https://open-api-fractal-testnet.unisat.io
   - name: MarketPlace-Runes
     description: Runes MarketPlace Service
     urls:
@@ -124,9 +110,16 @@ tags:
     description: Alkanes MarketPlace Service
     urls:
       - https://open-api.unisat.io
-      - https://open-api-testnet.unisat.io
+  - name: MarketPlace-Collection
+    description: Ordinals Collection MarketPlace Service
+    urls:
+      - https://open-api.unisat.io
       - https://open-api-fractal.unisat.io
-      - https://open-api-fractal-testnet.unisat.io
+  - name: MarketPlace-Domain
+    description: Ordinals Domain MarketPlace Service
+    urls:
+      - https://open-api.unisat.io
+      - https://open-api-fractal.unisat.io
   - name: brc20-swap
     description: BRC20 Swap and PizzaSwap Service
     urls:
@@ -4878,7 +4871,8 @@ paths:
   /v3/market/runes/auction/runes_types:
     post:
       operationId: getRunesTypes
-      summary: Get statistical data, price, market capitalization, etc. for runes.
+      summary: Get statistical data.
+      description: Get statistical data, price, market capitalization, etc. for runes.
       tags:
         - MarketPlace-Runes
       requestBody:
@@ -4956,7 +4950,8 @@ paths:
   /v3/market/runes/auction/runes_types_specified:
     post:
       operationId: getRunesTypesSpecified
-      summary: Get statistical data, price, market capitalization, etc. for Runes.
+      summary: Get statistical data for specified runes.
+      description: Get statistical data, price, market capitalization, etc. for Runes.
       tags:
         - MarketPlace-Runes
       requestBody:
@@ -5639,7 +5634,8 @@ paths:
   /v3/market/alkanes/auction/alkanes_types:
     post:
       operationId: getAlkanesTypes
-      summary: Get statistical data, price, market capitalization, etc. for alkanes.
+      summary: Get statistical data
+      description: Get statistical data, price, market capitalization, etc. for alkanes.
       tags:
         - MarketPlace-Alkanes
       requestBody:
@@ -5717,7 +5713,8 @@ paths:
   /v3/market/alkanes/auction/alkanes_types_specified:
     post:
       operationId: getAlkanesTypesSpecified
-      summary: Get statistical data, price, market capitalization, etc. for Alkanes.
+      summary: Get statistical data for specified alkanes.
+      description: Get statistical data, price, market capitalization, etc. for Alkanes.
       tags:
         - MarketPlace-Alkanes
       requestBody:
@@ -7359,7 +7356,8 @@ paths:
   /v3/market/domain/auction/domain_types:
     post:
       operationId: getDomainTypes
-      summary: Get statistical data, price, market capitalization, etc. for domain.
+      summary: Get statistical data.
+      description: Get statistical data, price, market capitalization, etc. for domain.
       tags:
         - MarketPlace-Domain
       responses:
@@ -12268,6 +12266,10 @@ components:
         alkanes:
           type: integer
           example: 100
+        metashrewVersion:
+          type: string
+        alkanesRsVersion:
+          type: string
     AlkaneEvent:
       type: object
       properties:

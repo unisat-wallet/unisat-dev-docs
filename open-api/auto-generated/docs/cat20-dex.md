@@ -9,8 +9,8 @@ Fractal Only API for CAT20 DEX operations. This API provides endpoints to intera
 ## 📑 Table of Contents
 
 - [CAT20-DEX](#cat20-dex)
-  - [Get token price](#get-token-price)
-  - [Get the market stats](#get-the-market-stats)
+  - [/v1/cat20-dex/getTokenPrice (Get token price) ](#get-token-price)
+  - [/v1/cat20-dex/getMarketStats (Get the market stats) ](#get-the-market-stats)
 
 ---
 

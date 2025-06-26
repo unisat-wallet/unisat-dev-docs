@@ -9,19 +9,19 @@ The Alkanes Indexer API is developed by the UniSat team, providing a simplified 
 ## 📑 Table of Contents
 
 - [Alkanes](#alkanes)
-  - [Get alkanes status](#get-alkanes-status)
-  - [Get alkanes list](#get-alkanes-list)
-  - [Get alkane info by alkaneid](#get-alkane-info-by-alkaneid)
-  - [Get alkanes token list](#get-alkanes-token-list)
-  - [Get alkanes holders by alkaneid](#get-alkanes-holders-by-alkaneid)
-  - [Get collection items](#get-collection-items)
-  - [Get contract events](#get-contract-events)
-  - [Get alkanes utxo balance](#get-alkanes-utxo-balance)
-  - [Get utxo alkanes balance by address and alkaneid](#get-utxo-alkanes-balance-by-address-and-alkaneid)
-  - [Get address alkanes token list](#get-address-alkanes-token-list)
-  - [Get address alkanes collection list](#get-address-alkanes-collection-list)
-  - [Get address collection items by alkaneid](#get-address-collection-items-by-alkaneid)
-  - [Get transfer history](#get-transfer-history)
+  - [/v1/indexer/alkanes/status (Get alkanes status) ](#get-alkanes-status)
+  - [/v1/indexer/alkanes/info-list (Get alkanes list) ](#get-alkanes-list)
+  - [/v1/indexer/alkanes/{alkaneid}/info (Get alkane info by alkaneid) ](#get-alkane-info-by-alkaneid)
+  - [/v1/indexer/alkanes/token-list (Get alkanes token list) ](#get-alkanes-token-list)
+  - [/v1/indexer/alkanes/{alkaneid}/holders (Get alkanes holders by alkaneid) ](#get-alkanes-holders-by-alkaneid)
+  - [/v1/indexer/alkanes/{alkaneid}/collection-items (Get collection items) ](#get-collection-items)
+  - [/v1/indexer/alkanes/{alkaneid}/contract-events (Get contract events) ](#get-contract-events)
+  - [/v1/indexer/alkanes/utxo/{txid}/{index}/balance (Get alkanes utxo balance) ](#get-alkanes-utxo-balance)
+  - [/v1/indexer/address/{address}/alkanes/{alkaneid}/utxo (Get utxo alkanes balance by address and alkaneid) ](#get-utxo-alkanes-balance-by-address-and-alkaneid)
+  - [/v1/indexer/address/{address}/alkanes/token-list (Get address alkanes token list) ](#get-address-alkanes-token-list)
+  - [/v1/indexer/address/{address}/alkanes/collection-list (Get address alkanes collection list) ](#get-address-alkanes-collection-list)
+  - [/v1/indexer/address/{address}/alkanes/{alkaneid}/collection-items (Get address collection items by alkaneid) ](#get-address-collection-items-by-alkaneid)
+  - [/v1/indexer/address/{address}/alkanes/{alkaneid}/transfer-history (Get transfer history) ](#get-transfer-history)
 
 ---
 
@@ -43,6 +43,8 @@ Get alkanes global status
 - `data` (object):
   - `bestHeight` (integer): 
   - `alkanes` (integer):  (example: `100`)
+  - `metashrewVersion` (string): 
+  - `alkanesRsVersion` (string): 
 
 ### Notes
 
@@ -50,6 +52,12 @@ This endpoint is used to monitor the indexer’s sync status.
 
 - `alkanes` indicates the total number of recognized Alkanes currently indexed by the system.
 - `bestHeight` represents the current height the indexer has processed. This value may lag behind the actual blockchain height. If `bestHeight` remains significantly behind the blockchain tip, it may indicate a synchronization issue, and the indexed data might be outdated.
+
+- `metashrewVersion` The metashrewVersion field indicates the version of the Metashrew indexer being used.
+  For more details, refer to the repository: https://github.com/sandshrewmetaprotocols/metashrew.
+
+- `alkanesRsVersion` The alkanesRsVersion field indicates the version of the alkanes-rs indexer in use.
+  For more information, refer to the repository: https://github.com/kungfuflex/alkanes-rs.
 
 ---
 

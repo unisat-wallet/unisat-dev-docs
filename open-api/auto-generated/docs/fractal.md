@@ -9,10 +9,10 @@ This API is limited to Fractal only. It provides endpoints to interact with the 
 ## 📑 Table of Contents
 
 - [Fractal](#fractal)
-  - [Get circulating FB in fractal mainnet](#get-circulating-fb-in-fractal-mainnet)
-  - [Get total supply FB in fractal mainnet](#get-total-supply-fb-in-fractal-mainnet)
-  - [Get total address](#get-total-address)
-  - [Get address rich list](#get-address-rich-list)
+  - [/v1/public/fractal/supply (Get circulating FB in fractal mainnet) ](#get-circulating-fb-in-fractal-mainnet)
+  - [/v1/public/fractal/total-supply (Get total supply FB in fractal mainnet) ](#get-total-supply-fb-in-fractal-mainnet)
+  - [/v1/public/address/total (Get total address) ](#get-total-address)
+  - [/v1/public/address/rich-list (Get address rich list) ](#get-address-rich-list)
 
 ---
 

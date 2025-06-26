@@ -9,35 +9,38 @@ This API provides endpoints for alkanes marketplace services
 ## 📑 Table of Contents
 
 - [MarketPlace-Alkanes](#marketplace-alkanes)
-  - [Get statistical data, price, market capitalization, etc. for alkanes.](#get-statistical-data-price-market-capitalization-etc-for-alkanes)
-  - [Get statistical data, price, market capitalization, etc. for Alkanes.](#get-statistical-data-price-market-capitalization-etc-for-alkanes)
-  - [Retrieve the list information of the market.](#retrieve-the-list-information-of-the-market)
-  - [Get information on listings, delistings, and sales.](#get-information-on-listings-delistings-and-sales)
-  - [Create listing order.](#create-listing-order)
-  - [Confirm listing order.](#confirm-listing-order)
-  - [Return params before creating purchase order.](#return-params-before-creating-purchase-order)
-  - [Create purchase order.](#create-purchase-order)
-  - [Confirm purchase order.](#confirm-purchase-order)
-  - [Create delisting order.](#create-delisting-order)
-  - [Confirm delisting order.](#confirm-delisting-order)
-  - [Create the order for price adjustment.](#create-the-order-for-price-adjustment)
-  - [Confirm the order for price adjustment.](#confirm-the-order-for-price-adjustment)
-  - [Create batch listing order.](#create-batch-listing-order)
-  - [Confirm batch listing order.](#confirm-batch-listing-order)
-  - [Return params before creating purchase order.](#return-params-before-creating-purchase-order)
-  - [Create purchase order.](#create-purchase-order)
-  - [Confirm purchase order.](#confirm-purchase-order)
+  - [/v3/market/alkanes/auction/alkanes_types (Get statistical data) ](#get-statistical-data)
+  - [/v3/market/alkanes/auction/alkanes_types_specified (Get statistical data for specified alkanes.) ](#get-statistical-data-for-specified-alkanes)
+  - [/v3/market/alkanes/auction/list (Retrieve the list information of the market.) ](#retrieve-the-list-information-of-the-market)
+  - [/v3/market/alkanes/auction/actions (Get information on listings, delistings, and sales.) ](#get-information-on-listings-delistings-and-sales)
+  - [/v3/market/alkanes/auction/create_put_on (Create listing order.) ](#create-listing-order)
+  - [/v3/market/alkanes/auction/confirm_put_on (Confirm listing order.) ](#confirm-listing-order)
+  - [/v3/market/alkanes/auction/create_bid_prepare (Return params before creating purchase order.) ](#return-params-before-creating-purchase-order)
+  - [/v3/market/alkanes/auction/create_bid (Create purchase order.) ](#create-purchase-order)
+  - [/v3/market/alkanes/auction/confirm_bid (Confirm purchase order.) ](#confirm-purchase-order)
+  - [/v3/market/alkanes/auction/create_put_off (Create delisting order.) ](#create-delisting-order)
+  - [/v3/market/alkanes/auction/confirm_put_off (Confirm delisting order.) ](#confirm-delisting-order)
+  - [/v3/market/alkanes/auction/create_modify_price (Create the order for price adjustment.) ](#create-the-order-for-price-adjustment)
+  - [/v3/market/alkanes/auction/confirm_modify_price (Confirm the order for price adjustment.) ](#confirm-the-order-for-price-adjustment)
+  - [/v3/market/alkanes/auction/create_batch_put_on (Create batch listing order.) ](#create-batch-listing-order)
+  - [/v3/market/alkanes/auction/confirm_batch_put_on (Confirm batch listing order.) ](#confirm-batch-listing-order)
+  - [/v3/market/alkanes/auction/create_batch_bid_prepare (Return params before creating purchase order.) ](#return-params-before-creating-purchase-order)
+  - [/v3/market/alkanes/auction/create_batch_bid (Create purchase order.) ](#create-purchase-order)
+  - [/v3/market/alkanes/auction/confirm_batch_bid (Confirm purchase order.) ](#confirm-purchase-order)
 
 ---
 
 ## MarketPlace-Alkanes
 
-### Get statistical data, price, market capitalization, etc. for alkanes.
-<a id="get-statistical-data-price-market-capitalization-etc-for-alkanes"></a>
+### Get statistical data
+<a id="get-statistical-data"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/alkanes_types`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/getAlkanesTypes)  
+
+#### Description
+Get statistical data, price, market capitalization, etc. for alkanes.
 
 #### Response (200)
 - `code` (number): 
@@ -57,12 +60,15 @@ This API provides endpoints for alkanes marketplace services
 
 ---
 
-### Get statistical data, price, market capitalization, etc. for Alkanes.
-<a id="get-statistical-data-price-market-capitalization-etc-for-alkanes"></a>
+### Get statistical data for specified alkanes.
+<a id="get-statistical-data-for-specified-alkanes"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/alkanes_types_specified`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/getAlkanesTypesSpecified)  
+
+#### Description
+Get statistical data, price, market capitalization, etc. for Alkanes.
 
 #### Response (200)
 - `code` (number): 

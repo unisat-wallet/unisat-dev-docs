@@ -128,10 +128,9 @@ ${swagger.info.description}
     const tagDisplay = tag === "_untagged" ? "Other APIs" : tag;
     const tagAnchor = normalizeAnchor(tagDisplay);
     output += `- [${tagDisplay}](#${tagAnchor})\n`;
-    eps.forEach(({ summary, ...res }) => {
-      if (!summary) console.log(res);
+    eps.forEach(({ route, summary, ...res }) => {
       const anchor = normalizeAnchor(summary);
-      output += `  - [${summary}](#${anchor})\n`;
+      output += `  - [${route} (${summary}) ](#${anchor})\n`;
     });
   }
 

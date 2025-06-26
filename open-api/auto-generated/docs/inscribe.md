@@ -9,21 +9,21 @@ This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free
 ## 📑 Table of Contents
 
 - [Inscribe](#inscribe)
-  - [Get order summary of current apikey](#get-order-summary-of-current-apikey)
-  - [Get order list of current apikey](#get-order-list-of-current-apikey)
-  - [Search an order by orderId](#search-an-order-by-orderid)
-  - [Create an order](#create-an-order)
-  - [Create an order to inscribe BRC-20 DEPLOY](#create-an-order-to-inscribe-brc-20-deploy)
-  - [Create an order to inscribe BRC-20 MINT](#create-an-order-to-inscribe-brc-20-mint)
-  - [Create an order to inscribe BRC-20 TRANSFER](#create-an-order-to-inscribe-brc-20-transfer)
-  - [Create an order to inscribe BRC-20 MINT](#create-an-order-to-inscribe-brc-20-mint)
-  - [Request commit txs of brc20-5byte-mint](#request-commit-txs-of-brc20-5byte-mint)
-  - [Sign commit txs of brc20-5byte-mint](#sign-commit-txs-of-brc20-5byte-mint)
-  - [Sign reveal txs of brc20-5byte-mint](#sign-reveal-txs-of-brc20-5byte-mint)
-  - [Create an order to etch Runes](#create-an-order-to-etch-runes)
-  - [Create an order to mint Runes](#create-an-order-to-mint-runes)
-  - [Process a refund for an order.](#process-a-refund-for-an-order)
-  - [Estimate the size of the refund transaction](#estimate-the-size-of-the-refund-transaction)
+  - [/v2/inscribe/order/summary (Get order summary of current apikey) ](#get-order-summary-of-current-apikey)
+  - [/v2/inscribe/order/list (Get order list of current apikey) ](#get-order-list-of-current-apikey)
+  - [/v2/inscribe/order/{orderId} (Search an order by orderId) ](#search-an-order-by-orderid)
+  - [/v2/inscribe/order/create (Create an order) ](#create-an-order)
+  - [/v2/inscribe/order/create/brc20-deploy (Create an order to inscribe BRC-20 DEPLOY) ](#create-an-order-to-inscribe-brc-20-deploy)
+  - [/v2/inscribe/order/create/brc20-mint (Create an order to inscribe BRC-20 MINT) ](#create-an-order-to-inscribe-brc-20-mint)
+  - [/v2/inscribe/order/create/brc20-transfer (Create an order to inscribe BRC-20 TRANSFER) ](#create-an-order-to-inscribe-brc-20-transfer)
+  - [/v2/inscribe/order/create/brc20-5byte-mint (Create an order to inscribe BRC-20 MINT) ](#create-an-order-to-inscribe-brc-20-mint)
+  - [/v2/inscribe/order/request-commit/brc20-5byte-mint (Request commit txs of brc20-5byte-mint) ](#request-commit-txs-of-brc20-5byte-mint)
+  - [/v2/inscribe/order/sign-commit/brc20-5byte-mint (Sign commit txs of brc20-5byte-mint) ](#sign-commit-txs-of-brc20-5byte-mint)
+  - [/v2/inscribe/order/sign-reveal/brc20-5byte-mint (Sign reveal txs of brc20-5byte-mint) ](#sign-reveal-txs-of-brc20-5byte-mint)
+  - [/v2/inscribe/order/create/runes-etch (Create an order to etch Runes) ](#create-an-order-to-etch-runes)
+  - [/v2/inscribe/order/create/runes-mint (Create an order to mint Runes) ](#create-an-order-to-mint-runes)
+  - [/v2/inscribe/order/{orderId}/refund (Process a refund for an order.) ](#process-a-refund-for-an-order)
+  - [/v2/inscribe/order/{orderId}/refund-estimate (Estimate the size of the refund transaction) ](#estimate-the-size-of-the-refund-transaction)
 
 ---
 
@@ -63,6 +63,12 @@ Get order list of current apikey
 #### Response (200)
 
 
+### Notes
+
+- status (Optional) : pending/inscribing/minted/closed/refunded
+- receiveAddress (Optional): Filter by receive address
+- clientId (Optional): The clientId passed when creating an order is useful for filtering a certain user's orders.
+
 ---
 
 ### Search an order by orderId
@@ -82,6 +88,44 @@ _amount = outputValue*count + minerFee + serviceFee + devFee_
 
 #### Response (200)
 
+
+### Notes
+
+```typescript
+enum OrderStatus {
+  // when create order
+  pending = "pending",
+
+  // pay not enough, need pay more
+  payment_notenough = "payment_notenough",
+
+  // pay over, need choose continue or refund
+  payment_overpay = "payment_overpay",
+
+  // there is an inscription in payment transaction, need refund
+  payment_withinscription = "payment_withinscription",
+
+  // in some case, payment transaction need be confirmed
+  payment_waitconfirmed = "payment_waitconfirmed",
+
+  // payment success
+  payment_success = "payment_success",
+
+  // ready to inscribe
+  ready = "ready",
+  inscribing = "inscribing",
+  minted = "minted",
+  closed = "closed",
+  refunded = "refunded",
+  cancel = "cancel",
+}
+
+enum InscriptionStatus {
+  pending = "pending",
+  unconfirmed = "unconfirmed",
+  confirmed = "confirmed",
+}
+```
 
 ---
 

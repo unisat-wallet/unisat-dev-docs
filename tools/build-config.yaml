@@ -5,7 +5,11 @@ swagger:
   - runes-indexer
   - alkanes-indexer
   - inscribe
-  - marketplace
+  - brc20-marketplace
+  - runes-marketplace
+  - alkanes-marketplace
+  - collection-marketplace
+  - domain-marketplace
   - brc20-swap
   - fractal
   - cat20-dex
@@ -20,6 +24,8 @@ doc:
   - brc20-marketplace
   - runes-marketplace
   - alkanes-marketplace
+  - collection-marketplace
+  - domain-marketplace
   - brc20-swap
   - fractal
   - cat20-dex
