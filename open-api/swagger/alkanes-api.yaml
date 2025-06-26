@@ -1,0 +1,965 @@
+openapi: 3.0.3
+info:
+  title: Alkanes API
+  version: 1.0.4
+  description: >-
+    The Alkanes API is developed by the UniSat team, providing a simplified and developer-friendly interface based on the official Alkanes indexer (kungfuflex/alkanes). 
+    It is built on specific versions of metashrew and alkanes-rs to ensure compatibility and consistency. 
+    We welcome feedback and suggestions for improvement.
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+tags:
+  - name: Alkanes
+    description: Alkanes (https://alkanes.build/docs/learn/intro)
+paths:
+  /v1/indexer/alkanes/status:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesStatus
+      summary: Get alkanes status
+      description: "Get alkanes global status"
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/AlkanesStatus"
+
+  /v1/indexer/alkanes/info-list:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesInfoList
+      summary: Get alkanes list
+      description: ""
+      parameters:
+        - name: type
+          in: query
+          description: "search by type,optional"
+          required: false
+          schema:
+            type: string
+            enum: [token, collection, nft, contract]
+        - name: sortBy
+          in: query
+          description: "sort by timestamp, alkaneid, default=timestamp"
+          required: false
+          schema:
+            type: string
+            enum: [timestamp, alkaneid]
+            default: timestamp
+        - name: order
+          in: query
+          description: "sort order,optional,default=asc"
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/alkanes/{alkaneid}/info:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesInfo
+      summary: Get alkane info by alkaneid
+      description: ""
+      parameters:
+        - name: alkaneid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/alkanes/token-list:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesTokenList
+      summary: Get alkanes token list
+      description: ""
+      parameters:
+        - name: alkaneid
+          in: query
+          description: "search by alkaneid"
+          required: false
+          schema:
+            type: string
+            example: 2:1
+        - name: name
+          in: query
+          description: "search by name"
+          required: false
+          schema:
+            type: string
+        - name: sortBy
+          in: query
+          description: "sort by timestamp, alkaneid, default=timestamp"
+          required: false
+          schema:
+            type: string
+            enum: [timestamp, alkaneid]
+            default: timestamp
+        - name: order
+          in: query
+          description: "sort order,optional,default=asc"
+          required: false
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/alkanes/{alkaneid}/holders:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesHolders
+      summary: Get alkanes holders by alkaneid
+      description: ""
+      parameters:
+        - name: alkaneid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          description: Start offset
+          in: query
+          required: false
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: "min=1,max=500,default=10"
+          in: query
+          required: false
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 1
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneHolder"
+
+  /v1/indexer/alkanes/{alkaneid}/collection-items:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesCollectionItems
+      summary: Get collection items
+      description: ""
+      parameters:
+        - name: alkaneid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      start:
+                        type: integer
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/alkanes/{alkaneid}/contract-events:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesContractEvents
+      summary: Get contract events
+      description: ""
+      parameters:
+        - name: alkaneid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: fromHeight
+          in: query
+          description: "search by from height"
+          required: true
+          schema:
+            type: integer
+        - name: toHeight
+          in: query
+          description: "search by to height"
+          required: true
+          schema:
+            type: integer
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      start:
+                        type: integer
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneEvent"
+
+  /v1/indexer/alkanes/utxo/{txid}/{index}/balance:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesUtxoBalance
+      summary: Get alkanes utxo balance
+      description: ""
+      parameters:
+        - name: txid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: index
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AlkanesUTXOBalance"
+
+  /v1/indexer/address/{address}/alkanes/{alkaneid}/utxo:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAddressAlkanesUtxo
+      summary: Get utxo alkanes balance by address and alkaneid
+      description: ""
+      parameters:
+        - name: address
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: alkaneid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    properties:
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+                      utxo:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneUtxo"
+
+  /v1/indexer/address/{address}/alkanes/token-list:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAddressAlkanesTokenList
+      summary: Get address alkanes token list
+      description: ""
+      parameters:
+        - name: address
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/address/{address}/alkanes/collection-list:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAddressAlkanesCollectionList
+      summary: Get address alkanes collection list
+      description: ""
+      parameters:
+        - name: address
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/address/{address}/alkanes/{alkaneid}/collection-items:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAddressAlkanesCollectionItems
+      summary: Get address collection items by alkaneid
+      description: ""
+      parameters:
+        - name: address
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: alkaneid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/address/{address}/alkanes/{alkaneid}/transfer-history:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAddressAlkanesTransferHistory
+      summary: Get transfer history
+      description: ""
+      parameters:
+        - name: address
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: alkaneid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: fromHeight
+          in: query
+          description: "search by from height"
+          required: true
+          schema:
+            type: integer
+        - name: toHeight
+          in: query
+          description: "search by to height"
+          required: true
+          schema:
+            type: integer
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneTransferHistory"
+
+components:
+  schemas:
+    AlkaneUtxo:
+      type: object
+      properties:
+        address:
+          type: string
+        satoshi:
+          type: integer
+          example: 10000
+        scriptPk:
+          type: string
+        txid:
+          type: string
+        vout:
+          type: integer
+          example: 0
+        confirmations:
+          type: integer
+        alkanes:
+          type: array
+          items:
+            $ref: "#/components/schemas/AlkanesUTXOBalance"
+    AlkaneType:
+      type: string
+      enum: [token, collection, nft, contract]
+      example: token
+    AlkanesUTXOBalance:
+      type: object
+      properties:
+        alkaneid:
+          type: string
+        amount:
+          type: string
+        type:
+          $ref: "#/components/schemas/AlkaneType"
+        logo:
+          type: string
+        tokenData:
+          $ref: "#/components/schemas/TokenData"
+        nftData:
+          $ref: "#/components/schemas/NFTData"
+        collectionData:
+          $ref: "#/components/schemas/CollectionData"
+    AlkanesBalance:
+      type: object
+      properties:
+        amount:
+          type: string
+          example: "10000"
+        alkaneid:
+          type: string
+          example: "2584327:44"
+        alkane:
+          type: string
+          example: "AAAAAAAAAAAAAB"
+        symbol:
+          type: string
+          example: "G"
+        divisibility:
+          type: integer
+          example: 0
+    AlkaneHolder:
+      type: object
+      properties:
+        address:
+          type: string
+        amount:
+          type: string
+          example: "10000"
+    AlkaneInfo:
+      type: object
+      properties:
+        alkaneid:
+          type: string
+          example: "2583283:1333"
+        height:
+          type: integer
+          format: uint64
+          example: 2583283
+        txid:
+          type: string
+        timestamp:
+          type: integer
+        type:
+          type: string
+        logo:
+          type: string
+        tokenData:
+          $ref: "#/components/schemas/TokenData"
+        nftData:
+          $ref: "#/components/schemas/NFTData"
+        collectionData:
+          $ref: "#/components/schemas/CollectionData"
+    TokenData:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "MyToken"
+        symbol:
+          type: string
+          example: "MTK"
+        divisibility:
+          type: integer
+          example: 0
+        totalSupply:
+          type: string
+          example: "1000000"
+        maxSupply:
+          type: string
+          example: "1000000"
+        premine:
+          type: string
+          example: "100000"
+        perMint:
+          type: string
+          example: "1000"
+        cap:
+          type: string
+          example: "10000000"
+        minted:
+          type: string
+          example: "500000"
+        mintable:
+          type: boolean
+        holders:
+          type: integer
+          example: 100
+    NFTData:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "MyNFT"
+        attributes:
+          type: object
+        contentType:
+          type: string
+        contentUrl:
+          type: string
+        collectionId:
+          type: string
+    CollectionData:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "MyCollection"
+        totalSupply:
+          type: string
+          example: "1000"
+        maxSupply:
+          type: string
+          example: "1000"
+        minted:
+          type: integer
+        holders:
+          type: integer
+    AlkanesStatus:
+      type: object
+      properties:
+        bestHeight:
+          type: integer
+        alkanes:
+          type: integer
+          example: 100
+    AlkaneEvent:
+      type: object
+      properties:
+        alkaneid:
+          type: string
+        caller:
+          type: string
+        type:
+          type: string
+        opcode:
+          type: string
+        fuel:
+          type: string
+        inputs:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+        height:
+          type: integer
+        txid:
+          type: string
+        vout:
+          type: integer
+    AlkaneTransferHistory:
+      type: object
+      properties:
+        height:
+          type: integer
+        txid:
+          type: string
+        type:
+          type: string
+        subType:
+          type: string
+        alkaneid:
+          type: string
+        address:
+          type: string
+        amount:
+          type: string
+          example: "10000"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

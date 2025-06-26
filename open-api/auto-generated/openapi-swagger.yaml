@@ -116,6 +116,13 @@ tags:
       - https://open-api-testnet.unisat.io
       - https://open-api-fractal.unisat.io
       - https://open-api-fractal-testnet.unisat.io
+  - name: MarketPlace-Alkanes
+    description: Alkanes MarketPlace Service
+    urls:
+      - https://open-api.unisat.io
+      - https://open-api-testnet.unisat.io
+      - https://open-api-fractal.unisat.io
+      - https://open-api-fractal-testnet.unisat.io
   - name: brc20-swap
     description: BRC20 Swap and PizzaSwap Service
     urls:
@@ -4737,6 +4744,749 @@ paths:
       summary: Confirm purchase order.
       tags:
         - MarketPlace-Runes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketConfirmBatchBidRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketConfirmBatchBidResponse'
+  /v3/market/alkanes/auction/alkanes_types:
+    post:
+      summary: Get statistical data, price, market capitalization, etc. for alkanes.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                timeType:
+                  enum:
+                    - day1
+                    - day7
+                    - day30
+                  description: 'Optional: day1, day7, day30'
+                start:
+                  type: number
+                limit:
+                  type: number
+              additionalProperties: false
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - BTCPrice
+                    type: object
+                    properties:
+                      BTCPrice:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          required:
+                            - tick
+                            - curPrice
+                            - changePrice
+                            - btcVolume
+                            - amountVolume
+                            - cap
+                          type: object
+                          properties:
+                            tick:
+                              type: string
+                            curPrice:
+                              type: number
+                            changePrice:
+                              type: number
+                            btcVolume:
+                              type: number
+                            amountVolume:
+                              type: number
+                            cap:
+                              type: string
+                            holders:
+                              type: integer
+                            transactions:
+                              type: integer
+                            warning:
+                              type: boolean
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v3/market/alkanes/auction/alkanes_types_specified:
+    post:
+      summary: Get statistical data, price, market capitalization, etc. for Alkanes.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                timeType:
+                  enum:
+                    - day1
+                    - day7
+                    - day30
+                  type: string
+                tick:
+                  type: string
+              additionalProperties: false
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      tick:
+                        type: string
+                      symbol:
+                        type: string
+                      curPrice:
+                        type: number
+                      changePrice:
+                        type: number
+                      btcVolume:
+                        type: number
+                      amountVolume:
+                        type: number
+                      cap:
+                        type: string
+                      capUSD:
+                        type: string
+                      deployTime:
+                        type: integer
+                      holders:
+                        type: integer
+                      number:
+                        type: integer
+                      transactions:
+                        type: integer
+                      warning:
+                        type: boolean
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v3/market/alkanes/auction/list:
+    post:
+      summary: Retrieve the list information of the market.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - filter
+                - sort
+                - start
+                - limit
+              type: object
+              properties:
+                filter:
+                  required:
+                    - nftType
+                  type: object
+                  properties:
+                    nftType:
+                      enum:
+                        - brc20
+                      type: string
+                    address:
+                      type: string
+                    tick:
+                      type: string
+                    minPrice:
+                      type: number
+                    maxPrice:
+                      type: number
+                    nftConfirm:
+                      type: boolean
+                    isEnd:
+                      description: Whether order ends
+                      type: boolean
+                    all:
+                      description: Ignore start and limit and return all collection data
+                      type: boolean
+                  additionalProperties: false
+                sort:
+                  type: object
+                  properties:
+                    unitPrice:
+                      enum:
+                        - 1
+                        - -1
+                      type: number
+                    onSaleTime:
+                      enum:
+                        - 1
+                        - -1
+                      type: number
+                    initPrice:
+                      enum:
+                        - 1
+                        - -1
+                      type: number
+                    inscriptionNumber:
+                      enum:
+                        - 1
+                        - -1
+                      type: number
+                  additionalProperties: false
+                start:
+                  description: The data is looked up from start
+                  type: number
+                limit:
+                  maximum: 100
+                  exclusiveMaximum: true
+                  description: Limit the amount of data
+                  type: number
+              additionalProperties: false
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - list
+                      - total
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          required:
+                            - inscriptionId
+                          type: object
+                          properties:
+                            auctionId:
+                              type: string
+                              nullable: true
+                            inscriptionId:
+                              type: string
+                            inscriptionNumber:
+                              type: number
+                              nullable: true
+                            marketType:
+                              type: string
+                              nullable: true
+                            address:
+                              type: string
+                              nullable: true
+                            price:
+                              type: number
+                              nullable: true
+                            nftType:
+                              type: string
+                              nullable: true
+                            tick:
+                              description: Brc20 field
+                              type: string
+                              nullable: true
+                            limit:
+                              description: Brc20 field
+                              type: number
+                              nullable: true
+                            amount:
+                              description: Brc20 field
+                              type: number
+                              nullable: true
+                            unitPrice:
+                              description: Brc20 field
+                              type: number
+                              nullable: true
+                          additionalProperties: false
+                      total:
+                        type: number
+                      timestamp:
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v3/market/alkanes/auction/actions:
+    post:
+      summary: Get information on listings, delistings, and sales.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - filter
+                - start
+                - limit
+              type: object
+              properties:
+                filter:
+                  type: object
+                  properties:
+                    nftType:
+                      enum:
+                        - brc20
+                      type: string
+                    address:
+                      type: string
+                    inscriptionId:
+                      type: string
+                    event:
+                      enum:
+                        - Cancel
+                        - Claim
+                        - Listed
+                        - Sold
+                        - Updated
+                      description: 'Event type: Cancel, Listed, Sold, Updated'
+                      type: string
+                    tick:
+                      type: string
+                  additionalProperties: false
+                start:
+                  type: number
+                limit:
+                  maximum: 100
+                  exclusiveMaximum: true
+                  type: number
+              additionalProperties: false
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - total
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          required:
+                            - auctionId
+                            - inscriptionId
+                            - inscriptionNumber
+                            - event
+                            - price
+                            - from
+                            - to
+                            - timestamp
+                          type: object
+                          properties:
+                            auctionId:
+                              type: string
+                            inscriptionId:
+                              type: string
+                            inscriptionNumber:
+                              type: number
+                            event:
+                              enum:
+                                - Listed
+                                - Sold
+                                - Cancel
+                                - Claim
+                                - Updated
+                              type: string
+                            price:
+                              type: number
+                            from:
+                              type: string
+                            to:
+                              type: string
+                              nullable: true
+                            timestamp:
+                              type: number
+                            nftConfirmNum:
+                              type: number
+                            nftType:
+                              enum:
+                                - brc20
+                                - domain
+                                - collection
+                              type: string
+                            endMsg:
+                              description: An error message generated by the order
+                              type: string
+                              nullable: true
+                            newest:
+                              description: The update order generates multiple events
+                              type: boolean
+                            name:
+                              description: Brc20 filed
+                              type: string
+                              nullable: true
+                            unitPrice:
+                              description: Brc20 filed
+                              type: number
+                              nullable: true
+                            amount:
+                              description: Brc20 filed
+                              type: number
+                              nullable: true
+                            domain:
+                              description: Domain filed
+                              type: string
+                              nullable: true
+                            domainType:
+                              enum:
+                                - sats
+                                - unisat
+                                - btc
+                                - xbt
+                                - ord
+                                - gm
+                                - bitmap
+                                - x
+                                - null
+                              description: Domain filed
+                              type: string
+                              nullable: true
+                            domainCategorys:
+                              description: Domain filed
+                              type: array
+                              items:
+                                enum:
+                                  - Keyboard
+                                  - Non Keyboard
+                                  - 1-99
+                                  - 3D
+                                  - 4D
+                                  - 5D
+                                  - Single Emoji
+                                  - Multi Emoji
+                                  - Common Word
+                                  - 1 Letter + 1 Number
+                                  - 2 Letters
+                                  - 3 Letters
+                                  - Numbers
+                                type: string
+                              nullable: true
+                            collectionId:
+                              description: Collection filed
+                              type: string
+                              nullable: true
+                            collectionItemName:
+                              description: Collection filed
+                              type: string
+                              nullable: true
+                            contentType:
+                              description: Collection filed
+                              type: string
+                              nullable: true
+                            contentBody:
+                              description: Collection filed
+                              type: string
+                              nullable: true
+                            attributes:
+                              description: Collection filed
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  trait_type:
+                                    type: string
+                                  value:
+                                    type: string
+                                additionalProperties: false
+                              nullable: true
+                          additionalProperties: false
+                      total:
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v3/market/alkanes/auction/create_put_on:
+    post:
+      summary: Create listing order.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AlkanesMarketCreatePutOnRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketCreatePutOnResponse'
+  /v3/market/alkanes/auction/confirm_put_on:
+    post:
+      summary: Confirm listing order.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketConfirmPutOnRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketConfirmPutOnResponse'
+  /v3/market/alkanes/auction/create_bid_prepare:
+    post:
+      summary: Return params before creating purchase order.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketCreateBidPrepareRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketCreateBidPrepareResponse'
+  /v3/market/alkanes/auction/create_bid:
+    post:
+      summary: Create purchase order.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketCreateBidRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketCreateBidResponse'
+  /v3/market/alkanes/auction/confirm_bid:
+    post:
+      summary: Confirm purchase order.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketConfirmBidRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketConfirmBidResponse'
+  /v3/market/alkanes/auction/create_put_off:
+    post:
+      summary: Create delisting order.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketCreatePutOffRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketCreatePutOffResponse'
+  /v3/market/alkanes/auction/confirm_put_off:
+    post:
+      summary: Confirm delisting order.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketConfirmPutOffRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketConfirmPutOffResponse'
+  /v3/market/alkanes/auction/create_modify_price:
+    post:
+      summary: Create the order for price adjustment.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketCreateModifyPriceRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketCreateModifyPriceResponse'
+  /v3/market/alkanes/auction/confirm_modify_price:
+    post:
+      summary: Confirm the order for price adjustment.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketConfirmModifyPriceRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketConfirmModifyPriceResponse'
+  /v3/market/alkanes/auction/create_batch_put_on:
+    post:
+      summary: Create batch listing order.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketCreateBatchPutOnRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketCreateBatchPutOnResponse'
+  /v3/market/alkanes/auction/confirm_batch_put_on:
+    post:
+      summary: Confirm batch listing order.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketConfirmBatchPutOnRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketConfirmBatchPutOnResponse'
+  /v3/market/alkanes/auction/create_batch_bid_prepare:
+    post:
+      summary: Return params before creating purchase order.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketCreateBatchBidPrepareRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketCreateBatchBidPrepareResponse'
+  /v3/market/alkanes/auction/create_batch_bid:
+    post:
+      summary: Create purchase order.
+      tags:
+        - MarketPlace-Alkanes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/MarketCreateBatchBidRequest'
+        required: true
+      responses:
+        '200':
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MarketCreateBatchBidResponse'
+  /v3/market/alkanes/auction/confirm_batch_bid:
+    post:
+      summary: Confirm purchase order.
+      tags:
+        - MarketPlace-Alkanes
       requestBody:
         content:
           application/json:
@@ -11341,6 +12091,44 @@ components:
           type: string
         index:
           description: The txid of the rune utxo index
+          type: string
+        initPrice:
+          description: Set the initial total price
+          type: string
+        unitPrice:
+          description: Unit Price (for tick)
+          type: string
+        pubkey:
+          description: User public key
+          type: string
+        marketType:
+          enum:
+            - fixedPrice
+          type: string
+          example: fixedPrice
+        btcAddress:
+          description: >-
+            (Optional) Only for multi-address wallet, such as Xverse, hiro.
+            Specifies the BTC receive address
+          type: string
+      additionalProperties: false
+    AlkanesMarketCreatePutOnRequest:
+      required:
+        - txid
+        - index
+        - initPrice
+        - unitPrice
+        - pubkey
+        - marketType
+      type: object
+      properties:
+        nftType:
+          type: string
+        txid:
+          description: The txid of the alkanes utxo txid
+          type: string
+        index:
+          description: The txid of the alkanes utxo index
           type: string
         initPrice:
           description: Set the initial total price

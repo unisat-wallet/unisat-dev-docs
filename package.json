@@ -3,8 +3,9 @@
   "version": "1.0.0",
   "license": "MIT",
   "scripts": {
-    "build": "npm run build:openapi-swagger && npm run build:error-codes",
+    "build": "npm run build:openapi-swagger && npm run build:error-codes && npm run build:openapi-doc",
     "build:openapi-swagger": "node tools/build-swagger.js",
+    "build:openapi-doc": "node tools/build-doc.js",
     "build:error-codes": "node tools/build-error.js",
     "prepare": "npm run build"
   },

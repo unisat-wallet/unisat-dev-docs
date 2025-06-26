@@ -9,3 +9,5 @@ swagger:
   - fractal
   - cat20-dex
   - collection-indexer
+doc:
+  - alkanes-api
