@@ -18,7 +18,8 @@ paths:
   /v3/market/alkanes/auction/alkanes_types:
     post:
       operationId: getAlkanesTypes
-      summary: Get statistical data, price, market capitalization, etc. for alkanes.
+      summary: Get statistical data
+      description: Get statistical data, price, market capitalization, etc. for alkanes.
       tags:
         - MarketPlace-Alkanes
       requestBody:
@@ -96,7 +97,8 @@ paths:
   /v3/market/alkanes/auction/alkanes_types_specified:
     post:
       operationId: getAlkanesTypesSpecified
-      summary: Get statistical data, price, market capitalization, etc. for Alkanes.
+      summary: Get statistical data for specified alkanes.
+      description: Get statistical data, price, market capitalization, etc. for Alkanes.
       tags:
         - MarketPlace-Alkanes
       requestBody:

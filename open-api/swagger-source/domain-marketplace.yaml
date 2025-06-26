@@ -19,7 +19,8 @@ paths:
   /v3/market/domain/auction/domain_types:
     post:
       operationId: getDomainTypes
-      summary: Get statistical data, price, market capitalization, etc. for domain.
+      summary: Get statistical data.
+      description: Get statistical data, price, market capitalization, etc. for domain.
       tags:
         - MarketPlace-Domain
       responses:

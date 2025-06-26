@@ -913,6 +913,10 @@ components:
         alkanes:
           type: integer
           example: 100
+        metashrewVersion:
+          type: string
+        alkanesRsVersion:
+          type: string
     AlkaneEvent:
       type: object
       properties:

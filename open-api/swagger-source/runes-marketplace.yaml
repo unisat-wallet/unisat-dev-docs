@@ -21,7 +21,8 @@ paths:
   /v3/market/runes/auction/runes_types:
     post:
       operationId: getRunesTypes
-      summary: Get statistical data, price, market capitalization, etc. for runes.
+      summary: Get statistical data.
+      description: Get statistical data, price, market capitalization, etc. for runes.
       tags:
         - MarketPlace-Runes
       requestBody:
@@ -99,7 +100,8 @@ paths:
   /v3/market/runes/auction/runes_types_specified:
     post:
       operationId: getRunesTypesSpecified
-      summary: Get statistical data, price, market capitalization, etc. for Runes.
+      summary: Get statistical data for specified runes.
+      description: Get statistical data, price, market capitalization, etc. for Runes.
       tags:
         - MarketPlace-Runes
       requestBody:

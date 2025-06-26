@@ -18,7 +18,7 @@ UniSat Open APIs provide standardized RESTful interfaces for accessing blockchai
 | Inscription Indexer    | Indexing of inscriptions                        | `inscription-indexer.yaml`    | [`inscription-indexer.md`](./auto-generated/docs/inscription-indexer.md)       |
 | BRC20 Indexer          | Indexing and data for BRC20 tokens              | `brc20-indexer.yaml`          | [`brc20-indexer.md`](./auto-generated/docs/brc20-indexer.md)                   |
 | Runes Indexer          | Indexing for Runes tokens                       | `runes-indexer.yaml`          | [`runes-indexer.md`](./auto-generated/docs/runes-indexer.md)                   |
-| Alkanes Indexer        | Developer-friendly API built on Alkanes indexer | `alkanes-indexer.yaml`        | [`alkanes.md`](./auto-generated/docs/alkanes-indexer.md)                       |
+| Alkanes Indexer        | Developer-friendly API built on Alkanes indexer | `alkanes-indexer.yaml`        | [`alkanes-indexer.md`](./auto-generated/docs/alkanes-indexer.md)               |
 | Collection Indexer     | NFT collections indexing                        | `collection-indexer.yaml`     | [`collection-indexer.md`](./auto-generated/docs/collection-indexer.md)         |
 | Inscribe               | Inscription creation and management             | `inscribe.yaml`               | [`inscribe.md`](./auto-generated/docs/inscribe.md)                             |
 | BRC20 Marketplace      | BRC20 marketplace                               | `brc20-marketplace.yaml`      | [`brc20-marketplace.md`](./auto-generated/docs/brc20-marketplace.md)           |
