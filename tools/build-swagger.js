@@ -18,7 +18,7 @@ if (config.swagger === undefined) {
 
 function loadSwaggerFile(filename) {
   const file = fs.readFileSync(
-    `${projectSourceDir}/swagger/${filename}.yaml`,
+    `${projectSourceDir}/swagger-source/${filename}.yaml`,
     "utf8"
   );
   return yaml.load(file);
@@ -84,6 +84,6 @@ fs.mkdirSync(swaggerDir, { recursive: true });
 fs.cpSync("./build", swaggerDir, { recursive: true });
 fs.writeFileSync(`${swaggerDir}/swagger.yaml`, str);
 
-fs.writeFileSync(`./open-api/auto-generated/openapi-swagger.yaml`, str);
+fs.writeFileSync(`./open-api/auto-generated/swagger/openapi-swagger.yaml`, str);
 
 console.log("build swagger success");

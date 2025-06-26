@@ -64,6 +64,28 @@ function getExtraNotes(extraNotesDir, operationId) {
   return "";
 }
 
+function normalizeAnchor(text) {
+  return text
+    .toLowerCase()
+    .replace(/\s+/g, "-")
+    .replace(/[^\w-]/g, "");
+}
+
+function groupEndpointsByTag(endpoints) {
+  const groups = {};
+  endpoints.forEach((ep) => {
+    const tags =
+      ep.operation.tags && ep.operation.tags.length
+        ? ep.operation.tags
+        : ["_untagged"];
+    tags.forEach((tag) => {
+      if (!groups[tag]) groups[tag] = [];
+      groups[tag].push(ep);
+    });
+  });
+  return groups;
+}
+
 function generateMarkdown(swagger, extraNotesDir) {
   const schemas = swagger.components?.schemas || {};
   const paths = swagger.paths;
@@ -86,7 +108,10 @@ function generateMarkdown(swagger, extraNotesDir) {
     }
   }
 
-  // 2. Generate Table of Contents
+  // 2. Group endpoints by tags
+  const groupedEndpoints = groupEndpointsByTag(endpoints);
+
+  // 3. Generate Table of Contents
   let output = `# ${swagger.info.title}
 
 ${swagger.info.description}
@@ -99,66 +124,72 @@ ${swagger.info.description}
 
 `;
 
-  endpoints.forEach(({ opId, summary }) => {
-    const anchor = summary
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^\w-]/g, "");
-    output += `- [${summary}](#${anchor})\n`;
-  });
+  for (const [tag, eps] of Object.entries(groupedEndpoints)) {
+    const tagDisplay = tag === "_untagged" ? "Other APIs" : tag;
+    const tagAnchor = normalizeAnchor(tagDisplay);
+    output += `- [${tagDisplay}](#${tagAnchor})\n`;
+    eps.forEach(({ summary, ...res }) => {
+      if (!summary) console.log(res);
+      const anchor = normalizeAnchor(summary);
+      output += `  - [${summary}](#${anchor})\n`;
+    });
+  }
 
   output += `\n---\n\n`;
 
-  // 3. Generate sections for each endpoint
-  for (const {
-    opId,
-    summary,
-    description,
-    method,
-    route,
-    operation,
-    tag,
-  } of endpoints) {
-    const anchor = summary
-      .toLowerCase()
-      .replace(/\s+/g, "-")
-      .replace(/[^\w-]/g, "");
+  // 4. Generate detailed API docs by tag group
+  for (const [tag, eps] of Object.entries(groupedEndpoints)) {
+    const tagDisplay = tag === "_untagged" ? "Other APIs" : tag;
+    const tagAnchor = normalizeAnchor(tagDisplay);
+    output += `## ${tagDisplay}\n\n`;
 
-    output += `## ${summary}\n`;
-    output += `**Method**: \`${method.toUpperCase()}\`  \n`;
-    output += `**Path**: \`${route}\`  \n`;
-    output += `**Swagger Link**: [View in Swagger UI](${swaggerBaseUrl}${operation.tags[0]}/${opId})  \n\n`;
+    for (const {
+      opId,
+      summary,
+      description,
+      method,
+      route,
+      operation,
+    } of eps) {
+      const anchor = normalizeAnchor(summary);
 
-    if (description) {
-      output += `### Description\n${description}\n\n`;
-    }
+      output += `### ${summary}\n`;
+      output += `<a id="${anchor}"></a>\n\n`;
+      output += `**Method**: \`${method.toUpperCase()}\`  \n`;
+      output += `**Path**: \`${route}\`  \n`;
+      output += `**Swagger Link**: [View in Swagger UI](${swaggerBaseUrl}${operation.tags[0]}/${opId})  \n\n`;
 
-    if (operation.parameters?.length) {
-      output += `### Parameters\n${getParameters(operation.parameters)}\n\n`;
-    }
-
-    const responses = operation.responses || {};
-    if (responses["200"]) {
-      output += `### Response (200)\n`;
-      const content = responses["200"].content?.["application/json"];
-      const ref = content?.schema?.$ref;
-      const directSchema = content?.schema;
-
-      if (ref) {
-        const refName = ref.split("/").pop();
-        const schema = schemas[refName];
-        output += `${renderSchema(schema, schemas)}\n\n`;
-      } else if (directSchema) {
-        output += `${renderSchema(directSchema, schemas)}\n\n`;
+      if (description) {
+        output += `#### Description\n${description}\n\n`;
       }
-    }
 
-    const notes = getExtraNotes(extraNotesDir, opId);
-    if (notes) {
-      output += `${notes.trim()}\n\n`;
-    }
+      if (operation.parameters?.length) {
+        output += `#### Parameters\n${getParameters(operation.parameters)}\n\n`;
+      }
 
-    output += `---\n\n`;
+      const responses = operation.responses || {};
+      if (responses["200"]) {
+        output += `#### Response (200)\n`;
+        const content = responses["200"].content?.["application/json"];
+        const ref = content?.schema?.$ref;
+        const directSchema = content?.schema;
+
+        if (ref) {
+          const refName = ref.split("/").pop();
+          const schema = schemas[refName];
+          output += `${renderSchema(schema, schemas)}\n\n`;
+        } else if (directSchema) {
+          output += `${renderSchema(directSchema, schemas)}\n\n`;
+        }
+      }
+
+      const notes = getExtraNotes(extraNotesDir, opId);
+      if (notes) {
+        output += `${notes.trim()}\n\n`;
+      }
+
+      output += `---\n\n`;
+    }
   }
 
   return output;
@@ -170,11 +201,15 @@ try {
 
   config.doc.forEach((item) => {
     const doc = yaml.load(
-      fs.readFileSync(`./open-api/swagger/${item}.yaml`, "utf8")
+      fs.readFileSync(`./open-api/swagger-source/${item}.yaml`, "utf8")
     );
-    const extraNotesDir = path.join(`./open-api/swagger/${item}_extra_notes`);
+    const extraNotesDir = path.join(`./open-api/note-source/${item}`);
     const markdown = generateMarkdown(doc, extraNotesDir);
-    fs.writeFileSync(`./open-api/auto-generated/${item}.md`, markdown, "utf8");
+    fs.writeFileSync(
+      `./open-api/auto-generated/docs/${item}.md`,
+      markdown,
+      "utf8"
+    );
     console.log(`✅ ${item}.md generated successfully!`);
   });
 } catch (e) {

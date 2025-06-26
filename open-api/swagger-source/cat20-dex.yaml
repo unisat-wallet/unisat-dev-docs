@@ -3,8 +3,8 @@ info:
   title: CAT20 DEX API
   version: 1.0.4
   description: >-
-    This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel
-    free to send us an email, and we will provide you with an API KEY.
+    Fractal Only API for CAT20 DEX operations.
+    This API provides endpoints to interact with the Fractal network, including supply information, address statistics, and rich lists.
   contact:
     email: contact@unisat.io
   license:
@@ -20,7 +20,11 @@ paths:
     get:
       tags:
         - CAT20-DEX
+      operationId: getTokenPrice
       summary: Get token price
+      description: >-
+        Retrieves the current price of a CAT20 token. If the token has no trades
+        in the last 30 days, it will return the last price.
       parameters:
         - name: tokenId
           description: tokenId
@@ -61,6 +65,7 @@ paths:
     get:
       tags:
         - CAT20-DEX
+      operationId: getMarketStats
       summary: Get the market stats
       description: >-
         Retrieves the market stats for all tokens which have trades in the last

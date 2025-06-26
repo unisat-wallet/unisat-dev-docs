@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
-  title: Alkanes API
+  title: Alkanes Indexer API
   version: 1.0.4
   description: >-
-    The Alkanes API is developed by the UniSat team, providing a simplified and developer-friendly interface based on the official Alkanes indexer (kungfuflex/alkanes). 
+    The Alkanes Indexer API is developed by the UniSat team, providing a simplified and developer-friendly interface based on the official Alkanes indexer (kungfuflex/alkanes). 
     It is built on specific versions of metashrew and alkanes-rs to ensure compatibility and consistency. 
     We welcome feedback and suggestions for improvement.
   contact:

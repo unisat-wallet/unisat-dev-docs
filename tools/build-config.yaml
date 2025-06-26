@@ -3,6 +3,7 @@ swagger:
   - inscription-indexer
   - brc20-indexer
   - runes-indexer
+  - alkanes-indexer
   - inscribe
   - marketplace
   - brc20-swap
@@ -10,4 +11,16 @@ swagger:
   - cat20-dex
   - collection-indexer
 doc:
-  - alkanes-api
+  - basic-indexer
+  - inscription-indexer
+  - brc20-indexer
+  - runes-indexer
+  - alkanes-indexer
+  - inscribe
+  - brc20-marketplace
+  - runes-marketplace
+  - alkanes-marketplace
+  - brc20-swap
+  - fractal
+  - cat20-dex
+  - collection-indexer

@@ -25,6 +25,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesStatus
       summary: Get runes status
       description: "Get runes global status"
       responses:
@@ -48,6 +49,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesList
       summary: Get runes list
       description: ""
       parameters:
@@ -117,6 +119,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRuneInfo
       summary: Get rune info by runeid
       description: ""
       parameters:
@@ -147,6 +150,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRuneHolders
       summary: Get runes holders by runeid
       description: ""
       parameters:
@@ -202,6 +206,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesBalanceList
       summary: Get runes balance list by address
       description: ""
       parameters:
@@ -254,6 +259,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesBalance
       summary: Get runes balance by address and runeid
       description: ""
       parameters:
@@ -290,6 +296,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesUtxoBalance
       summary: Get runes balance by utxo
       description: ""
       parameters:
@@ -328,6 +335,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesUtxoByAddressAndRuneid
       summary: Get utxo runes balance by address and runeid
       description: ""
       parameters:
@@ -385,6 +393,8 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesEvents
+      summary: Get Runes Events
       description: Get the full history events of Runes.
       parameters:
         - name: rune

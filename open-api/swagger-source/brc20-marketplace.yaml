@@ -1,0 +1,1875 @@
+openapi: 3.0.3
+info:
+  title: BRC20 MarketPlace API
+  version: 1.0.4
+  description: >-
+    This API provides endpoints for BRC20 marketplace services
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+  - url: https://open-api-testnet.unisat.io
+  - url: https://open-api-fractal.unisat.io
+  - url: https://open-api-fractal-testnet.unisat.io
+tags:
+  - name: MarketPlace-BRC20
+    description: BRC20 MarketPlace Service
+paths:
+  /v3/market/brc20/auction/bind_info:
+    post:
+      operationId: bindInfo
+      summary: Get the address bind info.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BindInfoRequest"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BindInfoResponse"
+
+  /v3/market/brc20/auction/brc20_kline:
+    post:
+      operationId: getBrc20Kline
+      summary: Get tick k line.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - tick
+                - timeStart
+                - timeEnd
+                - timeStep
+              type: object
+              properties:
+                tick:
+                  type: string
+                timeStart:
+                  description: Start time range
+                  type: number
+                timeEnd:
+                  description: End time range
+                  type: number
+                timeStep:
+                  description: Time granularity, such as milliseconds for a 5-minute interval
+                  type: number
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        price:
+                          type: number
+                        timestamp:
+                          type: number
+                      additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+
+  /v3/market/brc20/auction/brc20_types:
+    post:
+      operationId: getBrc20Types
+      summary: Get statistical data, price, market capitalization, etc. for BRC20.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                tickLen:
+                  type: number
+                  enum:
+                    - 4
+                    - 5
+                  example: 4
+                timeType:
+                  enum:
+                    - day1
+                    - day7
+                    - day30
+                  description: "Optional: day1, day7, day30"
+                  type: string
+                ticks:
+                  description: Specify a list of ticks
+                  type: array
+                  items:
+                    type: string
+                start:
+                  type: number
+                limit:
+                  type: number
+              additionalProperties: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - BTCPrice
+                    type: object
+                    properties:
+                      BTCPrice:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          required:
+                            - tick
+                            - curPrice
+                            - changePrice
+                            - btcVolume
+                            - amountVolume
+                            - cap
+                          type: object
+                          properties:
+                            tick:
+                              type: string
+                            curPrice:
+                              type: number
+                            changePrice:
+                              type: number
+                            btcVolume:
+                              type: number
+                            amountVolume:
+                              type: number
+                            cap:
+                              type: string
+                          additionalProperties: false
+                      deploy:
+                        description: The first three deployments of tick
+                        type: array
+                        items:
+                          required:
+                            - tick
+                            - curPrice
+                            - changePrice
+                            - btcVolume
+                            - amountVolume
+                            - cap
+                          type: object
+                          properties:
+                            tick:
+                              type: string
+                            curPrice:
+                              type: number
+                            changePrice:
+                              type: number
+                            btcVolume:
+                              type: number
+                            amountVolume:
+                              type: number
+                            cap:
+                              type: string
+                          additionalProperties: false
+                      cap:
+                        description: The top three tick by market capitalization
+                        type: array
+                        items:
+                          required:
+                            - tick
+                            - curPrice
+                            - changePrice
+                            - btcVolume
+                            - amountVolume
+                            - cap
+                          type: object
+                          properties:
+                            tick:
+                              type: string
+                            curPrice:
+                              type: number
+                            changePrice:
+                              type: number
+                            btcVolume:
+                              type: number
+                            amountVolume:
+                              type: number
+                            cap:
+                              type: string
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v3/market/brc20/auction/brc20_types_specified:
+    post:
+      operationId: getBrc20TypesSpecified
+      summary: Get statistical data, price, market capitalization, etc. for BRC20.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                timeType:
+                  enum:
+                    - day1
+                    - day7
+                    - day30
+                  type: string
+                tick:
+                  type: string
+              additionalProperties: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      tick:
+                        type: string
+                      curPrice:
+                        type: number
+                      changePrice:
+                        type: number
+                      btcVolume:
+                        type: number
+                      amountVolume:
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v3/market/brc20/auction/bind:
+    post:
+      operationId: bindBrc20NftAddress
+      summary: Bind btcAddress and nftAddress.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - btcAddress
+                - nftAddress
+                - sign
+              type: object
+              properties:
+                btcAddress:
+                  type: string
+                nftAddress:
+                  type: string
+                sign:
+                  type: string
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v3/market/brc20/auction/list:
+    post:
+      operationId: getBrc20AuctionList
+      summary: Retrieve the list information of the market.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - filter
+                - sort
+                - start
+                - limit
+              type: object
+              properties:
+                filter:
+                  required:
+                    - nftType
+                  type: object
+                  properties:
+                    nftType:
+                      enum:
+                        - brc20
+                      type: string
+                    address:
+                      type: string
+                    tick:
+                      type: string
+                    minPrice:
+                      type: number
+                    maxPrice:
+                      type: number
+                    nftConfirm:
+                      type: boolean
+                    isEnd:
+                      description: Whether order ends
+                      type: boolean
+                    all:
+                      description: Ignore start and limit and return all collection data
+                      type: boolean
+                  additionalProperties: false
+                sort:
+                  type: object
+                  properties:
+                    unitPrice:
+                      enum:
+                        - 1
+                        - -1
+                      type: number
+                    onSaleTime:
+                      enum:
+                        - 1
+                        - -1
+                      type: number
+                    initPrice:
+                      enum:
+                        - 1
+                        - -1
+                      type: number
+                    inscriptionNumber:
+                      enum:
+                        - 1
+                        - -1
+                      type: number
+                  additionalProperties: false
+                start:
+                  description: The data is looked up from start
+                  type: number
+                limit:
+                  maximum: 100
+                  exclusiveMaximum: true
+                  description: Limit the amount of data
+                  type: number
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - list
+                      - total
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          required:
+                            - inscriptionId
+                          type: object
+                          properties:
+                            auctionId:
+                              type: string
+                              nullable: true
+                            inscriptionId:
+                              type: string
+                            inscriptionNumber:
+                              type: number
+                              nullable: true
+                            marketType:
+                              type: string
+                              nullable: true
+                            address:
+                              type: string
+                              nullable: true
+                            price:
+                              type: number
+                              nullable: true
+                            nftType:
+                              type: string
+                              nullable: true
+                            tick:
+                              description: Brc20 field
+                              type: string
+                              nullable: true
+                            limit:
+                              description: Brc20 field
+                              type: number
+                              nullable: true
+                            amount:
+                              description: Brc20 field
+                              type: number
+                              nullable: true
+                            unitPrice:
+                              description: Brc20 field
+                              type: number
+                              nullable: true
+                          additionalProperties: false
+                      total:
+                        type: number
+                      timestamp:
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v3/market/brc20/auction/inscription_info:
+    post:
+      operationId: getBrc20InscriptionInfo
+      summary:
+        Retrieve inscription information, including brc20, names, collection.
+        It is necessary to first determine the inscription type before calling
+        the relevant services.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketInscriptionInfoRequest"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketInscriptionInfoResponse"
+  /v3/market/brc20/auction/inscription_info_list:
+    post:
+      operationId: getBrc20InscriptionInfoList
+      summary: Get the basic listing information of the specified inscription list
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketInscriptionInfoListRequest"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketInscriptionInfoListResponse"
+  /v3/market/brc20/auction/actions:
+    post:
+      operationId: getBrc20AuctionActions
+      summary: Get information on listings, delistings, and sales.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - filter
+                - start
+                - limit
+              type: object
+              properties:
+                filter:
+                  type: object
+                  properties:
+                    nftType:
+                      enum:
+                        - brc20
+                      type: string
+                    address:
+                      type: string
+                    inscriptionId:
+                      type: string
+                    event:
+                      enum:
+                        - Cancel
+                        - Claim
+                        - Listed
+                        - Sold
+                        - Updated
+                      description: "Event type: Cancel, Listed, Sold, Updated"
+                      type: string
+                    tick:
+                      type: string
+                  additionalProperties: false
+                start:
+                  type: number
+                limit:
+                  maximum: 100
+                  exclusiveMaximum: true
+                  type: number
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - total
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          required:
+                            - auctionId
+                            - inscriptionId
+                            - inscriptionNumber
+                            - event
+                            - price
+                            - from
+                            - to
+                            - timestamp
+                          type: object
+                          properties:
+                            auctionId:
+                              type: string
+                            inscriptionId:
+                              type: string
+                            inscriptionNumber:
+                              type: number
+                            event:
+                              enum:
+                                - Listed
+                                - Sold
+                                - Cancel
+                                - Claim
+                                - Updated
+                              type: string
+                            price:
+                              type: number
+                            from:
+                              type: string
+                            to:
+                              type: string
+                              nullable: true
+                            timestamp:
+                              type: number
+                            nftConfirmNum:
+                              type: number
+                            nftType:
+                              enum:
+                                - brc20
+                                - domain
+                                - collection
+                              type: string
+                            endMsg:
+                              description: An error message generated by the order
+                              type: string
+                              nullable: true
+                            newest:
+                              description: The update order generates multiple events
+                              type: boolean
+                            name:
+                              description: Brc20 filed
+                              type: string
+                              nullable: true
+                            unitPrice:
+                              description: Brc20 filed
+                              type: number
+                              nullable: true
+                            amount:
+                              description: Brc20 filed
+                              type: number
+                              nullable: true
+                            domain:
+                              description: Domain filed
+                              type: string
+                              nullable: true
+                            domainType:
+                              enum:
+                                - sats
+                                - unisat
+                                - btc
+                                - xbt
+                                - ord
+                                - gm
+                                - bitmap
+                                - x
+                                - null
+                              description: Domain filed
+                              type: string
+                              nullable: true
+                            domainCategorys:
+                              description: Domain filed
+                              type: array
+                              items:
+                                enum:
+                                  - Keyboard
+                                  - Non Keyboard
+                                  - 1-99
+                                  - 3D
+                                  - 4D
+                                  - 5D
+                                  - Single Emoji
+                                  - Multi Emoji
+                                  - Common Word
+                                  - 1 Letter + 1 Number
+                                  - 2 Letters
+                                  - 3 Letters
+                                  - Numbers
+                                type: string
+                              nullable: true
+                            collectionId:
+                              description: Collection filed
+                              type: string
+                              nullable: true
+                            collectionItemName:
+                              description: Collection filed
+                              type: string
+                              nullable: true
+                            contentType:
+                              description: Collection filed
+                              type: string
+                              nullable: true
+                            contentBody:
+                              description: Collection filed
+                              type: string
+                              nullable: true
+                            attributes:
+                              description: Collection filed
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  trait_type:
+                                    type: string
+                                  value:
+                                    type: string
+                                additionalProperties: false
+                              nullable: true
+                          additionalProperties: false
+                      total:
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v3/market/brc20/auction/create_put_on:
+    post:
+      operationId: createBrc20PutOn
+      summary: Create listing order.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketCreatePutOnRequest"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketCreatePutOnResponse"
+  /v3/market/brc20/auction/confirm_put_on:
+    post:
+      operationId: confirmBrc20PutOn
+      summary: Confirm listing order.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketConfirmPutOnRequest"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketConfirmPutOnResponse"
+  /v3/market/brc20/auction/create_bid_prepare:
+    post:
+      operationId: createBrc20BidPrepare
+      summary: Return params before creating purchase order.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketCreateBidPrepareRequest"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketCreateBidPrepareResponse"
+  /v3/market/brc20/auction/create_bid:
+    post:
+      operationId: createBrc20Bid
+      summary: Create purchase order.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketCreateBidRequest"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketCreateBidResponse"
+  /v3/market/brc20/auction/confirm_bid:
+    post:
+      operationId: confirmBrc20Bid
+      summary: Confirm purchase order.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketConfirmBidRequest"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketConfirmBidResponse"
+  /v3/market/brc20/auction/create_put_off:
+    post:
+      operationId: createBrc20PutOff
+      summary: Create delisting order.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketCreatePutOffRequest"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketCreatePutOffResponse"
+  /v3/market/brc20/auction/confirm_put_off:
+    post:
+      operationId: confirmBrc20PutOff
+      summary: Confirm delisting order.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketConfirmPutOffRequest"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketConfirmPutOffResponse"
+  /v3/market/brc20/auction/create_modify_price:
+    post:
+      operationId: createBrc20ModifyPrice
+      summary: Create the order for price adjustment.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketCreateModifyPriceRequest"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketCreateModifyPriceResponse"
+  /v3/market/brc20/auction/confirm_modify_price:
+    post:
+      operationId: confirmBrc20ModifyPrice
+      summary: Confirm the order for price adjustment.
+      tags:
+        - MarketPlace-BRC20
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MarketConfirmModifyPriceRequest"
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MarketConfirmModifyPriceResponse"
+
+components:
+  schemas:
+    MarketInscriptionInfoRequest:
+      required:
+        - inscriptionId
+      type: object
+      properties:
+        inscriptionId:
+          type: string
+      additionalProperties: false
+    MarketInscriptionInfoResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          required:
+            - inscriptionId
+          type: object
+          properties:
+            auctionId:
+              type: string
+              nullable: true
+            inscriptionId:
+              type: string
+            inscriptionNumber:
+              type: number
+              nullable: true
+            marketType:
+              type: string
+              example: fixedPrice
+              nullable: true
+            address:
+              type: string
+              nullable: true
+            price:
+              type: number
+              nullable: true
+            notSupport:
+              description: Domain name content support on sale
+              type: boolean
+            verification:
+              description: Whether the collection is validated
+              type: boolean
+            nftType:
+              type: string
+              nullable: true
+            tick:
+              description: Brc20 field
+              type: string
+              nullable: true
+            limit:
+              description: Brc20 field
+              type: number
+              nullable: true
+            amount:
+              description: Brc20 field
+              type: number
+              nullable: true
+            unitPrice:
+              description: Brc20 field
+              type: number
+              nullable: true
+            collectionId:
+              description: Collection field
+              type: string
+              nullable: true
+            contentType:
+              description: Collection field
+              type: string
+              nullable: true
+            contentBody:
+              description: Collection field
+              type: string
+              nullable: true
+            collectionItemName:
+              description: Collection field
+              type: string
+              nullable: true
+            collectionHighResImgUrl:
+              description: Collection field
+              type: string
+              nullable: true
+            collectionName:
+              description: Collection field
+              type: string
+              nullable: true
+            notOnSale:
+              description: Collection field
+              type: boolean
+              nullable: true
+            domain:
+              description: Domain field
+              type: string
+              nullable: true
+            domainHex:
+              description: Domain field
+              type: string
+              nullable: true
+            domainType:
+              enum:
+                - sats
+                - unisat
+                - btc
+                - xbt
+                - ord
+                - gm
+                - bitmap
+                - x
+                - null
+              description: Domain field
+              type: string
+              nullable: true
+            utxo:
+              description: The UTXO where the inscription is located
+              type: object
+              properties: {}
+              additionalProperties: false
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketInscriptionInfoListRequest:
+      type: object
+      properties:
+        address:
+          type: string
+        inscriptionIds:
+          type: array
+          items:
+            type: string
+      additionalProperties: false
+    MarketInscriptionInfoListResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          required:
+            - list
+          type: object
+          properties:
+            list:
+              type: array
+              items:
+                required:
+                  - inscriptionId
+                type: object
+                properties:
+                  auctionId:
+                    type: string
+                    nullable: true
+                  inscriptionId:
+                    type: string
+                  inscriptionNumber:
+                    type: number
+                    nullable: true
+                  marketType:
+                    type: string
+                    nullable: true
+                  address:
+                    type: string
+                    nullable: true
+                  price:
+                    type: number
+                    nullable: true
+                  nftType:
+                    type: string
+                    nullable: true
+                  status:
+                    type: string
+                additionalProperties: false
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketCreatePutOnRequest:
+      required:
+        - inscriptionId
+        - initPrice
+        - unitPrice
+        - pubkey
+        - marketType
+      type: object
+      properties:
+        nftType:
+          type: string
+        inscriptionId:
+          type: string
+        initPrice:
+          description: Set the initial total price
+          type: string
+        unitPrice:
+          description: Unit Price (for tick)
+          type: string
+        pubkey:
+          description: User public key
+          type: string
+        marketType:
+          enum:
+            - auction
+            - fixedPrice
+          type: string
+          example: fixedPrice
+        # auctionTime:
+        #   description: Auction mode optional, setting time of the order
+        #   type: number
+        # maxPrice:
+        #   description: Auction mode optional, setting max price of the order
+        #   type: string
+        btcAddress:
+          description: (Optional) Only for multi-address wallet, such as Xverse, hiro. Specifies the BTC receive address
+          type: string
+      additionalProperties: false
+    MarketCreatePutOnResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          required:
+            - auctionId
+            - psbt
+            - signIndexes
+          type: object
+          properties:
+            auctionId:
+              type: string
+            psbt:
+              type: string
+            signIndexes:
+              description: Specifies the signature location used by the xverse wallet
+              type: array
+              items:
+                type: number
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketConfirmPutOnRequest:
+      required:
+        - auctionId
+        - psbt
+      type: object
+      properties:
+        auctionId:
+          type: string
+        psbt:
+          type: string
+        fromBase64:
+          description: Is Base64 format, the default is hex format
+          type: boolean
+      additionalProperties: false
+    MarketConfirmPutOnResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          type: object
+          properties: {}
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketCreateBidPrepareRequest:
+      required:
+        - auctionId
+        - bidPrice
+        - address
+        - pubkey
+      type: object
+      properties:
+        auctionId:
+          type: string
+        bidPrice:
+          type: number
+        address:
+          description: Bidder address
+          type: string
+        pubkey:
+          description: Bidder pubkey
+          type: string
+      additionalProperties: false
+    MarketCreateBidPrepareResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          type: object
+          properties:
+            serverFee:
+              description: Expected service fee.
+              type: number
+            serverReal:
+              description: Real service fee.
+              type: number
+            serverFeeRate:
+              description: Real service fee rate.
+              type: number
+            txSize:
+              description: Estimated transaction size
+              type: number
+            nftValue:
+              description: Satoshis carried by the inscription
+              type: number
+            feeRate:
+              description: Network fee rate
+              type: number
+            availableBalance:
+              description: Available confirmed balance for the user
+              type: number
+            allBalance:
+              description: Available total balance for the user
+              type: number
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketCreateBidRequest:
+      required:
+        - auctionId
+        - bidPrice
+        - address
+        - pubkey
+      type: object
+      properties:
+        auctionId:
+          type: string
+        bidPrice:
+          type: number
+        address:
+          description: Bidder address
+          type: string
+        pubkey:
+          description: Bidder pubkey
+          type: string
+        feeRate:
+          description: The user sets the rate
+          type: number
+        nftAddress:
+          description: (Optional) Only for multi-address wallet, such as Xverse, hiro. Inscription receiving address
+          type: string
+        utxos:
+          description: Custom utxo
+          type: array
+          items:
+            type: object
+            properties:
+              txid:
+                type: string
+              index:
+                type: number
+      additionalProperties: false
+    MarketCreateBidResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          required:
+            - bidId
+            - psbtBid
+            - serverFee
+            - networkFee
+            - feeRate
+            - nftValue
+          type: object
+          properties:
+            bidId:
+              type: string
+            psbtBid:
+              description: Bid psbt
+              type: string
+            psbtBid2:
+              description: Auction mode is used, and the current empty string can be passed
+              type: string
+            psbtSettle:
+              description: Auction mode is used, and the current empty string can be passed
+              type: string
+            serverFee:
+              description: The service fee charged by the platform
+              type: number
+            networkFee:
+              description: BTC network total fee
+              type: number
+            feeRate:
+              description: BTC network fee rate
+              type: number
+            nftValue:
+              type: number
+            bidSignIndexes:
+              description: Specifies the bid signature location used by the xverse wallet
+              type: array
+              items:
+                type: number
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketConfirmBidRequest:
+      required:
+        - auctionId
+        - bidId
+        - psbtBid
+      type: object
+      properties:
+        auctionId:
+          type: string
+        bidId:
+          type: string
+        psbtBid:
+          type: string
+        psbtBid2:
+          description: Auction mode is used, and the current empty string can be passed
+          type: string
+        psbtSettle:
+          description: Auction mode is used, and the current empty string can be passed
+          type: string
+        fromBase64:
+          description: Is Base64 format, the default is hex format
+          type: boolean
+      additionalProperties: false
+    MarketConfirmBidResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          required:
+            - txid
+          type: object
+          properties:
+            txid:
+              description: Transaction txid
+              type: string
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketCreatePutOffRequest:
+      required:
+        - auctionId
+      type: object
+      properties:
+        auctionId:
+          type: string
+        nftAddress:
+          description: (Optional) Only for multi-address wallet, such as Xverse, hiro. Inscription receiving address.
+          type: string
+        btcPubkey:
+          description: (Optional) Only for multi-address wallet, such as Xverse, hiro. The public key used in the inscription of the order.
+          type: string
+        utxos:
+          description: Custom utxo
+          type: array
+          items:
+            type: object
+            properties:
+              txid:
+                type: string
+              index:
+                type: number
+        rbf:
+          type: boolean
+        offChain:
+          type: boolean
+      additionalProperties: false
+    MarketCreatePutOffResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          required:
+            - psbt
+          type: object
+          properties:
+            psbt:
+              type: string
+            txSize:
+              type: number
+            btcSignIndexes:
+              description: Specifies the btc signature location used by the xverse wallet
+              type: array
+              items:
+                type: number
+            nftSignIndexes:
+              description: Specifies the nft signature location used by the xverse wallet
+              type: array
+              items:
+                type: number
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketConfirmPutOffRequest:
+      required:
+        - auctionId
+        - psbt
+      type: object
+      properties:
+        auctionId:
+          type: string
+        psbt:
+          type: string
+        fromBase64:
+          description: Is Base64 format, the default is hex format
+          type: boolean
+        offChain:
+          type: boolean
+      additionalProperties: false
+    MarketConfirmPutOffResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          required:
+            - txid
+          type: object
+          properties:
+            txid:
+              type: string
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketCreateModifyPriceRequest:
+      required:
+        - auctionId
+        - initPrice
+        - unitPrice
+      type: object
+      properties:
+        auctionId:
+          type: string
+        initPrice:
+          type: string
+        unitPrice:
+          type: string
+      additionalProperties: false
+    MarketCreateModifyPriceResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          required:
+            - psbt
+            - signIndexes
+          type: object
+          properties:
+            psbt:
+              type: string
+            signIndexes:
+              description: Specifies the signature location used by the xverse wallet
+              type: array
+              items:
+                type: number
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketConfirmModifyPriceRequest:
+      required:
+        - auctionId
+        - psbt
+        - fromBase64
+      type: object
+      properties:
+        auctionId:
+          type: string
+        psbt:
+          type: string
+        fromBase64:
+          type: boolean
+      additionalProperties: false
+    MarketConfirmModifyPriceResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          type: object
+          properties: {}
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    BindInfoRequest:
+      required:
+        - address
+      type: object
+      properties:
+        address:
+          type: string
+      additionalProperties: false
+    BindInfoResponse:
+      required:
+        - btcAddress
+        - nftAddress
+      type: object
+      properties:
+        btcAddress:
+          type: string
+        nftAddress:
+          type: string
+      additionalProperties: false
+    RunesMarketCreatePutOnRequest:
+      required:
+        - txid
+        - index
+        - initPrice
+        - unitPrice
+        - pubkey
+        - marketType
+      type: object
+      properties:
+        nftType:
+          type: string
+        txid:
+          description: The txid of the rune utxo txid
+          type: string
+        index:
+          description: The txid of the rune utxo index
+          type: string
+        initPrice:
+          description: Set the initial total price
+          type: string
+        unitPrice:
+          description: Unit Price (for tick)
+          type: string
+        pubkey:
+          description: User public key
+          type: string
+        marketType:
+          enum:
+            - fixedPrice
+          type: string
+          example: fixedPrice
+        # auctionTime:
+        #   description: Auction mode optional, setting time of the order
+        #   type: number
+        # maxPrice:
+        #   description: Auction mode optional, setting max price of the order
+        #   type: string
+        btcAddress:
+          description: (Optional) Only for multi-address wallet, such as Xverse, hiro. Specifies the BTC receive address
+          type: string
+      additionalProperties: false
+    AlkanesMarketCreatePutOnRequest:
+      required:
+        - txid
+        - index
+        - initPrice
+        - unitPrice
+        - pubkey
+        - marketType
+      type: object
+      properties:
+        nftType:
+          type: string
+        txid:
+          description: The txid of the alkanes utxo txid
+          type: string
+        index:
+          description: The txid of the alkanes utxo index
+          type: string
+        initPrice:
+          description: Set the initial total price
+          type: string
+        unitPrice:
+          description: Unit Price (for tick)
+          type: string
+        pubkey:
+          description: User public key
+          type: string
+        marketType:
+          enum:
+            - fixedPrice
+          type: string
+          example: fixedPrice
+        # auctionTime:
+        #   description: Auction mode optional, setting time of the order
+        #   type: number
+        # maxPrice:
+        #   description: Auction mode optional, setting max price of the order
+        #   type: string
+        btcAddress:
+          description: (Optional) Only for multi-address wallet, such as Xverse, hiro. Specifies the BTC receive address
+          type: string
+      additionalProperties: false
+
+    MarketCreateBatchPutOnRequest:
+      required:
+        - unitPrice
+        - pubkey
+      type: object
+      properties:
+        unitPrice:
+          description: Unit Price (for tick)
+          type: string
+        pubkey:
+          description: User public key
+          type: string
+        nftType:
+          type: string
+        btcAddress:
+          description: (Optional) Only for multi-address wallet, such as Xverse, hiro. Specifies the BTC receive address
+          type: string
+        utxos:
+          description: Custom utxo
+          type: array
+          items:
+            type: object
+            properties:
+              txid:
+                type: string
+              index:
+                type: number
+      additionalProperties: false
+    MarketCreateBatchPutOnResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          required:
+            - auctionId
+            - psbt
+            - signIndexes
+          type: object
+          properties:
+            batchAuctionId:
+              type: string
+            psbt:
+              type: string
+            signIndexes:
+              description: Specifies the signature location used by the xverse wallet
+              type: array
+              items:
+                type: number
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketConfirmBatchPutOnRequest:
+      required:
+        - batchAuctionId
+        - psbt
+      type: object
+      properties:
+        batchAuctionId:
+          type: string
+        psbt:
+          type: string
+        fromBase64:
+          description: Is Base64 format, the default is hex format
+          type: boolean
+      additionalProperties: false
+    MarketConfirmBatchPutOnResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          type: object
+          properties: {}
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketCreateBatchBidPrepareRequest:
+      required:
+        - auctionIds
+        - address
+        - pubkey
+      type: object
+      properties:
+        auctionIds:
+          type: array
+          items:
+            type: string
+        address:
+          description: Bidder address
+          type: string
+        pubkey:
+          description: Bidder pubkey
+          type: string
+      additionalProperties: false
+    MarketCreateBatchBidPrepareResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          type: object
+          properties:
+            serverFee:
+              description: Expected service fee.
+              type: number
+            serverReal:
+              description: Real service fee.
+              type: number
+            serverFeeRate:
+              description: Real service fee rate.
+              type: number
+            txSize:
+              description: Estimated transaction size
+              type: number
+            feeRate:
+              description: Network fee rate
+              type: number
+            availableBalance:
+              description: Available confirmed balance for the user
+              type: number
+            validAuctionIds:
+              type: array
+              items:
+                type: string
+            invalidAuctionIds:
+              type: array
+              items:
+                type: string
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketCreateBatchBidRequest:
+      required:
+        - auctionIds
+        - bidPrices
+        - address
+        - pubkey
+      type: object
+      properties:
+        auctionIds:
+          type: array
+          items:
+            type: string
+        bidPrices:
+          type: array
+          items:
+            type: number
+        address:
+          description: Bidder address
+          type: string
+        pubkey:
+          description: Bidder pubkey
+          type: string
+        feeRate:
+          description: The user sets the rate
+          type: number
+        nftAddress:
+          description: (Optional) Only for multi-address wallet, such as Xverse, hiro. Inscription receiving address
+          type: string
+      additionalProperties: false
+    MarketCreateBatchBidResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          required:
+            - bidId
+            - psbtBid
+            - serverFee
+            - networkFee
+            - feeRate
+            - bidSignIndexes
+          type: object
+          properties:
+            bidId:
+              type: string
+            psbtBid:
+              description: Bid psbt
+              type: string
+            serverFee:
+              description: The service fee charged by the platform
+              type: number
+            networkFee:
+              description: BTC network total fee
+              type: number
+            feeRate:
+              description: BTC network fee rate
+              type: number
+            bidSignIndexes:
+              description: Specifies the bid signature location used by the xverse wallet
+              type: array
+              items:
+                type: number
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+    MarketConfirmBatchBidRequest:
+      required:
+        - bidId
+        - psbtBid
+      type: object
+      properties:
+        bidId:
+          type: string
+        psbtBid:
+          type: string
+        fromBase64:
+          description: Is Base64 format, the default is hex format
+          type: boolean
+      additionalProperties: false
+    MarketConfirmBatchBidResponse:
+      type: object
+      properties:
+        code:
+          type: number
+        msg:
+          type: string
+        data:
+          required:
+            - txid
+          type: object
+          properties:
+            txid:
+              description: Transaction txid
+              type: string
+          additionalProperties: false
+      required:
+        - msg
+        - code
+        - data
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

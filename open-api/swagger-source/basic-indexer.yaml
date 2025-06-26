@@ -1,8 +1,11 @@
 openapi: 3.0.3
 info:
-  title: UniSat Wallet - OpenAPI
+  title: Basic Indexer API
   version: 1.0.4
-  description: To use the OpenAPI, please register and log in at the UniSat Developer Center (https://developer.unisat.io). Once registered, you can directly obtain a free-plan API key through the developer center.
+  description: >-
+    Basic Indexer API is a RESTful API for accessing Bitcoin blockchain data.
+    It provides endpoints to retrieve information about blocks, transactions,
+    addresses, and more. The API supports both mainnet and testnet environments.
   contact:
     email: contact@unisat.io
   license:
@@ -28,8 +31,10 @@ paths:
     get:
       tags:
         - Blocks
-      summary: >
-        Get blockchain info.
+      operationId: getBlockchainInfo
+      summary: Get Blockchain Info
+      description: >
+        Get the current blockchain information, including chain type, block count, and best block hash.
       responses:
         "200":
           description: Successful operation
@@ -68,8 +73,9 @@ paths:
     get:
       tags:
         - Blocks
-      summary: >
-        Get Recommended Fees. (sat/vB)
+      operationId: getRecommendedFees
+      summary: Get Recommended Fees
+      description: Get the recommended fees for different confirmation times. (like mempool.space)
       responses:
         "200":
           description: Successful operation
@@ -106,7 +112,9 @@ paths:
     get:
       tags:
         - Blocks
-      summary: Get block info by block height.
+      operationId: getBlockByHeight
+      summary: Get block info by height
+      description: Get block info by height.
       parameters:
         - name: height
           description: Block height
@@ -139,7 +147,9 @@ paths:
     get:
       tags:
         - Blocks
-      summary: Get block info by blockid.
+      operationId: getBlockById
+      summary: Get block info by blockid
+      description: Get block info by blockid.
       parameters:
         - name: blockid
           description: Block id
@@ -171,7 +181,9 @@ paths:
     get:
       tags:
         - Blocks
-      summary: Get tx history by block height.
+      operationId: getTxsByBlockHeight
+      summary: Get txs by block height.
+      description: Get txs by block height.
       parameters:
         - name: height
           description: Block height
@@ -226,7 +238,9 @@ paths:
     get:
       tags:
         - Transactions
-      summary: Get the summary info of a tx.
+      operationId: getTxById
+      summary: Get tx info by txid
+      description: Get tx info by txid.
       parameters:
         - name: txid
           description: Tx id
@@ -258,7 +272,9 @@ paths:
     get:
       tags:
         - Transactions
-      summary: Get the inputs of a tx.
+      operationId: getInputsByTxId
+      summary: Get the inputs of a tx
+      description: Get the inputs of a tx.
       parameters:
         - name: txid
           description: Tx id
@@ -351,7 +367,9 @@ paths:
     get:
       tags:
         - Transactions
-      summary: Get the outputs of a tx.
+      operationId: getOutputsByTxId
+      summary: Get the outputs of a tx
+      description: Get the outputs of a tx.
       parameters:
         - name: txid
           description: Tx id
@@ -423,7 +441,9 @@ paths:
     get:
       tags:
         - Transactions
-      summary: Get a rawtx
+      operationId: getRawTxById
+      summary: Get the raw tx by txid
+      description: Get the raw tx by txid.
       parameters:
         - name: txid
           description: Tx id
@@ -456,7 +476,9 @@ paths:
     get:
       tags:
         - Transactions
-      summary: Get the utxo info
+      operationId: getUtxoByTxIdAndIndex
+      summary: Get the UTXO by txid and index
+      description: Get the UTXO by txid and index.
       parameters:
         - name: txid
           description: Tx id
@@ -527,7 +549,9 @@ paths:
     post:
       tags:
         - Transactions
+      operationId: localPushTx
       summary: Push rawtx to bitcoin node.
+      description: Push rawtx to bitcoin node.
       requestBody:
         content:
           application/json:
@@ -559,7 +583,9 @@ paths:
     post:
       tags:
         - Transactions
-      summary: Push multiple rawtxs to bitcoin node.
+      operationId: localPushTxs
+      summary: Push rawtxs to bitcoin node.
+      description: Push rawtxs to bitcoin node.
       requestBody:
         content:
           application/json:
@@ -593,7 +619,9 @@ paths:
     get:
       tags:
         - Addresses
-      description: Get balance by address.
+      operationId: getBalanceByAddress
+      summary: Get the balance by address
+      description: Get the balance by address.
       parameters:
         - name: address
           description: Address
@@ -645,7 +673,9 @@ paths:
     get:
       tags:
         - Addresses
-      description: Get the tx history by address.
+      operationId: getTxHistoryByAddress
+      summary: Get transaction history by address
+      description: Get transaction history by address.
       parameters:
         - name: address
           description: Address
@@ -699,7 +729,11 @@ paths:
     get:
       tags:
         - Addresses
-      summary: Get non inscription UTXO list by address
+      operationId: getUtxoDataByAddress
+      summary: Get UTXO list by address
+      description:
+        Retrieve the UTXOs of an address that do not contain inscriptions. Note that this excludes, but does not completely cover, assets from protocols such as Alkanes, Runes, and others.
+        To obtain the UTXOs of an address that are available for spending as BTC, please use the available-utxo endpoint.
       parameters:
         - name: address
           description: Address
@@ -760,7 +794,9 @@ paths:
     get:
       tags:
         - Addresses
-      description: Get available balance by address.
+      operationId: getAvailableBalanceByAddress
+      summary: Get available balance by address
+      description: This interface will return the current address's available balance that can be used for BTC spending. Balances of assets such as inscriptions, runes, and alkanes will not be included.
       parameters:
         - name: address
           description: Address
@@ -805,7 +841,11 @@ paths:
     get:
       tags:
         - Addresses
-      summary: Get available UTXO list by address (unlocked by utxo-tools and larger than 600 satoshis)
+      operationId: getAvailableUtxoDataByAddress
+      summary: Get available UTXO list by address
+      description:
+        This interface will return the current address's available UTXO list that can be used for BTC spending. UTXOs of assets such as inscriptions, runes, and alkanes will not be included. The UTXO management tool (https://unisat.io/utxo) can unlock these UTXOs, making them available again.
+        Additionally, UTXOs with less than 600 satoshis will not be returned to avoid potential unspendable outputs from unrecognized asset protocols or burns.
       parameters:
         - name: address
           description: Address

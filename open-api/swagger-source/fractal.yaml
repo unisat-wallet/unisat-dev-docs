@@ -3,8 +3,7 @@ info:
   title: Fractal Only API
   version: 1.0.4
   description: >-
-    This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel
-    free to send us an email, and we will provide you with an API KEY.
+    This API is limited to Fractal only. It provides endpoints to interact with the Fractal network, including supply information, address statistics, and rich lists.
   contact:
     email: contact@unisat.io
   license:
@@ -21,7 +20,10 @@ paths:
     get:
       tags:
         - Fractal
+      operationId: getFractalSupply
       summary: Get circulating FB in fractal mainnet
+      description: >-
+        Retrieves the circulating supply of Fractal Bitcoin (FB) in the mainnet.
       responses:
         "200":
           description: Successful operation
@@ -43,7 +45,10 @@ paths:
     get:
       tags:
         - Fractal
+      operationId: getFractalTotalSupply
       summary: Get total supply FB in fractal mainnet
+      description: >-
+        Retrieves the total supply of Fractal Bitcoin (FB) in the mainnet.
       responses:
         "200":
           description: Successful operation
@@ -65,7 +70,10 @@ paths:
     get:
       tags:
         - Fractal
+      operationId: getFractalTotalAddress
       summary: Get total address
+      description: >-
+        Retrieves the total number of addresses in the Fractal network.
       responses:
         "200":
           description: Successful operation
@@ -87,7 +95,10 @@ paths:
     get:
       tags:
         - Fractal
-      summary: Return the address list in descending order of amount.
+      operationId: getFractalRichList
+      summary: Get address rich list
+      description: >-
+        Retrieves a list of addresses sorted by their balance in descending order.
       parameters:
         - name: cursor
           description: Start offset

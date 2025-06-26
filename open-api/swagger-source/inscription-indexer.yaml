@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Inscription Indexer API
   version: 1.0.0
-  description: This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free to send us an email, and we will provide you with an API KEY.
+  description: Inscription Indexer API is a RESTful API for accessing and managing inscriptions on the Bitcoin blockchain. It provides endpoints to retrieve information about inscriptions, including their status, metadata, and associated transactions.
   contact:
     email: contact@unisat.io
   license:
@@ -24,6 +24,7 @@ paths:
     get:
       tags:
         - Inscriptions
+      operationId: getInscriptionInfo
       summary: Get inscription info by inscriptionId
       parameters:
         - name: inscriptionId
@@ -55,6 +56,7 @@ paths:
     get:
       tags:
         - Inscriptions
+      operationId: getInscriptionContent
       summary: Get inscription content info by inscriptionId
       parameters:
         - name: inscriptionId
@@ -72,6 +74,7 @@ paths:
     get:
       tags:
         - Inscriptions
+      operationId: getInscriptionEvents
       summary: Get inscription events
       parameters:
         - name: start
@@ -134,6 +137,7 @@ paths:
     get:
       tags:
         - Inscriptions
+      operationId: getInscriptionDataByAddress
       summary: Get inscription UTXO list by address
       parameters:
         - name: address
@@ -194,6 +198,7 @@ paths:
     get:
       tags:
         - Inscriptions
+      operationId: getInscriptionUtxoDataByAddress
       summary: Get inscription UTXO list by address
       parameters:
         - name: address

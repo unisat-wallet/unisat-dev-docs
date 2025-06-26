@@ -3,8 +3,9 @@ info:
   title: BRC20 Swap API
   version: 1.0.4
   description: >-
-    This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel
-    free to send us an email, and we will provide you with an API KEY.
+    BRC20 Swap API provides a set of interfaces for BRC20 Swap and PizzaSwap services.
+    It allows users to interact with the BRC20 Swap ecosystem, including balance checks,
+    pool information, liquidity management, and token transfers.
   contact:
     email: contact@unisat.io
   license:
@@ -20,9 +21,13 @@ tags:
 paths:
   /v1/brc20-swap/config:
     get:
-      summary: Swap's global configuration information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapConfig
+      summary: Swap's global configuration information.
+      description: >-
+        This interface provides the global configuration information for the BRC20 Swap service.
+        It includes details such as the module ID, service gas tick, and pending deposit confirmation numbers.
       responses:
         "200":
           description: Default Response
@@ -56,9 +61,13 @@ paths:
                   - data
   /v1/brc20-swap/balance:
     get:
-      summary: Gets the balance for the specified address and tick.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapBalance
+      summary: Gets the balance for the specified address and tick.
+      description: >-
+        This interface retrieves the balance for a specific address and tick in the BRC20 Swap service.
+        It returns the confirmed module balance, swap balance, pending swap balance, and pending available balance.
       parameters:
         - schema:
             type: string
@@ -110,9 +119,13 @@ paths:
                   - data
   /v1/brc20-swap/pool_info:
     get:
-      summary: Get Pool information based on trade pair.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPoolInfo
+      summary: Get Pool information based on trade pair.
+      description: >-
+        This interface retrieves the pool information for a specific trade pair in the BRC20 Swap service.
+        It includes details such as whether the pool exists, if liquidity has been added, tick prices, LP quantity, TVL, volume, and rewards.
       parameters:
         - schema:
             type: string
@@ -169,9 +182,13 @@ paths:
                   - data
   /v1/brc20-swap/select:
     get:
-      summary: Select the tick information that you can use based on the address.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapSelect
+      summary: Select the tick information that you can use based on the address.
+      description: >-
+        This interface retrieves the tick information that can be used for swapping based on the provided address.
+        It returns the tick, decimal, BRC20 balance, and swap balance for each available tick.
       parameters:
         - schema:
             type: string
@@ -218,11 +235,13 @@ paths:
                   - data
   /v1/brc20-swap/pre_deploy_pool:
     get:
-      summary:
-        /deploy_pool interface pre-load, get the signature content, gas and
-        byte information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPreDeployPool
+      summary: Prepare deploy pool operation
+      description: >-
+        This interface pre-loads the /deploy_pool operation, providing the signature content,
+        gas, and byte information required for deploying a pool in the BRC20 Swap service.
       parameters:
         - schema:
             type: string
@@ -304,9 +323,13 @@ paths:
                   - data
   /v1/brc20-swap/deploy_pool:
     post:
-      summary: Deploy the pool operation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapDeployPool
+      summary: Deploy the pool operation.
+      description: >-
+        This interface deploys a pool in the BRC20 Swap service. It requires the address, tick0, tick1,
+        timestamp, fee tick, and user signatures to complete the operation.
       requestBody:
         content:
           application/json:
@@ -372,11 +395,14 @@ paths:
                   - data
   /v1/brc20-swap/pre_add_liq:
     get:
-      summary:
-        /add_liq interface pre-load, get the signature content, gas and byte
-        information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPreAddLiq
+      summary: Prepare add liquidity operation
+      description: >-
+        This interface pre-loads the /add_liq operation, providing the signature content,
+        gas, and byte information required for adding liquidity in the BRC20 Swap service.
+
       parameters:
         - schema:
             type: string
@@ -478,9 +504,12 @@ paths:
                   - data
   /v1/brc20-swap/add_liq:
     post:
-      summary: Add the liquidity operation.
       tags:
         - brc20-swap
+      summary: Add the liquidity operation
+      description: >-
+        This interface adds liquidity to a pool in the BRC20 Swap service. It requires the address,
+        tick0, tick1, amounts, LP, slippage, timestamp, fee tick, and user signatures to complete the operation.
       requestBody:
         content:
           application/json:
@@ -587,11 +616,14 @@ paths:
                   - data
   /v1/brc20-swap/pre_remove_liq:
     get:
-      summary:
-        /remove_liq interface pre-load, get the signature content, gas and byte
-        information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPreRemoveLiq
+      summary: Prepare remove liquidity operation
+      description: >-
+        This interface pre-loads the /remove_liq operation, providing the signature content,
+        gas, and byte information required for removing liquidity in the BRC20 Swap service.
+
       parameters:
         - schema:
             type: string
@@ -694,9 +726,12 @@ paths:
                   - data
   /v1/brc20-swap/remove_liq:
     post:
-      summary: Remove the liquidity operation
       tags:
         - brc20-swap
+      summary: Remove the liquidity operation
+      description: >-
+        This interface removes liquidity from a pool in the BRC20 Swap service. It requires the address,
+        tick0, tick1, amounts, LP, slippage, timestamp, fee tick, and user signatures to complete the operation.
       requestBody:
         content:
           application/json:
@@ -803,10 +838,13 @@ paths:
                   - data
   /v1/brc20-swap/pre_send:
     get:
-      summary: /send interface pre-load, get the signature content, gas and byte
-        information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPreSend
+      summary: Prepare send operation
+      description: >-
+        This interface pre-loads the /send operation, providing the signature content,
+        gas, and byte information required for sending a tick in the BRC20 Swap service.
       parameters:
         - schema:
             type: string
@@ -896,9 +934,12 @@ paths:
                   - data
   /v1/brc20-swap/pre_batch_send:
     post:
-      summary: /batch_send interface pre-load, get the signature content, gas and byte information.
       tags:
         - brc20-swap
+      summary: Prepare batch send operation
+      description: >-
+        This interface pre-loads the /batch_send operation, providing the signature content,
+        gas, and byte information required for sending multiple ticks in the BRC20 Swap service.
       requestBody:
         required: true
         content:
@@ -989,9 +1030,13 @@ paths:
                   - data
   /v1/brc20-swap/pre_swap:
     get:
-      summary: /swap interface pre-load, get the signature content and gas information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPreSwap
+      summary: Prepare swap operation
+      description: >-
+        This interface pre-loads the /swap operation, providing the signature content,
+        gas, and byte information required for swapping ticks in the BRC20 Swap service.
       parameters:
         - schema:
             type: string
@@ -1101,9 +1146,13 @@ paths:
                   - data
   /v1/brc20-swap/send:
     post:
-      summary: The send operation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapSend
+      summary: The send operation.
+      description: >-
+        This interface sends a tick in the BRC20 Swap service. It requires the address, tick, amount,
+        receiver, timestamp, fee tick, and user signatures to complete the operation.
       requestBody:
         content:
           application/json:
@@ -1175,9 +1224,13 @@ paths:
                   - data
   /v1/brc20-swap/batch_send:
     post:
-      summary: The batch send operation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapBatchSend
+      summary: The batch send operation.
+      description: >-
+        This interface sends multiple ticks in the BRC20 Swap service. It requires the address, tick,
+        amount, receivers, timestamp, fee tick, and user signatures to complete the operation.
       requestBody:
         content:
           application/json:
@@ -1252,9 +1305,14 @@ paths:
                   - data
   /v1/brc20-swap/swap:
     post:
-      summary: The swap operation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapSwap
+      summary: The swap operation.
+      description: >-
+        This interface swaps ticks in the BRC20 Swap service. It requires the address, input tick,
+        output tick, input amount, output amount, slippage, exact type, timestamp, fee tick,
+        and user signatures to complete the operation.
       requestBody:
         content:
           application/json:
@@ -1354,9 +1412,13 @@ paths:
                   - data
   /v1/brc20-swap/pool_list:
     get:
-      summary: Gets the pool list information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPoolList
+      summary: Gets the pool list information.
+      description: >-
+        This interface retrieves the pool list information in the BRC20 Swap service. It supports
+        filtering by address, tick, and fuzzy matching, and allows pagination through start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -1417,9 +1479,13 @@ paths:
                   - data
   /v1/brc20-swap/my_pool_list:
     get:
-      summary: Gets the pool list information by address.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapMyPoolList
+      summary: Gets the user's pool list information.
+      description: >-
+        This interface retrieves the user's pool list information in the BRC20 Swap service. It supports
+        filtering by address, tick, and pagination through start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -1496,9 +1562,13 @@ paths:
                   - data
   /v1/brc20-swap/my_pool:
     get:
-      summary: Gets the user pool information for the specified pair.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapMyPool
+      summary: Gets the user pool information for the specified pair.
+      description: >-
+        This interface retrieves the user pool information for a specific pair in the BRC20 Swap service.
+        It requires the address, tick0, and tick1 parameters to identify the pool.
       parameters:
         - schema:
             type: string
@@ -1554,9 +1624,13 @@ paths:
                   - data
   /v1/brc20-swap/overview:
     get:
-      summary: An overview of swap information
       tags:
         - brc20-swap
+      operationId: getBrc20SwapOverview
+      summary: An overview of swap information
+      description: >-
+        This interface provides an overview of the swap information in the BRC20 Swap service,
+        including total liquidity, 7-day volume, 24-hour volume, number of transactions, and number of pairs.
       responses:
         "200":
           description: Default Response
@@ -1593,9 +1667,13 @@ paths:
                   - data
   /v1/brc20-swap/gas_history:
     get:
-      summary: Gets the gas consumption records for a user aggregation operation.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapGasHistory
+      summary: Gets the gas consumption records for a user aggregation operation.
+      description: >-
+        This interface retrieves the gas consumption records for a user aggregation operation in the BRC20 Swap service.
+        It supports filtering by address and pagination through start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -1656,9 +1734,13 @@ paths:
                   - data
   /v1/brc20-swap/send_history:
     get:
-      summary: Gets the history of send transaction.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapSendHistory
+      summary: Gets the history of send transaction.
+      description: >-
+        This interface retrieves the history of send transactions in the BRC20 Swap service.
+        It supports filtering by address, tick, and pagination through start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -1720,9 +1802,13 @@ paths:
                   - data
   /v1/brc20-swap/liq_history:
     get:
-      summary: Gets the history of a pair addition pool.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapLiqHistory
+      summary: Gets the history of a pair addition pool.
+      description: >-
+        This interface retrieves the history of pair addition pools in the BRC20 Swap service.
+        It supports filtering by address, tick, type (add or remove), and pagination through start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -1796,9 +1882,13 @@ paths:
                   - data
   /v1/brc20-swap/swap_history:
     get:
-      summary: Gets the history of swap.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapSwapHistory
+      summary: Gets the history of swap.
+      description: >-
+        This interface retrieves the history of swap transactions in the BRC20 Swap service.
+        It supports filtering by address, tick, and pagination through start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -1873,9 +1963,13 @@ paths:
                   - data
   /v1/brc20-swap/rollup_history:
     get:
-      summary: Get chain history of rollup inscription.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapRollupHistory
+      summary: Get chain history of rollup inscription.
+      description: >-
+        This interface retrieves the chain history of rollup inscriptions in the BRC20 Swap service.
+        It supports filtering by inscription ID and pagination through start and limit parameters.
       parameters:
         - schema:
             maximum: 100
@@ -1936,9 +2030,13 @@ paths:
                   - data
   /v1/brc20-swap/deposit_list:
     get:
-      summary: Gets the deposit list for a user.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapDepositList
+      summary: Gets the deposit list for a user.
+      description: >-
+        This interface retrieves the deposit list for a user in the BRC20 Swap service.
+        It supports filtering by address, tick, and pagination through start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -2006,9 +2104,14 @@ paths:
                   - data
   /v1/brc20-swap/create_deposit:
     get:
-      summary: Create a deposit psbt to be signed by the user.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapCreateDeposit
+      summary: Create a deposit psbt to be signed by the user.
+      description: >-
+        This interface creates a deposit PSBT to be signed by the user in the BRC20 Swap service.
+        It requires the inscription ID, public key, and address parameters to generate the PSBT.
+
       parameters:
         - schema:
             type: string
@@ -2056,9 +2159,13 @@ paths:
                   - data
   /v1/brc20-swap/confirm_deposit:
     post:
-      summary: User signature deposit psbt, submit confirmation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapConfirmDeposit
+      summary: User signature deposit psbt, submit confirmation.
+      description: >-
+        This interface allows the user to sign the deposit PSBT and submit the confirmation in the BRC20 Swap service.
+        It requires the PSBT and inscription ID to complete the operation.
       requestBody:
         content:
           application/json:
@@ -2096,9 +2203,12 @@ paths:
                   - data
   /v1/brc20-swap/system_status:
     get:
-      summary: Gets the current system state.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapSystemStatus
+      summary: Gets the current system state.
+      description: >-
+        This interface retrieves the current system state of the BRC20 Swap service, including whether rollup inscription committing is enabled.
       responses:
         "200":
           description: Default Response
@@ -2124,9 +2234,13 @@ paths:
                   - data
   /v1/brc20-swap/withdraw_history:
     get:
-      summary: Gets the user withdrawal history.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapWithdrawHistory
+      summary: Gets the user withdrawal history.
+      description: >-
+        This interface retrieves the user withdrawal history in the BRC20 Swap service.
+        It supports filtering by address, pagination through start and limit parameters, and an optional tick parameter.
       parameters:
         - schema:
             type: string
@@ -2200,9 +2314,13 @@ paths:
                   - data
   /v1/brc20-swap/create_retry_withdraw:
     get:
-      summary: Retry create a withdraw psbt to be signed by the user.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapCreateRetryWithdraw
+      summary: Retry create a withdraw psbt to be signed by the user.
+      description: >-
+        This interface retries to create a withdrawal PSBT to be signed by the user in the BRC20 Swap service.
+        It requires the withdrawal order ID, public key, and address parameters to generate the PSBT.
       parameters:
         - schema:
             type: string
@@ -2249,9 +2367,13 @@ paths:
                   - data
   /v1/brc20-swap/confirm_retry_withdraw:
     post:
-      summary: User signature withdraw psbt, submit confirmation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapConfirmRetryWithdraw
+      summary: User signature withdraw psbt, submit confirmation.
+      description: >-
+        This interface allows the user to sign the retry withdrawal PSBT and submit the confirmation in the BRC20 Swap service.
+        It requires the withdrawal order ID, payment PSBT, and approve PSBT to complete the operation.
       requestBody:
         content:
           application/json:
@@ -2293,9 +2415,14 @@ paths:
                   - data
   /v1/brc20-swap/create_withdraw:
     get:
-      summary: Create a withdraw psbt to be signed by the user.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapCreateWithdraw
+      summary: Create a withdraw psbt to be signed by the user.
+      description: >-
+        This interface creates a withdrawal PSBT to be signed by the user in the BRC20 Swap service.
+        It requires the public key, address, tick, amount, timestamp, and fee tick parameters to generate the PSBT.
+
       parameters:
         - schema:
             type: string
@@ -2349,9 +2476,14 @@ paths:
                   - data
   /v1/brc20-swap/confirm_withdraw:
     post:
-      summary: User signature withdraw psbt, submit confirmation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapConfirmWithdraw
+      summary: User signature withdraw psbt, submit confirmation.
+      description: >-
+        This interface allows the user to sign the withdrawal PSBT and submit the confirmation in the BRC20 Swap service.
+        It requires the withdrawal order ID, payment PSBT, approve PSBT, fee tick, and optional fee amount to complete the operation.
+
       requestBody:
         content:
           application/json:
@@ -2407,9 +2539,14 @@ paths:
                   - data
   /v1/brc20-swap/withdraw_process:
     get:
-      summary: Gets the withdrawal progress for the specified ID.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapWithdrawProcess
+      summary: Gets the withdrawal progress for the specified ID.
+      description: >-
+        This interface retrieves the withdrawal progress for a specific ID in the BRC20 Swap service.
+        It requires the ID parameter to identify the withdrawal order.
+
       parameters:
         - schema:
             type: string

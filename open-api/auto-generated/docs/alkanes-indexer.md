@@ -1,6 +1,6 @@
-# Alkanes API
+# Alkanes Indexer API
 
-The Alkanes API is developed by the UniSat team, providing a simplified and developer-friendly interface based on the official Alkanes indexer (kungfuflex/alkanes).  It is built on specific versions of metashrew and alkanes-rs to ensure compatibility and consistency.  We welcome feedback and suggestions for improvement.
+The Alkanes Indexer API is developed by the UniSat team, providing a simplified and developer-friendly interface based on the official Alkanes indexer (kungfuflex/alkanes).  It is built on specific versions of metashrew and alkanes-rs to ensure compatibility and consistency.  We welcome feedback and suggestions for improvement.
 
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
@@ -8,31 +8,36 @@ The Alkanes API is developed by the UniSat team, providing a simplified and deve
 
 ## 📑 Table of Contents
 
-- [Get alkanes status](#get-alkanes-status)
-- [Get alkanes list](#get-alkanes-list)
-- [Get alkane info by alkaneid](#get-alkane-info-by-alkaneid)
-- [Get alkanes token list](#get-alkanes-token-list)
-- [Get alkanes holders by alkaneid](#get-alkanes-holders-by-alkaneid)
-- [Get collection items](#get-collection-items)
-- [Get contract events](#get-contract-events)
-- [Get alkanes utxo balance](#get-alkanes-utxo-balance)
-- [Get utxo alkanes balance by address and alkaneid](#get-utxo-alkanes-balance-by-address-and-alkaneid)
-- [Get address alkanes token list](#get-address-alkanes-token-list)
-- [Get address alkanes collection list](#get-address-alkanes-collection-list)
-- [Get address collection items by alkaneid](#get-address-collection-items-by-alkaneid)
-- [Get transfer history](#get-transfer-history)
+- [Alkanes](#alkanes)
+  - [Get alkanes status](#get-alkanes-status)
+  - [Get alkanes list](#get-alkanes-list)
+  - [Get alkane info by alkaneid](#get-alkane-info-by-alkaneid)
+  - [Get alkanes token list](#get-alkanes-token-list)
+  - [Get alkanes holders by alkaneid](#get-alkanes-holders-by-alkaneid)
+  - [Get collection items](#get-collection-items)
+  - [Get contract events](#get-contract-events)
+  - [Get alkanes utxo balance](#get-alkanes-utxo-balance)
+  - [Get utxo alkanes balance by address and alkaneid](#get-utxo-alkanes-balance-by-address-and-alkaneid)
+  - [Get address alkanes token list](#get-address-alkanes-token-list)
+  - [Get address alkanes collection list](#get-address-alkanes-collection-list)
+  - [Get address collection items by alkaneid](#get-address-collection-items-by-alkaneid)
+  - [Get transfer history](#get-transfer-history)
 
 ---
 
-## Get alkanes status
+## Alkanes
+
+### Get alkanes status
+<a id="get-alkanes-status"></a>
+
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/status`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesStatus)  
 
-### Description
+#### Description
 Get alkanes global status
 
-### Response (200)
+#### Response (200)
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object):
@@ -48,19 +53,21 @@ This endpoint is used to monitor the indexer’s sync status.
 
 ---
 
-## Get alkanes list
+### Get alkanes list
+<a id="get-alkanes-list"></a>
+
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/info-list`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesInfoList)  
 
-### Parameters
+#### Parameters
 - `type` (query) : search by type,optional
 - `sortBy` (query) : sort by timestamp, alkaneid, default=timestamp
 - `order` (query) : sort order,optional,default=asc
 - `start` (query) : default=0
 - `limit` (query) : min=1,max=500,default=10
 
-### Response (200)
+#### Response (200)
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object):
@@ -100,15 +107,17 @@ This endpoint is used to monitor the indexer’s sync status.
 
 ---
 
-## Get alkane info by alkaneid
+### Get alkane info by alkaneid
+<a id="get-alkane-info-by-alkaneid"></a>
+
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/{alkaneid}/info`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesInfo)  
 
-### Parameters
+#### Parameters
 - `alkaneid` (path) **(required)**: 
 
-### Response (200)
+#### Response (200)
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object):
@@ -145,12 +154,14 @@ This endpoint is used to monitor the indexer’s sync status.
 
 ---
 
-## Get alkanes token list
+### Get alkanes token list
+<a id="get-alkanes-token-list"></a>
+
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/token-list`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesTokenList)  
 
-### Parameters
+#### Parameters
 - `alkaneid` (query) : search by alkaneid
 - `name` (query) : search by name
 - `sortBy` (query) : sort by timestamp, alkaneid, default=timestamp
@@ -158,7 +169,7 @@ This endpoint is used to monitor the indexer’s sync status.
 - `start` (query) : default=0
 - `limit` (query) : min=1,max=500,default=10
 
-### Response (200)
+#### Response (200)
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object):
@@ -198,17 +209,19 @@ This endpoint is used to monitor the indexer’s sync status.
 
 ---
 
-## Get alkanes holders by alkaneid
+### Get alkanes holders by alkaneid
+<a id="get-alkanes-holders-by-alkaneid"></a>
+
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/{alkaneid}/holders`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesHolders)  
 
-### Parameters
+#### Parameters
 - `alkaneid` (path) **(required)**: 
 - `start` (query) : Start offset
 - `limit` (query) : min=1,max=500,default=10
 
-### Response (200)
+#### Response (200)
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object):
@@ -220,17 +233,19 @@ This endpoint is used to monitor the indexer’s sync status.
 
 ---
 
-## Get collection items
+### Get collection items
+<a id="get-collection-items"></a>
+
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/{alkaneid}/collection-items`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesCollectionItems)  
 
-### Parameters
+#### Parameters
 - `alkaneid` (path) **(required)**: 
 - `start` (query) : default=0
 - `limit` (query) : min=1,max=500,default=10
 
-### Response (200)
+#### Response (200)
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object):
@@ -270,19 +285,21 @@ This endpoint is used to monitor the indexer’s sync status.
 
 ---
 
-## Get contract events
+### Get contract events
+<a id="get-contract-events"></a>
+
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/{alkaneid}/contract-events`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesContractEvents)  
 
-### Parameters
+#### Parameters
 - `alkaneid` (path) **(required)**: 
 - `fromHeight` (query) **(required)**: search by from height
 - `toHeight` (query) **(required)**: search by to height
 - `start` (query) : default=0
 - `limit` (query) : min=1,max=500,default=10
 
-### Response (200)
+#### Response (200)
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object):
@@ -303,16 +320,18 @@ This endpoint is used to monitor the indexer’s sync status.
 
 ---
 
-## Get alkanes utxo balance
+### Get alkanes utxo balance
+<a id="get-alkanes-utxo-balance"></a>
+
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/utxo/{txid}/{index}/balance`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesUtxoBalance)  
 
-### Parameters
+#### Parameters
 - `txid` (path) **(required)**: 
 - `index` (path) **(required)**: 
 
-### Response (200)
+#### Response (200)
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (array):
@@ -348,35 +367,39 @@ This endpoint is used to monitor the indexer’s sync status.
 
 ---
 
-## Get utxo alkanes balance by address and alkaneid
+### Get utxo alkanes balance by address and alkaneid
+<a id="get-utxo-alkanes-balance-by-address-and-alkaneid"></a>
+
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/alkanes/{alkaneid}/utxo`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAddressAlkanesUtxo)  
 
-### Parameters
+#### Parameters
 - `address` (path) **(required)**: 
 - `alkaneid` (path) **(required)**: 
 - `start` (query) : default=0
 - `limit` (query) : min=1,max=500,default=10
 
-### Response (200)
+#### Response (200)
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object): 
 
 ---
 
-## Get address alkanes token list
+### Get address alkanes token list
+<a id="get-address-alkanes-token-list"></a>
+
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/alkanes/token-list`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAddressAlkanesTokenList)  
 
-### Parameters
+#### Parameters
 - `address` (path) **(required)**: 
 - `start` (query) : default=0
 - `limit` (query) : min=1,max=500,default=10
 
-### Response (200)
+#### Response (200)
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object):
@@ -416,17 +439,19 @@ This endpoint is used to monitor the indexer’s sync status.
 
 ---
 
-## Get address alkanes collection list
+### Get address alkanes collection list
+<a id="get-address-alkanes-collection-list"></a>
+
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/alkanes/collection-list`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAddressAlkanesCollectionList)  
 
-### Parameters
+#### Parameters
 - `address` (path) **(required)**: 
 - `start` (query) : default=0
 - `limit` (query) : min=1,max=500,default=10
 
-### Response (200)
+#### Response (200)
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object):
@@ -466,18 +491,20 @@ This endpoint is used to monitor the indexer’s sync status.
 
 ---
 
-## Get address collection items by alkaneid
+### Get address collection items by alkaneid
+<a id="get-address-collection-items-by-alkaneid"></a>
+
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/alkanes/{alkaneid}/collection-items`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAddressAlkanesCollectionItems)  
 
-### Parameters
+#### Parameters
 - `address` (path) **(required)**: 
 - `alkaneid` (path) **(required)**: 
 - `start` (query) : default=0
 - `limit` (query) : min=1,max=500,default=10
 
-### Response (200)
+#### Response (200)
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object):
@@ -517,12 +544,14 @@ This endpoint is used to monitor the indexer’s sync status.
 
 ---
 
-## Get transfer history
+### Get transfer history
+<a id="get-transfer-history"></a>
+
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/alkanes/{alkaneid}/transfer-history`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAddressAlkanesTransferHistory)  
 
-### Parameters
+#### Parameters
 - `address` (path) **(required)**: 
 - `alkaneid` (path) **(required)**: 
 - `fromHeight` (query) **(required)**: search by from height
@@ -530,7 +559,7 @@ This endpoint is used to monitor the indexer’s sync status.
 - `start` (query) : default=0
 - `limit` (query) : min=1,max=500,default=10
 
-### Response (200)
+#### Response (200)
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object):

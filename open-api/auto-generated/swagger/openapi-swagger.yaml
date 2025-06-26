@@ -79,6 +79,10 @@ tags:
       - https://open-api-signet.unisat.io
       - https://open-api-fractal.unisat.io
       - https://open-api-fractal-testnet.unisat.io
+  - name: Alkanes
+    description: Alkanes (https://alkanes.build/docs/learn/intro)
+    urls:
+      - https://open-api.unisat.io
   - name: Inscribe
     description: Inscribe Service
     urls:
@@ -147,8 +151,11 @@ paths:
     get:
       tags:
         - Blocks
-      summary: |
-        Get blockchain info.
+      operationId: getBlockchainInfo
+      summary: Get Blockchain Info
+      description: >
+        Get the current blockchain information, including chain type, block
+        count, and best block hash.
       responses:
         '200':
           description: Successful operation
@@ -187,8 +194,11 @@ paths:
     get:
       tags:
         - Blocks
-      summary: |
-        Get Recommended Fees. (sat/vB)
+      operationId: getRecommendedFees
+      summary: Get Recommended Fees
+      description: >-
+        Get the recommended fees for different confirmation times. (like
+        mempool.space)
       responses:
         '200':
           description: Successful operation
@@ -225,7 +235,9 @@ paths:
     get:
       tags:
         - Blocks
-      summary: Get block info by block height.
+      operationId: getBlockByHeight
+      summary: Get block info by height
+      description: Get block info by height.
       parameters:
         - name: height
           description: Block height
@@ -258,7 +270,9 @@ paths:
     get:
       tags:
         - Blocks
-      summary: Get block info by blockid.
+      operationId: getBlockById
+      summary: Get block info by blockid
+      description: Get block info by blockid.
       parameters:
         - name: blockid
           description: Block id
@@ -290,7 +304,9 @@ paths:
     get:
       tags:
         - Blocks
-      summary: Get tx history by block height.
+      operationId: getTxsByBlockHeight
+      summary: Get txs by block height.
+      description: Get txs by block height.
       parameters:
         - name: height
           description: Block height
@@ -345,7 +361,9 @@ paths:
     get:
       tags:
         - Transactions
-      summary: Get the summary info of a tx.
+      operationId: getTxById
+      summary: Get tx info by txid
+      description: Get tx info by txid.
       parameters:
         - name: txid
           description: Tx id
@@ -377,7 +395,9 @@ paths:
     get:
       tags:
         - Transactions
-      summary: Get the inputs of a tx.
+      operationId: getInputsByTxId
+      summary: Get the inputs of a tx
+      description: Get the inputs of a tx.
       parameters:
         - name: txid
           description: Tx id
@@ -470,7 +490,9 @@ paths:
     get:
       tags:
         - Transactions
-      summary: Get the outputs of a tx.
+      operationId: getOutputsByTxId
+      summary: Get the outputs of a tx
+      description: Get the outputs of a tx.
       parameters:
         - name: txid
           description: Tx id
@@ -542,7 +564,9 @@ paths:
     get:
       tags:
         - Transactions
-      summary: Get a rawtx
+      operationId: getRawTxById
+      summary: Get the raw tx by txid
+      description: Get the raw tx by txid.
       parameters:
         - name: txid
           description: Tx id
@@ -574,7 +598,9 @@ paths:
     get:
       tags:
         - Transactions
-      summary: Get the utxo info
+      operationId: getUtxoByTxIdAndIndex
+      summary: Get the UTXO by txid and index
+      description: Get the UTXO by txid and index.
       parameters:
         - name: txid
           description: Tx id
@@ -643,7 +669,9 @@ paths:
     post:
       tags:
         - Transactions
+      operationId: localPushTx
       summary: Push rawtx to bitcoin node.
+      description: Push rawtx to bitcoin node.
       requestBody:
         content:
           application/json:
@@ -674,7 +702,9 @@ paths:
     post:
       tags:
         - Transactions
-      summary: Push multiple rawtxs to bitcoin node.
+      operationId: localPushTxs
+      summary: Push rawtxs to bitcoin node.
+      description: Push rawtxs to bitcoin node.
       requestBody:
         content:
           application/json:
@@ -707,7 +737,9 @@ paths:
     get:
       tags:
         - Addresses
-      description: Get balance by address.
+      operationId: getBalanceByAddress
+      summary: Get the balance by address
+      description: Get the balance by address.
       parameters:
         - name: address
           description: Address
@@ -759,7 +791,9 @@ paths:
     get:
       tags:
         - Addresses
-      description: Get the tx history by address.
+      operationId: getTxHistoryByAddress
+      summary: Get transaction history by address
+      description: Get transaction history by address.
       parameters:
         - name: address
           description: Address
@@ -813,7 +847,14 @@ paths:
     get:
       tags:
         - Addresses
-      summary: Get non inscription UTXO list by address
+      operationId: getUtxoDataByAddress
+      summary: Get UTXO list by address
+      description: >-
+        Retrieve the UTXOs of an address that do not contain inscriptions. Note
+        that this excludes, but does not completely cover, assets from protocols
+        such as Alkanes, Runes, and others. To obtain the UTXOs of an address
+        that are available for spending as BTC, please use the available-utxo
+        endpoint.
       parameters:
         - name: address
           description: Address
@@ -873,7 +914,12 @@ paths:
     get:
       tags:
         - Addresses
-      description: Get available balance by address.
+      operationId: getAvailableBalanceByAddress
+      summary: Get available balance by address
+      description: >-
+        This interface will return the current address's available balance that
+        can be used for BTC spending. Balances of assets such as inscriptions,
+        runes, and alkanes will not be included.
       parameters:
         - name: address
           description: Address
@@ -917,9 +963,16 @@ paths:
     get:
       tags:
         - Addresses
-      summary: >-
-        Get available UTXO list by address (unlocked by utxo-tools and larger
-        than 600 satoshis)
+      operationId: getAvailableUtxoDataByAddress
+      summary: Get available UTXO list by address
+      description: >-
+        This interface will return the current address's available UTXO list
+        that can be used for BTC spending. UTXOs of assets such as inscriptions,
+        runes, and alkanes will not be included. The UTXO management tool
+        (https://unisat.io/utxo) can unlock these UTXOs, making them available
+        again. Additionally, UTXOs with less than 600 satoshis will not be
+        returned to avoid potential unspendable outputs from unrecognized asset
+        protocols or burns.
       parameters:
         - name: address
           description: Address
@@ -979,6 +1032,7 @@ paths:
     get:
       tags:
         - Inscriptions
+      operationId: getInscriptionInfo
       summary: Get inscription info by inscriptionId
       parameters:
         - name: inscriptionId
@@ -1010,6 +1064,7 @@ paths:
     get:
       tags:
         - Inscriptions
+      operationId: getInscriptionContent
       summary: Get inscription content info by inscriptionId
       parameters:
         - name: inscriptionId
@@ -1027,6 +1082,7 @@ paths:
     get:
       tags:
         - Inscriptions
+      operationId: getInscriptionEvents
       summary: Get inscription events
       parameters:
         - name: start
@@ -1089,6 +1145,7 @@ paths:
     get:
       tags:
         - Inscriptions
+      operationId: getInscriptionDataByAddress
       summary: Get inscription UTXO list by address
       parameters:
         - name: address
@@ -1149,6 +1206,7 @@ paths:
     get:
       tags:
         - Inscriptions
+      operationId: getInscriptionUtxoDataByAddress
       summary: Get inscription UTXO list by address
       parameters:
         - name: address
@@ -1209,7 +1267,8 @@ paths:
     get:
       tags:
         - BRC-20
-      summary: Get the best block height of BRC20 data.
+      operationId: getBrc20BestHeight
+      summary: Get the best block height of BRC20 data
       description: >-
         Get the best block height of BRC20 data. This value will be consistent
         with the latest block height a short time after the block has been
@@ -1244,6 +1303,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20TickerList
+      summary: Get the tiker list of BRC20 token.
       description: Get the tiker list of BRC20 token.
       parameters:
         - name: start
@@ -1291,6 +1352,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20Status
+      summary: Get the status of BRC20 list.
       description: Obtain BRC20 list status
       parameters:
         - name: start
@@ -1362,6 +1425,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20InfoByTicker
+      summary: Get the infomation of BRC20 by ticker
       description: Get the infomation of BRC20 by ticker.
       parameters:
         - name: ticker
@@ -1394,6 +1459,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20HoldersByTicker
+      summary: Get the holders of BRC20 by ticker.
       description: Get the holders of BRC20 by ticker.
       parameters:
         - name: ticker
@@ -1458,6 +1525,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20HistoryByTicker
+      summary: Get the full history of BRC20 by ticker.
       description: Get the full history of BRC20.
       parameters:
         - name: ticker
@@ -1531,6 +1600,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20HistoryByTickerAndTxid
+      summary: Get the full history of BRC20 by address.
       description: Get the full history of BRC20 by address.
       parameters:
         - name: ticker
@@ -1604,6 +1675,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20HistoryByHeight
+      summary: Get the tiker list of BRC20 token by height.
       description: Get the tiker list of BRC20 token.
       parameters:
         - name: height
@@ -1661,6 +1734,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20SummaryByAddress
+      summary: Get the BRC20 token summary by address.
       description: >-
         Obtain BRC20 token summary by address, including available balance,
         transferable balance
@@ -1749,6 +1824,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20SummaryByAddressAndHeight
+      summary: Get the BRC20 token summary by address and height.
       description: >-
         Obtain BRC20 token summary by address, including available balance,
         transferable balance
@@ -1822,6 +1899,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20InfoByAddressAndTicker
+      summary: Get the BRC20 token info by address and ticker.
       description: >-
         Obtain BRC20 token infomation by address, including available balance,
         transferable balance, number of transferable inscriptions, the first few
@@ -1887,6 +1966,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20HistoryByAddress
+      summary: Get the full history of BRC20 by address.
       description: Get the full history of BRC20 by address.
       parameters:
         - name: address
@@ -1941,6 +2022,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20HistoryByAddressAndTicker
+      summary: Get the full history of BRC20 by address and ticker.
       description: Get the full history of BRC20 by address.
       parameters:
         - name: address
@@ -2014,6 +2097,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20TransferableInscriptionsByAddressAndTicker
+      summary: Get the transferable inscriptions list of BRC20 by address.
       description: Get the transferable inscriptions list of BRC20 by address.
       parameters:
         - name: address
@@ -2092,6 +2177,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20ModuleHistoryByAddress
+      summary: Get the history of BRC20 Module by address.
       description: Get the history of BRC20 Module.
       parameters:
         - name: module
@@ -2161,6 +2248,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20WithdrawHistory
+      summary: Get the withdraw history of BRC20.
       description: Get the withdraw history of BRC20.
       parameters:
         - name: start
@@ -2223,6 +2312,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesStatus
       summary: Get runes status
       description: Get runes global status
       responses:
@@ -2245,6 +2335,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesList
       summary: Get runes list
       description: ''
       parameters:
@@ -2313,6 +2404,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRuneInfo
       summary: Get rune info by runeid
       description: ''
       parameters:
@@ -2342,6 +2434,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRuneHolders
       summary: Get runes holders by runeid
       description: ''
       parameters:
@@ -2396,6 +2489,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesBalanceList
       summary: Get runes balance list by address
       description: ''
       parameters:
@@ -2447,6 +2541,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesBalance
       summary: Get runes balance by address and runeid
       description: ''
       parameters:
@@ -2482,6 +2577,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesUtxoBalance
       summary: Get runes balance by utxo
       description: ''
       parameters:
@@ -2519,6 +2615,7 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesUtxoByAddressAndRuneid
       summary: Get utxo runes balance by address and runeid
       description: ''
       parameters:
@@ -2575,6 +2672,8 @@ paths:
     get:
       tags:
         - Runes
+      operationId: getRunesEvents
+      summary: Get Runes Events
       description: Get the full history events of Runes.
       parameters:
         - name: rune
@@ -2655,10 +2754,739 @@ paths:
                         type: integer
         '401':
           description: Invalid API Key
+  /v1/indexer/alkanes/status:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesStatus
+      summary: Get alkanes status
+      description: Get alkanes global status
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ''
+                  data:
+                    $ref: '#/components/schemas/AlkanesStatus'
+  /v1/indexer/alkanes/info-list:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesInfoList
+      summary: Get alkanes list
+      description: ''
+      parameters:
+        - name: type
+          in: query
+          description: search by type,optional
+          required: false
+          schema:
+            type: string
+            enum:
+              - token
+              - collection
+              - nft
+              - contract
+        - name: sortBy
+          in: query
+          description: sort by timestamp, alkaneid, default=timestamp
+          required: false
+          schema:
+            type: string
+            enum:
+              - timestamp
+              - alkaneid
+            default: timestamp
+        - name: order
+          in: query
+          description: sort order,optional,default=asc
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+        - name: start
+          in: query
+          description: default=0
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: min=1,max=500,default=10
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ''
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AlkaneInfo'
+  /v1/indexer/alkanes/{alkaneid}/info:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesInfo
+      summary: Get alkane info by alkaneid
+      description: ''
+      parameters:
+        - name: alkaneid
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ''
+                  data:
+                    $ref: '#/components/schemas/AlkaneInfo'
+  /v1/indexer/alkanes/token-list:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesTokenList
+      summary: Get alkanes token list
+      description: ''
+      parameters:
+        - name: alkaneid
+          in: query
+          description: search by alkaneid
+          required: false
+          schema:
+            type: string
+            example: '2:1'
+        - name: name
+          in: query
+          description: search by name
+          required: false
+          schema:
+            type: string
+        - name: sortBy
+          in: query
+          description: sort by timestamp, alkaneid, default=timestamp
+          required: false
+          schema:
+            type: string
+            enum:
+              - timestamp
+              - alkaneid
+            default: timestamp
+        - name: order
+          in: query
+          description: sort order,optional,default=asc
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+        - name: start
+          in: query
+          description: default=0
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: min=1,max=500,default=10
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ''
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AlkaneInfo'
+  /v1/indexer/alkanes/{alkaneid}/holders:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesHolders
+      summary: Get alkanes holders by alkaneid
+      description: ''
+      parameters:
+        - name: alkaneid
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: start
+          description: Start offset
+          in: query
+          required: false
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: min=1,max=500,default=10
+          in: query
+          required: false
+          schema:
+            type: integer
+          example: 16
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ''
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 1
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AlkaneHolder'
+  /v1/indexer/alkanes/{alkaneid}/collection-items:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesCollectionItems
+      summary: Get collection items
+      description: ''
+      parameters:
+        - name: alkaneid
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: default=0
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: min=1,max=500,default=10
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ''
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      start:
+                        type: integer
+                      detail:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AlkaneInfo'
+  /v1/indexer/alkanes/{alkaneid}/contract-events:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesContractEvents
+      summary: Get contract events
+      description: ''
+      parameters:
+        - name: alkaneid
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: fromHeight
+          in: query
+          description: search by from height
+          required: true
+          schema:
+            type: integer
+        - name: toHeight
+          in: query
+          description: search by to height
+          required: true
+          schema:
+            type: integer
+        - name: start
+          in: query
+          description: default=0
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: min=1,max=500,default=10
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ''
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      start:
+                        type: integer
+                      detail:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AlkaneEvent'
+  /v1/indexer/alkanes/utxo/{txid}/{index}/balance:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAlkanesUtxoBalance
+      summary: Get alkanes utxo balance
+      description: ''
+      parameters:
+        - name: txid
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: index
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ''
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/AlkanesUTXOBalance'
+  /v1/indexer/address/{address}/alkanes/{alkaneid}/utxo:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAddressAlkanesUtxo
+      summary: Get utxo alkanes balance by address and alkaneid
+      description: ''
+      parameters:
+        - name: address
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: alkaneid
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: default=0
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: min=1,max=500,default=10
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ''
+                  data:
+                    properties:
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+                      utxo:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AlkaneUtxo'
+  /v1/indexer/address/{address}/alkanes/token-list:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAddressAlkanesTokenList
+      summary: Get address alkanes token list
+      description: ''
+      parameters:
+        - name: address
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: default=0
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: min=1,max=500,default=10
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ''
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AlkaneInfo'
+  /v1/indexer/address/{address}/alkanes/collection-list:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAddressAlkanesCollectionList
+      summary: Get address alkanes collection list
+      description: ''
+      parameters:
+        - name: address
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: default=0
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: min=1,max=500,default=10
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ''
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AlkaneInfo'
+  /v1/indexer/address/{address}/alkanes/{alkaneid}/collection-items:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAddressAlkanesCollectionItems
+      summary: Get address collection items by alkaneid
+      description: ''
+      parameters:
+        - name: address
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: alkaneid
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: default=0
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: min=1,max=500,default=10
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ''
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AlkaneInfo'
+  /v1/indexer/address/{address}/alkanes/{alkaneid}/transfer-history:
+    get:
+      tags:
+        - Alkanes
+      operationId: getAddressAlkanesTransferHistory
+      summary: Get transfer history
+      description: ''
+      parameters:
+        - name: address
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: alkaneid
+          in: path
+          description: ''
+          required: true
+          schema:
+            type: string
+        - name: fromHeight
+          in: query
+          description: search by from height
+          required: true
+          schema:
+            type: integer
+        - name: toHeight
+          in: query
+          description: search by to height
+          required: true
+          schema:
+            type: integer
+        - name: start
+          in: query
+          description: default=0
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: min=1,max=500,default=10
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        '200':
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ''
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/AlkaneTransferHistory'
   /v2/inscribe/order/summary:
     get:
       tags:
         - Inscribe
+      operationId: getOrderSummary
       summary: Get order summary of current apikey
       responses:
         '200':
@@ -2681,6 +3509,8 @@ paths:
     get:
       tags:
         - Inscribe
+      operationId: getOrderList
+      summary: Get order list of current apikey
       description: Get order list of current apikey
       parameters:
         - name: cursor
@@ -2769,6 +3599,7 @@ paths:
     get:
       tags:
         - Inscribe
+      operationId: getOrderById
       summary: Search an order by orderId
       description: |-
         It's recommended to query the latest status every 10 seconds.
@@ -2801,6 +3632,7 @@ paths:
     post:
       tags:
         - Inscribe
+      operationId: createOrder
       summary: Create an order
       description: Create an order to inscribe something
       requestBody:
@@ -2829,6 +3661,7 @@ paths:
     post:
       tags:
         - Inscribe
+      operationId: createOrderBRC20Deploy
       summary: Create an order to inscribe BRC-20 DEPLOY
       requestBody:
         content:
@@ -2856,6 +3689,7 @@ paths:
     post:
       tags:
         - Inscribe
+      operationId: createOrderBRC20Mint
       summary: Create an order to inscribe BRC-20 MINT
       requestBody:
         content:
@@ -2883,6 +3717,7 @@ paths:
     post:
       tags:
         - Inscribe
+      operationId: createOrderBRC20Transfer
       summary: Create an order to inscribe BRC-20 TRANSFER
       requestBody:
         content:
@@ -2910,6 +3745,7 @@ paths:
     post:
       tags:
         - Inscribe
+      operationId: createOrderBRC205ByteMint
       summary: Create an order to inscribe BRC-20 MINT
       requestBody:
         content:
@@ -2937,6 +3773,7 @@ paths:
     post:
       tags:
         - Inscribe
+      operationId: requestCommitBRC205ByteMint
       summary: Request commit txs of brc20-5byte-mint
       requestBody:
         content:
@@ -2965,6 +3802,7 @@ paths:
     post:
       tags:
         - Inscribe
+      operationId: signCommitBRC205ByteMint
       summary: Sign commit txs of brc20-5byte-mint
       requestBody:
         content:
@@ -2992,6 +3830,7 @@ paths:
     post:
       tags:
         - Inscribe
+      operationId: signRevealBRC205ByteMint
       summary: Sign reveal txs of brc20-5byte-mint
       requestBody:
         content:
@@ -3019,6 +3858,7 @@ paths:
     post:
       tags:
         - Inscribe
+      operationId: createOrderRunesEtch
       summary: Create an order to etch Runes
       requestBody:
         content:
@@ -3046,6 +3886,7 @@ paths:
     post:
       tags:
         - Inscribe
+      operationId: createOrderRunesMint
       summary: Create an order to mint Runes
       requestBody:
         content:
@@ -3073,6 +3914,7 @@ paths:
     post:
       tags:
         - Inscribe
+      operationId: refundOrder
       summary: Process a refund for an order.
       description: >-
         When the amount paid by the user includes inscriptions, inscribing
@@ -3121,6 +3963,7 @@ paths:
     post:
       tags:
         - Inscribe
+      operationId: estimateRefundOrder
       summary: Estimate the size of the refund transaction
       description: >-
         RefundAmount = PaidAmount - RefundTxSize * RefundFeeRate. This value
@@ -3164,6 +4007,7 @@ paths:
           description: Invalid API Key
   /v3/market/brc20/auction/bind_info:
     post:
+      operationId: bindInfo
       summary: Get the address bind info.
       tags:
         - MarketPlace-BRC20
@@ -3182,6 +4026,7 @@ paths:
                 $ref: '#/components/schemas/BindInfoResponse'
   /v3/market/brc20/auction/brc20_kline:
     post:
+      operationId: getBrc20Kline
       summary: Get tick k line.
       tags:
         - MarketPlace-BRC20
@@ -3239,6 +4084,7 @@ paths:
                   - data
   /v3/market/brc20/auction/brc20_types:
     post:
+      operationId: getBrc20Types
       summary: Get statistical data, price, market capitalization, etc. for BRC20.
       tags:
         - MarketPlace-BRC20
@@ -3374,6 +4220,7 @@ paths:
                   - data
   /v3/market/brc20/auction/brc20_types_specified:
     post:
+      operationId: getBrc20TypesSpecified
       summary: Get statistical data, price, market capitalization, etc. for BRC20.
       tags:
         - MarketPlace-BRC20
@@ -3424,6 +4271,7 @@ paths:
                   - data
   /v3/market/brc20/auction/bind:
     post:
+      operationId: bindBrc20NftAddress
       summary: Bind btcAddress and nftAddress.
       tags:
         - MarketPlace-BRC20
@@ -3467,6 +4315,7 @@ paths:
                   - data
   /v3/market/brc20/auction/list:
     post:
+      operationId: getBrc20AuctionList
       summary: Retrieve the list information of the market.
       tags:
         - MarketPlace-BRC20
@@ -3614,6 +4463,7 @@ paths:
                   - data
   /v3/market/brc20/auction/inscription_info:
     post:
+      operationId: getBrc20InscriptionInfo
       summary: >-
         Retrieve inscription information, including brc20, names, collection. It
         is necessary to first determine the inscription type before calling the
@@ -3635,6 +4485,7 @@ paths:
                 $ref: '#/components/schemas/MarketInscriptionInfoResponse'
   /v3/market/brc20/auction/inscription_info_list:
     post:
+      operationId: getBrc20InscriptionInfoList
       summary: Get the basic listing information of the specified inscription list
       tags:
         - MarketPlace-BRC20
@@ -3653,6 +4504,7 @@ paths:
                 $ref: '#/components/schemas/MarketInscriptionInfoListResponse'
   /v3/market/brc20/auction/actions:
     post:
+      operationId: getBrc20AuctionActions
       summary: Get information on listings, delistings, and sales.
       tags:
         - MarketPlace-BRC20
@@ -3854,6 +4706,7 @@ paths:
                   - data
   /v3/market/brc20/auction/create_put_on:
     post:
+      operationId: createBrc20PutOn
       summary: Create listing order.
       tags:
         - MarketPlace-BRC20
@@ -3872,6 +4725,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreatePutOnResponse'
   /v3/market/brc20/auction/confirm_put_on:
     post:
+      operationId: confirmBrc20PutOn
       summary: Confirm listing order.
       tags:
         - MarketPlace-BRC20
@@ -3890,6 +4744,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmPutOnResponse'
   /v3/market/brc20/auction/create_bid_prepare:
     post:
+      operationId: createBrc20BidPrepare
       summary: Return params before creating purchase order.
       tags:
         - MarketPlace-BRC20
@@ -3908,6 +4763,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBidPrepareResponse'
   /v3/market/brc20/auction/create_bid:
     post:
+      operationId: createBrc20Bid
       summary: Create purchase order.
       tags:
         - MarketPlace-BRC20
@@ -3926,6 +4782,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBidResponse'
   /v3/market/brc20/auction/confirm_bid:
     post:
+      operationId: confirmBrc20Bid
       summary: Confirm purchase order.
       tags:
         - MarketPlace-BRC20
@@ -3944,6 +4801,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmBidResponse'
   /v3/market/brc20/auction/create_put_off:
     post:
+      operationId: createBrc20PutOff
       summary: Create delisting order.
       tags:
         - MarketPlace-BRC20
@@ -3962,6 +4820,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreatePutOffResponse'
   /v3/market/brc20/auction/confirm_put_off:
     post:
+      operationId: confirmBrc20PutOff
       summary: Confirm delisting order.
       tags:
         - MarketPlace-BRC20
@@ -3980,6 +4839,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmPutOffResponse'
   /v3/market/brc20/auction/create_modify_price:
     post:
+      operationId: createBrc20ModifyPrice
       summary: Create the order for price adjustment.
       tags:
         - MarketPlace-BRC20
@@ -3998,6 +4858,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateModifyPriceResponse'
   /v3/market/brc20/auction/confirm_modify_price:
     post:
+      operationId: confirmBrc20ModifyPrice
       summary: Confirm the order for price adjustment.
       tags:
         - MarketPlace-BRC20
@@ -4016,6 +4877,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmModifyPriceResponse'
   /v3/market/runes/auction/runes_types:
     post:
+      operationId: getRunesTypes
       summary: Get statistical data, price, market capitalization, etc. for runes.
       tags:
         - MarketPlace-Runes
@@ -4093,6 +4955,7 @@ paths:
                   - data
   /v3/market/runes/auction/runes_types_specified:
     post:
+      operationId: getRunesTypesSpecified
       summary: Get statistical data, price, market capitalization, etc. for Runes.
       tags:
         - MarketPlace-Runes
@@ -4159,6 +5022,7 @@ paths:
                   - data
   /v3/market/runes/auction/list:
     post:
+      operationId: getRunesAuctionList
       summary: Retrieve the list information of the market.
       tags:
         - MarketPlace-Runes
@@ -4306,6 +5170,7 @@ paths:
                   - data
   /v3/market/runes/auction/actions:
     post:
+      operationId: getRunesAuctionActions
       summary: Get information on listings, delistings, and sales.
       tags:
         - MarketPlace-Runes
@@ -4507,6 +5372,7 @@ paths:
                   - data
   /v3/market/runes/auction/create_put_on:
     post:
+      operationId: createRunesPutOn
       summary: Create listing order.
       tags:
         - MarketPlace-Runes
@@ -4525,6 +5391,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreatePutOnResponse'
   /v3/market/runes/auction/confirm_put_on:
     post:
+      operationId: confirmRunesPutOn
       summary: Confirm listing order.
       tags:
         - MarketPlace-Runes
@@ -4543,6 +5410,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmPutOnResponse'
   /v3/market/runes/auction/create_bid_prepare:
     post:
+      operationId: createRunesBidPrepare
       summary: Return params before creating purchase order.
       tags:
         - MarketPlace-Runes
@@ -4561,6 +5429,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBidPrepareResponse'
   /v3/market/runes/auction/create_bid:
     post:
+      operationId: createRunesBid
       summary: Create purchase order.
       tags:
         - MarketPlace-Runes
@@ -4579,6 +5448,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBidResponse'
   /v3/market/runes/auction/confirm_bid:
     post:
+      operationId: confirmRunesBid
       summary: Confirm purchase order.
       tags:
         - MarketPlace-Runes
@@ -4597,6 +5467,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmBidResponse'
   /v3/market/runes/auction/create_put_off:
     post:
+      operationId: createRunesPutOff
       summary: Create delisting order.
       tags:
         - MarketPlace-Runes
@@ -4615,6 +5486,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreatePutOffResponse'
   /v3/market/runes/auction/confirm_put_off:
     post:
+      operationId: confirmRunesPutOff
       summary: Confirm delisting order.
       tags:
         - MarketPlace-Runes
@@ -4633,6 +5505,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmPutOffResponse'
   /v3/market/runes/auction/create_modify_price:
     post:
+      operationId: createRunesModifyPrice
       summary: Create the order for price adjustment.
       tags:
         - MarketPlace-Runes
@@ -4651,6 +5524,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateModifyPriceResponse'
   /v3/market/runes/auction/confirm_modify_price:
     post:
+      operationId: confirmRunesModifyPrice
       summary: Confirm the order for price adjustment.
       tags:
         - MarketPlace-Runes
@@ -4669,6 +5543,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmModifyPriceResponse'
   /v3/market/runes/auction/create_batch_put_on:
     post:
+      operationId: createRunesBatchPutOn
       summary: Create batch listing order.
       tags:
         - MarketPlace-Runes
@@ -4687,6 +5562,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBatchPutOnResponse'
   /v3/market/runes/auction/confirm_batch_put_on:
     post:
+      operationId: confirmRunesBatchPutOn
       summary: Confirm batch listing order.
       tags:
         - MarketPlace-Runes
@@ -4705,6 +5581,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmBatchPutOnResponse'
   /v3/market/runes/auction/create_batch_bid_prepare:
     post:
+      operationId: createRunesBatchBidPrepare
       summary: Return params before creating purchase order.
       tags:
         - MarketPlace-Runes
@@ -4723,6 +5600,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBatchBidPrepareResponse'
   /v3/market/runes/auction/create_batch_bid:
     post:
+      operationId: createRunesBatchBid
       summary: Create purchase order.
       tags:
         - MarketPlace-Runes
@@ -4741,6 +5619,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBatchBidResponse'
   /v3/market/runes/auction/confirm_batch_bid:
     post:
+      operationId: confirmRunesBatchBid
       summary: Confirm purchase order.
       tags:
         - MarketPlace-Runes
@@ -4759,6 +5638,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmBatchBidResponse'
   /v3/market/alkanes/auction/alkanes_types:
     post:
+      operationId: getAlkanesTypes
       summary: Get statistical data, price, market capitalization, etc. for alkanes.
       tags:
         - MarketPlace-Alkanes
@@ -4836,6 +5716,7 @@ paths:
                   - data
   /v3/market/alkanes/auction/alkanes_types_specified:
     post:
+      operationId: getAlkanesTypesSpecified
       summary: Get statistical data, price, market capitalization, etc. for Alkanes.
       tags:
         - MarketPlace-Alkanes
@@ -4902,6 +5783,7 @@ paths:
                   - data
   /v3/market/alkanes/auction/list:
     post:
+      operationId: getAlkanesAuctionList
       summary: Retrieve the list information of the market.
       tags:
         - MarketPlace-Alkanes
@@ -5049,6 +5931,7 @@ paths:
                   - data
   /v3/market/alkanes/auction/actions:
     post:
+      operationId: getAlkanesAuctionActions
       summary: Get information on listings, delistings, and sales.
       tags:
         - MarketPlace-Alkanes
@@ -5250,6 +6133,7 @@ paths:
                   - data
   /v3/market/alkanes/auction/create_put_on:
     post:
+      operationId: createAlkanesPutOn
       summary: Create listing order.
       tags:
         - MarketPlace-Alkanes
@@ -5268,6 +6152,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreatePutOnResponse'
   /v3/market/alkanes/auction/confirm_put_on:
     post:
+      operationId: confirmAlkanesPutOn
       summary: Confirm listing order.
       tags:
         - MarketPlace-Alkanes
@@ -5286,6 +6171,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmPutOnResponse'
   /v3/market/alkanes/auction/create_bid_prepare:
     post:
+      operationId: createAlkanesBidPrepare
       summary: Return params before creating purchase order.
       tags:
         - MarketPlace-Alkanes
@@ -5304,6 +6190,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBidPrepareResponse'
   /v3/market/alkanes/auction/create_bid:
     post:
+      operationId: createAlkanesBid
       summary: Create purchase order.
       tags:
         - MarketPlace-Alkanes
@@ -5322,6 +6209,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBidResponse'
   /v3/market/alkanes/auction/confirm_bid:
     post:
+      operationId: confirmAlkanesBid
       summary: Confirm purchase order.
       tags:
         - MarketPlace-Alkanes
@@ -5340,6 +6228,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmBidResponse'
   /v3/market/alkanes/auction/create_put_off:
     post:
+      operationId: createAlkanesPutOff
       summary: Create delisting order.
       tags:
         - MarketPlace-Alkanes
@@ -5358,6 +6247,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreatePutOffResponse'
   /v3/market/alkanes/auction/confirm_put_off:
     post:
+      operationId: confirmAlkanesPutOff
       summary: Confirm delisting order.
       tags:
         - MarketPlace-Alkanes
@@ -5376,6 +6266,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmPutOffResponse'
   /v3/market/alkanes/auction/create_modify_price:
     post:
+      operationId: createAlkanesModifyPrice
       summary: Create the order for price adjustment.
       tags:
         - MarketPlace-Alkanes
@@ -5394,6 +6285,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateModifyPriceResponse'
   /v3/market/alkanes/auction/confirm_modify_price:
     post:
+      operationId: confirmAlkanesModifyPrice
       summary: Confirm the order for price adjustment.
       tags:
         - MarketPlace-Alkanes
@@ -5412,6 +6304,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmModifyPriceResponse'
   /v3/market/alkanes/auction/create_batch_put_on:
     post:
+      operationId: createAlkanesBatchPutOn
       summary: Create batch listing order.
       tags:
         - MarketPlace-Alkanes
@@ -5430,6 +6323,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBatchPutOnResponse'
   /v3/market/alkanes/auction/confirm_batch_put_on:
     post:
+      operationId: confirmAlkanesBatchPutOn
       summary: Confirm batch listing order.
       tags:
         - MarketPlace-Alkanes
@@ -5448,6 +6342,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmBatchPutOnResponse'
   /v3/market/alkanes/auction/create_batch_bid_prepare:
     post:
+      operationId: createAlkanesBatchBidPrepare
       summary: Return params before creating purchase order.
       tags:
         - MarketPlace-Alkanes
@@ -5466,6 +6361,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBatchBidPrepareResponse'
   /v3/market/alkanes/auction/create_batch_bid:
     post:
+      operationId: createAlkanesBatchBid
       summary: Create purchase order.
       tags:
         - MarketPlace-Alkanes
@@ -5484,6 +6380,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBatchBidResponse'
   /v3/market/alkanes/auction/confirm_batch_bid:
     post:
+      operationId: confirmAlkanesBatchBid
       summary: Confirm purchase order.
       tags:
         - MarketPlace-Alkanes
@@ -5502,6 +6399,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmBatchBidResponse'
   /v3/market/collection/auction/collection_statistic:
     post:
+      operationId: getCollectionStatistic
       summary: Return a summary of collection.
       tags:
         - MarketPlace-Collection
@@ -5577,6 +6475,7 @@ paths:
                   - data
   /v3/market/collection/auction/collection_statistic_list:
     post:
+      operationId: getCollectionStatisticList
       summary: Return a summary of collection.
       tags:
         - MarketPlace-Collection
@@ -5679,6 +6578,7 @@ paths:
                   - data
   /v3/market/collection/auction/collection_summary:
     post:
+      operationId: getCollectionSummary
       summary: Get the collection statistics information at a certain address
       tags:
         - MarketPlace-Collection
@@ -5734,6 +6634,7 @@ paths:
                   - data
   /v3/market/collection/auction/collection_inscriptions:
     post:
+      operationId: getCollectionInscriptions
       summary: Get the list details of a certain collection at a certain address
       tags:
         - MarketPlace-Collection
@@ -5804,6 +6705,7 @@ paths:
                   - data
   /v3/market/collection/auction/inscription_info:
     post:
+      operationId: getInscriptionInfo
       summary: >-
         Retrieve inscription information, including brc20, names, collection. It
         is necessary to first determine the inscription type before calling the
@@ -5825,6 +6727,7 @@ paths:
                 $ref: '#/components/schemas/MarketInscriptionInfoResponse'
   /v3/market/collection/auction/inscription_info_list:
     post:
+      operationId: getInscriptionInfoList
       summary: Get the basic listing information of the specified inscription list
       tags:
         - MarketPlace-Collection
@@ -5843,6 +6746,7 @@ paths:
                 $ref: '#/components/schemas/MarketInscriptionInfoListResponse'
   /v3/market/collection/auction/list:
     post:
+      operationId: getMarketList
       summary: Retrieve the list information of the market.
       tags:
         - MarketPlace-Collection
@@ -6075,6 +6979,7 @@ paths:
                   - data
   /v3/market/collection/auction/actions:
     post:
+      operationId: getMarketActions
       summary: Get information on listings, delistings, and sales.
       tags:
         - MarketPlace-Collection
@@ -6282,6 +7187,7 @@ paths:
                   - data
   /v3/market/collection/auction/create_put_on:
     post:
+      operationId: createMarketPutOn
       summary: Create listing order.
       tags:
         - MarketPlace-Collection
@@ -6300,6 +7206,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreatePutOnResponse'
   /v3/market/collection/auction/confirm_put_on:
     post:
+      operationId: confirmMarketPutOn
       summary: Confirm listing order.
       tags:
         - MarketPlace-Collection
@@ -6318,6 +7225,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmPutOnResponse'
   /v3/market/collection/auction/create_bid_prepare:
     post:
+      operationId: createMarketBidPrepare
       summary: Return params before creating purchase order.
       tags:
         - MarketPlace-Collection
@@ -6336,6 +7244,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBidPrepareResponse'
   /v3/market/collection/auction/create_bid:
     post:
+      operationId: createMarketBid
       summary: Create purchase order.
       tags:
         - MarketPlace-Collection
@@ -6354,6 +7263,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBidResponse'
   /v3/market/collection/auction/confirm_bid:
     post:
+      operationId: confirmMarketBid
       summary: Confirm purchase order.
       tags:
         - MarketPlace-Collection
@@ -6372,6 +7282,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmBidResponse'
   /v3/market/collection/auction/create_put_off:
     post:
+      operationId: createMarketPutOff
       summary: Create delisting order.
       tags:
         - MarketPlace-Collection
@@ -6390,6 +7301,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreatePutOffResponse'
   /v3/market/collection/auction/confirm_put_off:
     post:
+      operationId: confirmMarketPutOff
       summary: Confirm delisting order.
       tags:
         - MarketPlace-Collection
@@ -6408,6 +7320,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmPutOffResponse'
   /v3/market/collection/auction/create_modify_price:
     post:
+      operationId: createMarketModifyPrice
       summary: Create the order for price adjustment.
       tags:
         - MarketPlace-Collection
@@ -6426,6 +7339,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateModifyPriceResponse'
   /v3/market/collection/auction/confirm_modify_price:
     post:
+      operationId: confirmMarketModifyPrice
       summary: Confirm the order for price adjustment.
       tags:
         - MarketPlace-Collection
@@ -6444,6 +7358,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmModifyPriceResponse'
   /v3/market/domain/auction/domain_types:
     post:
+      operationId: getDomainTypes
       summary: Get statistical data, price, market capitalization, etc. for domain.
       tags:
         - MarketPlace-Domain
@@ -6485,6 +7400,7 @@ paths:
                   - data
   /v3/market/domain/auction/domain_statistic:
     post:
+      operationId: getDomainStatistic
       summary: Return a summary of domain.
       tags:
         - MarketPlace-Domain
@@ -6533,6 +7449,7 @@ paths:
                   - data
   /v3/market/domain/auction/inscription_info:
     post:
+      operationId: getDomainInscriptionInfo
       summary: >-
         Retrieve inscription information, including brc20, names, collection. It
         is necessary to first determine the inscription type before calling the
@@ -6554,6 +7471,7 @@ paths:
                 $ref: '#/components/schemas/MarketInscriptionInfoResponse'
   /v3/market/domain/auction/inscription_info_list:
     post:
+      operationId: getDomainInscriptionInfoList
       summary: Get the basic listing information of the specified inscription list
       tags:
         - MarketPlace-Domain
@@ -6572,6 +7490,7 @@ paths:
                 $ref: '#/components/schemas/MarketInscriptionInfoListResponse'
   /v3/market/domain/auction/list:
     post:
+      operationId: getDomainMarketList
       summary: Retrieve the list information of the market.
       tags:
         - MarketPlace-Domain
@@ -6804,6 +7723,7 @@ paths:
                   - data
   /v3/market/domain/auction/actions:
     post:
+      operationId: getDomainMarketActions
       summary: Get information on listings, delistings, and sales.
       tags:
         - MarketPlace-Domain
@@ -7011,6 +7931,7 @@ paths:
                   - data
   /v3/market/domain/auction/create_put_on:
     post:
+      operationId: createDomainMarketPutOn
       summary: Create listing order.
       tags:
         - MarketPlace-Domain
@@ -7029,6 +7950,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreatePutOnResponse'
   /v3/market/domain/auction/confirm_put_on:
     post:
+      operationId: confirmDomainMarketPutOn
       summary: Confirm listing order.
       tags:
         - MarketPlace-Domain
@@ -7047,6 +7969,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmPutOnResponse'
   /v3/market/domain/auction/create_bid_prepare:
     post:
+      operationId: createDomainMarketBidPrepare
       summary: Return params before creating purchase order.
       tags:
         - MarketPlace-Domain
@@ -7065,6 +7988,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBidPrepareResponse'
   /v3/market/domain/auction/create_bid:
     post:
+      operationId: createDomainMarketBid
       summary: Create purchase order.
       tags:
         - MarketPlace-Domain
@@ -7083,6 +8007,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateBidResponse'
   /v3/market/domain/auction/confirm_bid:
     post:
+      operationId: confirmDomainMarketBid
       summary: Confirm purchase order.
       tags:
         - MarketPlace-Domain
@@ -7101,6 +8026,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmBidResponse'
   /v3/market/domain/auction/create_put_off:
     post:
+      operationId: createDomainMarketPutOff
       summary: Create delisting order.
       tags:
         - MarketPlace-Domain
@@ -7119,6 +8045,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreatePutOffResponse'
   /v3/market/domain/auction/confirm_put_off:
     post:
+      operationId: confirmDomainMarketPutOff
       summary: Confirm delisting order.
       tags:
         - MarketPlace-Domain
@@ -7137,6 +8064,7 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmPutOffResponse'
   /v3/market/domain/auction/create_modify_price:
     post:
+      operationId: createDomainMarketModifyPrice
       summary: Create the order for price adjustment.
       tags:
         - MarketPlace-Domain
@@ -7155,6 +8083,7 @@ paths:
                 $ref: '#/components/schemas/MarketCreateModifyPriceResponse'
   /v3/market/domain/auction/confirm_modify_price:
     post:
+      operationId: confirmDomainMarketModifyPrice
       summary: Confirm the order for price adjustment.
       tags:
         - MarketPlace-Domain
@@ -7173,9 +8102,14 @@ paths:
                 $ref: '#/components/schemas/MarketConfirmModifyPriceResponse'
   /v1/brc20-swap/config:
     get:
-      summary: Swap's global configuration information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapConfig
+      summary: Swap's global configuration information.
+      description: >-
+        This interface provides the global configuration information for the
+        BRC20 Swap service. It includes details such as the module ID, service
+        gas tick, and pending deposit confirmation numbers.
       responses:
         '200':
           description: Default Response
@@ -7209,9 +8143,14 @@ paths:
                   - data
   /v1/brc20-swap/balance:
     get:
-      summary: Gets the balance for the specified address and tick.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapBalance
+      summary: Gets the balance for the specified address and tick.
+      description: >-
+        This interface retrieves the balance for a specific address and tick in
+        the BRC20 Swap service. It returns the confirmed module balance, swap
+        balance, pending swap balance, and pending available balance.
       parameters:
         - schema:
             type: string
@@ -7263,9 +8202,15 @@ paths:
                   - data
   /v1/brc20-swap/pool_info:
     get:
-      summary: Get Pool information based on trade pair.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPoolInfo
+      summary: Get Pool information based on trade pair.
+      description: >-
+        This interface retrieves the pool information for a specific trade pair
+        in the BRC20 Swap service. It includes details such as whether the pool
+        exists, if liquidity has been added, tick prices, LP quantity, TVL,
+        volume, and rewards.
       parameters:
         - schema:
             type: string
@@ -7322,9 +8267,14 @@ paths:
                   - data
   /v1/brc20-swap/select:
     get:
-      summary: Select the tick information that you can use based on the address.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapSelect
+      summary: Select the tick information that you can use based on the address.
+      description: >-
+        This interface retrieves the tick information that can be used for
+        swapping based on the provided address. It returns the tick, decimal,
+        BRC20 balance, and swap balance for each available tick.
       parameters:
         - schema:
             type: string
@@ -7373,11 +8323,14 @@ paths:
                   - data
   /v1/brc20-swap/pre_deploy_pool:
     get:
-      summary: >-
-        /deploy_pool interface pre-load, get the signature content, gas and byte
-        information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPreDeployPool
+      summary: Prepare deploy pool operation
+      description: >-
+        This interface pre-loads the /deploy_pool operation, providing the
+        signature content, gas, and byte information required for deploying a
+        pool in the BRC20 Swap service.
       parameters:
         - schema:
             type: string
@@ -7459,9 +8412,14 @@ paths:
                   - data
   /v1/brc20-swap/deploy_pool:
     post:
-      summary: Deploy the pool operation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapDeployPool
+      summary: Deploy the pool operation.
+      description: >-
+        This interface deploys a pool in the BRC20 Swap service. It requires the
+        address, tick0, tick1, timestamp, fee tick, and user signatures to
+        complete the operation.
       requestBody:
         content:
           application/json:
@@ -7527,11 +8485,14 @@ paths:
                   - data
   /v1/brc20-swap/pre_add_liq:
     get:
-      summary: >-
-        /add_liq interface pre-load, get the signature content, gas and byte
-        information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPreAddLiq
+      summary: Prepare add liquidity operation
+      description: >-
+        This interface pre-loads the /add_liq operation, providing the signature
+        content, gas, and byte information required for adding liquidity in the
+        BRC20 Swap service.
       parameters:
         - schema:
             type: string
@@ -7633,9 +8594,13 @@ paths:
                   - data
   /v1/brc20-swap/add_liq:
     post:
-      summary: Add the liquidity operation.
       tags:
         - brc20-swap
+      summary: Add the liquidity operation
+      description: >-
+        This interface adds liquidity to a pool in the BRC20 Swap service. It
+        requires the address, tick0, tick1, amounts, LP, slippage, timestamp,
+        fee tick, and user signatures to complete the operation.
       requestBody:
         content:
           application/json:
@@ -7744,11 +8709,14 @@ paths:
                   - data
   /v1/brc20-swap/pre_remove_liq:
     get:
-      summary: >-
-        /remove_liq interface pre-load, get the signature content, gas and byte
-        information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPreRemoveLiq
+      summary: Prepare remove liquidity operation
+      description: >-
+        This interface pre-loads the /remove_liq operation, providing the
+        signature content, gas, and byte information required for removing
+        liquidity in the BRC20 Swap service.
       parameters:
         - schema:
             type: string
@@ -7851,9 +8819,13 @@ paths:
                   - data
   /v1/brc20-swap/remove_liq:
     post:
-      summary: Remove the liquidity operation
       tags:
         - brc20-swap
+      summary: Remove the liquidity operation
+      description: >-
+        This interface removes liquidity from a pool in the BRC20 Swap service.
+        It requires the address, tick0, tick1, amounts, LP, slippage, timestamp,
+        fee tick, and user signatures to complete the operation.
       requestBody:
         content:
           application/json:
@@ -7962,11 +8934,14 @@ paths:
                   - data
   /v1/brc20-swap/pre_send:
     get:
-      summary: >-
-        /send interface pre-load, get the signature content, gas and byte
-        information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPreSend
+      summary: Prepare send operation
+      description: >-
+        This interface pre-loads the /send operation, providing the signature
+        content, gas, and byte information required for sending a tick in the
+        BRC20 Swap service.
       parameters:
         - schema:
             type: string
@@ -8056,11 +9031,13 @@ paths:
                   - data
   /v1/brc20-swap/pre_batch_send:
     post:
-      summary: >-
-        /batch_send interface pre-load, get the signature content, gas and byte
-        information.
       tags:
         - brc20-swap
+      summary: Prepare batch send operation
+      description: >-
+        This interface pre-loads the /batch_send operation, providing the
+        signature content, gas, and byte information required for sending
+        multiple ticks in the BRC20 Swap service.
       requestBody:
         required: true
         content:
@@ -8151,9 +9128,14 @@ paths:
                   - data
   /v1/brc20-swap/pre_swap:
     get:
-      summary: /swap interface pre-load, get the signature content and gas information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPreSwap
+      summary: Prepare swap operation
+      description: >-
+        This interface pre-loads the /swap operation, providing the signature
+        content, gas, and byte information required for swapping ticks in the
+        BRC20 Swap service.
       parameters:
         - schema:
             type: string
@@ -8263,9 +9245,14 @@ paths:
                   - data
   /v1/brc20-swap/send:
     post:
-      summary: The send operation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapSend
+      summary: The send operation.
+      description: >-
+        This interface sends a tick in the BRC20 Swap service. It requires the
+        address, tick, amount, receiver, timestamp, fee tick, and user
+        signatures to complete the operation.
       requestBody:
         content:
           application/json:
@@ -8337,9 +9324,14 @@ paths:
                   - data
   /v1/brc20-swap/batch_send:
     post:
-      summary: The batch send operation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapBatchSend
+      summary: The batch send operation.
+      description: >-
+        This interface sends multiple ticks in the BRC20 Swap service. It
+        requires the address, tick, amount, receivers, timestamp, fee tick, and
+        user signatures to complete the operation.
       requestBody:
         content:
           application/json:
@@ -8414,9 +9406,15 @@ paths:
                   - data
   /v1/brc20-swap/swap:
     post:
-      summary: The swap operation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapSwap
+      summary: The swap operation.
+      description: >-
+        This interface swaps ticks in the BRC20 Swap service. It requires the
+        address, input tick, output tick, input amount, output amount, slippage,
+        exact type, timestamp, fee tick, and user signatures to complete the
+        operation.
       requestBody:
         content:
           application/json:
@@ -8518,9 +9516,14 @@ paths:
                   - data
   /v1/brc20-swap/pool_list:
     get:
-      summary: Gets the pool list information.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapPoolList
+      summary: Gets the pool list information.
+      description: >-
+        This interface retrieves the pool list information in the BRC20 Swap
+        service. It supports filtering by address, tick, and fuzzy matching, and
+        allows pagination through start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -8581,9 +9584,14 @@ paths:
                   - data
   /v1/brc20-swap/my_pool_list:
     get:
-      summary: Gets the pool list information by address.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapMyPoolList
+      summary: Gets the user's pool list information.
+      description: >-
+        This interface retrieves the user's pool list information in the BRC20
+        Swap service. It supports filtering by address, tick, and pagination
+        through start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -8660,9 +9668,14 @@ paths:
                   - data
   /v1/brc20-swap/my_pool:
     get:
-      summary: Gets the user pool information for the specified pair.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapMyPool
+      summary: Gets the user pool information for the specified pair.
+      description: >-
+        This interface retrieves the user pool information for a specific pair
+        in the BRC20 Swap service. It requires the address, tick0, and tick1
+        parameters to identify the pool.
       parameters:
         - schema:
             type: string
@@ -8718,9 +9731,14 @@ paths:
                   - data
   /v1/brc20-swap/overview:
     get:
-      summary: An overview of swap information
       tags:
         - brc20-swap
+      operationId: getBrc20SwapOverview
+      summary: An overview of swap information
+      description: >-
+        This interface provides an overview of the swap information in the BRC20
+        Swap service, including total liquidity, 7-day volume, 24-hour volume,
+        number of transactions, and number of pairs.
       responses:
         '200':
           description: Default Response
@@ -8757,9 +9775,14 @@ paths:
                   - data
   /v1/brc20-swap/gas_history:
     get:
-      summary: Gets the gas consumption records for a user aggregation operation.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapGasHistory
+      summary: Gets the gas consumption records for a user aggregation operation.
+      description: >-
+        This interface retrieves the gas consumption records for a user
+        aggregation operation in the BRC20 Swap service. It supports filtering
+        by address and pagination through start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -8820,9 +9843,14 @@ paths:
                   - data
   /v1/brc20-swap/send_history:
     get:
-      summary: Gets the history of send transaction.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapSendHistory
+      summary: Gets the history of send transaction.
+      description: >-
+        This interface retrieves the history of send transactions in the BRC20
+        Swap service. It supports filtering by address, tick, and pagination
+        through start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -8884,9 +9912,14 @@ paths:
                   - data
   /v1/brc20-swap/liq_history:
     get:
-      summary: Gets the history of a pair addition pool.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapLiqHistory
+      summary: Gets the history of a pair addition pool.
+      description: >-
+        This interface retrieves the history of pair addition pools in the BRC20
+        Swap service. It supports filtering by address, tick, type (add or
+        remove), and pagination through start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -8960,9 +9993,14 @@ paths:
                   - data
   /v1/brc20-swap/swap_history:
     get:
-      summary: Gets the history of swap.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapSwapHistory
+      summary: Gets the history of swap.
+      description: >-
+        This interface retrieves the history of swap transactions in the BRC20
+        Swap service. It supports filtering by address, tick, and pagination
+        through start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -9037,9 +10075,14 @@ paths:
                   - data
   /v1/brc20-swap/rollup_history:
     get:
-      summary: Get chain history of rollup inscription.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapRollupHistory
+      summary: Get chain history of rollup inscription.
+      description: >-
+        This interface retrieves the chain history of rollup inscriptions in the
+        BRC20 Swap service. It supports filtering by inscription ID and
+        pagination through start and limit parameters.
       parameters:
         - schema:
             maximum: 100
@@ -9100,9 +10143,14 @@ paths:
                   - data
   /v1/brc20-swap/deposit_list:
     get:
-      summary: Gets the deposit list for a user.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapDepositList
+      summary: Gets the deposit list for a user.
+      description: >-
+        This interface retrieves the deposit list for a user in the BRC20 Swap
+        service. It supports filtering by address, tick, and pagination through
+        start and limit parameters.
       parameters:
         - schema:
             type: string
@@ -9170,9 +10218,14 @@ paths:
                   - data
   /v1/brc20-swap/create_deposit:
     get:
-      summary: Create a deposit psbt to be signed by the user.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapCreateDeposit
+      summary: Create a deposit psbt to be signed by the user.
+      description: >-
+        This interface creates a deposit PSBT to be signed by the user in the
+        BRC20 Swap service. It requires the inscription ID, public key, and
+        address parameters to generate the PSBT.
       parameters:
         - schema:
             type: string
@@ -9220,9 +10273,14 @@ paths:
                   - data
   /v1/brc20-swap/confirm_deposit:
     post:
-      summary: User signature deposit psbt, submit confirmation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapConfirmDeposit
+      summary: User signature deposit psbt, submit confirmation.
+      description: >-
+        This interface allows the user to sign the deposit PSBT and submit the
+        confirmation in the BRC20 Swap service. It requires the PSBT and
+        inscription ID to complete the operation.
       requestBody:
         content:
           application/json:
@@ -9260,9 +10318,13 @@ paths:
                   - data
   /v1/brc20-swap/system_status:
     get:
-      summary: Gets the current system state.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapSystemStatus
+      summary: Gets the current system state.
+      description: >-
+        This interface retrieves the current system state of the BRC20 Swap
+        service, including whether rollup inscription committing is enabled.
       responses:
         '200':
           description: Default Response
@@ -9288,9 +10350,14 @@ paths:
                   - data
   /v1/brc20-swap/withdraw_history:
     get:
-      summary: Gets the user withdrawal history.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapWithdrawHistory
+      summary: Gets the user withdrawal history.
+      description: >-
+        This interface retrieves the user withdrawal history in the BRC20 Swap
+        service. It supports filtering by address, pagination through start and
+        limit parameters, and an optional tick parameter.
       parameters:
         - schema:
             type: string
@@ -9364,9 +10431,14 @@ paths:
                   - data
   /v1/brc20-swap/create_retry_withdraw:
     get:
-      summary: Retry create a withdraw psbt to be signed by the user.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapCreateRetryWithdraw
+      summary: Retry create a withdraw psbt to be signed by the user.
+      description: >-
+        This interface retries to create a withdrawal PSBT to be signed by the
+        user in the BRC20 Swap service. It requires the withdrawal order ID,
+        public key, and address parameters to generate the PSBT.
       parameters:
         - schema:
             type: string
@@ -9413,9 +10485,15 @@ paths:
                   - data
   /v1/brc20-swap/confirm_retry_withdraw:
     post:
-      summary: User signature withdraw psbt, submit confirmation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapConfirmRetryWithdraw
+      summary: User signature withdraw psbt, submit confirmation.
+      description: >-
+        This interface allows the user to sign the retry withdrawal PSBT and
+        submit the confirmation in the BRC20 Swap service. It requires the
+        withdrawal order ID, payment PSBT, and approve PSBT to complete the
+        operation.
       requestBody:
         content:
           application/json:
@@ -9457,9 +10535,14 @@ paths:
                   - data
   /v1/brc20-swap/create_withdraw:
     get:
-      summary: Create a withdraw psbt to be signed by the user.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapCreateWithdraw
+      summary: Create a withdraw psbt to be signed by the user.
+      description: >-
+        This interface creates a withdrawal PSBT to be signed by the user in the
+        BRC20 Swap service. It requires the public key, address, tick, amount,
+        timestamp, and fee tick parameters to generate the PSBT.
       parameters:
         - schema:
             type: string
@@ -9513,9 +10596,15 @@ paths:
                   - data
   /v1/brc20-swap/confirm_withdraw:
     post:
-      summary: User signature withdraw psbt, submit confirmation.
       tags:
         - brc20-swap
+      operationId: postBrc20SwapConfirmWithdraw
+      summary: User signature withdraw psbt, submit confirmation.
+      description: >-
+        This interface allows the user to sign the withdrawal PSBT and submit
+        the confirmation in the BRC20 Swap service. It requires the withdrawal
+        order ID, payment PSBT, approve PSBT, fee tick, and optional fee amount
+        to complete the operation.
       requestBody:
         content:
           application/json:
@@ -9571,9 +10660,14 @@ paths:
                   - data
   /v1/brc20-swap/withdraw_process:
     get:
-      summary: Gets the withdrawal progress for the specified ID.
       tags:
         - brc20-swap
+      operationId: getBrc20SwapWithdrawProcess
+      summary: Gets the withdrawal progress for the specified ID.
+      description: >-
+        This interface retrieves the withdrawal progress for a specific ID in
+        the BRC20 Swap service. It requires the ID parameter to identify the
+        withdrawal order.
       parameters:
         - schema:
             type: string
@@ -9676,7 +10770,9 @@ paths:
     get:
       tags:
         - Fractal
+      operationId: getFractalSupply
       summary: Get circulating FB in fractal mainnet
+      description: Retrieves the circulating supply of Fractal Bitcoin (FB) in the mainnet.
       responses:
         '200':
           description: Successful operation
@@ -9698,7 +10794,9 @@ paths:
     get:
       tags:
         - Fractal
+      operationId: getFractalTotalSupply
       summary: Get total supply FB in fractal mainnet
+      description: Retrieves the total supply of Fractal Bitcoin (FB) in the mainnet.
       responses:
         '200':
           description: Successful operation
@@ -9720,7 +10818,9 @@ paths:
     get:
       tags:
         - Fractal
+      operationId: getFractalTotalAddress
       summary: Get total address
+      description: Retrieves the total number of addresses in the Fractal network.
       responses:
         '200':
           description: Successful operation
@@ -9742,7 +10842,11 @@ paths:
     get:
       tags:
         - Fractal
-      summary: Return the address list in descending order of amount.
+      operationId: getFractalRichList
+      summary: Get address rich list
+      description: >-
+        Retrieves a list of addresses sorted by their balance in descending
+        order.
       parameters:
         - name: cursor
           description: Start offset
@@ -9779,7 +10883,11 @@ paths:
     get:
       tags:
         - CAT20-DEX
+      operationId: getTokenPrice
       summary: Get token price
+      description: >-
+        Retrieves the current price of a CAT20 token. If the token has no trades
+        in the last 30 days, it will return the last price.
       parameters:
         - name: tokenId
           description: tokenId
@@ -9820,6 +10928,7 @@ paths:
     get:
       tags:
         - CAT20-DEX
+      operationId: getMarketStats
       summary: Get the market stats
       description: >-
         Retrieves the market stats for all tokens which have trades in the last
@@ -9884,9 +10993,13 @@ paths:
           description: Invalid API Key
   /v1/collection-indexer/collection/status:
     get:
-      summary: Return the overall information of the collection service
       tags:
         - Collection-Indexer
+      operationId: getCollectionStatus
+      summary: Return the overall information of the collection service
+      description: >-
+        Returns the latest height of the collection indexer, the last handled
+        height, and the total number of collections.
       responses:
         '200':
           description: Default Response
@@ -9915,9 +11028,13 @@ paths:
                   - data
   /v1/collection-indexer/collection/{collectionId}/info:
     get:
-      summary: Return the details of the specified collection
       tags:
         - Collection-Indexer
+      operationId: getCollectionInfo
+      summary: Return the details of the specified collection
+      description: >-
+        Returns the details of a specific collection, including its name, icon,
+        supply, description, and social media links.
       parameters:
         - schema:
             type: number
@@ -9957,9 +11074,13 @@ paths:
                   - data
   /v1/collection-indexer/collection/{collectionId}/holders:
     get:
-      summary: Return the owner information of a specific collection
       tags:
         - Collection-Indexer
+      operationId: getCollectionHolders
+      summary: Return the owner information of a specific collection
+      description: >-
+        Returns the list of addresses that hold items from a specific
+        collection, along with the count of items each address holds.
       parameters:
         - schema:
             type: number
@@ -10015,9 +11136,13 @@ paths:
                   - data
   /v1/collection-indexer/address/{address}/collection/list:
     get:
-      summary: Return the collection summary for the specified address.
       tags:
         - Collection-Indexer
+      operationId: getAddressCollectionList
+      summary: Return the collection summary for the specified address.
+      description: >-
+        Returns the summary of all collections that the specified address holds,
+        including collection name, icon, supply, and social media links.
       parameters:
         - schema:
             type: number
@@ -10091,9 +11216,14 @@ paths:
                   - data
   /v1/collection-indexer/collection/{collectionId}/items:
     get:
-      summary: Return the list of inscriptions for a specific collection.
       tags:
         - Collection-Indexer
+      operationId: getCollectionItems
+      summary: Return the list of inscriptions for a specific collection.
+      description: >-
+        Returns the list of inscriptions that belong to a specific collection,
+        including details such as inscription ID, name, content type, and
+        height.
       parameters:
         - schema:
             type: number
@@ -10169,9 +11299,14 @@ paths:
                   - data
   /v1/collection-indexer/address/{address}/collection/{collectionId}/summary:
     get:
-      summary: Return the summary of a specific collection for the designated address.
       tags:
         - Collection-Indexer
+      operationId: getAddressCollectionSummary
+      summary: Return the summary of a specific collection for the designated address.
+      description: >-
+        Returns the summary of a specific collection for a designated address,
+        including collection name, icon, supply, description, and social media
+        links.
       parameters:
         - schema:
             type: number
@@ -10232,11 +11367,15 @@ paths:
                   - data
   /v1/collection-indexer/address/{address}/collection/{collectionId}/items:
     get:
-      summary: >-
-        Return the list of inscriptions for a specific collection at a
-        designated address.
       tags:
         - Collection-Indexer
+      operationId: getAddressCollectionItems
+      summary: >-
+        Get the list of inscriptions for a specific collection at a designated
+        address.
+      description: >-
+        Returns the list of inscriptions that belong to a specific collection at
+        a designated address, including details such as inscription ID, name,
       parameters:
         - schema:
             type: number
@@ -10317,9 +11456,13 @@ paths:
                   - data
   /v1/collection-indexer/inscription/{inscriptionId}/collection/list:
     get:
-      summary: Return the collection list where a specific inscription is located.
       tags:
         - Collection-Indexer
+      operationId: getInscriptionCollectionList
+      summary: Get inscription collection list
+      description: >-
+        Returns the list of collections that a specific inscription belongs to,
+        including collection name, icon, supply, and social media links.
       parameters:
         - schema:
             type: string
@@ -10956,6 +12099,218 @@ components:
         halvingBlockCount:
           type: integer
           example: 100
+    AlkaneUtxo:
+      type: object
+      properties:
+        address:
+          type: string
+        satoshi:
+          type: integer
+          example: 10000
+        scriptPk:
+          type: string
+        txid:
+          type: string
+        vout:
+          type: integer
+          example: 0
+        confirmations:
+          type: integer
+        alkanes:
+          type: array
+          items:
+            $ref: '#/components/schemas/AlkanesUTXOBalance'
+    AlkaneType:
+      type: string
+      enum:
+        - token
+        - collection
+        - nft
+        - contract
+      example: token
+    AlkanesUTXOBalance:
+      type: object
+      properties:
+        alkaneid:
+          type: string
+        amount:
+          type: string
+        type:
+          $ref: '#/components/schemas/AlkaneType'
+        logo:
+          type: string
+        tokenData:
+          $ref: '#/components/schemas/TokenData'
+        nftData:
+          $ref: '#/components/schemas/NFTData'
+        collectionData:
+          $ref: '#/components/schemas/CollectionData'
+    AlkanesBalance:
+      type: object
+      properties:
+        amount:
+          type: string
+          example: '10000'
+        alkaneid:
+          type: string
+          example: '2584327:44'
+        alkane:
+          type: string
+          example: AAAAAAAAAAAAAB
+        symbol:
+          type: string
+          example: G
+        divisibility:
+          type: integer
+          example: 0
+    AlkaneHolder:
+      type: object
+      properties:
+        address:
+          type: string
+        amount:
+          type: string
+          example: '10000'
+    AlkaneInfo:
+      type: object
+      properties:
+        alkaneid:
+          type: string
+          example: '2583283:1333'
+        height:
+          type: integer
+          format: uint64
+          example: 2583283
+        txid:
+          type: string
+        timestamp:
+          type: integer
+        type:
+          type: string
+        logo:
+          type: string
+        tokenData:
+          $ref: '#/components/schemas/TokenData'
+        nftData:
+          $ref: '#/components/schemas/NFTData'
+        collectionData:
+          $ref: '#/components/schemas/CollectionData'
+    TokenData:
+      type: object
+      properties:
+        name:
+          type: string
+          example: MyToken
+        symbol:
+          type: string
+          example: MTK
+        divisibility:
+          type: integer
+          example: 0
+        totalSupply:
+          type: string
+          example: '1000000'
+        maxSupply:
+          type: string
+          example: '1000000'
+        premine:
+          type: string
+          example: '100000'
+        perMint:
+          type: string
+          example: '1000'
+        cap:
+          type: string
+          example: '10000000'
+        minted:
+          type: string
+          example: '500000'
+        mintable:
+          type: boolean
+        holders:
+          type: integer
+          example: 100
+    NFTData:
+      type: object
+      properties:
+        name:
+          type: string
+          example: MyNFT
+        attributes:
+          type: object
+        contentType:
+          type: string
+        contentUrl:
+          type: string
+        collectionId:
+          type: string
+    CollectionData:
+      type: object
+      properties:
+        name:
+          type: string
+          example: MyCollection
+        totalSupply:
+          type: string
+          example: '1000'
+        maxSupply:
+          type: string
+          example: '1000'
+        minted:
+          type: integer
+        holders:
+          type: integer
+    AlkanesStatus:
+      type: object
+      properties:
+        bestHeight:
+          type: integer
+        alkanes:
+          type: integer
+          example: 100
+    AlkaneEvent:
+      type: object
+      properties:
+        alkaneid:
+          type: string
+        caller:
+          type: string
+        type:
+          type: string
+        opcode:
+          type: string
+        fuel:
+          type: string
+        inputs:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+        height:
+          type: integer
+        txid:
+          type: string
+        vout:
+          type: integer
+    AlkaneTransferHistory:
+      type: object
+      properties:
+        height:
+          type: integer
+        txid:
+          type: string
+        type:
+          type: string
+        subType:
+          type: string
+        alkaneid:
+          type: string
+        address:
+          type: string
+        amount:
+          type: string
+          example: '10000'
     Order:
       type: object
       properties:

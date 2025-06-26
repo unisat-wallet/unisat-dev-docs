@@ -3,8 +3,9 @@ info:
   title: BRC-20 API
   version: 1.0.4
   description: >-
-    This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel
-    free to send us an email, and we will provide you with an API KEY.
+    BRC-20 API is a RESTful API for BRC-20 token data indexing and querying.
+    It provides endpoints to retrieve information about BRC-20 tokens, including
+    their status, holders, history, and more.
   contact:
     email: contact@unisat.io
   license:
@@ -25,7 +26,8 @@ paths:
     get:
       tags:
         - BRC-20
-      summary: Get the best block height of BRC20 data.
+      operationId: getBrc20BestHeight
+      summary: Get the best block height of BRC20 data
       description: >-
         Get the best block height of BRC20 data. This value will be consistent
         with the latest block height a short time after the block has been
@@ -61,6 +63,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20TickerList
+      summary: Get the tiker list of BRC20 token.
       description: Get the tiker list of BRC20 token.
       parameters:
         - name: start
@@ -108,6 +112,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20Status
+      summary: Get the status of BRC20 list.
       description: >-
         Obtain BRC20 list status
       parameters:
@@ -181,6 +187,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20InfoByTicker
+      summary: Get the infomation of BRC20 by ticker
       description: Get the infomation of BRC20 by ticker.
       parameters:
         - name: ticker
@@ -214,6 +222,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20HoldersByTicker
+      summary: Get the holders of BRC20 by ticker.
       description: Get the holders of BRC20 by ticker.
       parameters:
         - name: ticker
@@ -278,6 +288,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20HistoryByTicker
+      summary: Get the full history of BRC20 by ticker.
       description: Get the full history of BRC20.
       parameters:
         - name: ticker
@@ -351,6 +363,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20HistoryByTickerAndTxid
+      summary: Get the full history of BRC20 by address.
       description: Get the full history of BRC20 by address.
       parameters:
         - name: ticker
@@ -424,6 +438,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20HistoryByHeight
+      summary: Get the tiker list of BRC20 token by height.
       description: Get the tiker list of BRC20 token.
       parameters:
         - name: height
@@ -482,6 +498,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20SummaryByAddress
+      summary: Get the BRC20 token summary by address.
       description: >-
         Obtain BRC20 token summary by address, including available balance,
         transferable balance
@@ -567,6 +585,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20SummaryByAddressAndHeight
+      summary: Get the BRC20 token summary by address and height.
       description: >-
         Obtain BRC20 token summary by address, including available balance,
         transferable balance
@@ -641,6 +661,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20InfoByAddressAndTicker
+      summary: Get the BRC20 token info by address and ticker.
       description: >-
         Obtain BRC20 token infomation by address, including available balance,
         transferable balance, number of transferable inscriptions, the first few
@@ -706,6 +728,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20HistoryByAddress
+      summary: Get the full history of BRC20 by address.
       description: Get the full history of BRC20 by address.
       parameters:
         - name: address
@@ -761,6 +785,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20HistoryByAddressAndTicker
+      summary: Get the full history of BRC20 by address and ticker.
       description: Get the full history of BRC20 by address.
       parameters:
         - name: address
@@ -834,6 +860,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20TransferableInscriptionsByAddressAndTicker
+      summary: Get the transferable inscriptions list of BRC20 by address.
       description: Get the transferable inscriptions list of BRC20 by address.
       parameters:
         - name: address
@@ -912,6 +940,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20ModuleHistoryByAddress
+      summary: Get the history of BRC20 Module by address.
       description: Get the history of BRC20 Module.
       parameters:
         - name: module
@@ -982,6 +1012,8 @@ paths:
     get:
       tags:
         - BRC-20
+      operationId: getBrc20WithdrawHistory
+      summary: Get the withdraw history of BRC20.
       description: Get the withdraw history of BRC20.
       parameters:
         - name: start

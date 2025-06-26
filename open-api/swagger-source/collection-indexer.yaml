@@ -3,8 +3,7 @@ info:
   title: Collection Indexer API
   version: 1.0.4
   description: >-
-    This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel
-    free to send us an email, and we will provide you with an API KEY.
+    This is the API for collections. Currently, it only indexes a single whitelisted collection.
   contact:
     email: contact@unisat.io
   license:
@@ -19,9 +18,14 @@ tags:
 paths:
   /v1/collection-indexer/collection/status:
     get:
-      summary: Return the overall information of the collection service
       tags:
         - Collection-Indexer
+      operationId: getCollectionStatus
+      summary: Return the overall information of the collection service
+      description: >-
+        Returns the latest height of the collection indexer, the last handled
+        height, and the total number of collections.
+
       responses:
         "200":
           description: Default Response
@@ -50,9 +54,14 @@ paths:
                   - data
   /v1/collection-indexer/collection/{collectionId}/info:
     get:
-      summary: Return the details of the specified collection
       tags:
         - Collection-Indexer
+      operationId: getCollectionInfo
+      summary: Return the details of the specified collection
+      description: >-
+        Returns the details of a specific collection, including its name, icon,
+        supply, description, and social media links.
+
       parameters:
         - schema:
             type: number
@@ -92,9 +101,14 @@ paths:
                   - data
   /v1/collection-indexer/collection/{collectionId}/holders:
     get:
-      summary: Return the owner information of a specific collection
       tags:
         - Collection-Indexer
+      operationId: getCollectionHolders
+      summary: Return the owner information of a specific collection
+      description: >-
+        Returns the list of addresses that hold items from a specific collection,
+        along with the count of items each address holds.
+
       parameters:
         - schema:
             type: number
@@ -150,9 +164,14 @@ paths:
                   - data
   /v1/collection-indexer/address/{address}/collection/list:
     get:
-      summary: Return the collection summary for the specified address.
       tags:
         - Collection-Indexer
+      operationId: getAddressCollectionList
+      summary: Return the collection summary for the specified address.
+      description: >-
+        Returns the summary of all collections that the specified address holds,
+        including collection name, icon, supply, and social media links.
+
       parameters:
         - schema:
             type: number
@@ -226,9 +245,14 @@ paths:
                   - data
   /v1/collection-indexer/collection/{collectionId}/items:
     get:
-      summary: Return the list of inscriptions for a specific collection.
       tags:
         - Collection-Indexer
+      operationId: getCollectionItems
+      summary: Return the list of inscriptions for a specific collection.
+      description: >-
+        Returns the list of inscriptions that belong to a specific collection,
+        including details such as inscription ID, name, content type, and height.
+
       parameters:
         - schema:
             type: number
@@ -304,9 +328,14 @@ paths:
                   - data
   /v1/collection-indexer/address/{address}/collection/{collectionId}/summary:
     get:
-      summary: Return the summary of a specific collection for the designated address.
       tags:
         - Collection-Indexer
+      operationId: getAddressCollectionSummary
+      summary: Return the summary of a specific collection for the designated address.
+      description: >-
+        Returns the summary of a specific collection for a designated address,
+        including collection name, icon, supply, description, and social media links.
+
       parameters:
         - schema:
             type: number
@@ -367,10 +396,14 @@ paths:
                   - data
   /v1/collection-indexer/address/{address}/collection/{collectionId}/items:
     get:
-      summary: Return the list of inscriptions for a specific collection at a
-        designated address.
       tags:
         - Collection-Indexer
+      operationId: getAddressCollectionItems
+      summary: Get the list of inscriptions for a specific collection at a designated address.
+      description: >-
+        Returns the list of inscriptions that belong to a specific collection at
+        a designated address, including details such as inscription ID, name,
+
       parameters:
         - schema:
             type: number
@@ -451,9 +484,14 @@ paths:
                   - data
   /v1/collection-indexer/inscription/{inscriptionId}/collection/list:
     get:
-      summary: Return the collection list where a specific inscription is located.
       tags:
         - Collection-Indexer
+      operationId: getInscriptionCollectionList
+      summary: Get inscription collection list
+      description: >-
+        Returns the list of collections that a specific inscription belongs to,
+        including collection name, icon, supply, and social media links.
+
       parameters:
         - schema:
             type: string
