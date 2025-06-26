@@ -5,18 +5,18 @@ This is the API for collections. Currently, it only indexes a single whitelisted
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
 ---
-
 ## 📑 Table of Contents
 
-- [Collection-Indexer](#collection-indexer)
-  - [/v1/collection-indexer/collection/status (Return the overall information of the collection service) ](#return-the-overall-information-of-the-collection-service)
-  - [/v1/collection-indexer/collection/{collectionId}/info (Return the details of the specified collection) ](#return-the-details-of-the-specified-collection)
-  - [/v1/collection-indexer/collection/{collectionId}/holders (Return the owner information of a specific collection) ](#return-the-owner-information-of-a-specific-collection)
-  - [/v1/collection-indexer/address/{address}/collection/list (Return the collection summary for the specified address.) ](#return-the-collection-summary-for-the-specified-address)
-  - [/v1/collection-indexer/collection/{collectionId}/items (Return the list of inscriptions for a specific collection.) ](#return-the-list-of-inscriptions-for-a-specific-collection)
-  - [/v1/collection-indexer/address/{address}/collection/{collectionId}/summary (Return the summary of a specific collection for the designated address.) ](#return-the-summary-of-a-specific-collection-for-the-designated-address)
-  - [/v1/collection-indexer/address/{address}/collection/{collectionId}/items (Get the list of inscriptions for a specific collection at a designated address.) ](#get-the-list-of-inscriptions-for-a-specific-collection-at-a-designated-address)
-  - [/v1/collection-indexer/inscription/{inscriptionId}/collection/list (Get inscription collection list) ](#get-inscription-collection-list)
+| Route | Summary |
+| ----- | ------- |
+| [GET /v1/collection-indexer/collection/status](#return-the-overall-information-of-the-collection-service) | Return the overall information of the collection service |
+| [GET /v1/collection-indexer/collection/{collectionId}/info](#return-the-details-of-the-specified-collection) | Return the details of the specified collection |
+| [GET /v1/collection-indexer/collection/{collectionId}/holders](#return-the-owner-information-of-a-specific-collection) | Return the owner information of a specific collection |
+| [GET /v1/collection-indexer/address/{address}/collection/list](#return-the-collection-summary-for-the-specified-address) | Return the collection summary for the specified address. |
+| [GET /v1/collection-indexer/collection/{collectionId}/items](#return-the-list-of-inscriptions-for-a-specific-collection) | Return the list of inscriptions for a specific collection. |
+| [GET /v1/collection-indexer/address/{address}/collection/{collectionId}/summary](#return-the-summary-of-a-specific-collection-for-the-designated-address) | Return the summary of a specific collection for the designated address. |
+| [GET /v1/collection-indexer/address/{address}/collection/{collectionId}/items](#get-the-list-of-inscriptions-for-a-specific-collection-at-a-designated-address) | Get the list of inscriptions for a specific collection at a designated address. |
+| [GET /v1/collection-indexer/inscription/{inscriptionId}/collection/list](#get-inscription-collection-list) | Get inscription collection list |
 
 ---
 

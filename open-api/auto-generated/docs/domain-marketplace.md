@@ -5,25 +5,25 @@ This API provides endpoints for ordinals domain marketplace services.
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
 ---
-
 ## 📑 Table of Contents
 
-- [MarketPlace-Domain](#marketplace-domain)
-  - [/v3/market/domain/auction/domain_types (Get statistical data.) ](#get-statistical-data)
-  - [/v3/market/domain/auction/domain_statistic (Return a summary of domain.) ](#return-a-summary-of-domain)
-  - [/v3/market/domain/auction/inscription_info (Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services.) ](#retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services)
-  - [/v3/market/domain/auction/inscription_info_list (Get the basic listing information of the specified inscription list) ](#get-the-basic-listing-information-of-the-specified-inscription-list)
-  - [/v3/market/domain/auction/list (Retrieve the list information of the market.) ](#retrieve-the-list-information-of-the-market)
-  - [/v3/market/domain/auction/actions (Get information on listings, delistings, and sales.) ](#get-information-on-listings-delistings-and-sales)
-  - [/v3/market/domain/auction/create_put_on (Create listing order.) ](#create-listing-order)
-  - [/v3/market/domain/auction/confirm_put_on (Confirm listing order.) ](#confirm-listing-order)
-  - [/v3/market/domain/auction/create_bid_prepare (Return params before creating purchase order.) ](#return-params-before-creating-purchase-order)
-  - [/v3/market/domain/auction/create_bid (Create purchase order.) ](#create-purchase-order)
-  - [/v3/market/domain/auction/confirm_bid (Confirm purchase order.) ](#confirm-purchase-order)
-  - [/v3/market/domain/auction/create_put_off (Create delisting order.) ](#create-delisting-order)
-  - [/v3/market/domain/auction/confirm_put_off (Confirm delisting order.) ](#confirm-delisting-order)
-  - [/v3/market/domain/auction/create_modify_price (Create the order for price adjustment.) ](#create-the-order-for-price-adjustment)
-  - [/v3/market/domain/auction/confirm_modify_price (Confirm the order for price adjustment.) ](#confirm-the-order-for-price-adjustment)
+| Route | Summary |
+| ----- | ------- |
+| [POST /v3/market/domain/auction/domain_types](#get-statistical-data) | Get statistical data. |
+| [POST /v3/market/domain/auction/domain_statistic](#return-a-summary-of-domain) | Return a summary of domain. |
+| [POST /v3/market/domain/auction/inscription_info](#retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services) | Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services. |
+| [POST /v3/market/domain/auction/inscription_info_list](#get-the-basic-listing-information-of-the-specified-inscription-list) | Get the basic listing information of the specified inscription list |
+| [POST /v3/market/domain/auction/list](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
+| [POST /v3/market/domain/auction/actions](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
+| [POST /v3/market/domain/auction/create_put_on](#create-listing-order) | Create listing order. |
+| [POST /v3/market/domain/auction/confirm_put_on](#confirm-listing-order) | Confirm listing order. |
+| [POST /v3/market/domain/auction/create_bid_prepare](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
+| [POST /v3/market/domain/auction/create_bid](#create-purchase-order) | Create purchase order. |
+| [POST /v3/market/domain/auction/confirm_bid](#confirm-purchase-order) | Confirm purchase order. |
+| [POST /v3/market/domain/auction/create_put_off](#create-delisting-order) | Create delisting order. |
+| [POST /v3/market/domain/auction/confirm_put_off](#confirm-delisting-order) | Confirm delisting order. |
+| [POST /v3/market/domain/auction/create_modify_price](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
+| [POST /v3/market/domain/auction/confirm_modify_price](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
 
 ---
 

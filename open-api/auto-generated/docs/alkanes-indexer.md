@@ -5,23 +5,23 @@ The Alkanes Indexer API is developed by the UniSat team, providing a simplified 
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
 ---
-
 ## 📑 Table of Contents
 
-- [Alkanes](#alkanes)
-  - [/v1/indexer/alkanes/status (Get alkanes status) ](#get-alkanes-status)
-  - [/v1/indexer/alkanes/info-list (Get alkanes list) ](#get-alkanes-list)
-  - [/v1/indexer/alkanes/{alkaneid}/info (Get alkane info by alkaneid) ](#get-alkane-info-by-alkaneid)
-  - [/v1/indexer/alkanes/token-list (Get alkanes token list) ](#get-alkanes-token-list)
-  - [/v1/indexer/alkanes/{alkaneid}/holders (Get alkanes holders by alkaneid) ](#get-alkanes-holders-by-alkaneid)
-  - [/v1/indexer/alkanes/{alkaneid}/collection-items (Get collection items) ](#get-collection-items)
-  - [/v1/indexer/alkanes/{alkaneid}/contract-events (Get contract events) ](#get-contract-events)
-  - [/v1/indexer/alkanes/utxo/{txid}/{index}/balance (Get alkanes utxo balance) ](#get-alkanes-utxo-balance)
-  - [/v1/indexer/address/{address}/alkanes/{alkaneid}/utxo (Get utxo alkanes balance by address and alkaneid) ](#get-utxo-alkanes-balance-by-address-and-alkaneid)
-  - [/v1/indexer/address/{address}/alkanes/token-list (Get address alkanes token list) ](#get-address-alkanes-token-list)
-  - [/v1/indexer/address/{address}/alkanes/collection-list (Get address alkanes collection list) ](#get-address-alkanes-collection-list)
-  - [/v1/indexer/address/{address}/alkanes/{alkaneid}/collection-items (Get address collection items by alkaneid) ](#get-address-collection-items-by-alkaneid)
-  - [/v1/indexer/address/{address}/alkanes/{alkaneid}/transfer-history (Get transfer history) ](#get-transfer-history)
+| Route | Summary |
+| ----- | ------- |
+| [GET /v1/indexer/alkanes/status](#get-alkanes-status) | Get alkanes status |
+| [GET /v1/indexer/alkanes/info-list](#get-alkanes-list) | Get alkanes list |
+| [GET /v1/indexer/alkanes/{alkaneid}/info](#get-alkane-info-by-alkaneid) | Get alkane info by alkaneid |
+| [GET /v1/indexer/alkanes/token-list](#get-alkanes-token-list) | Get alkanes token list |
+| [GET /v1/indexer/alkanes/{alkaneid}/holders](#get-alkanes-holders-by-alkaneid) | Get alkanes holders by alkaneid |
+| [GET /v1/indexer/alkanes/{alkaneid}/collection-items](#get-collection-items) | Get collection items |
+| [GET /v1/indexer/alkanes/{alkaneid}/contract-events](#get-contract-events) | Get contract events |
+| [GET /v1/indexer/alkanes/utxo/{txid}/{index}/balance](#get-alkanes-utxo-balance) | Get alkanes utxo balance |
+| [GET /v1/indexer/address/{address}/alkanes/{alkaneid}/utxo](#get-utxo-alkanes-balance-by-address-and-alkaneid) | Get utxo alkanes balance by address and alkaneid |
+| [GET /v1/indexer/address/{address}/alkanes/token-list](#get-address-alkanes-token-list) | Get address alkanes token list |
+| [GET /v1/indexer/address/{address}/alkanes/collection-list](#get-address-alkanes-collection-list) | Get address alkanes collection list |
+| [GET /v1/indexer/address/{address}/alkanes/{alkaneid}/collection-items](#get-address-collection-items-by-alkaneid) | Get address collection items by alkaneid |
+| [GET /v1/indexer/address/{address}/alkanes/{alkaneid}/transfer-history](#get-transfer-history) | Get transfer history |
 
 ---
 

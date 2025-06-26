@@ -5,15 +5,15 @@ Inscription Indexer API is a RESTful API for accessing and managing inscriptions
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
 ---
-
 ## 📑 Table of Contents
 
-- [Inscriptions](#inscriptions)
-  - [/v1/indexer/inscription/info/{inscriptionId} (Get inscription info by inscriptionId) ](#get-inscription-info-by-inscriptionid)
-  - [/v1/indexer/inscription/content/{inscriptionId} (Get inscription content info by inscriptionId) ](#get-inscription-content-info-by-inscriptionid)
-  - [/v1/indexer/inscription/events (Get inscription events) ](#get-inscription-events)
-  - [/v1/indexer/address/{address}/inscription-data (Get inscription UTXO list by address) ](#get-inscription-utxo-list-by-address)
-  - [/v1/indexer/address/{address}/inscription-utxo-data (Get inscription UTXO list by address) ](#get-inscription-utxo-list-by-address)
+| Route | Summary |
+| ----- | ------- |
+| [GET /v1/indexer/inscription/info/{inscriptionId}](#get-inscription-info-by-inscriptionid) | Get inscription info by inscriptionId |
+| [GET /v1/indexer/inscription/content/{inscriptionId}](#get-inscription-content-info-by-inscriptionid) | Get inscription content info by inscriptionId |
+| [GET /v1/indexer/inscription/events](#get-inscription-events) | Get inscription events |
+| [GET /v1/indexer/address/{address}/inscription-data](#get-inscription-utxo-list-by-address) | Get inscription UTXO list by address |
+| [GET /v1/indexer/address/{address}/inscription-utxo-data](#get-inscription-utxo-list-by-address) | Get inscription UTXO list by address |
 
 ---
 

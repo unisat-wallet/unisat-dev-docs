@@ -5,19 +5,19 @@ This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
 ---
-
 ## 📑 Table of Contents
 
-- [Runes](#runes)
-  - [/v1/indexer/runes/status (Get runes status) ](#get-runes-status)
-  - [/v1/indexer/runes/info-list (Get runes list) ](#get-runes-list)
-  - [/v1/indexer/runes/{runeid}/info (Get rune info by runeid) ](#get-rune-info-by-runeid)
-  - [/v1/indexer/runes/{runeid}/holders (Get runes holders by runeid) ](#get-runes-holders-by-runeid)
-  - [/v1/indexer/address/{address}/runes/balance-list (Get runes balance list by address) ](#get-runes-balance-list-by-address)
-  - [/v1/indexer/address/{address}/runes/{runeid}/balance (Get runes balance by address and runeid) ](#get-runes-balance-by-address-and-runeid)
-  - [/v1/indexer/runes/utxo/{txid}/{index}/balance (Get runes balance by utxo) ](#get-runes-balance-by-utxo)
-  - [/v1/indexer/address/{address}/runes/{runeid}/utxo (Get utxo runes balance by address and runeid) ](#get-utxo-runes-balance-by-address-and-runeid)
-  - [/v1/indexer/runes/event (Get Runes Events) ](#get-runes-events)
+| Route | Summary |
+| ----- | ------- |
+| [GET /v1/indexer/runes/status](#get-runes-status) | Get runes status |
+| [GET /v1/indexer/runes/info-list](#get-runes-list) | Get runes list |
+| [GET /v1/indexer/runes/{runeid}/info](#get-rune-info-by-runeid) | Get rune info by runeid |
+| [GET /v1/indexer/runes/{runeid}/holders](#get-runes-holders-by-runeid) | Get runes holders by runeid |
+| [GET /v1/indexer/address/{address}/runes/balance-list](#get-runes-balance-list-by-address) | Get runes balance list by address |
+| [GET /v1/indexer/address/{address}/runes/{runeid}/balance](#get-runes-balance-by-address-and-runeid) | Get runes balance by address and runeid |
+| [GET /v1/indexer/runes/utxo/{txid}/{index}/balance](#get-runes-balance-by-utxo) | Get runes balance by utxo |
+| [GET /v1/indexer/address/{address}/runes/{runeid}/utxo](#get-utxo-runes-balance-by-address-and-runeid) | Get utxo runes balance by address and runeid |
+| [GET /v1/indexer/runes/event](#get-runes-events) | Get Runes Events |
 
 ---
 

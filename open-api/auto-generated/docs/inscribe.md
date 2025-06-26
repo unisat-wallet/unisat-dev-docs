@@ -5,25 +5,25 @@ This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
 ---
-
 ## 📑 Table of Contents
 
-- [Inscribe](#inscribe)
-  - [/v2/inscribe/order/summary (Get order summary of current apikey) ](#get-order-summary-of-current-apikey)
-  - [/v2/inscribe/order/list (Get order list of current apikey) ](#get-order-list-of-current-apikey)
-  - [/v2/inscribe/order/{orderId} (Search an order by orderId) ](#search-an-order-by-orderid)
-  - [/v2/inscribe/order/create (Create an order) ](#create-an-order)
-  - [/v2/inscribe/order/create/brc20-deploy (Create an order to inscribe BRC-20 DEPLOY) ](#create-an-order-to-inscribe-brc-20-deploy)
-  - [/v2/inscribe/order/create/brc20-mint (Create an order to inscribe BRC-20 MINT) ](#create-an-order-to-inscribe-brc-20-mint)
-  - [/v2/inscribe/order/create/brc20-transfer (Create an order to inscribe BRC-20 TRANSFER) ](#create-an-order-to-inscribe-brc-20-transfer)
-  - [/v2/inscribe/order/create/brc20-5byte-mint (Create an order to inscribe BRC-20 MINT) ](#create-an-order-to-inscribe-brc-20-mint)
-  - [/v2/inscribe/order/request-commit/brc20-5byte-mint (Request commit txs of brc20-5byte-mint) ](#request-commit-txs-of-brc20-5byte-mint)
-  - [/v2/inscribe/order/sign-commit/brc20-5byte-mint (Sign commit txs of brc20-5byte-mint) ](#sign-commit-txs-of-brc20-5byte-mint)
-  - [/v2/inscribe/order/sign-reveal/brc20-5byte-mint (Sign reveal txs of brc20-5byte-mint) ](#sign-reveal-txs-of-brc20-5byte-mint)
-  - [/v2/inscribe/order/create/runes-etch (Create an order to etch Runes) ](#create-an-order-to-etch-runes)
-  - [/v2/inscribe/order/create/runes-mint (Create an order to mint Runes) ](#create-an-order-to-mint-runes)
-  - [/v2/inscribe/order/{orderId}/refund (Process a refund for an order.) ](#process-a-refund-for-an-order)
-  - [/v2/inscribe/order/{orderId}/refund-estimate (Estimate the size of the refund transaction) ](#estimate-the-size-of-the-refund-transaction)
+| Route | Summary |
+| ----- | ------- |
+| [GET /v2/inscribe/order/summary](#get-order-summary-of-current-apikey) | Get order summary of current apikey |
+| [GET /v2/inscribe/order/list](#get-order-list-of-current-apikey) | Get order list of current apikey |
+| [GET /v2/inscribe/order/{orderId}](#search-an-order-by-orderid) | Search an order by orderId |
+| [POST /v2/inscribe/order/create](#create-an-order) | Create an order |
+| [POST /v2/inscribe/order/create/brc20-deploy](#create-an-order-to-inscribe-brc-20-deploy) | Create an order to inscribe BRC-20 DEPLOY |
+| [POST /v2/inscribe/order/create/brc20-mint](#create-an-order-to-inscribe-brc-20-mint) | Create an order to inscribe BRC-20 MINT |
+| [POST /v2/inscribe/order/create/brc20-transfer](#create-an-order-to-inscribe-brc-20-transfer) | Create an order to inscribe BRC-20 TRANSFER |
+| [POST /v2/inscribe/order/create/brc20-5byte-mint](#create-an-order-to-inscribe-brc-20-mint) | Create an order to inscribe BRC-20 MINT |
+| [POST /v2/inscribe/order/request-commit/brc20-5byte-mint](#request-commit-txs-of-brc20-5byte-mint) | Request commit txs of brc20-5byte-mint |
+| [POST /v2/inscribe/order/sign-commit/brc20-5byte-mint](#sign-commit-txs-of-brc20-5byte-mint) | Sign commit txs of brc20-5byte-mint |
+| [POST /v2/inscribe/order/sign-reveal/brc20-5byte-mint](#sign-reveal-txs-of-brc20-5byte-mint) | Sign reveal txs of brc20-5byte-mint |
+| [POST /v2/inscribe/order/create/runes-etch](#create-an-order-to-etch-runes) | Create an order to etch Runes |
+| [POST /v2/inscribe/order/create/runes-mint](#create-an-order-to-mint-runes) | Create an order to mint Runes |
+| [POST /v2/inscribe/order/{orderId}/refund](#process-a-refund-for-an-order) | Process a refund for an order. |
+| [POST /v2/inscribe/order/{orderId}/refund-estimate](#estimate-the-size-of-the-refund-transaction) | Estimate the size of the refund transaction |
 
 ---
 

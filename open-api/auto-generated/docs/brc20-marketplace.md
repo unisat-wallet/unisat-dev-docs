@@ -5,28 +5,28 @@ This API provides endpoints for BRC20 marketplace services
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
 ---
-
 ## 📑 Table of Contents
 
-- [MarketPlace-BRC20](#marketplace-brc20)
-  - [/v3/market/brc20/auction/bind_info (Get the address bind info.) ](#get-the-address-bind-info)
-  - [/v3/market/brc20/auction/brc20_kline (Get tick k line.) ](#get-tick-k-line)
-  - [/v3/market/brc20/auction/brc20_types (Get statistical data, price, market capitalization, etc. for BRC20.) ](#get-statistical-data-price-market-capitalization-etc-for-brc20)
-  - [/v3/market/brc20/auction/brc20_types_specified (Get statistical data, price, market capitalization, etc. for BRC20.) ](#get-statistical-data-price-market-capitalization-etc-for-brc20)
-  - [/v3/market/brc20/auction/bind (Bind btcAddress and nftAddress.) ](#bind-btcaddress-and-nftaddress)
-  - [/v3/market/brc20/auction/list (Retrieve the list information of the market.) ](#retrieve-the-list-information-of-the-market)
-  - [/v3/market/brc20/auction/inscription_info (Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services.) ](#retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services)
-  - [/v3/market/brc20/auction/inscription_info_list (Get the basic listing information of the specified inscription list) ](#get-the-basic-listing-information-of-the-specified-inscription-list)
-  - [/v3/market/brc20/auction/actions (Get information on listings, delistings, and sales.) ](#get-information-on-listings-delistings-and-sales)
-  - [/v3/market/brc20/auction/create_put_on (Create listing order.) ](#create-listing-order)
-  - [/v3/market/brc20/auction/confirm_put_on (Confirm listing order.) ](#confirm-listing-order)
-  - [/v3/market/brc20/auction/create_bid_prepare (Return params before creating purchase order.) ](#return-params-before-creating-purchase-order)
-  - [/v3/market/brc20/auction/create_bid (Create purchase order.) ](#create-purchase-order)
-  - [/v3/market/brc20/auction/confirm_bid (Confirm purchase order.) ](#confirm-purchase-order)
-  - [/v3/market/brc20/auction/create_put_off (Create delisting order.) ](#create-delisting-order)
-  - [/v3/market/brc20/auction/confirm_put_off (Confirm delisting order.) ](#confirm-delisting-order)
-  - [/v3/market/brc20/auction/create_modify_price (Create the order for price adjustment.) ](#create-the-order-for-price-adjustment)
-  - [/v3/market/brc20/auction/confirm_modify_price (Confirm the order for price adjustment.) ](#confirm-the-order-for-price-adjustment)
+| Route | Summary |
+| ----- | ------- |
+| [POST /v3/market/brc20/auction/bind_info](#get-the-address-bind-info) | Get the address bind info. |
+| [POST /v3/market/brc20/auction/brc20_kline](#get-tick-k-line) | Get tick k line. |
+| [POST /v3/market/brc20/auction/brc20_types](#get-statistical-data-price-market-capitalization-etc-for-brc20) | Get statistical data, price, market capitalization, etc. for BRC20. |
+| [POST /v3/market/brc20/auction/brc20_types_specified](#get-statistical-data-price-market-capitalization-etc-for-brc20) | Get statistical data, price, market capitalization, etc. for BRC20. |
+| [POST /v3/market/brc20/auction/bind](#bind-btcaddress-and-nftaddress) | Bind btcAddress and nftAddress. |
+| [POST /v3/market/brc20/auction/list](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
+| [POST /v3/market/brc20/auction/inscription_info](#retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services) | Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services. |
+| [POST /v3/market/brc20/auction/inscription_info_list](#get-the-basic-listing-information-of-the-specified-inscription-list) | Get the basic listing information of the specified inscription list |
+| [POST /v3/market/brc20/auction/actions](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
+| [POST /v3/market/brc20/auction/create_put_on](#create-listing-order) | Create listing order. |
+| [POST /v3/market/brc20/auction/confirm_put_on](#confirm-listing-order) | Confirm listing order. |
+| [POST /v3/market/brc20/auction/create_bid_prepare](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
+| [POST /v3/market/brc20/auction/create_bid](#create-purchase-order) | Create purchase order. |
+| [POST /v3/market/brc20/auction/confirm_bid](#confirm-purchase-order) | Confirm purchase order. |
+| [POST /v3/market/brc20/auction/create_put_off](#create-delisting-order) | Create delisting order. |
+| [POST /v3/market/brc20/auction/confirm_put_off](#confirm-delisting-order) | Confirm delisting order. |
+| [POST /v3/market/brc20/auction/create_modify_price](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
+| [POST /v3/market/brc20/auction/confirm_modify_price](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
 
 ---
 

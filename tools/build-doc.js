@@ -119,20 +119,19 @@ ${swagger.info.description}
 👉 [View Swagger UI](${swaggerBaseUrl})
 
 ---
-
-## 📑 Table of Contents
-
 `;
 
-  for (const [tag, eps] of Object.entries(groupedEndpoints)) {
-    const tagDisplay = tag === "_untagged" ? "Other APIs" : tag;
-    const tagAnchor = normalizeAnchor(tagDisplay);
-    output += `- [${tagDisplay}](#${tagAnchor})\n`;
-    eps.forEach(({ route, summary, ...res }) => {
-      const anchor = normalizeAnchor(summary);
-      output += `  - [${route} (${summary}) ](#${anchor})\n`;
-    });
-  }
+  output += `## 📑 Table of Contents\n\n`;
+  output += `| Route | Summary |\n`;
+  output += `| ----- | ------- |\n`;
+
+  endpoints.forEach(({ summary, method, route }) => {
+    const anchor = summary
+      .toLowerCase()
+      .replace(/\s+/g, "-")
+      .replace(/[^\w-]/g, "");
+    output += `| [${method.toUpperCase()} ${route}](#${anchor}) | ${summary} |\n`;
+  });
 
   output += `\n---\n\n`;
 

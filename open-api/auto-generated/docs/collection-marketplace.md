@@ -5,27 +5,27 @@ This API provides endpoints for ordinals collection marketplace services
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
 ---
-
 ## 📑 Table of Contents
 
-- [MarketPlace-Collection](#marketplace-collection)
-  - [/v3/market/collection/auction/collection_statistic (Return a summary of collection.) ](#return-a-summary-of-collection)
-  - [/v3/market/collection/auction/collection_statistic_list (Return a summary of collection.) ](#return-a-summary-of-collection)
-  - [/v3/market/collection/auction/collection_summary (Get the collection statistics information at a certain address) ](#get-the-collection-statistics-information-at-a-certain-address)
-  - [/v3/market/collection/auction/collection_inscriptions (Get the list details of a certain collection at a certain address) ](#get-the-list-details-of-a-certain-collection-at-a-certain-address)
-  - [/v3/market/collection/auction/inscription_info (Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services.) ](#retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services)
-  - [/v3/market/collection/auction/inscription_info_list (Get the basic listing information of the specified inscription list) ](#get-the-basic-listing-information-of-the-specified-inscription-list)
-  - [/v3/market/collection/auction/list (Retrieve the list information of the market.) ](#retrieve-the-list-information-of-the-market)
-  - [/v3/market/collection/auction/actions (Get information on listings, delistings, and sales.) ](#get-information-on-listings-delistings-and-sales)
-  - [/v3/market/collection/auction/create_put_on (Create listing order.) ](#create-listing-order)
-  - [/v3/market/collection/auction/confirm_put_on (Confirm listing order.) ](#confirm-listing-order)
-  - [/v3/market/collection/auction/create_bid_prepare (Return params before creating purchase order.) ](#return-params-before-creating-purchase-order)
-  - [/v3/market/collection/auction/create_bid (Create purchase order.) ](#create-purchase-order)
-  - [/v3/market/collection/auction/confirm_bid (Confirm purchase order.) ](#confirm-purchase-order)
-  - [/v3/market/collection/auction/create_put_off (Create delisting order.) ](#create-delisting-order)
-  - [/v3/market/collection/auction/confirm_put_off (Confirm delisting order.) ](#confirm-delisting-order)
-  - [/v3/market/collection/auction/create_modify_price (Create the order for price adjustment.) ](#create-the-order-for-price-adjustment)
-  - [/v3/market/collection/auction/confirm_modify_price (Confirm the order for price adjustment.) ](#confirm-the-order-for-price-adjustment)
+| Route | Summary |
+| ----- | ------- |
+| [POST /v3/market/collection/auction/collection_statistic](#return-a-summary-of-collection) | Return a summary of collection. |
+| [POST /v3/market/collection/auction/collection_statistic_list](#return-a-summary-of-collection) | Return a summary of collection. |
+| [POST /v3/market/collection/auction/collection_summary](#get-the-collection-statistics-information-at-a-certain-address) | Get the collection statistics information at a certain address |
+| [POST /v3/market/collection/auction/collection_inscriptions](#get-the-list-details-of-a-certain-collection-at-a-certain-address) | Get the list details of a certain collection at a certain address |
+| [POST /v3/market/collection/auction/inscription_info](#retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services) | Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services. |
+| [POST /v3/market/collection/auction/inscription_info_list](#get-the-basic-listing-information-of-the-specified-inscription-list) | Get the basic listing information of the specified inscription list |
+| [POST /v3/market/collection/auction/list](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
+| [POST /v3/market/collection/auction/actions](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
+| [POST /v3/market/collection/auction/create_put_on](#create-listing-order) | Create listing order. |
+| [POST /v3/market/collection/auction/confirm_put_on](#confirm-listing-order) | Confirm listing order. |
+| [POST /v3/market/collection/auction/create_bid_prepare](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
+| [POST /v3/market/collection/auction/create_bid](#create-purchase-order) | Create purchase order. |
+| [POST /v3/market/collection/auction/confirm_bid](#confirm-purchase-order) | Confirm purchase order. |
+| [POST /v3/market/collection/auction/create_put_off](#create-delisting-order) | Create delisting order. |
+| [POST /v3/market/collection/auction/confirm_put_off](#confirm-delisting-order) | Confirm delisting order. |
+| [POST /v3/market/collection/auction/create_modify_price](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
+| [POST /v3/market/collection/auction/confirm_modify_price](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
 
 ---
 

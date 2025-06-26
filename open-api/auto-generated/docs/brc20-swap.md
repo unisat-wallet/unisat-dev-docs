@@ -5,45 +5,45 @@ BRC20 Swap API provides a set of interfaces for BRC20 Swap and PizzaSwap service
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
 ---
-
 ## 📑 Table of Contents
 
-- [brc20-swap](#brc20-swap)
-  - [/v1/brc20-swap/config (Swap's global configuration information.) ](#swaps-global-configuration-information)
-  - [/v1/brc20-swap/balance (Gets the balance for the specified address and tick.) ](#gets-the-balance-for-the-specified-address-and-tick)
-  - [/v1/brc20-swap/pool_info (Get Pool information based on trade pair.) ](#get-pool-information-based-on-trade-pair)
-  - [/v1/brc20-swap/select (Select the tick information that you can use based on the address.) ](#select-the-tick-information-that-you-can-use-based-on-the-address)
-  - [/v1/brc20-swap/pre_deploy_pool (Prepare deploy pool operation) ](#prepare-deploy-pool-operation)
-  - [/v1/brc20-swap/deploy_pool (Deploy the pool operation.) ](#deploy-the-pool-operation)
-  - [/v1/brc20-swap/pre_add_liq (Prepare add liquidity operation) ](#prepare-add-liquidity-operation)
-  - [/v1/brc20-swap/add_liq (Add the liquidity operation) ](#add-the-liquidity-operation)
-  - [/v1/brc20-swap/pre_remove_liq (Prepare remove liquidity operation) ](#prepare-remove-liquidity-operation)
-  - [/v1/brc20-swap/remove_liq (Remove the liquidity operation) ](#remove-the-liquidity-operation)
-  - [/v1/brc20-swap/pre_send (Prepare send operation) ](#prepare-send-operation)
-  - [/v1/brc20-swap/pre_batch_send (Prepare batch send operation) ](#prepare-batch-send-operation)
-  - [/v1/brc20-swap/pre_swap (Prepare swap operation) ](#prepare-swap-operation)
-  - [/v1/brc20-swap/send (The send operation.) ](#the-send-operation)
-  - [/v1/brc20-swap/batch_send (The batch send operation.) ](#the-batch-send-operation)
-  - [/v1/brc20-swap/swap (The swap operation.) ](#the-swap-operation)
-  - [/v1/brc20-swap/pool_list (Gets the pool list information.) ](#gets-the-pool-list-information)
-  - [/v1/brc20-swap/my_pool_list (Gets the user's pool list information.) ](#gets-the-users-pool-list-information)
-  - [/v1/brc20-swap/my_pool (Gets the user pool information for the specified pair.) ](#gets-the-user-pool-information-for-the-specified-pair)
-  - [/v1/brc20-swap/overview (An overview of swap information) ](#an-overview-of-swap-information)
-  - [/v1/brc20-swap/gas_history (Gets the gas consumption records for a user aggregation operation.) ](#gets-the-gas-consumption-records-for-a-user-aggregation-operation)
-  - [/v1/brc20-swap/send_history (Gets the history of send transaction.) ](#gets-the-history-of-send-transaction)
-  - [/v1/brc20-swap/liq_history (Gets the history of a pair addition pool.) ](#gets-the-history-of-a-pair-addition-pool)
-  - [/v1/brc20-swap/swap_history (Gets the history of swap.) ](#gets-the-history-of-swap)
-  - [/v1/brc20-swap/rollup_history (Get chain history of rollup inscription.) ](#get-chain-history-of-rollup-inscription)
-  - [/v1/brc20-swap/deposit_list (Gets the deposit list for a user.) ](#gets-the-deposit-list-for-a-user)
-  - [/v1/brc20-swap/create_deposit (Create a deposit psbt to be signed by the user.) ](#create-a-deposit-psbt-to-be-signed-by-the-user)
-  - [/v1/brc20-swap/confirm_deposit (User signature deposit psbt, submit confirmation.) ](#user-signature-deposit-psbt-submit-confirmation)
-  - [/v1/brc20-swap/system_status (Gets the current system state.) ](#gets-the-current-system-state)
-  - [/v1/brc20-swap/withdraw_history (Gets the user withdrawal history.) ](#gets-the-user-withdrawal-history)
-  - [/v1/brc20-swap/create_retry_withdraw (Retry create a withdraw psbt to be signed by the user.) ](#retry-create-a-withdraw-psbt-to-be-signed-by-the-user)
-  - [/v1/brc20-swap/confirm_retry_withdraw (User signature withdraw psbt, submit confirmation.) ](#user-signature-withdraw-psbt-submit-confirmation)
-  - [/v1/brc20-swap/create_withdraw (Create a withdraw psbt to be signed by the user.) ](#create-a-withdraw-psbt-to-be-signed-by-the-user)
-  - [/v1/brc20-swap/confirm_withdraw (User signature withdraw psbt, submit confirmation.) ](#user-signature-withdraw-psbt-submit-confirmation)
-  - [/v1/brc20-swap/withdraw_process (Gets the withdrawal progress for the specified ID.) ](#gets-the-withdrawal-progress-for-the-specified-id)
+| Route | Summary |
+| ----- | ------- |
+| [GET /v1/brc20-swap/config](#swaps-global-configuration-information) | Swap's global configuration information. |
+| [GET /v1/brc20-swap/balance](#gets-the-balance-for-the-specified-address-and-tick) | Gets the balance for the specified address and tick. |
+| [GET /v1/brc20-swap/pool_info](#get-pool-information-based-on-trade-pair) | Get Pool information based on trade pair. |
+| [GET /v1/brc20-swap/select](#select-the-tick-information-that-you-can-use-based-on-the-address) | Select the tick information that you can use based on the address. |
+| [GET /v1/brc20-swap/pre_deploy_pool](#prepare-deploy-pool-operation) | Prepare deploy pool operation |
+| [POST /v1/brc20-swap/deploy_pool](#deploy-the-pool-operation) | Deploy the pool operation. |
+| [GET /v1/brc20-swap/pre_add_liq](#prepare-add-liquidity-operation) | Prepare add liquidity operation |
+| [POST /v1/brc20-swap/add_liq](#add-the-liquidity-operation) | Add the liquidity operation |
+| [GET /v1/brc20-swap/pre_remove_liq](#prepare-remove-liquidity-operation) | Prepare remove liquidity operation |
+| [POST /v1/brc20-swap/remove_liq](#remove-the-liquidity-operation) | Remove the liquidity operation |
+| [GET /v1/brc20-swap/pre_send](#prepare-send-operation) | Prepare send operation |
+| [POST /v1/brc20-swap/pre_batch_send](#prepare-batch-send-operation) | Prepare batch send operation |
+| [GET /v1/brc20-swap/pre_swap](#prepare-swap-operation) | Prepare swap operation |
+| [POST /v1/brc20-swap/send](#the-send-operation) | The send operation. |
+| [POST /v1/brc20-swap/batch_send](#the-batch-send-operation) | The batch send operation. |
+| [POST /v1/brc20-swap/swap](#the-swap-operation) | The swap operation. |
+| [GET /v1/brc20-swap/pool_list](#gets-the-pool-list-information) | Gets the pool list information. |
+| [GET /v1/brc20-swap/my_pool_list](#gets-the-users-pool-list-information) | Gets the user's pool list information. |
+| [GET /v1/brc20-swap/my_pool](#gets-the-user-pool-information-for-the-specified-pair) | Gets the user pool information for the specified pair. |
+| [GET /v1/brc20-swap/overview](#an-overview-of-swap-information) | An overview of swap information |
+| [GET /v1/brc20-swap/gas_history](#gets-the-gas-consumption-records-for-a-user-aggregation-operation) | Gets the gas consumption records for a user aggregation operation. |
+| [GET /v1/brc20-swap/send_history](#gets-the-history-of-send-transaction) | Gets the history of send transaction. |
+| [GET /v1/brc20-swap/liq_history](#gets-the-history-of-a-pair-addition-pool) | Gets the history of a pair addition pool. |
+| [GET /v1/brc20-swap/swap_history](#gets-the-history-of-swap) | Gets the history of swap. |
+| [GET /v1/brc20-swap/rollup_history](#get-chain-history-of-rollup-inscription) | Get chain history of rollup inscription. |
+| [GET /v1/brc20-swap/deposit_list](#gets-the-deposit-list-for-a-user) | Gets the deposit list for a user. |
+| [GET /v1/brc20-swap/create_deposit](#create-a-deposit-psbt-to-be-signed-by-the-user) | Create a deposit psbt to be signed by the user. |
+| [POST /v1/brc20-swap/confirm_deposit](#user-signature-deposit-psbt-submit-confirmation) | User signature deposit psbt, submit confirmation. |
+| [GET /v1/brc20-swap/system_status](#gets-the-current-system-state) | Gets the current system state. |
+| [GET /v1/brc20-swap/withdraw_history](#gets-the-user-withdrawal-history) | Gets the user withdrawal history. |
+| [GET /v1/brc20-swap/create_retry_withdraw](#retry-create-a-withdraw-psbt-to-be-signed-by-the-user) | Retry create a withdraw psbt to be signed by the user. |
+| [POST /v1/brc20-swap/confirm_retry_withdraw](#user-signature-withdraw-psbt-submit-confirmation) | User signature withdraw psbt, submit confirmation. |
+| [GET /v1/brc20-swap/create_withdraw](#create-a-withdraw-psbt-to-be-signed-by-the-user) | Create a withdraw psbt to be signed by the user. |
+| [POST /v1/brc20-swap/confirm_withdraw](#user-signature-withdraw-psbt-submit-confirmation) | User signature withdraw psbt, submit confirmation. |
+| [GET /v1/brc20-swap/withdraw_process](#gets-the-withdrawal-progress-for-the-specified-id) | Gets the withdrawal progress for the specified ID. |
 
 ---
 

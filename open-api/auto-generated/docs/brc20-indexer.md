@@ -5,26 +5,26 @@ BRC-20 API is a RESTful API for BRC-20 token data indexing and querying. It prov
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
 ---
-
 ## 📑 Table of Contents
 
-- [BRC-20](#brc-20)
-  - [/v1/indexer/brc20/bestheight (Get the best block height of BRC20 data) ](#get-the-best-block-height-of-brc20-data)
-  - [/v1/indexer/brc20/list (Get the tiker list of BRC20 token.) ](#get-the-tiker-list-of-brc20-token)
-  - [/v1/indexer/brc20/status (Get the status of BRC20 list.) ](#get-the-status-of-brc20-list)
-  - [/v1/indexer/brc20/{ticker}/info (Get the infomation of BRC20 by ticker) ](#get-the-infomation-of-brc20-by-ticker)
-  - [/v1/indexer/brc20/{ticker}/holders (Get the holders of BRC20 by ticker.) ](#get-the-holders-of-brc20-by-ticker)
-  - [/v1/indexer/brc20/{ticker}/history (Get the full history of BRC20 by ticker.) ](#get-the-full-history-of-brc20-by-ticker)
-  - [/v1/indexer/brc20/{ticker}/tx/{txid}/history (Get the full history of BRC20 by address.) ](#get-the-full-history-of-brc20-by-address)
-  - [/v1/indexer/brc20/history-by-height/{height} (Get the tiker list of BRC20 token by height.) ](#get-the-tiker-list-of-brc20-token-by-height)
-  - [/v1/indexer/address/{address}/brc20/summary (Get the BRC20 token summary by address.) ](#get-the-brc20-token-summary-by-address)
-  - [/v1/indexer/address/{address}/brc20/summary-by-height/{height} (Get the BRC20 token summary by address and height.) ](#get-the-brc20-token-summary-by-address-and-height)
-  - [/v1/indexer/address/{address}/brc20/{ticker}/info (Get the BRC20 token info by address and ticker.) ](#get-the-brc20-token-info-by-address-and-ticker)
-  - [/v1/indexer/address/{address}/brc20/history (Get the full history of BRC20 by address.) ](#get-the-full-history-of-brc20-by-address)
-  - [/v1/indexer/address/{address}/brc20/{ticker}/history (Get the full history of BRC20 by address and ticker.) ](#get-the-full-history-of-brc20-by-address-and-ticker)
-  - [/v1/indexer/address/{address}/brc20/{ticker}/transferable-inscriptions (Get the transferable inscriptions list of BRC20 by address.) ](#get-the-transferable-inscriptions-list-of-brc20-by-address)
-  - [/v1/indexer/brc20-module/{module}/history (Get the history of BRC20 Module by address.) ](#get-the-history-of-brc20-module-by-address)
-  - [/v1/indexer/brc20-module/withdraw-history (Get the withdraw history of BRC20.) ](#get-the-withdraw-history-of-brc20)
+| Route | Summary |
+| ----- | ------- |
+| [GET /v1/indexer/brc20/bestheight](#get-the-best-block-height-of-brc20-data) | Get the best block height of BRC20 data |
+| [GET /v1/indexer/brc20/list](#get-the-tiker-list-of-brc20-token) | Get the tiker list of BRC20 token. |
+| [GET /v1/indexer/brc20/status](#get-the-status-of-brc20-list) | Get the status of BRC20 list. |
+| [GET /v1/indexer/brc20/{ticker}/info](#get-the-infomation-of-brc20-by-ticker) | Get the infomation of BRC20 by ticker |
+| [GET /v1/indexer/brc20/{ticker}/holders](#get-the-holders-of-brc20-by-ticker) | Get the holders of BRC20 by ticker. |
+| [GET /v1/indexer/brc20/{ticker}/history](#get-the-full-history-of-brc20-by-ticker) | Get the full history of BRC20 by ticker. |
+| [GET /v1/indexer/brc20/{ticker}/tx/{txid}/history](#get-the-full-history-of-brc20-by-address) | Get the full history of BRC20 by address. |
+| [GET /v1/indexer/brc20/history-by-height/{height}](#get-the-tiker-list-of-brc20-token-by-height) | Get the tiker list of BRC20 token by height. |
+| [GET /v1/indexer/address/{address}/brc20/summary](#get-the-brc20-token-summary-by-address) | Get the BRC20 token summary by address. |
+| [GET /v1/indexer/address/{address}/brc20/summary-by-height/{height}](#get-the-brc20-token-summary-by-address-and-height) | Get the BRC20 token summary by address and height. |
+| [GET /v1/indexer/address/{address}/brc20/{ticker}/info](#get-the-brc20-token-info-by-address-and-ticker) | Get the BRC20 token info by address and ticker. |
+| [GET /v1/indexer/address/{address}/brc20/history](#get-the-full-history-of-brc20-by-address) | Get the full history of BRC20 by address. |
+| [GET /v1/indexer/address/{address}/brc20/{ticker}/history](#get-the-full-history-of-brc20-by-address-and-ticker) | Get the full history of BRC20 by address and ticker. |
+| [GET /v1/indexer/address/{address}/brc20/{ticker}/transferable-inscriptions](#get-the-transferable-inscriptions-list-of-brc20-by-address) | Get the transferable inscriptions list of BRC20 by address. |
+| [GET /v1/indexer/brc20-module/{module}/history](#get-the-history-of-brc20-module-by-address) | Get the history of BRC20 Module by address. |
+| [GET /v1/indexer/brc20-module/withdraw-history](#get-the-withdraw-history-of-brc20) | Get the withdraw history of BRC20. |
 
 ---
 

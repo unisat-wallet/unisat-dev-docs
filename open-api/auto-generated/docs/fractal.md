@@ -5,14 +5,14 @@ This API is limited to Fractal only. It provides endpoints to interact with the 
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
 ---
-
 ## 📑 Table of Contents
 
-- [Fractal](#fractal)
-  - [/v1/public/fractal/supply (Get circulating FB in fractal mainnet) ](#get-circulating-fb-in-fractal-mainnet)
-  - [/v1/public/fractal/total-supply (Get total supply FB in fractal mainnet) ](#get-total-supply-fb-in-fractal-mainnet)
-  - [/v1/public/address/total (Get total address) ](#get-total-address)
-  - [/v1/public/address/rich-list (Get address rich list) ](#get-address-rich-list)
+| Route | Summary |
+| ----- | ------- |
+| [GET /v1/public/fractal/supply](#get-circulating-fb-in-fractal-mainnet) | Get circulating FB in fractal mainnet |
+| [GET /v1/public/fractal/total-supply](#get-total-supply-fb-in-fractal-mainnet) | Get total supply FB in fractal mainnet |
+| [GET /v1/public/address/total](#get-total-address) | Get total address |
+| [GET /v1/public/address/rich-list](#get-address-rich-list) | Get address rich list |
 
 ---
 

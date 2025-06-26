@@ -5,12 +5,12 @@ Fractal Only API for CAT20 DEX operations. This API provides endpoints to intera
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
 ---
-
 ## 📑 Table of Contents
 
-- [CAT20-DEX](#cat20-dex)
-  - [/v1/cat20-dex/getTokenPrice (Get token price) ](#get-token-price)
-  - [/v1/cat20-dex/getMarketStats (Get the market stats) ](#get-the-market-stats)
+| Route | Summary |
+| ----- | ------- |
+| [GET /v1/cat20-dex/getTokenPrice](#get-token-price) | Get token price |
+| [GET /v1/cat20-dex/getMarketStats](#get-the-market-stats) | Get the market stats |
 
 ---
 

@@ -5,28 +5,28 @@ This API provides endpoints for alkanes marketplace services
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
 ---
-
 ## 📑 Table of Contents
 
-- [MarketPlace-Alkanes](#marketplace-alkanes)
-  - [/v3/market/alkanes/auction/alkanes_types (Get statistical data) ](#get-statistical-data)
-  - [/v3/market/alkanes/auction/alkanes_types_specified (Get statistical data for specified alkanes.) ](#get-statistical-data-for-specified-alkanes)
-  - [/v3/market/alkanes/auction/list (Retrieve the list information of the market.) ](#retrieve-the-list-information-of-the-market)
-  - [/v3/market/alkanes/auction/actions (Get information on listings, delistings, and sales.) ](#get-information-on-listings-delistings-and-sales)
-  - [/v3/market/alkanes/auction/create_put_on (Create listing order.) ](#create-listing-order)
-  - [/v3/market/alkanes/auction/confirm_put_on (Confirm listing order.) ](#confirm-listing-order)
-  - [/v3/market/alkanes/auction/create_bid_prepare (Return params before creating purchase order.) ](#return-params-before-creating-purchase-order)
-  - [/v3/market/alkanes/auction/create_bid (Create purchase order.) ](#create-purchase-order)
-  - [/v3/market/alkanes/auction/confirm_bid (Confirm purchase order.) ](#confirm-purchase-order)
-  - [/v3/market/alkanes/auction/create_put_off (Create delisting order.) ](#create-delisting-order)
-  - [/v3/market/alkanes/auction/confirm_put_off (Confirm delisting order.) ](#confirm-delisting-order)
-  - [/v3/market/alkanes/auction/create_modify_price (Create the order for price adjustment.) ](#create-the-order-for-price-adjustment)
-  - [/v3/market/alkanes/auction/confirm_modify_price (Confirm the order for price adjustment.) ](#confirm-the-order-for-price-adjustment)
-  - [/v3/market/alkanes/auction/create_batch_put_on (Create batch listing order.) ](#create-batch-listing-order)
-  - [/v3/market/alkanes/auction/confirm_batch_put_on (Confirm batch listing order.) ](#confirm-batch-listing-order)
-  - [/v3/market/alkanes/auction/create_batch_bid_prepare (Return params before creating purchase order.) ](#return-params-before-creating-purchase-order)
-  - [/v3/market/alkanes/auction/create_batch_bid (Create purchase order.) ](#create-purchase-order)
-  - [/v3/market/alkanes/auction/confirm_batch_bid (Confirm purchase order.) ](#confirm-purchase-order)
+| Route | Summary |
+| ----- | ------- |
+| [POST /v3/market/alkanes/auction/alkanes_types](#get-statistical-data) | Get statistical data |
+| [POST /v3/market/alkanes/auction/alkanes_types_specified](#get-statistical-data-for-specified-alkanes) | Get statistical data for specified alkanes. |
+| [POST /v3/market/alkanes/auction/list](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
+| [POST /v3/market/alkanes/auction/actions](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
+| [POST /v3/market/alkanes/auction/create_put_on](#create-listing-order) | Create listing order. |
+| [POST /v3/market/alkanes/auction/confirm_put_on](#confirm-listing-order) | Confirm listing order. |
+| [POST /v3/market/alkanes/auction/create_bid_prepare](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
+| [POST /v3/market/alkanes/auction/create_bid](#create-purchase-order) | Create purchase order. |
+| [POST /v3/market/alkanes/auction/confirm_bid](#confirm-purchase-order) | Confirm purchase order. |
+| [POST /v3/market/alkanes/auction/create_put_off](#create-delisting-order) | Create delisting order. |
+| [POST /v3/market/alkanes/auction/confirm_put_off](#confirm-delisting-order) | Confirm delisting order. |
+| [POST /v3/market/alkanes/auction/create_modify_price](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
+| [POST /v3/market/alkanes/auction/confirm_modify_price](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
+| [POST /v3/market/alkanes/auction/create_batch_put_on](#create-batch-listing-order) | Create batch listing order. |
+| [POST /v3/market/alkanes/auction/confirm_batch_put_on](#confirm-batch-listing-order) | Confirm batch listing order. |
+| [POST /v3/market/alkanes/auction/create_batch_bid_prepare](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
+| [POST /v3/market/alkanes/auction/create_batch_bid](#create-purchase-order) | Create purchase order. |
+| [POST /v3/market/alkanes/auction/confirm_batch_bid](#confirm-purchase-order) | Confirm purchase order. |
 
 ---
 
