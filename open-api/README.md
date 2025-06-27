@@ -16,7 +16,7 @@ UniSat Open APIs provide standardized RESTful interfaces for accessing blockchai
 
 | API Category      | Description                                     | Documentation Link                                                       |
 | ----------------- | ----------------------------------------------- | ------------------------------------------------------------------------ |
-| Blockchain Level  | Core blockchain and transaction indexing        | [`basic-indexer.md`](./auto-generated/docs/basic-indexer.md)             |
+| Blockchain Level  | Core blockchain and transaction indexing        | [`blockchain-indexer.md`](./auto-generated/docs/blockchain-indexer.md)   |
 | Inscription Level | Indexing of inscriptions                        | [`inscription-indexer.md`](./auto-generated/docs/inscription-indexer.md) |
 | BRC20             | Indexing and data for BRC20 tokens              | [`brc20-indexer.md`](./auto-generated/docs/brc20-indexer.md)             |
 | Runes             | Indexing for Runes tokens                       | [`runes-indexer.md`](./auto-generated/docs/runes-indexer.md)             |
@@ -36,11 +36,11 @@ UniSat Open APIs provide standardized RESTful interfaces for accessing blockchai
 
 ### Fractal Bitcoin Specific API
 
-| API Category           | Description                                     | Documentation Link                                                             |
-| ---------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------ |
-| Fractal                | Fractal network related APIs                    | [`fractal.md`](./auto-generated/docs/fractal.md)                               |
-| BRC20 Swap             | Swap functionality for BRC20 tokens             | [`brc20-swap.md`](./auto-generated/docs/brc20-swap.md)                         |
-| CAT20 DEX              | Decentralized exchange for CAT20 tokens         | [`cat20-dex.md`](./auto-generated/docs/cat20-dex.md)                           |
+| API Category | Description                             | Documentation Link                                     |
+| ------------ | --------------------------------------- | ------------------------------------------------------ |
+| Fractal      | Fractal network related APIs            | [`fractal.md`](./auto-generated/docs/fractal.md)       |
+| BRC20 Swap   | Swap functionality for BRC20 tokens     | [`brc20-swap.md`](./auto-generated/docs/brc20-swap.md) |
+| CAT20 DEX    | Decentralized exchange for CAT20 tokens | [`cat20-dex.md`](./auto-generated/docs/cat20-dex.md)   |
 
 ---
 

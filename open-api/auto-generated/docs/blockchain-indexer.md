@@ -1,6 +1,6 @@
-# Basic Indexer API
+# Blockchain API
 
-Basic Indexer API is a RESTful API for accessing Bitcoin blockchain data. It provides endpoints to retrieve information about blocks, transactions, addresses, and more. The API supports both mainnet and testnet environments.
+Blockchain API is a RESTful API for accessing Bitcoin blockchain data. It provides endpoints to retrieve information about blocks, transactions, addresses, and more. The API supports both mainnet and testnet environments.
 
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 

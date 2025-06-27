@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
-  title: Basic Indexer API
+  title: Blockchain API
   version: 1.0.4
   description: >-
-    Basic Indexer API is a RESTful API for accessing Bitcoin blockchain data.
+    Blockchain API is a RESTful API for accessing Bitcoin blockchain data.
     It provides endpoints to retrieve information about blocks, transactions,
     addresses, and more. The API supports both mainnet and testnet environments.
   contact:

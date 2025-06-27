@@ -1,5 +1,5 @@
 swagger:
-  - basic-indexer
+  - blockchain-indexer
   - inscription-indexer
   - brc20-indexer
   - runes-indexer
@@ -15,7 +15,7 @@ swagger:
   - cat20-dex
   - collection-indexer
 doc:
-  - basic-indexer
+  - blockchain-indexer
   - inscription-indexer
   - brc20-indexer
   - runes-indexer
