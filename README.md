@@ -2,13 +2,39 @@
 
 Welcome to the UniSat developer resource hub. Here you will find all the essential API specifications, wallet integration guides, and tools to help you build and integrate with UniSat Wallet and related services.
 
-## Getting Start
+## Available API Documentation
 
-### 🚀 Open APIs
+[`Open API README.md`](./open-api/README.md)
 
-Explore our officially supported APIs to interact with the UniSat ecosystem:
+### Blockchain Indexing API
 
-See [open-api/README.md](./open-api/README.md)
+| API Category      | Description                                     | Documentation Link                                                       |
+| ----------------- | ----------------------------------------------- | ------------------------------------------------------------------------ |
+| Blockchain Level  | Core blockchain and transaction indexing        | [`basic-indexer.md`](./open-api/auto-generated/docs/basic-indexer.md)             |
+| Inscription Level | Indexing of inscriptions                        | [`inscription-indexer.md`](./open-api/auto-generated/docs/inscription-indexer.md) |
+| BRC20             | Indexing and data for BRC20 tokens              | [`brc20-indexer.md`](./open-api/auto-generated/docs/brc20-indexer.md)             |
+| Runes             | Indexing for Runes tokens                       | [`runes-indexer.md`](./open-api/auto-generated/docs/runes-indexer.md)             |
+| Alkanes           | Developer-friendly API built on Alkanes indexer | [`alkanes-indexer.md`](./open-api/auto-generated/docs/alkanes-indexer.md)         |
+| Collection        | NFT collections indexing                        | [`collection-indexer.md`](./open-api/auto-generated/docs/collection-indexer.md)   |
+
+### UniSat Services API
+
+| API Category           | Description                         | Documentation Link                                                             |
+| ---------------------- | ----------------------------------- | ------------------------------------------------------------------------------ |
+| UniSat Inscribe        | Inscription creation and management | [`inscribe.md`](./open-api/auto-generated/docs/inscribe.md)                             |
+| BRC20 Marketplace      | BRC20 marketplace                   | [`brc20-marketplace.md`](./open-api/auto-generated/docs/brc20-marketplace.md)           |
+| Runes Marketplace      | Runes marketplace                   | [`runes-marketplace.md`](./open-api/auto-generated/docs/runes-marketplace.md)           |
+| Alkanes Marketplace    | Alkanes marketplace                 | [`alkanes-marketplace.md`](./open-api/auto-generated/docs/alkanes-marketplace.md)       |
+| Collection Marketplace | Ordinals Collection marketplace     | [`collection-marketplace.md`](./open-api/auto-generated/docs/collection-marketplace.md) |
+| Domain Marketplace     | Ordinals Domain marketplace         | [`domain-marketplace.md`](./open-api/auto-generated/docs/domain-marketplace.md)         |
+
+### Fractal Bitcoin Specific API
+
+| API Category           | Description                                     | Documentation Link                                                             |
+| ---------------------- | ----------------------------------------------- | ------------------------------------------------------------------------------ |
+| Fractal                | Fractal network related APIs                    | [`fractal.md`](./open-api/auto-generated/docs/fractal.md)                               |
+| BRC20 Swap             | Swap functionality for BRC20 tokens             | [`brc20-swap.md`](./open-api/auto-generated/docs/brc20-swap.md)                         |
+| CAT20 DEX              | Decentralized exchange for CAT20 tokens         | [`cat20-dex.md`](./open-api/auto-generated/docs/cat20-dex.md)                           |
 
 ### 🔧 Wallet Integration
 
@@ -26,44 +52,3 @@ curl -O https://raw.githubusercontent.com/unisat-wallet/unisat-dev-support/main/
 
 
 ```
-
-## build
-
-Clone the repository and install dependencies:
-
-```
-git clone https://github.com/unisat-wallet/unisat-dev-support
-yarn install
-
-```
-
-Build OpenAPI swagger files:
-
-```bash
-yarn build:openapi-swagger
-```
-
-Build error codes:
-
-```bash
-yarn build:error-codes
-```
-
-## Contribute
-
-We welcome contributions! Please follow these steps to contribute:
-
-- Fork the repository
-- Create a feature branch
-  ```
-  git checkout -b feature/your-feature
-  ```
-- Commit your changes
-  ```
-  git commit -m 'Add some feature'
-  ```
-- Push to the branch
-  ```
-  git push origin feature/your-feature
-  ```
-- Open a Pull Request on GitHub
