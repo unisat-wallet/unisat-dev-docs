@@ -2,6 +2,39 @@
 
 The following provides several methods to list the wallet's assets and construct corresponding send transactions.
 
+### getBalanceV2
+
+```
+unisat.getBalanceV2()
+```
+
+Get BTC balance
+
+**Parameters**
+
+none
+
+**Returns**
+
+- `Promise` - `Object`:
+  - `available` - `number` : the available satoshis
+  - `unavailable` - `number` : the unavailable satoshis
+  - `total` - `number` : the total satoshis
+
+**Example**
+
+```javascript
+try {
+    let res = await window.unisat.getBalanceV2();
+    console.log(res)
+} catch (e) {
+    console.log(e);
+}
+
+> {"available":10000,"unavailable":546,"total":10546}
+
+```
+
 ### getBalance
 
 ```
@@ -38,6 +71,22 @@ try {
 }
 
 ```
+
+### getBitcoinUtxos
+
+```
+unisat.getBitcoinUtxos(cursor,size)
+```
+
+GetBitcoinUTXOS
+
+**Parameters**
+
+**Returns**
+
+- `Promise` - `object`:
+  - `txid` - `string`:
+  - `vout` - `integer`:
 
 ### sendBitcoin
 

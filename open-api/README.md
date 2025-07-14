@@ -12,6 +12,8 @@ UniSat Open APIs provide standardized RESTful interfaces for accessing blockchai
 
 ## Available API Documentation
 
+**Recommended Reading:** [BTC Assets and Other Protocol Assets Overview](./btc-and-protocol-assets.md)
+
 ### Blockchain Indexing API
 
 | API Category      | Description                                     | Documentation Link                                                       |

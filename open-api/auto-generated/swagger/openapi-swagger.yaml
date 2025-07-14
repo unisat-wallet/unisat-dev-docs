@@ -841,13 +841,75 @@ paths:
       tags:
         - Addresses
       operationId: getUtxoDataByAddress
-      summary: Get UTXO list by address
+      summary: Get BTCUTXO list by address
       description: >-
         Retrieve the UTXOs of an address that do not contain inscriptions. Note
         that this excludes, but does not completely cover, assets from protocols
         such as Alkanes, Runes, and others. To obtain the UTXOs of an address
         that are available for spending as BTC, please use the available-utxo
         endpoint.
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        '200':
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      cursor:
+                        type: integer
+                      total:
+                        type: integer
+                      totalConfirmed:
+                        type: integer
+                      totalUnconfirmed:
+                        type: integer
+                      totalUnconfirmedSpend:
+                        type: integer
+                      utxo:
+                        type: array
+                        items:
+                          $ref: '#/components/schemas/UTXO'
+        '401':
+          description: Invalid API Key
+  /v1/indexer/address/{address}/all-utxo-data:
+    get:
+      tags:
+        - Addresses
+      operationId: getAllUtxoDataByAddress
+      summary: Get all UTXO list by address
+      description: Retrieve all UTXOs of an address.
       parameters:
         - name: address
           description: Address

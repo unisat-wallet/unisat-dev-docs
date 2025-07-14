@@ -6,6 +6,8 @@ Welcome to the UniSat developer resource hub. Here you will find all the essenti
 
 [`Open API README.md`](./open-api/README.md)
 
+**Recommended Reading:** [BTC Assets and Other Protocol Assets Overview](open-api/btc-and-protocol-assets.md)
+
 ### Blockchain Indexing API
 
 | API Category      | Description                                     | Documentation Link                                                                |

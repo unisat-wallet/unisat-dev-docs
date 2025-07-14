@@ -23,7 +23,8 @@ Blockchain API is a RESTful API for accessing Bitcoin blockchain data. It provid
 | [POST /v1/indexer/local_pushtxs](#push-rawtxs-to-bitcoin-node) | Push rawtxs to bitcoin node. |
 | [GET /v1/indexer/address/{address}/balance](#get-the-balance-by-address) | Get the balance by address |
 | [GET /v1/indexer/address/{address}/history](#get-transaction-history-by-address) | Get transaction history by address |
-| [GET /v1/indexer/address/{address}/utxo-data](#get-utxo-list-by-address) | Get UTXO list by address |
+| [GET /v1/indexer/address/{address}/utxo-data](#get-btcutxo-list-by-address) | Get BTCUTXO list by address |
+| [GET /v1/indexer/address/{address}/all-utxo-data](#get-all-utxo-list-by-address) | Get all UTXO list by address |
 | [GET /v1/indexer/address/{address}/available-balance](#get-available-balance-by-address) | Get available balance by address |
 | [GET /v1/indexer/address/{address}/available-utxo-data](#get-available-utxo-list-by-address) | Get available UTXO list by address |
 
@@ -391,8 +392,8 @@ Get transaction history by address.
 
 ---
 
-### Get UTXO list by address
-<a id="get-utxo-list-by-address"></a>
+### Get BTCUTXO list by address
+<a id="get-btcutxo-list-by-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/utxo-data`  
@@ -400,6 +401,26 @@ Get transaction history by address.
 
 #### Description
 Retrieve the UTXOs of an address that do not contain inscriptions. Note that this excludes, but does not completely cover, assets from protocols such as Alkanes, Runes, and others. To obtain the UTXOs of an address that are available for spending as BTC, please use the available-utxo endpoint.
+
+#### Parameters
+- `address` (path) **(required)**: Address
+- `cursor` (query) **(required)**: Start offset
+- `size` (query) **(required)**: Number of items returned
+
+#### Response (200)
+
+
+---
+
+### Get all UTXO list by address
+<a id="get-all-utxo-list-by-address"></a>
+
+**Method**: `GET`  
+**Path**: `/v1/indexer/address/{address}/all-utxo-data`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Addresses/getAllUtxoDataByAddress)  
+
+#### Description
+Retrieve all UTXOs of an address.
 
 #### Parameters
 - `address` (path) **(required)**: Address
