@@ -47,7 +47,32 @@ This document describes all endpoints and details related to Bitcoin (BTC) balan
 
 ---
 
-## 5. FAQ
+## 5. About Abandoned Inscriptions and UTXO Data
+
+**Background:**
+
+In previous versions, the `inscription-utxo-data` endpoint returned all inscription UTXOs. After a recent upgrade, UTXOs corresponding to "abandoned inscriptions" are now filtered out for efficiency.
+
+**What are abandoned inscriptions?**
+- BRC20 MINT inscriptions
+- BRC20 TRANSFER inscriptions that have already been transferred
+
+These inscriptions do not carry BRC20 assets and account for a large proportion of the index. To improve efficiency and reduce unnecessary data, they are now excluded from the normal inscription list.
+
+**How to access abandoned inscription UTXOs?**
+If you still need access to these UTXOs, please use the new `/abandon-nft-utxo-data` endpoint. This endpoint specifically returns UTXOs for abandoned inscriptions as defined above.
+
+**Balance Calculation Change:**
+- **Old version:**
+  - `Total balance = utxo-data + inscription-utxo-data`
+- **Current version:**
+  - `Total balance = utxo-data + inscription-utxo-data + abandon-nft-utxo-data`
+
+If you have any questions about this change, please contact the UniSat developer support team.
+
+---
+
+## 6. FAQ
 
 **Q: Why is my total balance different from my available balance?**
 A: Total balance includes all assets, including those locked by protocols (inscriptions, Runes, Alkanes, etc.), while available balance only counts spendable BTC.

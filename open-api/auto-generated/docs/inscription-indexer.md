@@ -14,6 +14,7 @@ Inscription Indexer API is a RESTful API for accessing and managing inscriptions
 | [GET /v1/indexer/inscription/events](#get-inscription-events) | Get inscription events |
 | [GET /v1/indexer/address/{address}/inscription-data](#get-inscription-utxo-list-by-address) | Get inscription UTXO list by address |
 | [GET /v1/indexer/address/{address}/inscription-utxo-data](#get-inscription-utxo-list-by-address) | Get inscription UTXO list by address |
+| [GET /v1/indexer/address/{address}/abandon-nft-utxo-data](#get-abandon-nft-utxo-list-by-address) | Get abandon nft UTXO list by address |
 
 ---
 
@@ -89,6 +90,17 @@ Inscription Indexer API is a RESTful API for accessing and managing inscriptions
 **Path**: `/v1/indexer/address/{address}/inscription-utxo-data`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscriptions/getInscriptionUtxoDataByAddress)  
 
+#### Description
+Returns the list of inscription UTXOs for the given address. 
+**Note:** In previous versions, this endpoint returned all inscription UTXOs. After a recent upgrade, UTXOs corresponding to "abandoned inscriptions" are now filtered out. 
+
+**Abandoned inscriptions** refer to:
+- BRC20 MINT inscriptions
+- BRC20 TRANSFER inscriptions that have already been transferred
+
+These inscriptions do not carry BRC20 assets and account for a large proportion of the index. To improve efficiency, they are now excluded from the normal inscription list. If you still need access to these UTXOs, please use the `/abandon-nft-utxo-data` endpoint.
+
+
 #### Parameters
 - `address` (path) **(required)**: Address
 - `cursor` (query) **(required)**: Start offset
@@ -96,6 +108,54 @@ Inscription Indexer API is a RESTful API for accessing and managing inscriptions
 
 #### Response (200)
 
+
+---
+
+### Get abandon nft UTXO list by address
+<a id="get-abandon-nft-utxo-list-by-address"></a>
+
+**Method**: `GET`  
+**Path**: `/v1/indexer/address/{address}/abandon-nft-utxo-data`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscriptions/getAbandonNftUtxoDataByAddress)  
+
+#### Description
+Returns the list of UTXOs for "abandoned inscriptions" for the given address. 
+
+**Abandoned inscriptions** are defined as:
+- BRC20 MINT inscriptions
+- BRC20 TRANSFER inscriptions that have already been transferred
+
+These inscriptions do not carry BRC20 assets and are excluded from the normal `/inscription-utxo-data` results. Use this endpoint if you specifically need to access these UTXOs.
+
+
+#### Parameters
+- `address` (path) **(required)**: Address
+- `cursor` (query) **(required)**: Start offset
+- `size` (query) **(required)**: Number of items returned
+
+#### Response (200)
+
+
+### Notes
+
+**Background:**
+
+In previous versions, the `inscription-utxo-data` endpoint returned all inscription UTXOs. After a recent upgrade, UTXOs corresponding to "abandoned inscriptions" are now filtered out for efficiency.
+
+**What are abandoned inscriptions?**
+- BRC20 MINT inscriptions
+- BRC20 TRANSFER inscriptions that have already been transferred
+
+These inscriptions do not carry BRC20 assets and account for a large proportion of the index. To improve efficiency and reduce unnecessary data, they are now excluded from the normal inscription list.
+
+**How to access abandoned inscription UTXOs?**
+If you still need access to these UTXOs, please use the new `/abandon-nft-utxo-data` endpoint. This endpoint specifically returns UTXOs for abandoned inscriptions as defined above.
+
+**Summary:**
+- `/inscription-utxo-data` now only returns active inscription UTXOs (excluding abandoned ones)
+- `/abandon-nft-utxo-data` returns UTXOs for abandoned inscriptions
+
+If you have any questions about this change, please contact the UniSat developer support team.
 
 ---
 

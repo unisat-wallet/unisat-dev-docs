@@ -200,6 +200,15 @@ paths:
         - Inscriptions
       operationId: getInscriptionUtxoDataByAddress
       summary: Get inscription UTXO list by address
+      description: |
+        Returns the list of inscription UTXOs for the given address. 
+        **Note:** In previous versions, this endpoint returned all inscription UTXOs. After a recent upgrade, UTXOs corresponding to "abandoned inscriptions" are now filtered out. 
+        
+        **Abandoned inscriptions** refer to:
+        - BRC20 MINT inscriptions
+        - BRC20 TRANSFER inscriptions that have already been transferred
+        
+        These inscriptions do not carry BRC20 assets and account for a large proportion of the index. To improve efficiency, they are now excluded from the normal inscription list. If you still need access to these UTXOs, please use the `/abandon-nft-utxo-data` endpoint.
       parameters:
         - name: address
           description: Address
@@ -253,6 +262,76 @@ paths:
                         type: array
                         items:
                           $ref: "#/components/schemas/UTXO"
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/address/{address}/abandon-nft-utxo-data:
+    get:
+      tags:
+        - Inscriptions
+      operationId: getAbandonNftUtxoDataByAddress
+      summary: Get abandon nft UTXO list by address
+      description: |
+        Returns the list of UTXOs for "abandoned inscriptions" for the given address. 
+        
+        **Abandoned inscriptions** are defined as:
+        - BRC20 MINT inscriptions
+        - BRC20 TRANSFER inscriptions that have already been transferred
+        
+        These inscriptions do not carry BRC20 assets and are excluded from the normal `/inscription-utxo-data` results. Use this endpoint if you specifically need to access these UTXOs.
+      parameters:
+        - name: address
+          description: Address
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      cursor:
+                        type: integer
+                      total:
+                        type: integer
+                      totalConfirmed:
+                        type: integer
+                      totalUnconfirmed:
+                        type: integer
+                      totalUnconfirmedSpend:
+                        type: integer
+                      utxo:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AbandonNFTUTXO"
         "401":
           description: Invalid API Key
 
@@ -419,6 +498,28 @@ components:
         vout:
           type: integer
           example: 0
+    AbandonNFTUTXO:
+      type: object
+      properties:
+        balance:
+          type: integer
+          example: 10000
+        cursor:
+          type: integer
+          example: 0
+        nftMintCount:
+          type: integer
+          example: 1
+        nftTransferCount:
+          type: integer
+          example: 0
+        total:
+          type: integer
+          example: 1
+        utxo:
+          type: array
+          items:
+            $ref: "#/components/schemas/UTXO"
   securitySchemes:
     bearerAuth:
       type: http
