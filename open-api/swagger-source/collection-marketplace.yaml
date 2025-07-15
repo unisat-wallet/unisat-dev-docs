@@ -387,8 +387,6 @@ paths:
                   properties:
                     nftType:
                       enum:
-                        - brc20
-                        - domain
                         - collection
                       type: string
                     address:
@@ -617,9 +615,7 @@ paths:
                   properties:
                     nftType:
                       enum:
-                        - brc20
                         - collection
-                        - domain
                       type: string
                     address:
                       type: string

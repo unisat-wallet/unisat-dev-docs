@@ -189,7 +189,7 @@ paths:
                   properties:
                     nftType:
                       enum:
-                        - brc20
+                        - runes
                       type: string
                     address:
                       type: string
@@ -334,7 +334,7 @@ paths:
                   properties:
                     nftType:
                       enum:
-                        - brc20
+                        - runes
                       type: string
                     address:
                       type: string
