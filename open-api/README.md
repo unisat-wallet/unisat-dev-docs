@@ -44,6 +44,18 @@ UniSat Open APIs provide standardized RESTful interfaces for accessing blockchai
 | BRC20 Swap   | Swap functionality for BRC20 tokens     | [`brc20-swap.md`](./auto-generated/docs/brc20-swap.md) |
 | CAT20 DEX    | Decentralized exchange for CAT20 tokens | [`cat20-dex.md`](./auto-generated/docs/cat20-dex.md)   |
 
+## Fractal OpenAPI Inscribe Fee Rules
+
+- **[Event Inscribe Fee Rules (July 22 – Sep 30, 2024)](./fractal-openapi-inscribe-fee-rules.md)**  
+  Special rules and discounts during the event period.
+- **[Standard Inscribe Fee Rules](./fractal-openapi-inscribe-fee-rules-standard.md)**  
+  Regular rules effective outside of event periods.
+
+## Bitcoin OpenAPI Inscribe Fee Rules
+
+- **[Bitcoin Inscribe Fee Rules](./btc-inscribe-fee-rules.md)**  
+  Service fee and per-inscription fee details for Bitcoin Mainnet.
+
 ---
 
 ## Accessing API Documentation
