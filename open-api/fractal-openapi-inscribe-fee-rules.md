@@ -1,4 +1,7 @@
-# Fractal OpenAPI Fee Rules: July 22 – Sep 30, 2024 Event
+# Fractal OpenAPI Inscribe Service Fee Rules: July 22 – Sep 30, 2024 Event
+
+> **Note:**
+> This document describes only the service fee (platform fee) for inscribe orders. The total amount to pay for an order also includes the minimum UTXO required for all inscriptions (minUtxoTotal), the estimated miner fee (networkSats), and any developer fee (devFee). For the full payment formula, see the [Inscribe FAQ](./inscribe-faq.md).
 
 ## Event Scope
 
@@ -21,7 +24,7 @@
 
 ---
 
-## Event Fee Rules
+## Service Fee Rules (Event)
 
 - **For n ≤ 6:** 100,000 sats per inscription
 - **For n > 6:**  
@@ -29,7 +32,7 @@
   (i.e., maximum fee is 0.13 FB per order)
 
 > **Notes:**  
-> - 1 FB = 100,000,000 sats (1 BTC)  
+> - 1 FB = 100,000,000 sats  
 > - The fee is always rounded up to the nearest satoshi  
 > - For orders above 500 inscriptions, the fee is capped at 0.13 FB
 
@@ -54,8 +57,16 @@
 | 500      | 0.13     | 13,000,000 | Event discount, cap  |
 | 1000     | 0.13     | 13,000,000 | Capped at 500 limit  |
 
+---
+
+## Additional Notes
+
+- No client type distinction: Web and App use the same rule
+- No special discount for high-point users
+- Points rule unchanged: 1 point per 100 inscriptions
+- All fees are settled in sats, rounded up
 
 ---
 
 **Summary:**  
-During the July 22 – Sep 30, 2024 event period, Fractal OpenAPI applies a bulk discount for n > 6 and increases the minting limit to 1000 per order. After the event, standard rules will apply (see Standard Fee Rules documentation).
+This document describes only the service fee (platform fee) for inscribe orders during the July 22 – Sep 30, 2024 event period. The total amount to pay also includes minUtxoTotal, networkSats, and devFee. For the full payment formula, see the [Inscribe FAQ](./inscribe-faq.md). After the event, standard rules will apply (see Standard Service Fee Rules documentation).

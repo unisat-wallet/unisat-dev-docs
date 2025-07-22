@@ -1,4 +1,7 @@
-# Bitcoin OpenAPI Fee Rules
+# Bitcoin OpenAPI Inscribe Service Fee Rules (V2)
+
+> **Note:**
+> This document describes only the service fee (platform fee) for inscribe orders. The total amount to pay for an order also includes the minimum UTXO required for all inscriptions (minUtxoTotal), the estimated miner fee (networkSats), and any developer fee (devFee). For the full payment formula, see the [Inscribe FAQ](./inscribe-faq.md).
 
 ## Scope
 
@@ -20,7 +23,7 @@
 
 ---
 
-## Fee Rules
+## Service Fee Rules (V2)
 
 - **Base service fee:** 3000 sats
 - **Per-inscription fee:** 150 sats for each inscription above the free quota
@@ -54,9 +57,4 @@
 
 ## Summary
 
-- The first 20 inscriptions in each order are free.
-- After the free quota, each additional inscription costs 150 sats, with a base fee of 3000 sats.
-- The maximum service fee per order is capped at 4999 sats.
-- Maximum 1000 inscriptions per order.
-
----
+This document describes only the service fee (platform fee) for inscribe orders. The total amount to pay also includes minUtxoTotal, networkSats, and devFee. For the full payment formula, see the [Inscribe FAQ](./inscribe-faq.md).

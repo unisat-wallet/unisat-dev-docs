@@ -1,4 +1,7 @@
-# Fractal OpenAPI Standard Fee Rules
+# Fractal OpenAPI Standard Inscribe Service Fee Rules
+
+> **Note:**
+> This document describes only the service fee (platform fee) for inscribe orders. The total amount to pay for an order also includes the minimum UTXO required for all inscriptions (minUtxoTotal), the estimated miner fee (networkSats), and any developer fee (devFee). For the full payment formula, see the [Inscribe FAQ](./inscribe-faq.md).
 
 ## Scope
 
@@ -20,12 +23,12 @@
 
 ---
 
-## Standard Fee Rules
+## Service Fee Rules (Standard)
 
 - **For all orders:** 100,000 sats per inscription
 
 > **Notes:**  
-> - 1 FB = 100,000,000 sats (1 BTC)  
+> - 1 FB = 100,000,000 sats   
 > - The fee is always rounded up to the nearest satoshi
 
 ---
@@ -45,8 +48,16 @@
 | 10       | 0.01     | 1,000,000  |
 | 100      | 0.1      | 10,000,000 |
 
+---
+
+## Additional Notes
+
+- No client type distinction: Web and App use the same rule
+- No special discount for high-point users
+- Points rule: 1 point per 100 inscriptions
+- All fees are settled in sats, rounded up
 
 ---
 
 **Summary:**  
-These are the standard Fractal OpenAPI fee rules, effective outside of special event periods. For event-specific rules, refer to the relevant event documentation. 
+This document describes only the service fee (platform fee) for inscribe orders. The total amount to pay also includes minUtxoTotal, networkSats, and devFee. For the full payment formula, see the [Inscribe FAQ](./inscribe-faq.md). For event-specific rules, refer to the relevant event documentation. 
