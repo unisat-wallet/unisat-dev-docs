@@ -1093,6 +1093,9 @@ components:
         vout:
           type: integer
           example: 0
+        isLowFee:
+          type: boolean
+          description: Whether the UTXO has a low fee rate (less than 1 sat/vB)
     InscriptionItem:
       type: object
       properties:
