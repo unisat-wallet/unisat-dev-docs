@@ -24,7 +24,7 @@ tags:
   - name: Transactions
     description: Transactions
   - name: Addresses
-    description: Addresses
+    description: Please read the [Address Balance & UTXO Guide](https://github.com/unisat-wallet/unisat-dev-docs/blob/master/open-api/btc-balance-utxo.md) before using Address related APIs.
 
 paths:
   /v1/indexer/blockchain/info:
@@ -796,8 +796,7 @@ paths:
         - Addresses
       operationId: getAllUtxoDataByAddress
       summary: Get all UTXO list by address
-      description:
-        Retrieve all UTXOs of an address. 
+      description: Retrieve all UTXOs of an address.
       parameters:
         - name: address
           description: Address
@@ -868,6 +867,13 @@ paths:
           required: true
           schema:
             type: string
+        - name: withLowFee
+          description: Whether to include UTXOs balance with low fee rate (less than 1 sat/vB)
+          in: query
+          required: false
+          schema:
+            type: boolean
+          example: false
       responses:
         "200":
           description: Successful operation
@@ -931,6 +937,13 @@ paths:
           schema:
             type: integer
           example: 16
+        - name: withLowFee
+          description: Whether to include UTXOs with low fee rate (less than 1 sat/vB)
+          in: query
+          required: false
+          schema:
+            type: boolean
+          example: false
       responses:
         "200":
           description: Successful operation
@@ -1008,8 +1021,7 @@ components:
           example: ""
         maxFeeRate:
           type: number
-          description: maxfeerate (optional)
-          example: 1000
+          description: maxfeerate btc/kvB(optional and must less than 1 btc/kvB)
     LocalPushtxsParams:
       type: object
       properties:
@@ -1021,8 +1033,7 @@ components:
             example: ""
         maxFeeRate:
           type: number
-          description: maxfeerate (optional)
-          example: 1000
+          description: maxfeerate btc/kvB(optional and must less than 1 btc/kvB)
     TxHistoryItem:
       type: object
       properties:

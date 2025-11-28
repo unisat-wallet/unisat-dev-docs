@@ -444,6 +444,7 @@ This interface will return the current address's available balance that can be u
 
 #### Parameters
 - `address` (path) **(required)**: Address
+- `withLowFee` (query) : Whether to include UTXOs balance with low fee rate (less than 1 sat/vB)
 
 #### Response (200)
 
@@ -464,6 +465,7 @@ This interface will return the current address's available UTXO list that can be
 - `address` (path) **(required)**: Address
 - `cursor` (query) **(required)**: Start offset
 - `size` (query) **(required)**: Number of items returned
+- `withLowFee` (query) : Whether to include UTXOs with low fee rate (less than 1 sat/vB)
 
 #### Response (200)
 

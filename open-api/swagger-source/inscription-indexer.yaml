@@ -203,11 +203,11 @@ paths:
       description: |
         Returns the list of inscription UTXOs for the given address. 
         **Note:** In previous versions, this endpoint returned all inscription UTXOs. After a recent upgrade, UTXOs corresponding to "abandoned inscriptions" are now filtered out. 
-        
+
         **Abandoned inscriptions** refer to:
         - BRC20 MINT inscriptions
         - BRC20 TRANSFER inscriptions that have already been transferred
-        
+
         These inscriptions do not carry BRC20 assets and account for a large proportion of the index. To improve efficiency, they are now excluded from the normal inscription list. If you still need access to these UTXOs, please use the `/abandon-nft-utxo-data` endpoint.
       parameters:
         - name: address
@@ -273,11 +273,11 @@ paths:
       summary: Get abandon nft UTXO list by address
       description: |
         Returns the list of UTXOs for "abandoned inscriptions" for the given address. 
-        
+
         **Abandoned inscriptions** are defined as:
         - BRC20 MINT inscriptions
         - BRC20 TRANSFER inscriptions that have already been transferred
-        
+
         These inscriptions do not carry BRC20 assets and are excluded from the normal `/inscription-utxo-data` results. Use this endpoint if you specifically need to access these UTXOs.
       parameters:
         - name: address

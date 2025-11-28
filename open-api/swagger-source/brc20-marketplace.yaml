@@ -350,7 +350,7 @@ paths:
                   properties:
                     nftType:
                       enum:
-                        - alkanes
+                        - brc20
                       type: string
                     address:
                       type: string
@@ -536,7 +536,7 @@ paths:
                   properties:
                     nftType:
                       enum:
-                        - alkanes
+                        - brc20
                       type: string
                     address:
                       type: string
