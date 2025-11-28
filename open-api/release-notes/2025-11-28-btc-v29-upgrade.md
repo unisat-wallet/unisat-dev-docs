@@ -6,13 +6,15 @@ This update includes a full upgrade of the Bitcoin node to **Bitcoin Core v29**,
 
 ---
 
-## 1. Bitcoin Node Upgraded to Bitcoin Core v29
+## 1. Broadcast API Updates
 
-UniSat backend nodes have been upgraded to **Bitcoin Core v29**, enabling:
+The `local_pushtx` API now supports broadcasting **low-fee-rate transactions**
 
-- Support for broadcasting low-fee-rate transactions
-- Ability for APIs to return UTXOs associated with low-fee transactions
-- Support for low-fee-rate inscriptions in the Inscribe API
+This enhancement ensures that low-fee transactions are handled more efficiently and are more likely to be reflected accurately on third-party mempool explorers.
+
+Documentation:
+
+- [/v1/indexer/local_pushtx](../auto-generated/docs/blockchain-indexer.md#push-rawtx-to-bitcoin-node)
 
 ---
 
@@ -25,7 +27,7 @@ With Bitcoin Core v29, UTXOs from low-fee transactions are now tracked and optio
 - This endpoint **now returns low-fee UTXOs by default**.
 - No additional parameters are required.
 
-Documentation: [btc-balance-utxo.md](../btc-balance-utxo.md)
+Documentation:
 
 - [/v1/indexer/address/{address}/utxo-data](../auto-generated/docs/blockchain-indexer.md#get-btcutxo-list-by-address)
 - [BTC Balance and UTXO](../btc-balance-utxo.md)
