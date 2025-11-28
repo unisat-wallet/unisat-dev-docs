@@ -1,0 +1,1051 @@
+openapi: 3.0.3
+info:
+  title: BRC20 Prog API
+  version: 1.0.0
+  description: >-
+    BRC20 Prog API provides comprehensive BRC20 token data query services, including token information, holder data, historical records, and more.
+    The system uses global memory caching technology to quickly respond to various query requests and supports efficient filtering queries based on indexes.
+  contact:
+    email: contact@brc20-prog.com
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+  - url: https://open-api-signet.unisat.io
+tags:
+  - name: BRC20-Prog
+    description: BRC20-Prog token related interfaces
+paths:
+  /v1/indexer/brc20-prog/bestheight:
+    get:
+      tags:
+        - BRC20-Prog
+      operationId: getBestHeight
+      summary: Get best height
+      description: "Get current blockchain best height"
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/BRC20TickerBestHeightInfo"
+
+  /v1/indexer/brc20-prog/list:
+    get:
+      tags:
+        - BRC20-Prog
+      operationId: getTickerList
+      summary: Get ticker list
+      description: "Get all BRC20 token list"
+      parameters:
+        - name: start
+          in: query
+          description: "Start offset, default 0"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: "Number of items returned, default 20, max 500"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 500
+            default: 20
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/BRC20TickerListResp"
+
+  /v1/indexer/brc20-prog/status:
+    get:
+      tags:
+        - BRC20-Prog
+      operationId: getTickerStatus
+      summary: Get ticker status
+      description: "Get ticker status information with multiple filtering and sorting options"
+      parameters:
+        - name: ticker
+          in: query
+          description: "Filter by ticker name"
+          required: false
+          schema:
+            type: string
+        - name: complete
+          in: query
+          description: "Filter by mint status"
+          required: false
+          schema:
+            type: string
+            enum: [yes, no, all]
+        - name: sort
+          in: query
+          description: "Sort field"
+          required: false
+          schema:
+            type: string
+            enum: [holders, deploy, transactions]
+        - name: start
+          in: query
+          description: "Start offset, default 0"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: "Number of items returned, default 20"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 500
+            default: 20
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/BRC20TickerStatusResp"
+
+  /v1/indexer/brc20-prog/{ticker}/info:
+    get:
+      tags:
+        - BRC20-Prog
+      operationId: getTickerInfo
+      summary: Get ticker info
+      description: "Get detailed information of specified ticker"
+      parameters:
+        - name: ticker
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/BRC20Ticker"
+
+  /v1/indexer/brc20-prog/history-by-height/{height}:
+    get:
+      tags:
+        - BRC20-Prog
+      operationId: getTickerHistoryByHeight
+      summary: Get ticker history by height
+      description: "Get ticker history records at specified block height"
+      parameters:
+        - name: height
+          in: path
+          description: "Block height"
+          required: true
+          schema:
+            type: integer
+        - name: start
+          in: query
+          description: "Start offset, default 0"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: "Number of items returned, default 20"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 500
+            default: 20
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/BRC20TickerHistoryInfo"
+
+  /v1/indexer/brc20-prog/{ticker}/holders:
+    get:
+      tags:
+        - BRC20-Prog
+      operationId: getTickerHolders
+      summary: Get ticker holders
+      description: "Get holder list of specified ticker"
+      parameters:
+        - name: ticker
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "Start offset, default 0"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: "Number of items returned, default 20"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 500
+            default: 20
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/BRC20TickerHoldersResp"
+
+  /v1/indexer/brc20-prog/{ticker}/history:
+    get:
+      tags:
+        - BRC20-Prog
+      operationId: getTickerHistory
+      summary: Get ticker history
+      description: "Get history records of specified ticker with event type and block height filtering"
+      parameters:
+        - name: ticker
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: type
+          in: query
+          description: "Filter by event type"
+          required: false
+          schema:
+            type: string
+            enum: [deploy-inscribe, transfer, inscribe-mint, inscribe-transfer, brc20prog-withdraw-inscribe, brc20prog-withdraw-transfer]
+        - name: height
+          in: query
+          description: "Filter by block height"
+          required: false
+          schema:
+            type: integer
+        - name: start
+          in: query
+          description: "Start offset, default 0"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: "Number of items returned, default 20"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 500
+            default: 20
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/BRC20TickerHistoryResp"
+
+  /v1/indexer/address/{address}/brc20-prog/summary:
+    get:
+      tags:
+        - BRC20-Prog
+      operationId: getAddressTokenSummary
+      summary: Get address token summary
+      description: "Get token summary information of specified address"
+      parameters:
+        - name: address
+          in: path
+          description: "Bitcoin address"
+          required: true
+          schema:
+            type: string
+        - name: ticker
+          in: query
+          description: "Filter by ticker name"
+          required: false
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "Start offset, default 0"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: "Number of items returned, default 20"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 500
+            default: 20
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/BRC20TokenSummaryResp"
+
+  /v1/indexer/address/{address}/brc20-prog/ticker/{ticker}/balance:
+    get:
+      tags:
+        - BRC20-Prog
+      operationId: getAddressTickerBalance
+      summary: Get address ticker balance
+      description: "Get specific ticker balance of specified address"
+      parameters:
+        - name: address
+          in: path
+          description: "Bitcoin address"
+          required: true
+          schema:
+            type: string
+        - name: ticker
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/BRC20TokenSummaryInfo"
+
+  /v1/indexer/address/{address}/brc20-prog/ticker/{ticker}/balance-by-height/{height}:
+    get:
+      tags:
+        - BRC20-Prog
+      operationId: getAddressTickerBalanceByHeight
+      summary: Get address ticker balance by height
+      description: "Get ticker balance of specified address at specified height"
+      parameters:
+        - name: address
+          in: path
+          description: "Bitcoin address"
+          required: true
+          schema:
+            type: string
+        - name: ticker
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: height
+          in: path
+          description: "Block height"
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/BRC20TokenSummaryInfoBase"
+
+  /v1/indexer/address/{address}/brc20-prog/ticker/{ticker}/transferable-inscriptions:
+    get:
+      tags:
+        - BRC20-Prog
+      operationId: getAddressTickerTransferableInscriptions
+      summary: Get address ticker transferable inscriptions
+      description: "Get transferable inscription list of specific ticker for specified address"
+      parameters:
+        - name: address
+          in: path
+          description: "Bitcoin address"
+          required: true
+          schema:
+            type: string
+        - name: ticker
+          in: path
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "Start offset, default 0"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+        - name: limit
+          in: query
+          description: "Number of items returned, default 20"
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            maximum: 500
+            default: 20
+      responses:
+        "200":
+          description: Successful response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      start:
+                        type: integer
+                      height:
+                        type: integer
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/BRC20UnusedTxInfo"
+
+components:
+  schemas:
+    BRC20TickerBestHeightInfo:
+      type: object
+      properties:
+        height:
+          type: integer
+          example: 800000
+        blockid:
+          type: string
+          example: "0000000000000000000000000000000000000000000000000000000000000000"
+        timestamp:
+          type: integer
+          example: 1703123456
+
+    BRC20TickerListResp:
+      type: object
+      properties:
+        height:
+          type: integer
+          example: 800000
+        total:
+          type: integer
+          example: 100
+        start:
+          type: integer
+          example: 0
+        detail:
+          type: array
+          items:
+            type: string
+          example: ["ordi", "pups", "rats"]
+
+    BRC20TickerStatusInfo:
+      type: object
+      properties:
+        ticker:
+          type: string
+          example: "ordi"
+        selfMint:
+          type: boolean
+          example: false
+        holdersCount:
+          type: integer
+          example: 15000
+        historyCount:
+          type: integer
+          example: 50000
+        inscriptionNumber:
+          type: integer
+          format: int64
+          example: 123456
+        inscriptionId:
+          type: string
+          example: "1234567890abcdef"
+        max:
+          type: string
+          example: "21000000"
+        limit:
+          type: string
+          example: "1000"
+        minted:
+          type: string
+          example: "21000000"
+        totalMinted:
+          type: string
+          example: "21000000"
+        confirmedMinted:
+          type: string
+          example: "21000000"
+        confirmedMinted1h:
+          type: string
+          example: "1000"
+        confirmedMinted6h:
+          type: string
+          example: "5000"
+        confirmedMinted24h:
+          type: string
+          example: "20000"
+        mintTimes:
+          type: integer
+          format: uint32
+          example: 21000
+        decimal:
+          type: integer
+          format: uint8
+          example: 8
+        creator:
+          type: string
+          example: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+        txid:
+          type: string
+          example: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
+        deployHeight:
+          type: integer
+          format: uint32
+          example: 767430
+
+    BRC20TickerStatusResp:
+      type: object
+      properties:
+        height:
+          type: integer
+          example: 800000
+        total:
+          type: integer
+          example: 1
+        start:
+          type: integer
+          example: 0
+        detail:
+          type: array
+          items:
+            $ref: "#/components/schemas/BRC20TickerStatusInfo"
+
+    BRC20TickerInfoWithHeatMap:
+      type: object
+      properties:
+        ticker:
+          type: string
+          example: "ordi"
+        count:
+          type: integer
+          example: 1000
+        statusInfo:
+          $ref: "#/components/schemas/BRC20TickerStatusInfo"
+
+    BRC20TickerHeatMapResp:
+      type: object
+      properties:
+        height:
+          type: integer
+          example: 800000
+        total:
+          type: integer
+          example: 100
+        start:
+          type: integer
+          example: 0
+        detail:
+          type: array
+          items:
+            $ref: "#/components/schemas/BRC20TickerInfoWithHeatMap"
+
+    BRC20Ticker:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        originalTick:
+          type: string
+          example: "ordi"
+        tick:
+          type: string
+          example: "ordi"
+        maxSupply:
+          type: string
+          example: "21000000"
+        decimals:
+          type: integer
+          example: 8
+        limitPerMint:
+          type: string
+          example: "1000"
+        remainingSupply:
+          type: string
+          example: "0"
+        burnedSupply:
+          type: string
+          example: "0"
+        isSelfMint:
+          type: boolean
+          example: false
+        deployInscriptionId:
+          type: string
+          example: "1234567890abcdef"
+        blockHeight:
+          type: integer
+          description: "Block height"
+          example: 767430
+        inscriptionNumber:
+          type: integer
+          format: int64
+          example: 123456
+        mintTimes:
+          type: integer
+          format: uint32
+          example: 21000
+        mintedSupply:
+          type: string
+          example: "21000000"
+        txid:
+          type: string
+          example: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
+        creatorAddress:
+          type: string
+          example: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+
+    BRC20HistoryEvent:
+      type: object
+      properties:
+        tick:
+          type: string
+          example: "ordi"
+        original_tick:
+          type: string
+          example: "ordi"
+        minted_pkScript:
+          type: string
+          example: "001234567890abcdef"
+        minted_wallet:
+          type: string
+          example: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+        amount:
+          type: string
+          example: "1000"
+        parent_id:
+          type: string
+          example: "1234567890abcdef"
+        deployer_pkScript:
+          type: string
+          example: "001234567890abcdef"
+        deployer_wallet:
+          type: string
+          example: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+        max_supply:
+          type: string
+          example: "21000000"
+        limit_per_mint:
+          type: string
+          example: "1000"
+        is_self_mint:
+          type: string
+          example: "false"
+        predeployer_pkScript:
+          type: string
+          example: "001234567890abcdef"
+        predeployer_wallet:
+          type: string
+          example: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+        hash:
+          type: string
+          example: "1234567890abcdef"
+        source_pkScript:
+          type: string
+          example: "001234567890abcdef"
+        source_wallet:
+          type: string
+          example: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+        spent_pkScript:
+          type: string
+          example: "001234567890abcdef"
+        spent_wallet:
+          type: string
+          example: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+        data:
+          type: string
+          example: "data"
+        base64_data:
+          type: string
+          example: "ZGF0YQ=="
+        contract_address:
+          type: string
+          example: "0x1234567890abcdef"
+        contract_inscription_id:
+          type: string
+          example: "1234567890abcdef"
+        byte_len:
+          type: integer
+          example: 4
+        using_tx_id:
+          type: string
+          example: "1234567890abcdef"
+
+    BRC20TickerHistoryInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        ticker:
+          type: string
+          example: "ordi"
+        type:
+          type: string
+          enum: [inscribe-deploy, inscribe-mint, inscribe-transfer, transfer, send, receive]
+          example: "inscribe-deploy"
+        txid:
+          type: string
+          example: "1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"
+        vout:
+          type: integer
+          format: uint32
+          example: 0
+        offset:
+          type: integer
+          format: uint64
+          example: 0
+        inscriptionNumber:
+          type: integer
+          format: int64
+          example: 123456
+        inscriptionId:
+          type: string
+          example: "1234567890abcdef"
+        from:
+          type: string
+          example: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+        to:
+          type: string
+          example: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+        amount:
+          type: string
+          example: "21000000"
+        height:
+          type: integer
+          format: uint32
+          description: "Block height"
+          example: 800000
+        event:
+          $ref: "#/components/schemas/BRC20HistoryEvent"
+        decimal:
+          type: integer
+          example: 8
+        overallBalance:
+          type: string
+          example: "21000000"
+        transferBalance:
+          type: string
+          example: "0"
+        availableBalance:
+          type: string
+          example: "0"
+        valid:
+          type: boolean
+          example: true
+
+    BRC20TickerHistoryResp:
+      type: object
+      properties:
+        height:
+          type: integer
+          example: 800000
+        total:
+          type: integer
+          example: 50000
+        start:
+          type: integer
+          example: 0
+        detail:
+          type: array
+          items:
+            $ref: "#/components/schemas/BRC20TickerHistoryInfo"
+
+    BRC20TickerHoldersInfo:
+      type: object
+      properties:
+        address:
+          type: string
+          example: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+        overallBalance:
+          type: string
+          example: "1000"
+        transferableBalance:
+          type: string
+          example: "500"
+        availableBalance:
+          type: string
+          example: "500"
+
+    BRC20TickerHoldersResp:
+      type: object
+      properties:
+        height:
+          type: integer
+          example: 800000
+        total:
+          type: integer
+          example: 15000
+        start:
+          type: integer
+          example: 0
+        detail:
+          type: array
+          items:
+            $ref: "#/components/schemas/BRC20TickerHoldersInfo"
+
+    BRC20TokenSummaryInfo:
+      type: object
+      properties:
+        ticker:
+          type: string
+          example: "ordi"
+        selfMint:
+          type: boolean
+          example: false
+        decimal:
+          type: integer
+          example: 8
+        overallBalance:
+          type: string
+          example: "1000"
+        transferableBalance:
+          type: string
+          example: "500"
+        availableBalance:
+          type: string
+          example: "500"
+        moduleBalance:
+          type: string
+          example: "0"
+
+    BRC20TokenSummaryInfoBase:
+      type: object
+      properties:
+        ticker:
+          type: string
+          example: "ordi"
+        selfMint:
+          type: boolean
+          example: false
+        decimal:
+          type: integer
+          example: 8
+        overallBalance:
+          type: string
+          example: "1000"
+        transferableBalance:
+          type: string
+          example: "500"
+        availableBalance:
+          type: string
+          example: "500"
+
+    BRC20TokenSummaryResp:
+      type: object
+      properties:
+        height:
+          type: integer
+          example: 800000
+        moduleHeight:
+          type: integer
+          format: int64
+          example: 800000
+        total:
+          type: integer
+          example: 5
+        start:
+          type: integer
+          example: 0
+        detail:
+          type: array
+          items:
+            $ref: "#/components/schemas/BRC20TokenSummaryInfo"
+
+    BRC20UnusedTxInfo:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: int64
+          example: 1
+        inscriptionId:
+          type: string
+          example: "1234567890abcdef"
+        tick:
+          type: string
+          example: "ordi"
+        amount:
+          type: string
+          example: "1000"
+        currentHolderPkscript:
+          type: string
+          example: "001234567890abcdef"
+        currentHolderWallet:
+          type: string
+          example: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+        eventId:
+          type: integer
+          format: int64
+          example: 1
+        blockHeight:
+          type: integer
+          description: "Block height"
+          example: 800000
+        inscriptionNumber:
+          type: integer
+          format: int64
+          example: 123456
+
+    GetHistoryByEventIdsReqParams:
+      type: object
+      required:
+        - address
+        - eventIds
+      properties:
+        address:
+          type: string
+          example: "bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"
+        eventIds:
+          type: array
+          items:
+            type: integer
+            format: int64
+          example: [1, 2, 3]
+
+    ErrorResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          example: 10003
+        msg:
+          type: string
+          example: "Parameter error"
+        data:
+          type: object
+          nullable: true
