@@ -18,9 +18,8 @@ UniSat Inscribe API provides complete Bitcoin inscription services, supporting s
 - **[BRC-20 (5-byte) Authorized Protocol](./brc20-5byte-guide-en.md)** - 5-character authorized tokens
   - Deploy / Mint (requires PSBT authorization) / Transfer
   - Only deployer can mint
-- **[BRC-20 (6-byte) Protocol](./brc20-6byte-guide-en.md)** - 6-character tokens
-  - Timed activation / Permission control
-  - Support self_mint to control minting permissions
+- **[BRC-20 (6-byte) BRC2.0 Programmable Module](./brc20-6byte-guide-en.md)** - 6-character tokens
+  - BRC2.0 - Programmable Module
 
 ### Runes Protocol
 

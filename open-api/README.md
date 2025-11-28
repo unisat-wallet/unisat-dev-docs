@@ -27,14 +27,14 @@ UniSat Open APIs provide standardized RESTful interfaces for accessing blockchai
 
 ### UniSat Services API
 
-| API Category           | Description                         | Documentation Link                                                             |
-| ---------------------- | ----------------------------------- | ------------------------------------------------------------------------------ |
-| UniSat Inscribe        | Inscription creation and management | [`inscribe.md`](./auto-generated/docs/inscribe.md)                             |
-| BRC20 Marketplace      | BRC20 marketplace                   | [`brc20-marketplace.md`](./auto-generated/docs/brc20-marketplace.md)           |
-| Runes Marketplace      | Runes marketplace                   | [`runes-marketplace.md`](./auto-generated/docs/runes-marketplace.md)           |
-| Alkanes Marketplace    | Alkanes marketplace                 | [`alkanes-marketplace.md`](./auto-generated/docs/alkanes-marketplace.md)       |
-| Collection Marketplace | Ordinals Collection marketplace     | [`collection-marketplace.md`](./auto-generated/docs/collection-marketplace.md) |
-| Domain Marketplace     | Ordinals Domain marketplace         | [`domain-marketplace.md`](./auto-generated/docs/domain-marketplace.md)         |
+| API Category           | Description                         | Documentation Link                                                                            |
+| ---------------------- | ----------------------------------- | --------------------------------------------------------------------------------------------- |
+| UniSat Inscribe        | Inscription creation and management | [`inscribe.md`](./auto-generated/docs/inscribe.md) [`inscribe-guide.md`](./inscribe-guide.md) |
+| BRC20 Marketplace      | BRC20 marketplace                   | [`brc20-marketplace.md`](./auto-generated/docs/brc20-marketplace.md)                          |
+| Runes Marketplace      | Runes marketplace                   | [`runes-marketplace.md`](./auto-generated/docs/runes-marketplace.md)                          |
+| Alkanes Marketplace    | Alkanes marketplace                 | [`alkanes-marketplace.md`](./auto-generated/docs/alkanes-marketplace.md)                      |
+| Collection Marketplace | Ordinals Collection marketplace     | [`collection-marketplace.md`](./auto-generated/docs/collection-marketplace.md)                |
+| Domain Marketplace     | Ordinals Domain marketplace         | [`domain-marketplace.md`](./auto-generated/docs/domain-marketplace.md)                        |
 
 ### Fractal Bitcoin Specific API
 
