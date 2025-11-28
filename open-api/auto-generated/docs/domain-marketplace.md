@@ -9,21 +9,21 @@ This API provides endpoints for ordinals domain marketplace services.
 
 | Route | Summary |
 | ----- | ------- |
-| [POST /v3/market/domain/auction/domain_types](#get-statistical-data) | Get statistical data. |
-| [POST /v3/market/domain/auction/domain_statistic](#return-a-summary-of-domain) | Return a summary of domain. |
-| [POST /v3/market/domain/auction/inscription_info](#retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services) | Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services. |
-| [POST /v3/market/domain/auction/inscription_info_list](#get-the-basic-listing-information-of-the-specified-inscription-list) | Get the basic listing information of the specified inscription list |
-| [POST /v3/market/domain/auction/list](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
-| [POST /v3/market/domain/auction/actions](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
-| [POST /v3/market/domain/auction/create_put_on](#create-listing-order) | Create listing order. |
-| [POST /v3/market/domain/auction/confirm_put_on](#confirm-listing-order) | Confirm listing order. |
-| [POST /v3/market/domain/auction/create_bid_prepare](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
-| [POST /v3/market/domain/auction/create_bid](#create-purchase-order) | Create purchase order. |
-| [POST /v3/market/domain/auction/confirm_bid](#confirm-purchase-order) | Confirm purchase order. |
-| [POST /v3/market/domain/auction/create_put_off](#create-delisting-order) | Create delisting order. |
-| [POST /v3/market/domain/auction/confirm_put_off](#confirm-delisting-order) | Confirm delisting order. |
-| [POST /v3/market/domain/auction/create_modify_price](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
-| [POST /v3/market/domain/auction/confirm_modify_price](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
+| [POST `/v3/market/domain/auction/domain_types`](#get-statistical-data) | Get statistical data. |
+| [POST `/v3/market/domain/auction/domain_statistic`](#return-a-summary-of-domain) | Return a summary of domain. |
+| [POST `/v3/market/domain/auction/inscription_info`](#retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services) | Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services. |
+| [POST `/v3/market/domain/auction/inscription_info_list`](#get-the-basic-listing-information-of-the-specified-inscription-list) | Get the basic listing information of the specified inscription list |
+| [POST `/v3/market/domain/auction/list`](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
+| [POST `/v3/market/domain/auction/actions`](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
+| [POST `/v3/market/domain/auction/create_put_on`](#create-listing-order) | Create listing order. |
+| [POST `/v3/market/domain/auction/confirm_put_on`](#confirm-listing-order) | Confirm listing order. |
+| [POST `/v3/market/domain/auction/create_bid_prepare`](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
+| [POST `/v3/market/domain/auction/create_bid`](#create-purchase-order) | Create purchase order. |
+| [POST `/v3/market/domain/auction/confirm_bid`](#confirm-purchase-order) | Confirm purchase order. |
+| [POST `/v3/market/domain/auction/create_put_off`](#create-delisting-order) | Create delisting order. |
+| [POST `/v3/market/domain/auction/confirm_put_off`](#confirm-delisting-order) | Confirm delisting order. |
+| [POST `/v3/market/domain/auction/create_modify_price`](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
+| [POST `/v3/market/domain/auction/confirm_modify_price`](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
 
 ---
 
@@ -50,6 +50,7 @@ Get statistical data, price, market capitalization, etc. for domain.
     - `curPrice` (integer): 
     - `domainType` (string): 
 
+
 ---
 
 ### Return a summary of domain.
@@ -67,6 +68,7 @@ Get statistical data, price, market capitalization, etc. for domain.
     - `demo` (string): 
     - `domainCategory` (string): 
     - `total` (integer): 
+
 
 ---
 
@@ -107,6 +109,7 @@ Get statistical data, price, market capitalization, etc. for domain.
   - `utxo` (object):
 
 
+
 ---
 
 ### Get the basic listing information of the specified inscription list
@@ -129,6 +132,7 @@ Get statistical data, price, market capitalization, etc. for domain.
     - `price` (number): 
     - `nftType` (string): 
     - `status` (string): 
+
 
 ---
 
@@ -169,6 +173,7 @@ Get statistical data, price, market capitalization, etc. for domain.
     - `domainType` (string): Domain field
   - `total` (number): 
   - `timestamp` (number): 
+
 
 ---
 
@@ -212,6 +217,7 @@ Get statistical data, price, market capitalization, etc. for domain.
       - `value` (string): 
   - `total` (number): 
 
+
 ---
 
 ### Create listing order.
@@ -230,6 +236,7 @@ Get statistical data, price, market capitalization, etc. for domain.
   - `signIndexes` (array):
 
 
+
 ---
 
 ### Confirm listing order.
@@ -243,6 +250,7 @@ Get statistical data, price, market capitalization, etc. for domain.
 - `code` (number): 
 - `msg` (string): 
 - `data` (object):
+
 
 
 ---
@@ -266,6 +274,7 @@ Get statistical data, price, market capitalization, etc. for domain.
   - `feeRate` (number): Network fee rate
   - `availableBalance` (number): Available confirmed balance for the user
   - `allBalance` (number): Available total balance for the user
+
 
 ---
 
@@ -291,6 +300,7 @@ Get statistical data, price, market capitalization, etc. for domain.
   - `bidSignIndexes` (array):
 
 
+
 ---
 
 ### Confirm purchase order.
@@ -305,6 +315,7 @@ Get statistical data, price, market capitalization, etc. for domain.
 - `msg` (string): 
 - `data` (object):
   - `txid` (string): Transaction txid
+
 
 ---
 
@@ -326,6 +337,7 @@ Get statistical data, price, market capitalization, etc. for domain.
   - `nftSignIndexes` (array):
 
 
+
 ---
 
 ### Confirm delisting order.
@@ -340,6 +352,7 @@ Get statistical data, price, market capitalization, etc. for domain.
 - `msg` (string): 
 - `data` (object):
   - `txid` (string): 
+
 
 ---
 
@@ -358,6 +371,7 @@ Get statistical data, price, market capitalization, etc. for domain.
   - `signIndexes` (array):
 
 
+
 ---
 
 ### Confirm the order for price adjustment.
@@ -371,6 +385,7 @@ Get statistical data, price, market capitalization, etc. for domain.
 - `code` (number): 
 - `msg` (string): 
 - `data` (object):
+
 
 
 ---

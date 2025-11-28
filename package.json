@@ -10,6 +10,7 @@
     "prepare": "npm run build"
   },
   "dependencies": {
-    "js-yaml": "^4.1.0"
+    "js-yaml": "^4.1.0",
+    "swagger-ui-react": "^5.31.0"
   }
 }

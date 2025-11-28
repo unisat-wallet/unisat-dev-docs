@@ -9,10 +9,10 @@ This API is limited to Fractal only. It provides endpoints to interact with the 
 
 | Route | Summary |
 | ----- | ------- |
-| [GET /v1/public/fractal/supply](#get-circulating-fb-in-fractal-mainnet) | Get circulating FB in fractal mainnet |
-| [GET /v1/public/fractal/total-supply](#get-total-supply-fb-in-fractal-mainnet) | Get total supply FB in fractal mainnet |
-| [GET /v1/public/address/total](#get-total-address) | Get total address |
-| [GET /v1/public/address/rich-list](#get-address-rich-list) | Get address rich list |
+| [GET `/v1/public/fractal/supply`](#get-circulating-fb-in-fractal-mainnet) | Get circulating FB in fractal mainnet |
+| [GET `/v1/public/fractal/total-supply`](#get-total-supply-fb-in-fractal-mainnet) | Get total supply FB in fractal mainnet |
+| [GET `/v1/public/address/total`](#get-total-address) | Get total address |
+| [GET `/v1/public/address/rich-list`](#get-address-rich-list) | Get address rich list |
 
 ---
 
@@ -31,6 +31,7 @@ Retrieves the circulating supply of Fractal Bitcoin (FB) in the mainnet.
 #### Response (200)
 
 
+
 ---
 
 ### Get total supply FB in fractal mainnet
@@ -46,6 +47,7 @@ Retrieves the total supply of Fractal Bitcoin (FB) in the mainnet.
 #### Response (200)
 
 
+
 ---
 
 ### Get total address
@@ -59,6 +61,7 @@ Retrieves the total supply of Fractal Bitcoin (FB) in the mainnet.
 Retrieves the total number of addresses in the Fractal network.
 
 #### Response (200)
+
 
 
 ---
@@ -78,6 +81,7 @@ Retrieves a list of addresses sorted by their balance in descending order.
 - `size` (query) **(required)**: Number of items returned (Max 10000)
 
 #### Response (200)
+
 
 
 ---

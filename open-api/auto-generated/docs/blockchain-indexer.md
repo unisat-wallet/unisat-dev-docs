@@ -9,24 +9,24 @@ Blockchain API is a RESTful API for accessing Bitcoin blockchain data. It provid
 
 | Route | Summary |
 | ----- | ------- |
-| [GET /v1/indexer/blockchain/info](#get-blockchain-info) | Get Blockchain Info |
-| [GET /v1/indexer/fees/recommended](#get-recommended-fees) | Get Recommended Fees |
-| [GET /v1/indexer/height/{height}/block](#get-block-info-by-height) | Get block info by height |
-| [GET /v1/indexer/block/id/{blockid}](#get-block-info-by-blockid) | Get block info by blockid |
-| [GET /v1/indexer/block/{height}/txs](#get-txs-by-block-height) | Get txs by block height. |
-| [GET /v1/indexer/tx/{txid}](#get-tx-info-by-txid) | Get tx info by txid |
-| [GET /v1/indexer/tx/{txid}/ins](#get-the-inputs-of-a-tx) | Get the inputs of a tx |
-| [GET /v1/indexer/tx/{txid}/outs](#get-the-outputs-of-a-tx) | Get the outputs of a tx |
-| [GET /v1/indexer/rawtx/{txid}](#get-the-raw-tx-by-txid) | Get the raw tx by txid |
-| [GET /v1/indexer/utxo/{txid}/{index}](#get-the-utxo-by-txid-and-index) | Get the UTXO by txid and index |
-| [POST /v1/indexer/local_pushtx](#push-rawtx-to-bitcoin-node) | Push rawtx to bitcoin node. |
-| [POST /v1/indexer/local_pushtxs](#push-rawtxs-to-bitcoin-node) | Push rawtxs to bitcoin node. |
-| [GET /v1/indexer/address/{address}/balance](#get-the-balance-by-address) | Get the balance by address |
-| [GET /v1/indexer/address/{address}/history](#get-transaction-history-by-address) | Get transaction history by address |
-| [GET /v1/indexer/address/{address}/utxo-data](#get-btcutxo-list-by-address) | Get BTCUTXO list by address |
-| [GET /v1/indexer/address/{address}/all-utxo-data](#get-all-utxo-list-by-address) | Get all UTXO list by address |
-| [GET /v1/indexer/address/{address}/available-balance](#get-available-balance-by-address) | Get available balance by address |
-| [GET /v1/indexer/address/{address}/available-utxo-data](#get-available-utxo-list-by-address) | Get available UTXO list by address |
+| [GET `/v1/indexer/blockchain/info`](#get-blockchain-info) | Get Blockchain Info |
+| [GET `/v1/indexer/fees/recommended`](#get-recommended-fees) | Get Recommended Fees |
+| [GET `/v1/indexer/height/TODO-height/block`](#get-block-info-by-height) | Get block info by height |
+| [GET `/v1/indexer/block/id/TODO-blockid`](#get-block-info-by-blockid) | Get block info by blockid |
+| [GET `/v1/indexer/block/TODO-height/txs`](#get-txs-by-block-height) | Get txs by block height. |
+| [GET `/v1/indexer/tx/TODO-txid`](#get-tx-info-by-txid) | Get tx info by txid |
+| [GET `/v1/indexer/tx/TODO-txid/ins`](#get-the-inputs-of-a-tx) | Get the inputs of a tx |
+| [GET `/v1/indexer/tx/TODO-txid/outs`](#get-the-outputs-of-a-tx) | Get the outputs of a tx |
+| [GET `/v1/indexer/rawtx/TODO-txid`](#get-the-raw-tx-by-txid) | Get the raw tx by txid |
+| [GET `/v1/indexer/utxo/TODO-txid/TODO-index`](#get-the-utxo-by-txid-and-index) | Get the UTXO by txid and index |
+| [POST `/v1/indexer/local_pushtx`](#push-rawtx-to-bitcoin-node) | Push rawtx to bitcoin node. |
+| [POST `/v1/indexer/local_pushtxs`](#push-rawtxs-to-bitcoin-node) | Push rawtxs to bitcoin node. |
+| [GET `/v1/indexer/address/TODO-address/balance`](#get-the-balance-by-address) | Get the balance by address |
+| [GET `/v1/indexer/address/TODO-address/history`](#get-transaction-history-by-address) | Get transaction history by address |
+| [GET `/v1/indexer/address/TODO-address/utxo-data`](#get-btcutxo-list-by-address) | Get BTCUTXO list by address |
+| [GET `/v1/indexer/address/TODO-address/all-utxo-data`](#get-all-utxo-list-by-address) | Get all UTXO list by address |
+| [GET `/v1/indexer/address/TODO-address/available-balance`](#get-available-balance-by-address) | Get available balance by address |
+| [GET `/v1/indexer/address/TODO-address/available-utxo-data`](#get-available-utxo-list-by-address) | Get available UTXO list by address |
 
 ---
 
@@ -46,6 +46,7 @@ Get the current blockchain information, including chain type, block count, and b
 #### Response (200)
 
 
+
 ---
 
 ### Get Recommended Fees
@@ -59,6 +60,7 @@ Get the current blockchain information, including chain type, block count, and b
 Get the recommended fees for different confirmation times. (like mempool.space)
 
 #### Response (200)
+
 
 
 ---
@@ -79,6 +81,7 @@ Get block info by height.
 #### Response (200)
 
 
+
 ---
 
 ### Get block info by blockid
@@ -95,6 +98,7 @@ Get block info by blockid.
 - `blockid` (path) **(required)**: Block id
 
 #### Response (200)
+
 
 
 ---
@@ -117,6 +121,7 @@ Get txs by block height.
 #### Response (200)
 
 
+
 ---
 
 ## Transactions
@@ -135,6 +140,7 @@ Get tx info by txid.
 - `txid` (path) **(required)**: Tx id
 
 #### Response (200)
+
 
 
 ---
@@ -157,6 +163,7 @@ Get the inputs of a tx.
 #### Response (200)
 
 
+
 ---
 
 ### Get the outputs of a tx
@@ -177,6 +184,7 @@ Get the outputs of a tx.
 #### Response (200)
 
 
+
 ---
 
 ### Get the raw tx by txid
@@ -193,6 +201,7 @@ Get the raw tx by txid.
 - `txid` (path) **(required)**: Tx id
 
 #### Response (200)
+
 
 
 ---
@@ -320,6 +329,7 @@ Migration Guidance:
 - The inscriptionsCount (no changes required)
 - The inscriptions array will eventually be removed for useless brc20 Inscriptions
 
+
 ---
 
 ### Push rawtx to bitcoin node.
@@ -335,6 +345,7 @@ Push rawtx to bitcoin node.
 #### Response (200)
 
 
+
 ---
 
 ### Push rawtxs to bitcoin node.
@@ -348,6 +359,7 @@ Push rawtx to bitcoin node.
 Push rawtxs to bitcoin node.
 
 #### Response (200)
+
 
 
 ---
@@ -370,6 +382,7 @@ Get the balance by address.
 #### Response (200)
 
 
+
 ---
 
 ### Get transaction history by address
@@ -388,6 +401,7 @@ Get transaction history by address.
 - `size` (query) **(required)**: Number of items returned
 
 #### Response (200)
+
 
 
 ---
@@ -410,6 +424,7 @@ Retrieve the UTXOs of an address that do not contain inscriptions. Note that thi
 #### Response (200)
 
 
+
 ---
 
 ### Get all UTXO list by address
@@ -428,6 +443,7 @@ Retrieve all UTXOs of an address.
 - `size` (query) **(required)**: Number of items returned
 
 #### Response (200)
+
 
 
 ---
@@ -449,6 +465,7 @@ This interface will return the current address's available balance that can be u
 #### Response (200)
 
 
+
 ---
 
 ### Get available UTXO list by address
@@ -468,6 +485,7 @@ This interface will return the current address's available UTXO list that can be
 - `withLowFee` (query) : Whether to include UTXOs with low fee rate (less than 1 sat/vB)
 
 #### Response (200)
+
 
 
 ---

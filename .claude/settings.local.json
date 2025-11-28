@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(mv:*)",
+      "Bash(rmdir:*)",
+      "Bash(mkdir:*)",
+      "Bash(cp:*)",
+      "Bash(yarn install:*)",
+      "Bash(yarn start:*)",
+      "Bash(chmod:*)",
+      "Bash(true)",
+      "Bash(grep:*)",
+      "Bash(sed:*)"
+    ],
+    "deny": [],
+    "ask": []
+  }
+}

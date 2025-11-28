@@ -9,12 +9,12 @@ Inscription Indexer API is a RESTful API for accessing and managing inscriptions
 
 | Route | Summary |
 | ----- | ------- |
-| [GET /v1/indexer/inscription/info/{inscriptionId}](#get-inscription-info-by-inscriptionid) | Get inscription info by inscriptionId |
-| [GET /v1/indexer/inscription/content/{inscriptionId}](#get-inscription-content-info-by-inscriptionid) | Get inscription content info by inscriptionId |
-| [GET /v1/indexer/inscription/events](#get-inscription-events) | Get inscription events |
-| [GET /v1/indexer/address/{address}/inscription-data](#get-inscription-utxo-list-by-address) | Get inscription UTXO list by address |
-| [GET /v1/indexer/address/{address}/inscription-utxo-data](#get-inscription-utxo-list-by-address) | Get inscription UTXO list by address |
-| [GET /v1/indexer/address/{address}/abandon-nft-utxo-data](#get-abandon-nft-utxo-list-by-address) | Get abandon nft UTXO list by address |
+| [GET `/v1/indexer/inscription/info/TODO-inscriptionId`](#get-inscription-info-by-inscriptionid) | Get inscription info by inscriptionId |
+| [GET `/v1/indexer/inscription/content/TODO-inscriptionId`](#get-inscription-content-info-by-inscriptionid) | Get inscription content info by inscriptionId |
+| [GET `/v1/indexer/inscription/events`](#get-inscription-events) | Get inscription events |
+| [GET `/v1/indexer/address/TODO-address/inscription-data`](#get-inscription-utxo-list-by-address) | Get inscription UTXO list by address |
+| [GET `/v1/indexer/address/TODO-address/inscription-utxo-data`](#get-inscription-utxo-list-by-address) | Get inscription UTXO list by address |
+| [GET `/v1/indexer/address/TODO-address/abandon-nft-utxo-data`](#get-abandon-nft-utxo-list-by-address) | Get abandon nft UTXO list by address |
 
 ---
 
@@ -33,6 +33,7 @@ Inscription Indexer API is a RESTful API for accessing and managing inscriptions
 #### Response (200)
 
 
+
 ---
 
 ### Get inscription content info by inscriptionId
@@ -46,6 +47,7 @@ Inscription Indexer API is a RESTful API for accessing and managing inscriptions
 - `inscriptionId` (path) **(required)**: 
 
 #### Response (200)
+
 ---
 
 ### Get inscription events
@@ -64,6 +66,7 @@ Inscription Indexer API is a RESTful API for accessing and managing inscriptions
 #### Response (200)
 
 
+
 ---
 
 ### Get inscription UTXO list by address
@@ -79,6 +82,7 @@ Inscription Indexer API is a RESTful API for accessing and managing inscriptions
 - `size` (query) **(required)**: Number of items returned
 
 #### Response (200)
+
 
 
 ---
@@ -107,6 +111,7 @@ These inscriptions do not carry BRC20 assets and account for a large proportion 
 - `size` (query) **(required)**: Number of items returned
 
 #### Response (200)
+
 
 
 ---
@@ -156,6 +161,7 @@ If you still need access to these UTXOs, please use the new `/abandon-nft-utxo-d
 - `/abandon-nft-utxo-data` returns UTXOs for abandoned inscriptions
 
 If you have any questions about this change, please contact the UniSat developer support team.
+
 
 ---
 

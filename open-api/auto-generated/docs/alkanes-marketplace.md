@@ -9,24 +9,24 @@ This API provides endpoints for alkanes marketplace services
 
 | Route | Summary |
 | ----- | ------- |
-| [POST /v3/market/alkanes/auction/alkanes_types](#get-statistical-data) | Get statistical data |
-| [POST /v3/market/alkanes/auction/alkanes_types_specified](#get-statistical-data-for-specified-alkanes) | Get statistical data for specified alkanes. |
-| [POST /v3/market/alkanes/auction/list](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
-| [POST /v3/market/alkanes/auction/actions](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
-| [POST /v3/market/alkanes/auction/create_put_on](#create-listing-order) | Create listing order. |
-| [POST /v3/market/alkanes/auction/confirm_put_on](#confirm-listing-order) | Confirm listing order. |
-| [POST /v3/market/alkanes/auction/create_bid_prepare](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
-| [POST /v3/market/alkanes/auction/create_bid](#create-purchase-order) | Create purchase order. |
-| [POST /v3/market/alkanes/auction/confirm_bid](#confirm-purchase-order) | Confirm purchase order. |
-| [POST /v3/market/alkanes/auction/create_put_off](#create-delisting-order) | Create delisting order. |
-| [POST /v3/market/alkanes/auction/confirm_put_off](#confirm-delisting-order) | Confirm delisting order. |
-| [POST /v3/market/alkanes/auction/create_modify_price](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
-| [POST /v3/market/alkanes/auction/confirm_modify_price](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
-| [POST /v3/market/alkanes/auction/create_batch_put_on](#create-batch-listing-order) | Create batch listing order. |
-| [POST /v3/market/alkanes/auction/confirm_batch_put_on](#confirm-batch-listing-order) | Confirm batch listing order. |
-| [POST /v3/market/alkanes/auction/create_batch_bid_prepare](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
-| [POST /v3/market/alkanes/auction/create_batch_bid](#create-purchase-order) | Create purchase order. |
-| [POST /v3/market/alkanes/auction/confirm_batch_bid](#confirm-purchase-order) | Confirm purchase order. |
+| [POST `/v3/market/alkanes/auction/alkanes_types`](#get-statistical-data) | Get statistical data |
+| [POST `/v3/market/alkanes/auction/alkanes_types_specified`](#get-statistical-data-for-specified-alkanes) | Get statistical data for specified alkanes. |
+| [POST `/v3/market/alkanes/auction/list`](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
+| [POST `/v3/market/alkanes/auction/actions`](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
+| [POST `/v3/market/alkanes/auction/create_put_on`](#create-listing-order) | Create listing order. |
+| [POST `/v3/market/alkanes/auction/confirm_put_on`](#confirm-listing-order) | Confirm listing order. |
+| [POST `/v3/market/alkanes/auction/create_bid_prepare`](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
+| [POST `/v3/market/alkanes/auction/create_bid`](#create-purchase-order) | Create purchase order. |
+| [POST `/v3/market/alkanes/auction/confirm_bid`](#confirm-purchase-order) | Confirm purchase order. |
+| [POST `/v3/market/alkanes/auction/create_put_off`](#create-delisting-order) | Create delisting order. |
+| [POST `/v3/market/alkanes/auction/confirm_put_off`](#confirm-delisting-order) | Confirm delisting order. |
+| [POST `/v3/market/alkanes/auction/create_modify_price`](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
+| [POST `/v3/market/alkanes/auction/confirm_modify_price`](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
+| [POST `/v3/market/alkanes/auction/create_batch_put_on`](#create-batch-listing-order) | Create batch listing order. |
+| [POST `/v3/market/alkanes/auction/confirm_batch_put_on`](#confirm-batch-listing-order) | Confirm batch listing order. |
+| [POST `/v3/market/alkanes/auction/create_batch_bid_prepare`](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
+| [POST `/v3/market/alkanes/auction/create_batch_bid`](#create-purchase-order) | Create purchase order. |
+| [POST `/v3/market/alkanes/auction/confirm_batch_bid`](#confirm-purchase-order) | Confirm purchase order. |
 
 ---
 
@@ -58,6 +58,7 @@ Get statistical data, price, market capitalization, etc. for alkanes.
     - `transactions` (integer): 
     - `warning` (boolean): 
 
+
 ---
 
 ### Get statistical data for specified alkanes.
@@ -88,6 +89,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
   - `transactions` (integer): 
   - `warning` (boolean): 
 
+
 ---
 
 ### Retrieve the list information of the market.
@@ -115,6 +117,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
     - `unitPrice` (number): Brc20 field
   - `total` (number): 
   - `timestamp` (number): 
+
 
 ---
 
@@ -158,6 +161,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
       - `value` (string): 
   - `total` (number): 
 
+
 ---
 
 ### Create listing order.
@@ -176,6 +180,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
   - `signIndexes` (array):
 
 
+
 ---
 
 ### Confirm listing order.
@@ -189,6 +194,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
 - `code` (number): 
 - `msg` (string): 
 - `data` (object):
+
 
 
 ---
@@ -212,6 +218,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
   - `feeRate` (number): Network fee rate
   - `availableBalance` (number): Available confirmed balance for the user
   - `allBalance` (number): Available total balance for the user
+
 
 ---
 
@@ -237,6 +244,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
   - `bidSignIndexes` (array):
 
 
+
 ---
 
 ### Confirm purchase order.
@@ -251,6 +259,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
 - `msg` (string): 
 - `data` (object):
   - `txid` (string): Transaction txid
+
 
 ---
 
@@ -272,6 +281,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
   - `nftSignIndexes` (array):
 
 
+
 ---
 
 ### Confirm delisting order.
@@ -286,6 +296,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
 - `msg` (string): 
 - `data` (object):
   - `txid` (string): 
+
 
 ---
 
@@ -304,6 +315,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
   - `signIndexes` (array):
 
 
+
 ---
 
 ### Confirm the order for price adjustment.
@@ -317,6 +329,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
 - `code` (number): 
 - `msg` (string): 
 - `data` (object):
+
 
 
 ---
@@ -337,6 +350,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
   - `signIndexes` (array):
 
 
+
 ---
 
 ### Confirm batch listing order.
@@ -350,6 +364,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
 - `code` (number): 
 - `msg` (string): 
 - `data` (object):
+
 
 
 ---
@@ -376,6 +391,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
   - `invalidAuctionIds` (array):
 
 
+
 ---
 
 ### Create purchase order.
@@ -397,6 +413,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
   - `bidSignIndexes` (array):
 
 
+
 ---
 
 ### Confirm purchase order.
@@ -411,6 +428,7 @@ Get statistical data, price, market capitalization, etc. for Alkanes.
 - `msg` (string): 
 - `data` (object):
   - `txid` (string): Transaction txid
+
 
 ---
 

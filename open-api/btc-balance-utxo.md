@@ -6,9 +6,9 @@ This document describes all endpoints and details related to Bitcoin (BTC) balan
 
 ## 1. BTC Balance Endpoints
 
-- `/v1/indexer/address/{address}/available-balance`: Get the sum of all BTC UTXOs that are currently available for spending by this address, applying the same filtering rules as `/available-utxo-data`: protocol asset UTXOs (such as inscriptions, Runes, Alkanes), dust (<600 sat), and (in some cases) mempool UTXOs are excluded. This is the recommended way to determine your true spendable BTC balance.
+- `/v1/indexer/address/{address}/available-balance`: Get the sum of all BTC UTXOs that are currently available for spending by this address, applying the same filtering rules as `/available-utxo-data`: protocol asset UTXOs (such as inscriptions, Runes, Alkanes), dust (< 600 sat), and (in some cases) mempool UTXOs are excluded. This is the recommended way to determine your true spendable BTC balance.
 - `/v1/indexer/address/{address}/available-utxo-data`: Get spendable UTXOs (excludes protocol assets and dust UTXOs < 600 sat). **(Recommended, see special rules below)** The sum of all UTXOs returned by this endpoint equals the `available` field in the `available-balance` endpoint.
-- `/v1/indexer/address/{address}/utxo-data`: Get UTXOs without inscriptions for an address. *(Legacy, see notes below)*
+- `/v1/indexer/address/{address}/utxo-data`: Get UTXOs without inscriptions for an address. _(Legacy, see notes below)_
 - `/v1/indexer/address/{address}/all-utxo-data`: Get all UTXOs for an address (including protocol assets).
 - `/v1/indexer/utxo/{txid}/{index}`: Get details of a single UTXO by txid and index.
 
@@ -28,13 +28,13 @@ This document describes all endpoints and details related to Bitcoin (BTC) balan
 
 ## 3. Quick Comparison Table
 
-| Endpoint | Description | Special Notes |
-|----------|-------------|--------------|
-| `/v1/indexer/address/{address}/available-balance` | Get spendable balance | Excludes protocol-locked |
-| `/v1/indexer/address/{address}/available-utxo-data` | Get available UTXOs | Excludes protocol assets, dust, and (in some cases) mempool |
-| `/v1/indexer/address/{address}/utxo-data` | Get normal UTXOs | Excludes protocol assets *(legacy)* |
-| `/v1/indexer/address/{address}/all-utxo-data` | Get all UTXOs | Includes protocol assets |
-| `/v1/indexer/utxo/{txid}/{index}` | Get single UTXO | Three possible states |
+| Endpoint                                            | Description           | Special Notes                                               |
+| --------------------------------------------------- | --------------------- | ----------------------------------------------------------- |
+| `/v1/indexer/address/{address}/available-balance`   | Get spendable balance | Excludes protocol-locked                                    |
+| `/v1/indexer/address/{address}/available-utxo-data` | Get available UTXOs   | Excludes protocol assets, dust, and (in some cases) mempool |
+| `/v1/indexer/address/{address}/utxo-data`           | Get normal UTXOs      | Excludes protocol assets _(legacy)_                         |
+| `/v1/indexer/address/{address}/all-utxo-data`       | Get all UTXOs         | Includes protocol assets                                    |
+| `/v1/indexer/utxo/{txid}/{index}`                   | Get single UTXO       | Three possible states                                       |
 
 ---
 
@@ -54,6 +54,7 @@ This document describes all endpoints and details related to Bitcoin (BTC) balan
 In previous versions, the `inscription-utxo-data` endpoint returned all inscription UTXOs. After a recent upgrade, UTXOs corresponding to "abandoned inscriptions" are now filtered out for efficiency.
 
 **What are abandoned inscriptions?**
+
 - BRC20 MINT inscriptions
 - BRC20 TRANSFER inscriptions that have already been transferred
 
@@ -63,6 +64,7 @@ These inscriptions do not carry BRC20 assets and account for a large proportion 
 If you still need access to these UTXOs, please use the new `/abandon-nft-utxo-data` endpoint. This endpoint specifically returns UTXOs for abandoned inscriptions as defined above.
 
 **Balance Calculation Change:**
+
 - **Old version:**
   - `Total balance = utxo-data + inscription-utxo-data`
 - **Current version:**
@@ -100,10 +102,9 @@ Alternatively, you can use `/v1/indexer/address/{address}/all-utxo-data` to retr
 **Q: Should I use utxo-data and inscription-utxo-data for new integrations?**
 A: No. These endpoints are legacy and do not account for all protocol assets. Use `available-utxo-data` for new development.
 
-
 ---
 
 ## 6. Change Log & References
 
 - UTXO endpoint updated on 2025-05-20: BRC20 TRANSFER/MINT inscriptions with no value are no longer queryable.
-- For more details, refer to the [Swagger UI](https://open-api.unisat.io/#/). 
+- For more details, refer to the [Swagger UI](https://open-api.unisat.io/#/).
