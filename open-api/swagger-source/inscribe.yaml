@@ -19,7 +19,9 @@ servers:
   - url: https://open-api-fractal-testnet.unisat.io
 tags:
   - name: Inscribe
-    description: Inscribe Service
+    description: Please read the [Inscribe Guide](https://github.com/unisat-wallet/unisat-dev-docs/blob/master/open-api/inscribe-guide.md) before using the API.
+  - name: Inscribe Deprecated
+    description: Deprecated APIs, will be removed in future versions.
 paths:
   /v2/inscribe/order/summary:
     get:
@@ -200,9 +202,11 @@ paths:
   /v2/inscribe/order/create/brc20-deploy:
     post:
       tags:
-        - Inscribe
+        - Inscribe Deprecated
       operationId: createOrderBRC20Deploy
-      summary: Create an order to inscribe BRC-20 DEPLOY
+      summary: Create an order to inscribe BRC-20 DEPLOY (Deprecated)
+      description: >-
+        Deprecated, please use /order/create instead
       requestBody:
         content:
           application/json:
@@ -228,9 +232,11 @@ paths:
   /v2/inscribe/order/create/brc20-mint:
     post:
       tags:
-        - Inscribe
+        - Inscribe Deprecated
       operationId: createOrderBRC20Mint
-      summary: Create an order to inscribe BRC-20 MINT
+      summary: Create an order to inscribe BRC-20 MINT (Deprecated)
+      description: >-
+        Deprecated, please use /order/create instead
       requestBody:
         content:
           application/json:
@@ -256,9 +262,11 @@ paths:
   /v2/inscribe/order/create/brc20-transfer:
     post:
       tags:
-        - Inscribe
+        - Inscribe Deprecated
       operationId: createOrderBRC20Transfer
-      summary: Create an order to inscribe BRC-20 TRANSFER
+      summary: Create an order to inscribe BRC-20 TRANSFER (Deprecated)
+      description: >-
+        Deprecated, please use /order/create instead
       requestBody:
         content:
           application/json:
@@ -281,12 +289,98 @@ paths:
                     $ref: "#/components/schemas/Order"
         "401":
           description: Invalid API Key
-  /v2/inscribe/order/create/brc20-5byte-mint:
+  /v2/inscribe/order/request-commit:
     post:
       tags:
         - Inscribe
+      operationId: requestCommit
+      summary: Request commit txs of some order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderRequestCommitBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/OrderRequestCommitBRC205ByteMintResponse"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/sign-commit:
+    post:
+      tags:
+        - Inscribe
+      operationId: signCommit
+      summary: Sign commit txs of some order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderSignCommitBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/OrderSignCommitBRC205ByteMintResponse"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/sign-reveal:
+    post:
+      tags:
+        - Inscribe
+      operationId: signReveal
+      summary: Sign reveal txs of some order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderSignRevealBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/OrderSignRevealBRC205ByteMintResponse"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create/brc20-5byte-mint:
+    post:
+      tags:
+        - Inscribe Deprecated
       operationId: createOrderBRC205ByteMint
-      summary: Create an order to inscribe BRC-20 MINT
+      summary: Create an order to inscribe BRC-20 MINT (Deprecated)
+      description: >-
+        Deprecated, please use /order/create instead
       requestBody:
         content:
           application/json:
@@ -312,9 +406,11 @@ paths:
   /v2/inscribe/order/request-commit/brc20-5byte-mint:
     post:
       tags:
-        - Inscribe
+        - Inscribe Deprecated
       operationId: requestCommitBRC205ByteMint
-      summary: Request commit txs of brc20-5byte-mint
+      summary: Request commit txs of brc20-5byte-mint. (Deprecated)
+      description: >-
+        Deprecated, please use /order/request-commit instead
       requestBody:
         content:
           application/json:
@@ -340,9 +436,11 @@ paths:
   /v2/inscribe/order/sign-commit/brc20-5byte-mint:
     post:
       tags:
-        - Inscribe
+        - Inscribe Deprecated
       operationId: signCommitBRC205ByteMint
-      summary: Sign commit txs of brc20-5byte-mint
+      summary: Sign commit txs of brc20-5byte-mint (Deprecated)
+      description: >-
+        Deprecated, please use /order/sign-commit instead
       requestBody:
         content:
           application/json:
@@ -368,9 +466,11 @@ paths:
   /v2/inscribe/order/sign-reveal/brc20-5byte-mint:
     post:
       tags:
-        - Inscribe
+        - Inscribe Deprecated
       operationId: signRevealBRC205ByteMint
-      summary: Sign reveal txs of brc20-5byte-mint
+      summary: Sign reveal txs of brc20-5byte-mint (Deprecated)
+      description: >-
+        Deprecated, please use /order/sign-reveal instead
       requestBody:
         content:
           application/json:
@@ -846,6 +946,14 @@ components:
         orderId:
           type: string
           description: orderId
+          example: ""
+        payerAddress:
+          type: string
+          description: payer's bitcoin address
+          example: ""
+        payerPubkey:
+          type: string
+          description: payer's pubkey
           example: ""
     OrderRequestCommitBRC205ByteMintResponse:
       type: object

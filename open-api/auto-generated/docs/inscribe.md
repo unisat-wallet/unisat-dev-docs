@@ -13,13 +13,16 @@ This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free
 | [GET /v2/inscribe/order/list](#get-order-list-of-current-apikey) | Get order list of current apikey |
 | [GET /v2/inscribe/order/{orderId}](#search-an-order-by-orderid) | Search an order by orderId |
 | [POST /v2/inscribe/order/create](#create-an-order) | Create an order |
-| [POST /v2/inscribe/order/create/brc20-deploy](#create-an-order-to-inscribe-brc-20-deploy) | Create an order to inscribe BRC-20 DEPLOY |
-| [POST /v2/inscribe/order/create/brc20-mint](#create-an-order-to-inscribe-brc-20-mint) | Create an order to inscribe BRC-20 MINT |
-| [POST /v2/inscribe/order/create/brc20-transfer](#create-an-order-to-inscribe-brc-20-transfer) | Create an order to inscribe BRC-20 TRANSFER |
-| [POST /v2/inscribe/order/create/brc20-5byte-mint](#create-an-order-to-inscribe-brc-20-mint) | Create an order to inscribe BRC-20 MINT |
-| [POST /v2/inscribe/order/request-commit/brc20-5byte-mint](#request-commit-txs-of-brc20-5byte-mint) | Request commit txs of brc20-5byte-mint |
-| [POST /v2/inscribe/order/sign-commit/brc20-5byte-mint](#sign-commit-txs-of-brc20-5byte-mint) | Sign commit txs of brc20-5byte-mint |
-| [POST /v2/inscribe/order/sign-reveal/brc20-5byte-mint](#sign-reveal-txs-of-brc20-5byte-mint) | Sign reveal txs of brc20-5byte-mint |
+| [POST /v2/inscribe/order/create/brc20-deploy](#create-an-order-to-inscribe-brc-20-deploy-deprecated) | Create an order to inscribe BRC-20 DEPLOY (Deprecated) |
+| [POST /v2/inscribe/order/create/brc20-mint](#create-an-order-to-inscribe-brc-20-mint-deprecated) | Create an order to inscribe BRC-20 MINT (Deprecated) |
+| [POST /v2/inscribe/order/create/brc20-transfer](#create-an-order-to-inscribe-brc-20-transfer-deprecated) | Create an order to inscribe BRC-20 TRANSFER (Deprecated) |
+| [POST /v2/inscribe/order/request-commit](#request-commit-txs-of-some-order) | Request commit txs of some order |
+| [POST /v2/inscribe/order/sign-commit](#sign-commit-txs-of-some-order) | Sign commit txs of some order |
+| [POST /v2/inscribe/order/sign-reveal](#sign-reveal-txs-of-some-order) | Sign reveal txs of some order |
+| [POST /v2/inscribe/order/create/brc20-5byte-mint](#create-an-order-to-inscribe-brc-20-mint-deprecated) | Create an order to inscribe BRC-20 MINT (Deprecated) |
+| [POST /v2/inscribe/order/request-commit/brc20-5byte-mint](#request-commit-txs-of-brc20-5byte-mint-deprecated) | Request commit txs of brc20-5byte-mint. (Deprecated) |
+| [POST /v2/inscribe/order/sign-commit/brc20-5byte-mint](#sign-commit-txs-of-brc20-5byte-mint-deprecated) | Sign commit txs of brc20-5byte-mint (Deprecated) |
+| [POST /v2/inscribe/order/sign-reveal/brc20-5byte-mint](#sign-reveal-txs-of-brc20-5byte-mint-deprecated) | Sign reveal txs of brc20-5byte-mint (Deprecated) |
 | [POST /v2/inscribe/order/create/runes-etch](#create-an-order-to-etch-runes) | Create an order to etch Runes |
 | [POST /v2/inscribe/order/create/runes-mint](#create-an-order-to-mint-runes) | Create an order to mint Runes |
 | [POST /v2/inscribe/order/{orderId}/refund](#process-a-refund-for-an-order) | Process a refund for an order. |
@@ -144,84 +147,36 @@ Create an order to inscribe something
 
 ---
 
-### Create an order to inscribe BRC-20 DEPLOY
-<a id="create-an-order-to-inscribe-brc-20-deploy"></a>
+### Request commit txs of some order
+<a id="request-commit-txs-of-some-order"></a>
 
 **Method**: `POST`  
-**Path**: `/v2/inscribe/order/create/brc20-deploy`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/createOrderBRC20Deploy)  
+**Path**: `/v2/inscribe/order/request-commit`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/requestCommit)  
 
 #### Response (200)
 
 
 ---
 
-### Create an order to inscribe BRC-20 MINT
-<a id="create-an-order-to-inscribe-brc-20-mint"></a>
+### Sign commit txs of some order
+<a id="sign-commit-txs-of-some-order"></a>
 
 **Method**: `POST`  
-**Path**: `/v2/inscribe/order/create/brc20-mint`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/createOrderBRC20Mint)  
+**Path**: `/v2/inscribe/order/sign-commit`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/signCommit)  
 
 #### Response (200)
 
 
 ---
 
-### Create an order to inscribe BRC-20 TRANSFER
-<a id="create-an-order-to-inscribe-brc-20-transfer"></a>
+### Sign reveal txs of some order
+<a id="sign-reveal-txs-of-some-order"></a>
 
 **Method**: `POST`  
-**Path**: `/v2/inscribe/order/create/brc20-transfer`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/createOrderBRC20Transfer)  
-
-#### Response (200)
-
-
----
-
-### Create an order to inscribe BRC-20 MINT
-<a id="create-an-order-to-inscribe-brc-20-mint"></a>
-
-**Method**: `POST`  
-**Path**: `/v2/inscribe/order/create/brc20-5byte-mint`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/createOrderBRC205ByteMint)  
-
-#### Response (200)
-
-
----
-
-### Request commit txs of brc20-5byte-mint
-<a id="request-commit-txs-of-brc20-5byte-mint"></a>
-
-**Method**: `POST`  
-**Path**: `/v2/inscribe/order/request-commit/brc20-5byte-mint`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/requestCommitBRC205ByteMint)  
-
-#### Response (200)
-
-
----
-
-### Sign commit txs of brc20-5byte-mint
-<a id="sign-commit-txs-of-brc20-5byte-mint"></a>
-
-**Method**: `POST`  
-**Path**: `/v2/inscribe/order/sign-commit/brc20-5byte-mint`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/signCommitBRC205ByteMint)  
-
-#### Response (200)
-
-
----
-
-### Sign reveal txs of brc20-5byte-mint
-<a id="sign-reveal-txs-of-brc20-5byte-mint"></a>
-
-**Method**: `POST`  
-**Path**: `/v2/inscribe/order/sign-reveal/brc20-5byte-mint`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/signRevealBRC205ByteMint)  
+**Path**: `/v2/inscribe/order/sign-reveal`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/signReveal)  
 
 #### Response (200)
 
@@ -282,6 +237,113 @@ RefundAmount = PaidAmount - RefundTxSize * RefundFeeRate. This value must be gre
 
 #### Parameters
 - `orderId` (path) **(required)**: 
+
+#### Response (200)
+
+
+---
+
+## Inscribe Deprecated
+
+### Create an order to inscribe BRC-20 DEPLOY (Deprecated)
+<a id="create-an-order-to-inscribe-brc-20-deploy-deprecated"></a>
+
+**Method**: `POST`  
+**Path**: `/v2/inscribe/order/create/brc20-deploy`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe Deprecated/createOrderBRC20Deploy)  
+
+#### Description
+Deprecated, please use /order/create instead
+
+#### Response (200)
+
+
+---
+
+### Create an order to inscribe BRC-20 MINT (Deprecated)
+<a id="create-an-order-to-inscribe-brc-20-mint-deprecated"></a>
+
+**Method**: `POST`  
+**Path**: `/v2/inscribe/order/create/brc20-mint`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe Deprecated/createOrderBRC20Mint)  
+
+#### Description
+Deprecated, please use /order/create instead
+
+#### Response (200)
+
+
+---
+
+### Create an order to inscribe BRC-20 TRANSFER (Deprecated)
+<a id="create-an-order-to-inscribe-brc-20-transfer-deprecated"></a>
+
+**Method**: `POST`  
+**Path**: `/v2/inscribe/order/create/brc20-transfer`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe Deprecated/createOrderBRC20Transfer)  
+
+#### Description
+Deprecated, please use /order/create instead
+
+#### Response (200)
+
+
+---
+
+### Create an order to inscribe BRC-20 MINT (Deprecated)
+<a id="create-an-order-to-inscribe-brc-20-mint-deprecated"></a>
+
+**Method**: `POST`  
+**Path**: `/v2/inscribe/order/create/brc20-5byte-mint`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe Deprecated/createOrderBRC205ByteMint)  
+
+#### Description
+Deprecated, please use /order/create instead
+
+#### Response (200)
+
+
+---
+
+### Request commit txs of brc20-5byte-mint. (Deprecated)
+<a id="request-commit-txs-of-brc20-5byte-mint-deprecated"></a>
+
+**Method**: `POST`  
+**Path**: `/v2/inscribe/order/request-commit/brc20-5byte-mint`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe Deprecated/requestCommitBRC205ByteMint)  
+
+#### Description
+Deprecated, please use /order/request-commit instead
+
+#### Response (200)
+
+
+---
+
+### Sign commit txs of brc20-5byte-mint (Deprecated)
+<a id="sign-commit-txs-of-brc20-5byte-mint-deprecated"></a>
+
+**Method**: `POST`  
+**Path**: `/v2/inscribe/order/sign-commit/brc20-5byte-mint`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe Deprecated/signCommitBRC205ByteMint)  
+
+#### Description
+Deprecated, please use /order/sign-commit instead
+
+#### Response (200)
+
+
+---
+
+### Sign reveal txs of brc20-5byte-mint (Deprecated)
+<a id="sign-reveal-txs-of-brc20-5byte-mint-deprecated"></a>
+
+**Method**: `POST`  
+**Path**: `/v2/inscribe/order/sign-reveal/brc20-5byte-mint`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe Deprecated/signRevealBRC205ByteMint)  
+
+#### Description
+Deprecated, please use /order/sign-reveal instead
 
 #### Response (200)
 

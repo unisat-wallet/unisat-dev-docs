@@ -40,6 +40,7 @@ Create a new BRC-20 token. Each token can only be deployed once, first come firs
 | ticker    | string  | Yes      | BRC-20 token ticker (4 characters)                     |
 | max       | string  | Yes      | Maximum supply                                         |
 | limit     | string  | Yes      | Mint limit per transaction                             |
+| decimal   | string  | No       | Decimal places (default "18", range 0-18)              |
 | selfMint  | boolean | No       | Whether only deployer can mint (default false, public) |
 
 ### Example Request
@@ -55,7 +56,8 @@ curl -X POST "https://open-api.unisat.io/v2/inscribe/order/create" \
     "brc20_deploy": {
       "ticker": "ordi",
       "max": "21000000",
-      "limit": "1000"
+      "limit": "1000",
+      "decimal": "18"
     }
   }'
 ```
@@ -68,7 +70,8 @@ curl -X POST "https://open-api.unisat.io/v2/inscribe/order/create" \
   "op": "deploy",
   "tick": "ordi",
   "max": "21000000",
-  "lim": "1000"
+  "lim": "1000",
+  "dec": "18"
 }
 ```
 
@@ -84,6 +87,7 @@ curl -X POST "https://open-api.unisat.io/v2/inscribe/order/create" \
 - Token ticker must be 4 characters (e.g., `ordi`, `sats`)
 - Same ticker can only be deployed once, first come first served
 - After successful deployment, anyone can mint the token
+- **decimal**: Specifies the number of decimal places for the token (0-18). Default is "18". This determines the token's precision. For example, with decimal="18", the smallest unit is 0.000000000000000001 tokens.
 
 ---
 
@@ -287,6 +291,7 @@ async function deployBRC20() {
           ticker: "test",
           max: "21000000",
           limit: "1000",
+          decimal: "18",
         },
       }),
     }

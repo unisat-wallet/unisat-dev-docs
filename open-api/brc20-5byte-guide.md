@@ -40,6 +40,7 @@ Create a new 5-byte BRC-20 token. The deployment process is the same as 4-byte, 
 | ticker    | string  | Yes      | BRC-20 token ticker (**5 characters**)                                     |
 | max       | string  | Yes      | Maximum supply                                                             |
 | limit     | string  | Yes      | Mint limit per transaction                                                 |
+| decimal   | string  | No       | Decimal places (default "18", range 0-18)                                  |
 | selfMint  | boolean | No       | Whether only deployer can mint (5-byte tokens default true, deployer only) |
 
 ### Example Request
@@ -55,7 +56,8 @@ curl -X POST "https://open-api.unisat.io/v2/inscribe/order/create" \
     "brc20_deploy": {
       "ticker": "pizza",
       "max": "21000000",
-      "limit": "1000"
+      "limit": "1000",
+      "decimal": "18"
     }
   }'
 ```
@@ -68,7 +70,8 @@ curl -X POST "https://open-api.unisat.io/v2/inscribe/order/create" \
   "op": "deploy",
   "tick": "pizza",
   "max": "21000000",
-  "lim": "1000"
+  "lim": "1000",
+  "dec": "18"
 }
 ```
 
@@ -85,6 +88,7 @@ Same as 4-byte, direct payment:
 - Token ticker **must be 5 characters** (e.g., `pizza`, `names`)
 - After deployment, **only the deployer can mint** this token
 - Must save deployer's private key for subsequent minting authorization
+- **decimal**: Specifies the number of decimal places for the token (0-18). Default is "18". This determines the token's precision.
 
 ---
 
