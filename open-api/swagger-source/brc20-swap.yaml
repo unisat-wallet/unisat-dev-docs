@@ -3,7 +3,7 @@ info:
   title: BRC20 Swap API
   version: 1.0.4
   description: >-
-    BRC20 Swap API provides a set of interfaces for BRC20 Swap and PizzaSwap services.
+    BRC20 Swap API provides a set of interfaces for BRC20 Swap and InSwap services.
     It allows users to interact with the BRC20 Swap ecosystem, including balance checks,
     pool information, liquidity management, and token transfers.
   contact:
@@ -17,7 +17,7 @@ servers:
   - url: https://open-api-fractal-testnet.unisat.io
 tags:
   - name: brc20-swap
-    description: BRC20 Swap and PizzaSwap Service
+    description: BRC20 Swap and InSwap Service
 paths:
   /v1/brc20-swap/config:
     get:
@@ -117,6 +117,81 @@ paths:
                   - msg
                   - code
                   - data
+  /v1/brc20-swap/all_balance:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapAllBalances
+      summary: Gets all BRC20 token balances for a specified address.
+      description: >-
+        This interface retrieves the complete list of all BRC20 token balances for a specific wallet address in the BRC20 Swap service.
+        For each tick, it returns detailed balance information including the confirmed module balance, swap balance, pending swap balance, and pending available balance.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: pubkey
+          required: false
+      responses:
+        "200":
+          description: Successful response returning all token balances for the address.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    description: A map where each key is a token ticker symbol.
+                    additionalProperties:
+                      type: object
+                      properties:
+                        balance:
+                          type: object
+                          properties:
+                            module:
+                              type: string
+                              description: Confirmed module balance.
+                            swap:
+                              type: string
+                              description: Confirmed swap balance.
+                            pendingSwap:
+                              type: string
+                              description: The balance converted from pending to swap.
+                            pendingAvailable:
+                              type: string
+                              description: The balance converted from pending to module.
+                          additionalProperties: false
+                        decimal:
+                          type: string
+                          description: Token decimal precision.
+                        assetType:
+                          type: string
+                          description: Type of the asset (e.g., 'brc20', 'btc').
+                        networkType:
+                          type: string
+                          description: Underlying network (e.g., 'BITCOIN_MAINNET', 'FRACTAL_BITCOIN_MAINNET').
+                        price:
+                          type: number
+                          description: Current price of the token, if available.
+                      required:
+                        - balance
+                        - decimal
+                        - assetType
+                        - networkType
+                required:
+                  - code
+                  - msg
+                  - data
   /v1/brc20-swap/pool_info:
     get:
       tags:
@@ -174,6 +249,42 @@ paths:
                       reward0:
                         type: string
                       reward1:
+                        type: string
+                      activedPid:
+                        description: Active pool ID
+                        type: string
+                      marketCap:
+                        description: Market cap
+                        type: number
+                      marketCapTick:
+                        description: Market cap tick
+                        type: string
+                      networkType0:
+                        description: Network type for tick0
+                        type: string
+                      networkType1:
+                        description: Network type for tick1
+                        type: string
+                      assetType0:
+                        description: Asset type for tick0
+                        type: string
+                      assetType1:
+                        description: Asset type for tick1
+                        type: string
+                      l1Tick0:
+                        description: L1 tick0
+                        type: string
+                      l1Tick1:
+                        description: L1 tick1
+                        type: string
+                      amount0:
+                        description: Amount of tick0
+                        type: string
+                      amount1:
+                        description: Amount of tick1
+                        type: string
+                      volume30d:
+                        description: 30 days volume
                         type: string
                     additionalProperties: false
                 required:
@@ -315,6 +426,36 @@ paths:
                         type: string
                       usdPrice:
                         description: The dollar value of the fee
+                        type: string
+                      feeTick:
+                        description: Tick used as fee
+                        type: string
+                      totalFreeQuota:
+                        description: Total free quota
+                        type: string
+                      remainingFreeQuota:
+                        description: Remaining free quota
+                        type: string
+                      totalUsedFreeQuota:
+                        description: Total used free quota
+                        type: string
+                      usageFreeQuota:
+                        description: Usage free quota
+                        type: string
+                      hasVoucher:
+                        description: Has voucher
+                        type: boolean
+                      assetFeeAmount:
+                        description: Asset fee amount
+                        type: string
+                      assetFeeTick:
+                        description: Asset fee tick
+                        type: string
+                      assetFeeTickPrice:
+                        description: Asset fee tick price
+                        type: string
+                      assetFeeTickBalance:
+                        description: Asset fee tick balance
                         type: string
                     additionalProperties: false
                 required:
@@ -497,6 +638,39 @@ paths:
                       feeBalance:
                         description: The user's fee tick balance
                         type: string
+                      usdPrice:
+                        description: The dollar value of the fee
+                        type: string
+                      feeTick:
+                        description: Tick used as fee
+                        type: string
+                      totalFreeQuota:
+                        description: Total free quota
+                        type: string
+                      remainingFreeQuota:
+                        description: Remaining free quota
+                        type: string
+                      totalUsedFreeQuota:
+                        description: Total used free quota
+                        type: string
+                      usageFreeQuota:
+                        description: Usage free quota
+                        type: string
+                      hasVoucher:
+                        description: Has voucher
+                        type: boolean
+                      assetFeeAmount:
+                        description: Asset fee amount
+                        type: string
+                      assetFeeTick:
+                        description: Asset fee tick
+                        type: string
+                      assetFeeTickPrice:
+                        description: Asset fee tick price
+                        type: string
+                      assetFeeTickBalance:
+                        description: Asset fee tick balance
+                        type: string
                     additionalProperties: false
                 required:
                   - msg
@@ -609,6 +783,18 @@ paths:
                         type: string
                       ts:
                         type: number
+                      success:
+                        description: Operation success status
+                        type: boolean
+                      value:
+                        description: Operation value
+                        type: number
+                      preResult:
+                        description: Pre-operation result
+                        type: object
+                      result:
+                        description: Operation result
+                        type: object
                     additionalProperties: false
                 required:
                   - msg
@@ -718,6 +904,42 @@ paths:
                         type: string
                       usdPrice:
                         description: The dollar value of the fee
+                        type: string
+                      feeTick:
+                        description: Tick used as fee
+                        type: string
+                      totalFreeQuota:
+                        description: Total free quota
+                        type: string
+                      remainingFreeQuota:
+                        description: Remaining free quota
+                        type: string
+                      totalUsedFreeQuota:
+                        description: Total used free quota
+                        type: string
+                      usageFreeQuota:
+                        description: Usage free quota
+                        type: string
+                      hasVoucher:
+                        description: Has voucher
+                        type: boolean
+                      assetFeeAmount:
+                        description: Asset fee amount
+                        type: string
+                      assetFeeTick:
+                        description: Asset fee tick
+                        type: string
+                      assetFeeTickPrice:
+                        description: Asset fee tick price
+                        type: string
+                      assetFeeTickBalance:
+                        description: Asset fee tick balance
+                        type: string
+                      reward0:
+                        description: Reward amount for tick0
+                        type: string
+                      reward1:
+                        description: Reward amount for tick1
                         type: string
                     additionalProperties: false
                 required:
@@ -831,6 +1053,18 @@ paths:
                         type: string
                       ts:
                         type: number
+                      success:
+                        description: Operation success status
+                        type: boolean
+                      value:
+                        description: Operation value
+                        type: number
+                      preResult:
+                        description: Pre-operation result
+                        type: object
+                      result:
+                        description: Operation result
+                        type: object
                     additionalProperties: false
                 required:
                   - msg
@@ -1405,6 +1639,18 @@ paths:
                         type: string
                       ts:
                         type: number
+                      success:
+                        description: Operation success status
+                        type: boolean
+                      value:
+                        description: Operation value
+                        type: number
+                      preResult:
+                        description: Pre-operation result
+                        type: object
+                      result:
+                        description: Operation result
+                        type: object
                     additionalProperties: false
                 required:
                   - msg
@@ -1470,6 +1716,15 @@ paths:
                             volume24h:
                               type: string
                             volume7d:
+                              type: string
+                            volume30d:
+                              description: 30 days volume
+                              type: string
+                            amount0:
+                              description: Amount of tick0
+                              type: string
+                            amount1:
+                              description: Amount of tick1
                               type: string
                           additionalProperties: false
                     additionalProperties: false
@@ -1617,6 +1872,21 @@ paths:
                       amount1:
                         description: Amount of tick1
                         type: string
+                      lockedLp:
+                        description: Locked LP amount
+                        type: string
+                      claimedReward0:
+                        description: Claimed reward for tick0
+                        type: string
+                      claimedReward1:
+                        description: Claimed reward for tick1
+                        type: string
+                      unclaimedReward0:
+                        description: Unclaimed reward for tick0
+                        type: string
+                      unclaimedReward1:
+                        description: Unclaimed reward for tick1
+                        type: string
                     additionalProperties: false
                 required:
                   - msg
@@ -1723,6 +1993,12 @@ paths:
                             tickB:
                               type: string
                             gas:
+                              type: string
+                            tick:
+                              description: Fee tick
+                              type: string
+                            to:
+                              description: Recipient address
                               type: string
                             ts:
                               type: number
@@ -1870,6 +2146,12 @@ paths:
                               type: string
                             amount1:
                               type: string
+                            reward0:
+                              description: Reward amount for tick0
+                              type: string
+                            reward1:
+                              description: Reward amount for tick1
+                              type: string
                             lp:
                               type: string
                             ts:
@@ -1972,7 +2254,6 @@ paths:
         It supports filtering by inscription ID and pagination through start and limit parameters.
       parameters:
         - schema:
-            maximum: 100
             exclusiveMaximum: true
             type: number
           in: query
@@ -2195,7 +2476,13 @@ paths:
                     type: string
                   data:
                     type: object
-                    properties: {}
+                    properties:
+                      txid:
+                        description: Transaction ID
+                        type: string
+                      pendingNum:
+                        description: Number of pending confirmations
+                        type: number
                     additionalProperties: false
                 required:
                   - msg
@@ -2639,6 +2926,3311 @@ paths:
                               type: string
                             ts:
                               type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/quote_swap:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapQuoteSwap
+      summary: Returns the estimated number of swaps based on the input and exact type.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tickIn
+          required: true
+          description: Input tick
+        - schema:
+            type: string
+          in: query
+          name: tickOut
+          required: true
+          description: Output tick
+        - schema:
+            type: string
+          in: query
+          name: amount
+          required: true
+          description: If it is exactIn, it is the amount of input tick, else is the amount of output tick
+        - schema:
+            enum:
+              - exactIn
+              - exactOut
+            type: string
+            example: exactIn
+          in: query
+          name: exactType
+          required: true
+          description: Exact input or exact output
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      amountUSD:
+                        description: Input amount of usd value
+                        type: string
+                      expectUSD:
+                        description: Estimated amount of usd value
+                        type: string
+                      expect:
+                        description: Estimated amount
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/quote_add_liq:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapQuoteAddLiq
+      summary: Based on the pair to get the actual addition ratio, LP number and other information.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: amount0
+          required: false
+          description: The expect amount of tick0
+        - schema:
+            type: string
+          in: query
+          name: amount1
+          required: false
+          description: The expect amount of tick1
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      amount0:
+                        description: The real amount of tick0
+                        type: string
+                      amount1:
+                        description: The real amount of tick1
+                        type: string
+                      amount0USD:
+                        description: The usd value of amount0
+                        type: string
+                      amount1USD:
+                        description: The usd value of amount1
+                        type: string
+                      lp:
+                        description: Estimated lp
+                        type: string
+                      tick0PerTick1:
+                        description: tick0/tick1
+                        type: string
+                      tick1PerTick0:
+                        description: tick1/tick0
+                        type: string
+                      shareOfPool:
+                        description: The proportion of the injected quantity in the pool
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/quote_remove_liq:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapQuoteRemoveLiq
+      summary: Estimate the number of ticks you can get by typing LP.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: lp
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - amount0
+                      - amount1
+                    type: object
+                    properties:
+                      tick0:
+                        type: string
+                      tick1:
+                        type: string
+                      amount0:
+                        description: Amount of tick0
+                        type: string
+                      amount1:
+                        description: Amount of tick1
+                        type: string
+                      amount0USD:
+                        type: string
+                      amount1USD:
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pre_stake:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapPreStake
+      summary: Prepare stake operation
+      description: >-
+        This interface pre-loads the /stake operation, providing the signature content,
+        gas, and byte information required for staking in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: pid
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: amount
+          required: true
+          description: The amount of send tick
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: true
+          description: Timestamp (seconds)
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+          description: Tick used as fee
+        - schema:
+            type: string
+          in: query
+          name: payType
+          required: false
+          description: "Pay Type: tick, freeQuota"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - ids
+                      - signMsgs
+                    type: object
+                    properties:
+                      ids:
+                        description: User signature id
+                        type: array
+                        items:
+                          type: string
+                      signMsgs:
+                        description: User signature information
+                        type: array
+                        items:
+                          type: string
+                      feeAmount:
+                        description: The fee that the user needs to pay
+                        type: string
+                      feeTickPrice:
+                        description: The price of fee tick
+                        type: string
+                      feeBalance:
+                        description: The user's fee tick balance
+                        type: string
+                      usdPrice:
+                        description: The dollar value of the fee
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pre_unstake:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapPreUnstake
+      summary: Prepare unstake operation
+      description: >-
+        This interface pre-loads the /unstake operation, providing the signature content,
+        gas, and byte information required for unstaking in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: pid
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: amount
+          required: true
+          description: The amount of send tick
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: true
+          description: Timestamp (seconds)
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+          description: Tick used as fee
+        - schema:
+            type: string
+          in: query
+          name: payType
+          required: false
+          description: "Pay Type: tick, freeQuota"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - ids
+                      - signMsgs
+                    type: object
+                    properties:
+                      ids:
+                        description: User signature id
+                        type: array
+                        items:
+                          type: string
+                      signMsgs:
+                        description: User signature information
+                        type: array
+                        items:
+                          type: string
+                      feeAmount:
+                        description: The fee that the user needs to pay
+                        type: string
+                      feeTickPrice:
+                        description: The price of fee tick
+                        type: string
+                      feeBalance:
+                        description: The user's fee tick balance
+                        type: string
+                      usdPrice:
+                        description: The dollar value of the fee
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pre_claim:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapPreClaim
+      summary: Prepare claim operation
+      description: >-
+        This interface pre-loads the /claim operation, providing the signature content,
+        gas, and byte information required for claiming rewards in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: pid
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: true
+          description: Timestamp (seconds)
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+          description: Tick used as fee
+        - schema:
+            type: string
+          in: query
+          name: payType
+          required: false
+          description: "Pay Type: tick, freeQuota"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - ids
+                      - signMsgs
+                    type: object
+                    properties:
+                      ids:
+                        description: User signature id
+                        type: array
+                        items:
+                          type: string
+                      signMsgs:
+                        description: User signature information
+                        type: array
+                        items:
+                          type: string
+                      feeAmount:
+                        description: The fee that the user needs to pay
+                        type: string
+                      feeTickPrice:
+                        description: The price of fee tick
+                        type: string
+                      feeBalance:
+                        description: The user's fee tick balance
+                        type: string
+                      usdPrice:
+                        description: The dollar value of the fee
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pre_send_lp:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapPreSendLp
+      summary: Prepare send LP operation
+      description: >-
+        This interface pre-loads the /send_lp operation, providing the signature content,
+        gas, and byte information required for sending LP in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+          description: Lp tick0
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+          description: Lp tick1
+        - schema:
+            type: string
+          in: query
+          name: amount
+          required: true
+          description: The amount of send tick
+        - schema:
+            type: string
+          in: query
+          name: to
+          required: true
+          description: The receiver of send tick
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: true
+          description: Timestamp (seconds)
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+          description: Tick used as fee
+        - schema:
+            type: string
+          in: query
+          name: payType
+          required: false
+          description: "Pay Type: tick, freeQuota"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - ids
+                      - signMsgs
+                    type: object
+                    properties:
+                      ids:
+                        description: User signature id
+                        type: array
+                        items:
+                          type: string
+                      signMsgs:
+                        description: User signature information
+                        type: array
+                        items:
+                          type: string
+                      feeAmount:
+                        description: The fee that the user needs to pay
+                        type: string
+                      feeTickPrice:
+                        description: The price of fee tick
+                        type: string
+                      feeBalance:
+                        description: The user's fee tick balance
+                        type: string
+                      usdPrice:
+                        description: The dollar value of the fee
+                        type: string
+                      amount0PerLp:
+                        type: string
+                      amount1PerLp:
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/send_lp:
+    post:
+      tags:
+        - brc20-swap
+      operationId: postBrc20SwapSendLp
+      summary: The send LP operation.
+      description: >-
+        This interface sends LP in the BRC20 Swap service. It requires the address, tick0, tick1, amount,
+        receiver, timestamp, fee tick, and user signatures to complete the operation.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - address
+                - tick0
+                - tick1
+                - amount
+                - to
+                - ts
+                - feeTick
+                - feeAmount
+                - feeTickPrice
+              type: object
+              properties:
+                address:
+                  type: string
+                tick0:
+                  description: Lp tick0
+                  type: string
+                tick1:
+                  description: Lp tick1
+                  type: string
+                amount:
+                  description: The amount of send tick
+                  type: string
+                to:
+                  description: The receiver of send tick
+                  type: string
+                ts:
+                  description: Timestamp (seconds)
+                  type: number
+                feeTick:
+                  description: Tick used as fee
+                  type: string
+                feeAmount:
+                  description: The fee that the user needs to pay
+                  type: string
+                feeTickPrice:
+                  description: The price of fee tick
+                  type: string
+                sigs:
+                  description: User signature
+                  type: array
+                  items:
+                    type: string
+                payType:
+                  type: string
+                rememberPayType:
+                  type: boolean
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/stake:
+    post:
+      tags:
+        - brc20-swap
+      operationId: postBrc20SwapStake
+      summary: The stake operation.
+      description: >-
+        This interface stakes LP in the BRC20 Swap service. It requires the pid, address, amount,
+        timestamp, fee tick, and user signatures to complete the operation.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - pid
+                - address
+                - amount
+                - ts
+                - feeTick
+                - feeAmount
+                - feeTickPrice
+              type: object
+              properties:
+                pid:
+                  type: string
+                address:
+                  type: string
+                amount:
+                  description: The amount of send tick
+                  type: string
+                ts:
+                  description: Timestamp (seconds)
+                  type: number
+                feeTick:
+                  description: Tick used as fee
+                  type: string
+                feeAmount:
+                  description: The fee that the user needs to pay
+                  type: string
+                feeTickPrice:
+                  description: The price of fee tick
+                  type: string
+                sigs:
+                  description: User signature
+                  type: array
+                  items:
+                    type: string
+                payType:
+                  type: string
+                rememberPayType:
+                  type: boolean
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/unstake:
+    post:
+      tags:
+        - brc20-swap
+      operationId: postBrc20SwapUnstake
+      summary: The unstake operation.
+      description: >-
+        This interface unstakes LP in the BRC20 Swap service. It requires the pid, address, amount,
+        timestamp, fee tick, and user signatures to complete the operation.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - pid
+                - address
+                - amount
+                - ts
+                - feeTick
+                - feeAmount
+                - feeTickPrice
+              type: object
+              properties:
+                pid:
+                  type: string
+                address:
+                  type: string
+                amount:
+                  description: The amount of send tick
+                  type: string
+                ts:
+                  description: Timestamp (seconds)
+                  type: number
+                feeTick:
+                  description: Tick used as fee
+                  type: string
+                feeAmount:
+                  description: The fee that the user needs to pay
+                  type: string
+                feeTickPrice:
+                  description: The price of fee tick
+                  type: string
+                sigs:
+                  description: User signature
+                  type: array
+                  items:
+                    type: string
+                payType:
+                  type: string
+                rememberPayType:
+                  type: boolean
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/claim:
+    post:
+      tags:
+        - brc20-swap
+      operationId: postBrc20SwapClaim
+      summary: The claim operation.
+      description: >-
+        This interface claims rewards in the BRC20 Swap service. It requires the pid, address,
+        timestamp, fee tick, and user signatures to complete the operation.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - pid
+                - address
+                - ts
+                - feeTick
+                - feeAmount
+                - feeTickPrice
+              type: object
+              properties:
+                pid:
+                  type: string
+                address:
+                  type: string
+                ts:
+                  description: Timestamp (seconds)
+                  type: number
+                feeTick:
+                  description: Tick used as fee
+                  type: string
+                feeAmount:
+                  description: The fee that the user needs to pay
+                  type: string
+                feeTickPrice:
+                  description: The price of fee tick
+                  type: string
+                sigs:
+                  description: User signature
+                  type: array
+                  items:
+                    type: string
+                payType:
+                  type: string
+                rememberPayType:
+                  type: boolean
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      amount:
+                        description: Claimed reward amount
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/lp_reward_history:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapLpRewardHistory
+      summary: Gets the user pool information for the specified pair.
+      description: >-
+        This interface retrieves the LP reward history for a specific pair in the BRC20 Swap service.
+        It requires the address, tick0, tick1, and pagination parameters.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            type:
+                              type: string
+                            address:
+                              type: string
+                            tick0:
+                              type: string
+                            tick1:
+                              type: string
+                            reward0:
+                              type: string
+                            reward1:
+                              type: string
+                            ts:
+                              type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/stake_history:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapStakeHistory
+      summary: Gets the stake history.
+      description: >-
+        This interface retrieves the stake history in the BRC20 Swap service.
+        It supports filtering by pid, address, type, and pagination through start and limit parameters.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: pid
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: search
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: type
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            pid:
+                              type: string
+                            address:
+                              type: string
+                            poolTick0:
+                              type: string
+                            poolTick1:
+                              type: string
+                            type:
+                              type: string
+                            amount:
+                              type: string
+                            tick:
+                              type: string
+                            ts:
+                              type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/stake_list:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapStakeList
+      summary: Gets the stake list.
+      description: >-
+        This interface retrieves the stake list in the BRC20 Swap service.
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            startBlock:
+                              type: number
+                            endBlock:
+                              type: number
+                            stakePools:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  summary:
+                                    type: object
+                                    properties:
+                                      pid:
+                                        type: string
+                                      poolTick0:
+                                        type: string
+                                      poolTick1:
+                                        type: string
+                                      rewardTick:
+                                        type: string
+                                      curTotalLp:
+                                        type: string
+                                      baseReward:
+                                        type: string
+                                      stageNeedLp:
+                                        type: array
+                                        items:
+                                          type: string
+                                      stageAddedRewards:
+                                        type: array
+                                        items:
+                                          type: string
+                                    additionalProperties: false
+                                additionalProperties: false
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/stake_item:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapStakeItem
+      summary: Gets the stake item.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: eid
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      item:
+                        type: object
+                        properties:
+                          startBlock:
+                            type: number
+                          endBlock:
+                            type: number
+                          stakePools:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                summary:
+                                  type: object
+                                  properties:
+                                    pid:
+                                      type: string
+                                    poolTick0:
+                                      type: string
+                                    poolTick1:
+                                      type: string
+                                    rewardTick:
+                                      type: string
+                                    curTotalLp:
+                                      type: string
+                                    baseReward:
+                                      type: string
+                                    stageNeedLp:
+                                      type: array
+                                      items:
+                                        type: string
+                                    stageAddedRewards:
+                                      type: array
+                                      items:
+                                        type: string
+                                  additionalProperties: false
+                              additionalProperties: false
+                        additionalProperties: false
+                      newestHeight:
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/stake_user_info:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapStakeUserInfo
+      summary: Gets the user info.
+      description: >-
+        This interface retrieves the stake user information in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    additionalProperties: true
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/user_info:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapUserInfo
+      summary: Gets the user info.
+      description: >-
+        This interface retrieves the user information in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      defaultPayType:
+                        type: string
+                      rememberPayType:
+                        type: boolean
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/select_deposit:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapSelectDeposit
+      summary: Select deposit information
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: pubkey
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: v
+          required: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    additionalProperties: true
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/func_info:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapFuncInfo
+      summary: Gets the func info.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: id
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    additionalProperties: true
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/deposit_balance:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapDepositBalance
+      summary: Gets the deposit balance
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: pubkey
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    additionalProperties: true
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/deposit_process:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapDepositProcess
+      summary: Gets the deposit process.
+      description: >-
+        This interface retrieves the deposit process for a specific transaction ID in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: txid
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      tick:
+                        type: string
+                      amount:
+                        type: string
+                      cur:
+                        description: Current number of confirmations
+                        type: number
+                      sum:
+                        description: Total number of confirmations
+                        type: number
+                      ts:
+                        type: number
+                      txid:
+                        type: string
+                      type:
+                        type: string
+                      status:
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/tick_price:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapTickPrice
+      summary: Gets the tick price
+      description: >-
+        This interface retrieves the price for a specific tick in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      price:
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/address_gas:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapAddressGas
+      summary: Gets the address's total tick fee
+      description: >-
+        This interface retrieves the total gas consumption for a specific address and fee tick in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/price_line:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapPriceLine
+      summary: Gets the price line.
+      description: >-
+        This interface retrieves the price line data for a specific pair in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: timeRange
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            price:
+                              type: number
+                            usdPrice:
+                              type: number
+                            ts:
+                              type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/community_info:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapCommunityInfo
+      summary: Gets the community info.
+      description: >-
+        This interface retrieves the community information for a specific tick in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      tick:
+                        type: string
+                      twitter:
+                        type: string
+                      telegram:
+                        type: string
+                      website:
+                        type: string
+                      discord:
+                        type: string
+                      desc:
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/add_community_info:
+    post:
+      tags:
+        - brc20-swap
+      operationId: postBrc20SwapAddCommunityInfo
+      summary: Adds community info.
+      description: >-
+        This interface adds or updates community information for a specific tick in the BRC20 Swap service.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - tick
+              type: object
+              properties:
+                tick:
+                  type: string
+                twitter:
+                  type: string
+                telegram:
+                  type: string
+                website:
+                  type: string
+                discord:
+                  type: string
+                desc:
+                  type: string
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/community_list:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapCommunityList
+      summary: Gets the community info list.
+      description: >-
+        This interface retrieves the list of all community information in the BRC20 Swap service.
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            tick:
+                              type: string
+                            twitter:
+                              type: string
+                            telegram:
+                              type: string
+                            website:
+                              type: string
+                            discord:
+                              type: string
+                            desc:
+                              type: string
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/tick_holders:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapTickHolders
+      summary: Gets the tick holders.
+      description: >-
+        This interface retrieves the list of tick holders for a specific tick in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            maximum: 100
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            address:
+                              type: string
+                            amount:
+                              type: string
+                            percentage:
+                              type: number
+                            relativePercentage:
+                              type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pool_holders:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapPoolHolders
+      summary: Gets the pool holders.
+      description: >-
+        This interface retrieves the list of pool holders for a specific pair in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            address:
+                              type: string
+                            amount0:
+                              type: string
+                            amount1:
+                              type: string
+                            lp:
+                              type: string
+                            shareOfPool:
+                              type: string
+                            lockLp:
+                              type: object
+                              properties:
+                                lp:
+                                  type: string
+                                amount0:
+                                  type: string
+                                amount1:
+                                  type: string
+                              additionalProperties: false
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/reward_curve:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapRewardCurve
+      summary: Get reward curve data.
+      description: >-
+        This interface retrieves the reward curve data for a specific pair and time range in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: startTime
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: endTime
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    additionalProperties: true
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/send_lp_history:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapSendLpHistory
+      summary: Gets the history of send lp transaction.
+      description: >-
+        This interface retrieves the history of send LP transactions in the BRC20 Swap service.
+        It supports filtering by address, tick, and pagination through start and limit parameters.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: false
+        - schema:
+            type: boolean
+          in: query
+          name: fuzzySearch
+          required: false
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            maximum: 100
+            exclusiveMaximum: true
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            tick:
+                              type: string
+                            amount:
+                              type: string
+                            to:
+                              type: string
+                            ts:
+                              type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/burn_history:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapBurnHistory
+      summary: Gets the history of burn transaction.
+      description: >-
+        This interface retrieves the history of burn transactions in the BRC20 Swap service.
+        It supports filtering by address, tick, and pagination through start and limit parameters.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: false
+        - schema:
+            type: boolean
+          in: query
+          name: fuzzySearch
+          required: false
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            maximum: 100
+            exclusiveMaximum: true
+            type: number
+          in: query
+          name: limit
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      totalLp:
+                        description: Total LP amount
+                        type: string
+                      burnedLp:
+                        description: Burned LP amount
+                        type: string
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            tick:
+                              type: string
+                            amount:
+                              type: string
+                            to:
+                              type: string
+                            ts:
+                              type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/task_list:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapTaskList
+      summary: Get task list for address.
+      description: >-
+        This interface retrieves the task list for a specific address in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: tid
+          required: false
+          default: "1"
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      tid:
+                        type: string
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            tid:
+                              type: string
+                            itemId:
+                              type: string
+                            address:
+                              type: string
+                            done:
+                              type: boolean
+                          additionalProperties: false
+                    additionalProperties: false
+                    startTime:
+                      description: Task start time
+                      type: number
+                    endTime:
+                      description: Task end time
+                      type: number
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/address_usd:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapAddressUsd
+      summary: Get address usd.
+      description: >-
+        This interface retrieves the USD value of assets for a specific address in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        assetsUSD:
+                          type: string
+                        lpUSD:
+                          type: string
+                      additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pre_lock_lp:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapPreLockLp
+      summary: Prepare lock LP operation
+      description: >-
+        This interface pre-loads the /lock_lp operation, providing the signature content,
+        gas, and byte information required for locking LP in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: lockDay
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+          description: Lp tick0
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+          description: Lp tick1
+        - schema:
+            type: string
+          in: query
+          name: amount
+          required: true
+          description: The amount of lock tick
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: true
+          description: Timestamp (seconds)
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+          description: Tick used as fee
+        - schema:
+            type: string
+          in: query
+          name: payType
+          required: false
+          description: "Pay Type: tick, freeQuota"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - ids
+                      - signMsgs
+                    type: object
+                    properties:
+                      ids:
+                        description: User signature id
+                        type: array
+                        items:
+                          type: string
+                      signMsgs:
+                        description: User signature information
+                        type: array
+                        items:
+                          type: string
+                      feeAmount:
+                        description: The fee that the user needs to pay
+                        type: string
+                      feeTickPrice:
+                        description: The price of fee tick
+                        type: string
+                      feeBalance:
+                        description: The user's fee tick balance
+                        type: string
+                      usdPrice:
+                        description: The dollar value of the fee
+                        type: string
+                      amount0PerLp:
+                        type: string
+                      amount1PerLp:
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/lock_lp:
+    post:
+      tags:
+        - brc20-swap
+      operationId: postBrc20SwapLockLp
+      summary: The lock lp operation.
+      description: >-
+        This interface locks LP in the BRC20 Swap service. It requires the address, lockDay, tick0, tick1, amount,
+        timestamp, fee tick, and user signatures to complete the operation.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - address
+                - lockDay
+                - tick0
+                - tick1
+                - amount
+                - ts
+                - feeTick
+                - feeAmount
+                - feeTickPrice
+              type: object
+              properties:
+                address:
+                  type: string
+                lockDay:
+                  type: string
+                tick0:
+                  type: string
+                tick1:
+                  type: string
+                amount:
+                  description: The amount of lock tick
+                  type: string
+                ts:
+                  description: Timestamp (seconds)
+                  type: number
+                feeTick:
+                  description: Tick used as fee
+                  type: string
+                feeAmount:
+                  description: The fee that the user needs to pay
+                  type: string
+                feeTickPrice:
+                  description: The price of fee tick
+                  type: string
+                sigs:
+                  description: User signature
+                  type: array
+                  items:
+                    type: string
+                payType:
+                  type: string
+                rememberPayType:
+                  type: boolean
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pre_unlock_lp:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapPreUnlockLp
+      summary: Prepare unlock LP operation
+      description: >-
+        This interface pre-loads the /unlock_lp operation, providing the signature content,
+        gas, and byte information required for unlocking LP in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+          description: Lp tick0
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+          description: Lp tick1
+        - schema:
+            type: string
+          in: query
+          name: amount
+          required: true
+          description: The amount of unlock tick
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: true
+          description: Timestamp (seconds)
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+          description: Tick used as fee
+        - schema:
+            type: string
+          in: query
+          name: payType
+          required: false
+          description: "Pay Type: tick, freeQuota"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    required:
+                      - ids
+                      - signMsgs
+                    type: object
+                    properties:
+                      ids:
+                        description: User signature id
+                        type: array
+                        items:
+                          type: string
+                      signMsgs:
+                        description: User signature information
+                        type: array
+                        items:
+                          type: string
+                      feeAmount:
+                        description: The fee that the user needs to pay
+                        type: string
+                      feeTickPrice:
+                        description: The price of fee tick
+                        type: string
+                      feeBalance:
+                        description: The user's fee tick balance
+                        type: string
+                      usdPrice:
+                        description: The dollar value of the fee
+                        type: string
+                      amount0PerLp:
+                        type: string
+                      amount1PerLp:
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/unlock_lp:
+    post:
+      tags:
+        - brc20-swap
+      operationId: postBrc20SwapUnlockLp
+      summary: The unlock lp operation.
+      description: >-
+        This interface unlocks LP in the BRC20 Swap service. It requires the address, tick0, tick1, amount,
+        timestamp, fee tick, and user signatures to complete the operation.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - address
+                - tick0
+                - tick1
+                - amount
+                - ts
+                - feeTick
+                - feeAmount
+                - feeTickPrice
+              type: object
+              properties:
+                address:
+                  type: string
+                tick0:
+                  type: string
+                tick1:
+                  type: string
+                amount:
+                  description: The amount of unlock tick
+                  type: string
+                ts:
+                  description: Timestamp (seconds)
+                  type: number
+                feeTick:
+                  description: Tick used as fee
+                  type: string
+                feeAmount:
+                  description: The fee that the user needs to pay
+                  type: string
+                feeTickPrice:
+                  description: The price of fee tick
+                  type: string
+                sigs:
+                  description: User signature
+                  type: array
+                  items:
+                    type: string
+                payType:
+                  type: string
+                rememberPayType:
+                  type: boolean
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties: {}
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/lock_lp_history:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapLockLpHistory
+      summary: Gets the history of lock lp transaction.
+      description: >-
+        This interface retrieves the history of lock LP transactions in the BRC20 Swap service.
+        It supports filtering by address, tick, lockDay, and pagination through start and limit parameters.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: false
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: limit
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: false
+        - schema:
+            type: number
+          in: query
+          name: lockDay
+          required: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            address:
+                              type: string
+                            tick0:
+                              type: string
+                            tick1:
+                              type: string
+                            lp:
+                              type: string
+                            amount0:
+                              type: string
+                            amount1:
+                              type: string
+                            amount0USD:
+                              type: string
+                            amount1USD:
+                              type: string
+                            lockDay:
+                              type: number
+                            unlockTime:
+                              type: string
+                            ts:
+                              type: number
+                            shareOfPool:
+                              type: string
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/unlock_lp_history:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapUnlockLpHistory
+      summary: Gets the history of unlock lp transaction.
+      description: >-
+        This interface retrieves the history of unlock LP transactions in the BRC20 Swap service.
+        It supports filtering by address, tick, and pagination through start and limit parameters.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: false
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: limit
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            address:
+                              type: string
+                            tick0:
+                              type: string
+                            tick1:
+                              type: string
+                            lp:
+                              type: string
+                            amount0:
+                              type: string
+                            amount1:
+                              type: string
+                            amount0USD:
+                              type: string
+                            amount1USD:
+                              type: string
+                            ts:
+                              type: number
+                          additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/export_lock_lp_history:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapExportLockLpHistory
+      summary: Export lock lp history to CSV file.
+      description: >-
+        This interface exports the lock LP history to a CSV file in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: lockDay
+          required: false
+        - schema:
+            type: number
+          in: query
+          name: lockTime
+          required: false
+      responses:
+        "200":
+          description: CSV file download
+          content:
+            text/csv:
+              schema:
+                type: string
+  /v1/brc20-swap/my_lock_lp:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapMyLockLp
+      summary: Gets the user lock lp.
+      description: >-
+        This interface retrieves the user's lock LP information for a specific pair in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: tick0
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tick1
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      lp:
+                        type: string
+                      lockLp:
+                        type: string
+                      availableLp:
+                        type: string
+                      availableAmount0:
+                        type: string
+                      availableAmount1:
+                        type: string
+                      shareOfPool:
+                        type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/select_pool:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapSelectPool
+      summary: Select the tick information that you can swap.
+      description: >-
+        This interface retrieves the tick information that can be used for swapping based on the provided address and optional filters.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tickIn
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: tickOut
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: search
+          required: false
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        tick:
+                          type: string
+                        decimal:
+                          type: string
+                        brc20Balance:
+                          description: Module balance (not participate in swap calculations)
+                          type: string
+                        swapBalance:
+                          description: Swap balance
+                          type: string
+                        routes:
+                          description: Available routes for swapping
+                          type: array
+                          items:
+                            type: string
+                      additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/pre_multi_swap:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapPreMultiSwap
+      summary: Prepare multi swap operation
+      description: >-
+        This interface pre-loads the /multi_swap operation, providing the signature content
+        and gas information required for multi swapping in the BRC20 Swap service.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tickIn
+          required: true
+          description: Input tick
+        - schema:
+            type: string
+          in: query
+          name: tickOut
+          required: true
+          description: Output tick
+        - schema:
+            type: string
+          in: query
+          name: amountIn
+          required: true
+          description: The amount of input tick
+        - schema:
+            type: string
+          in: query
+          name: amountOut
+          required: true
+          description: The amount of output tick
+        - schema:
+            type: string
+          in: query
+          name: slippage
+          required: true
+        - schema:
+            enum:
+              - exactIn
+              - exactOut
+            type: string
+            example: exactIn
+          in: query
+          name: exactType
+          required: true
+        - schema:
+            type: number
+          in: query
+          name: ts
+          required: true
+          description: Timestamp(seconds)
+        - schema:
+            type: string
+          in: query
+          name: feeTick
+          required: true
+          description: Tick used as fee
+        - schema:
+            type: string
+          in: query
+          name: payType
+          required: false
+          description: "Pay Type: tick, freeQuota"
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      required:
+                        - ids
+                        - signMsgs
+                      type: object
+                      properties:
+                        ids:
+                          description: User signature id
+                          type: array
+                          items:
+                            type: string
+                        signMsgs:
+                          description: User signature information
+                          type: array
+                          items:
+                            type: string
+                        feeAmount:
+                          description: The fee that the user needs to pay
+                          type: string
+                        feeTickPrice:
+                          description: The price of fee tick
+                          type: string
+                        feeBalance:
+                          description: The user's fee tick balance
+                          type: string
+                        usdPrice:
+                          description: The dollar value of the fee
+                          type: string
+                      additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/multi_swap:
+    post:
+      tags:
+        - brc20-swap
+      operationId: postBrc20SwapMultiSwap
+      summary: The multi swap operation.
+      description: >-
+        This interface performs multi swaps in the BRC20 Swap service. It requires an array of swap items,
+        each with address, input tick, output tick, amounts, slippage, exact type, timestamp, fee tick,
+        and user signatures to complete the operation.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - items
+              type: object
+              properties:
+                items:
+                  type: array
+                  items:
+                    required:
+                      - address
+                      - tickIn
+                      - tickOut
+                      - amountIn
+                      - amountOut
+                      - feeTick
+                      - slippage
+                      - exactType
+                      - ts
+                      - feeAmount
+                      - feeTickPrice
+                    type: object
+                    properties:
+                      address:
+                        type: string
+                      tickIn:
+                        description: Input tick
+                        type: string
+                      tickOut:
+                        description: Output tick
+                        type: string
+                      amountIn:
+                        description: The amount of input tick
+                        type: string
+                      amountOut:
+                        description: The amount of output tick
+                        type: string
+                      feeTick:
+                        type: string
+                      slippage:
+                        type: string
+                      exactType:
+                        enum:
+                          - exactIn
+                          - exactOut
+                        type: string
+                      ts:
+                        description: Timestamp (seconds)
+                        type: number
+                      feeAmount:
+                        description: The fee that the user needs to pay
+                        type: string
+                      feeTickPrice:
+                        description: The price of fee tick
+                        type: string
+                      sigs:
+                        description: User signature
+                        type: array
+                        items:
+                          type: string
+                      payType:
+                        type: string
+                      rememberPayType:
+                        type: boolean
+                      assetFeeTick:
+                        type: string
+                      assetFeeAmount:
+                        type: string
+                      assetFeeTickPrice:
+                        type: string
+                    additionalProperties: false
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: array
+                    items:
+                      type: object
+                      properties:
+                        address:
+                          type: string
+                        tickIn:
+                          type: string
+                        tickOut:
+                          type: string
+                        success:
+                          type: boolean
+                        amountIn:
+                          type: string
+                        amountOut:
+                          type: string
+                        exactType:
+                          type: string
+                        value:
+                          type: number
+                        ts:
+                          type: number
+                        failureReason:
+                          type: string
+                      additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/quote_multi_swap:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapQuoteMultiSwap
+      summary: Returns the estimated number of multi swaps based on the input and exact type.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: true
+        - schema:
+            type: string
+          in: query
+          name: tickIn
+          required: true
+          description: Input tick
+        - schema:
+            type: string
+          in: query
+          name: tickOut
+          required: true
+          description: Output tick
+        - schema:
+            type: string
+          in: query
+          name: amount
+          required: true
+          description: If it is exactIn, it is the amount of input tick, else is the amount of output tick
+        - schema:
+            enum:
+              - exactIn
+              - exactOut
+            type: string
+            example: exactIn
+          in: query
+          name: exactType
+          required: true
+          description: Exact input or exact output
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      amountUSD:
+                        description: Input amount of usd value
+                        type: string
+                      expectUSD:
+                        description: Estimated amount of usd value
+                        type: string
+                      expect:
+                        description: Estimated amount
+                        type: string
+                      routesExpect:
+                        description: Estimated amounts for each route
+                        type: array
+                        items:
+                          type: string
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/multi_swap_history:
+    get:
+      tags:
+        - brc20-swap
+      operationId: getBrc20SwapMultiSwapHistory
+      summary: Gets the history of multi swap.
+      description: >-
+        This interface retrieves the history of multi swap transactions in the BRC20 Swap service.
+        It supports filtering by address, tick, and pagination through start and limit parameters.
+      parameters:
+        - schema:
+            type: string
+          in: query
+          name: address
+          required: false
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: false
+        - schema:
+            type: boolean
+          in: query
+          name: fuzzySearch
+          required: false
+        - schema:
+            type: number
+          in: query
+          name: start
+          required: true
+        - schema:
+            maximum: 100
+            exclusiveMaximum: true
+            type: number
+          in: query
+          name: limit
+          required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          required:
+                            - tickIn
+                            - tickOut
+                            - amountIn
+                            - amountOut
+                          type: object
+                          properties:
+                            address:
+                              type: string
+                            tickIn:
+                              description: Input tick
+                              type: string
+                            tickOut:
+                              description: Output tick
+                              type: string
+                            amountIn:
+                              description: The amount of input tick
+                              type: string
+                            amountOut:
+                              description: The amount of output tick
+                              type: string
+                            exactType:
+                              type: string
+                            ts:
+                              type: number
+                            value:
+                              description: Swap value
+                              type: number
+                            route0:
+                              description: First route details
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                tickIn:
+                                  type: string
+                                tickOut:
+                                  type: string
+                                amountIn:
+                                  type: string
+                                amountOut:
+                                  type: string
+                                exactType:
+                                  type: string
+                                ts:
+                                  type: number
+                                success:
+                                  type: boolean
+                                failureReason:
+                                  type: string
+                              additionalProperties: false
+                            route1:
+                              description: Second route details
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                tickIn:
+                                  type: string
+                                tickOut:
+                                  type: string
+                                amountIn:
+                                  type: string
+                                amountOut:
+                                  type: string
+                                exactType:
+                                  type: string
+                                ts:
+                                  type: number
+                                success:
+                                  type: boolean
+                                failureReason:
+                                  type: string
+                              additionalProperties: false
                           additionalProperties: false
                     additionalProperties: false
                 required:
