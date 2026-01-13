@@ -9,23 +9,23 @@ This API provides endpoints for ordinals collection marketplace services
 
 | Route | Summary |
 | ----- | ------- |
-| [POST /v3/market/collection/auction/collection_statistic](#return-a-summary-of-collection) | Return a summary of collection. |
-| [POST /v3/market/collection/auction/collection_statistic_list](#return-a-summary-of-collection) | Return a summary of collection. |
-| [POST /v3/market/collection/auction/collection_summary](#get-the-collection-statistics-information-at-a-certain-address) | Get the collection statistics information at a certain address |
-| [POST /v3/market/collection/auction/collection_inscriptions](#get-the-list-details-of-a-certain-collection-at-a-certain-address) | Get the list details of a certain collection at a certain address |
-| [POST /v3/market/collection/auction/inscription_info](#retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services) | Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services. |
-| [POST /v3/market/collection/auction/inscription_info_list](#get-the-basic-listing-information-of-the-specified-inscription-list) | Get the basic listing information of the specified inscription list |
-| [POST /v3/market/collection/auction/list](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
-| [POST /v3/market/collection/auction/actions](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
-| [POST /v3/market/collection/auction/create_put_on](#create-listing-order) | Create listing order. |
-| [POST /v3/market/collection/auction/confirm_put_on](#confirm-listing-order) | Confirm listing order. |
-| [POST /v3/market/collection/auction/create_bid_prepare](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
-| [POST /v3/market/collection/auction/create_bid](#create-purchase-order) | Create purchase order. |
-| [POST /v3/market/collection/auction/confirm_bid](#confirm-purchase-order) | Confirm purchase order. |
-| [POST /v3/market/collection/auction/create_put_off](#create-delisting-order) | Create delisting order. |
-| [POST /v3/market/collection/auction/confirm_put_off](#confirm-delisting-order) | Confirm delisting order. |
-| [POST /v3/market/collection/auction/create_modify_price](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
-| [POST /v3/market/collection/auction/confirm_modify_price](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
+| [POST `/v3/market/collection/auction/collection_statistic`](#return-a-summary-of-collection) | Return a summary of collection. |
+| [POST `/v3/market/collection/auction/collection_statistic_list`](#return-a-summary-of-collection) | Return a summary of collection. |
+| [POST `/v3/market/collection/auction/collection_summary`](#get-the-collection-statistics-information-at-a-certain-address) | Get the collection statistics information at a certain address |
+| [POST `/v3/market/collection/auction/collection_inscriptions`](#get-the-list-details-of-a-certain-collection-at-a-certain-address) | Get the list details of a certain collection at a certain address |
+| [POST `/v3/market/collection/auction/inscription_info`](#retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services) | Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services. |
+| [POST `/v3/market/collection/auction/inscription_info_list`](#get-the-basic-listing-information-of-the-specified-inscription-list) | Get the basic listing information of the specified inscription list |
+| [POST `/v3/market/collection/auction/list`](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
+| [POST `/v3/market/collection/auction/actions`](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
+| [POST `/v3/market/collection/auction/create_put_on`](#create-listing-order) | Create listing order. |
+| [POST `/v3/market/collection/auction/confirm_put_on`](#confirm-listing-order) | Confirm listing order. |
+| [POST `/v3/market/collection/auction/create_bid_prepare`](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
+| [POST `/v3/market/collection/auction/create_bid`](#create-purchase-order) | Create purchase order. |
+| [POST `/v3/market/collection/auction/confirm_bid`](#confirm-purchase-order) | Confirm purchase order. |
+| [POST `/v3/market/collection/auction/create_put_off`](#create-delisting-order) | Create delisting order. |
+| [POST `/v3/market/collection/auction/confirm_put_off`](#confirm-delisting-order) | Confirm delisting order. |
+| [POST `/v3/market/collection/auction/create_modify_price`](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
+| [POST `/v3/market/collection/auction/confirm_modify_price`](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
 
 ---
 
@@ -58,6 +58,7 @@ This API provides endpoints for ordinals collection marketplace services
   - `website` (string): 
   - `verification` (boolean): Officially certified
 
+
 ---
 
 ### Return a summary of collection.
@@ -89,6 +90,7 @@ This API provides endpoints for ordinals collection marketplace services
     - `verification` (boolean): Officially certified
   - `total` (number): 
 
+
 ---
 
 ### Get the collection statistics information at a certain address
@@ -108,6 +110,7 @@ This API provides endpoints for ordinals collection marketplace services
     - `iconContentType` (string): 
     - `name` (string): 
     - `total` (number): 
+
 
 ---
 
@@ -132,6 +135,7 @@ This API provides endpoints for ordinals collection marketplace services
     - `contentType` (string): 
     - `listed` (boolean): 
   - `total` (number): 
+
 
 ---
 
@@ -172,6 +176,7 @@ This API provides endpoints for ordinals collection marketplace services
   - `utxo` (object):
 
 
+
 ---
 
 ### Get the basic listing information of the specified inscription list
@@ -194,6 +199,7 @@ This API provides endpoints for ordinals collection marketplace services
     - `price` (number): 
     - `nftType` (string): 
     - `status` (string): 
+
 
 ---
 
@@ -234,6 +240,7 @@ This API provides endpoints for ordinals collection marketplace services
     - `domainType` (string): Domain field
   - `total` (number): 
   - `timestamp` (number): 
+
 
 ---
 
@@ -277,6 +284,7 @@ This API provides endpoints for ordinals collection marketplace services
       - `value` (string): 
   - `total` (number): 
 
+
 ---
 
 ### Create listing order.
@@ -295,6 +303,7 @@ This API provides endpoints for ordinals collection marketplace services
   - `signIndexes` (array):
 
 
+
 ---
 
 ### Confirm listing order.
@@ -308,6 +317,7 @@ This API provides endpoints for ordinals collection marketplace services
 - `code` (number): 
 - `msg` (string): 
 - `data` (object):
+
 
 
 ---
@@ -331,6 +341,7 @@ This API provides endpoints for ordinals collection marketplace services
   - `feeRate` (number): Network fee rate
   - `availableBalance` (number): Available confirmed balance for the user
   - `allBalance` (number): Available total balance for the user
+
 
 ---
 
@@ -356,6 +367,7 @@ This API provides endpoints for ordinals collection marketplace services
   - `bidSignIndexes` (array):
 
 
+
 ---
 
 ### Confirm purchase order.
@@ -370,6 +382,7 @@ This API provides endpoints for ordinals collection marketplace services
 - `msg` (string): 
 - `data` (object):
   - `txid` (string): Transaction txid
+
 
 ---
 
@@ -391,6 +404,7 @@ This API provides endpoints for ordinals collection marketplace services
   - `nftSignIndexes` (array):
 
 
+
 ---
 
 ### Confirm delisting order.
@@ -405,6 +419,7 @@ This API provides endpoints for ordinals collection marketplace services
 - `msg` (string): 
 - `data` (object):
   - `txid` (string): 
+
 
 ---
 
@@ -423,6 +438,7 @@ This API provides endpoints for ordinals collection marketplace services
   - `signIndexes` (array):
 
 
+
 ---
 
 ### Confirm the order for price adjustment.
@@ -436,6 +452,7 @@ This API provides endpoints for ordinals collection marketplace services
 - `code` (number): 
 - `msg` (string): 
 - `data` (object):
+
 
 
 ---

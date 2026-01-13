@@ -9,8 +9,8 @@ Fractal Only API for CAT20 DEX operations. This API provides endpoints to intera
 
 | Route | Summary |
 | ----- | ------- |
-| [GET /v1/cat20-dex/getTokenPrice](#get-token-price) | Get token price |
-| [GET /v1/cat20-dex/getMarketStats](#get-the-market-stats) | Get the market stats |
+| [GET `/v1/cat20-dex/getTokenPrice`](#get-token-price) | Get token price |
+| [GET `/v1/cat20-dex/getMarketStats`](#get-the-market-stats) | Get the market stats |
 
 ---
 
@@ -32,6 +32,7 @@ Retrieves the current price of a CAT20 token. If the token has no trades in the 
 #### Response (200)
 
 
+
 ---
 
 ### Get the market stats
@@ -51,6 +52,7 @@ Retrieves the market stats for all tokens which have trades in the last 30 days
 - `limit` (query) : The limit of the stats (default 20, max 100)
 
 #### Response (200)
+
 
 
 ---

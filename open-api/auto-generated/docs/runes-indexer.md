@@ -9,15 +9,15 @@ This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free
 
 | Route | Summary |
 | ----- | ------- |
-| [GET /v1/indexer/runes/status](#get-runes-status) | Get runes status |
-| [GET /v1/indexer/runes/info-list](#get-runes-list) | Get runes list |
-| [GET /v1/indexer/runes/{runeid}/info](#get-rune-info-by-runeid) | Get rune info by runeid |
-| [GET /v1/indexer/runes/{runeid}/holders](#get-runes-holders-by-runeid) | Get runes holders by runeid |
-| [GET /v1/indexer/address/{address}/runes/balance-list](#get-runes-balance-list-by-address) | Get runes balance list by address |
-| [GET /v1/indexer/address/{address}/runes/{runeid}/balance](#get-runes-balance-by-address-and-runeid) | Get runes balance by address and runeid |
-| [GET /v1/indexer/runes/utxo/{txid}/{index}/balance](#get-runes-balance-by-utxo) | Get runes balance by utxo |
-| [GET /v1/indexer/address/{address}/runes/{runeid}/utxo](#get-utxo-runes-balance-by-address-and-runeid) | Get utxo runes balance by address and runeid |
-| [GET /v1/indexer/runes/event](#get-runes-events) | Get Runes Events |
+| [GET `/v1/indexer/runes/status`](#get-runes-status) | Get runes status |
+| [GET `/v1/indexer/runes/info-list`](#get-runes-list) | Get runes list |
+| [GET `/v1/indexer/runes/TODO-runeid/info`](#get-rune-info-by-runeid) | Get rune info by runeid |
+| [GET `/v1/indexer/runes/TODO-runeid/holders`](#get-runes-holders-by-runeid) | Get runes holders by runeid |
+| [GET `/v1/indexer/address/TODO-address/runes/balance-list`](#get-runes-balance-list-by-address) | Get runes balance list by address |
+| [GET `/v1/indexer/address/TODO-address/runes/TODO-runeid/balance`](#get-runes-balance-by-address-and-runeid) | Get runes balance by address and runeid |
+| [GET `/v1/indexer/runes/utxo/TODO-txid/TODO-index/balance`](#get-runes-balance-by-utxo) | Get runes balance by utxo |
+| [GET `/v1/indexer/address/TODO-address/runes/TODO-runeid/utxo`](#get-utxo-runes-balance-by-address-and-runeid) | Get utxo runes balance by address and runeid |
+| [GET `/v1/indexer/runes/event`](#get-runes-events) | Get Runes Events |
 
 ---
 
@@ -50,6 +50,7 @@ Get runes global status
 - halvingBlockCount: The number of blocks remaining until the next halving
 
 ![image](./runes_p1.avif)
+
 
 ---
 
@@ -102,6 +103,7 @@ Get runes global status
     - `mintable` (boolean): 
     - `remaining` (string): 
 
+
 ---
 
 ### Get rune info by runeid
@@ -146,6 +148,7 @@ Get runes global status
   - `mintable` (boolean): 
   - `remaining` (string): 
 
+
 ---
 
 ### Get runes holders by runeid
@@ -170,6 +173,7 @@ Get runes global status
     - `address` (string): 
     - `amount` (string):  (example: `10000`)
 
+
 ---
 
 ### Get runes balance list by address
@@ -188,6 +192,7 @@ Get runes global status
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object): 
+
 
 ---
 
@@ -213,6 +218,7 @@ Get runes global status
   - `symbol` (string):  (example: `G`)
   - `divisibility` (integer):  (example: `0`)
 
+
 ---
 
 ### Get runes balance by utxo
@@ -237,6 +243,7 @@ Get runes global status
   - `symbol` (string):  (example: `G`)
   - `divisibility` (integer):  (example: `0`)
 
+
 ---
 
 ### Get utxo runes balance by address and runeid
@@ -256,6 +263,7 @@ Get runes global status
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object): 
+
 
 ---
 
@@ -279,6 +287,7 @@ Get the full history events of Runes.
 - `limit` (query) : Number of inscriptions returned
 
 #### Response (200)
+
 
 
 ---

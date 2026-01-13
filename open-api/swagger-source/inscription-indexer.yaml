@@ -468,36 +468,6 @@ components:
         txidx:
           type: integer
           description: tx index in block
-    UTXO:
-      type: object
-      properties:
-        address:
-          type: string
-        codeType:
-          type: integer
-        height:
-          type: integer
-        idx:
-          type: integer
-        inscriptions:
-          type: array
-          items:
-            $ref: "#/components/schemas/InscriptionItem"
-        isOpInRBF:
-          type: boolean
-          example: false
-        satoshi:
-          type: integer
-          example: 10000
-        scriptPk:
-          type: string
-        scriptType:
-          type: string
-        txid:
-          type: string
-        vout:
-          type: integer
-          example: 0
     AbandonNFTUTXO:
       type: object
       properties:

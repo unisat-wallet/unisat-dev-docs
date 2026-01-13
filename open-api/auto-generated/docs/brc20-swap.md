@@ -9,41 +9,41 @@ BRC20 Swap API provides a set of interfaces for BRC20 Swap and PizzaSwap service
 
 | Route | Summary |
 | ----- | ------- |
-| [GET /v1/brc20-swap/config](#swaps-global-configuration-information) | Swap's global configuration information. |
-| [GET /v1/brc20-swap/balance](#gets-the-balance-for-the-specified-address-and-tick) | Gets the balance for the specified address and tick. |
-| [GET /v1/brc20-swap/pool_info](#get-pool-information-based-on-trade-pair) | Get Pool information based on trade pair. |
-| [GET /v1/brc20-swap/select](#select-the-tick-information-that-you-can-use-based-on-the-address) | Select the tick information that you can use based on the address. |
-| [GET /v1/brc20-swap/pre_deploy_pool](#prepare-deploy-pool-operation) | Prepare deploy pool operation |
-| [POST /v1/brc20-swap/deploy_pool](#deploy-the-pool-operation) | Deploy the pool operation. |
-| [GET /v1/brc20-swap/pre_add_liq](#prepare-add-liquidity-operation) | Prepare add liquidity operation |
-| [POST /v1/brc20-swap/add_liq](#add-the-liquidity-operation) | Add the liquidity operation |
-| [GET /v1/brc20-swap/pre_remove_liq](#prepare-remove-liquidity-operation) | Prepare remove liquidity operation |
-| [POST /v1/brc20-swap/remove_liq](#remove-the-liquidity-operation) | Remove the liquidity operation |
-| [GET /v1/brc20-swap/pre_send](#prepare-send-operation) | Prepare send operation |
-| [POST /v1/brc20-swap/pre_batch_send](#prepare-batch-send-operation) | Prepare batch send operation |
-| [GET /v1/brc20-swap/pre_swap](#prepare-swap-operation) | Prepare swap operation |
-| [POST /v1/brc20-swap/send](#the-send-operation) | The send operation. |
-| [POST /v1/brc20-swap/batch_send](#the-batch-send-operation) | The batch send operation. |
-| [POST /v1/brc20-swap/swap](#the-swap-operation) | The swap operation. |
-| [GET /v1/brc20-swap/pool_list](#gets-the-pool-list-information) | Gets the pool list information. |
-| [GET /v1/brc20-swap/my_pool_list](#gets-the-users-pool-list-information) | Gets the user's pool list information. |
-| [GET /v1/brc20-swap/my_pool](#gets-the-user-pool-information-for-the-specified-pair) | Gets the user pool information for the specified pair. |
-| [GET /v1/brc20-swap/overview](#an-overview-of-swap-information) | An overview of swap information |
-| [GET /v1/brc20-swap/gas_history](#gets-the-gas-consumption-records-for-a-user-aggregation-operation) | Gets the gas consumption records for a user aggregation operation. |
-| [GET /v1/brc20-swap/send_history](#gets-the-history-of-send-transaction) | Gets the history of send transaction. |
-| [GET /v1/brc20-swap/liq_history](#gets-the-history-of-a-pair-addition-pool) | Gets the history of a pair addition pool. |
-| [GET /v1/brc20-swap/swap_history](#gets-the-history-of-swap) | Gets the history of swap. |
-| [GET /v1/brc20-swap/rollup_history](#get-chain-history-of-rollup-inscription) | Get chain history of rollup inscription. |
-| [GET /v1/brc20-swap/deposit_list](#gets-the-deposit-list-for-a-user) | Gets the deposit list for a user. |
-| [GET /v1/brc20-swap/create_deposit](#create-a-deposit-psbt-to-be-signed-by-the-user) | Create a deposit psbt to be signed by the user. |
-| [POST /v1/brc20-swap/confirm_deposit](#user-signature-deposit-psbt-submit-confirmation) | User signature deposit psbt, submit confirmation. |
-| [GET /v1/brc20-swap/system_status](#gets-the-current-system-state) | Gets the current system state. |
-| [GET /v1/brc20-swap/withdraw_history](#gets-the-user-withdrawal-history) | Gets the user withdrawal history. |
-| [GET /v1/brc20-swap/create_retry_withdraw](#retry-create-a-withdraw-psbt-to-be-signed-by-the-user) | Retry create a withdraw psbt to be signed by the user. |
-| [POST /v1/brc20-swap/confirm_retry_withdraw](#user-signature-withdraw-psbt-submit-confirmation) | User signature withdraw psbt, submit confirmation. |
-| [GET /v1/brc20-swap/create_withdraw](#create-a-withdraw-psbt-to-be-signed-by-the-user) | Create a withdraw psbt to be signed by the user. |
-| [POST /v1/brc20-swap/confirm_withdraw](#user-signature-withdraw-psbt-submit-confirmation) | User signature withdraw psbt, submit confirmation. |
-| [GET /v1/brc20-swap/withdraw_process](#gets-the-withdrawal-progress-for-the-specified-id) | Gets the withdrawal progress for the specified ID. |
+| [GET `/v1/brc20-swap/config`](#swaps-global-configuration-information) | Swap's global configuration information. |
+| [GET `/v1/brc20-swap/balance`](#gets-the-balance-for-the-specified-address-and-tick) | Gets the balance for the specified address and tick. |
+| [GET `/v1/brc20-swap/pool_info`](#get-pool-information-based-on-trade-pair) | Get Pool information based on trade pair. |
+| [GET `/v1/brc20-swap/select`](#select-the-tick-information-that-you-can-use-based-on-the-address) | Select the tick information that you can use based on the address. |
+| [GET `/v1/brc20-swap/pre_deploy_pool`](#prepare-deploy-pool-operation) | Prepare deploy pool operation |
+| [POST `/v1/brc20-swap/deploy_pool`](#deploy-the-pool-operation) | Deploy the pool operation. |
+| [GET `/v1/brc20-swap/pre_add_liq`](#prepare-add-liquidity-operation) | Prepare add liquidity operation |
+| [POST `/v1/brc20-swap/add_liq`](#add-the-liquidity-operation) | Add the liquidity operation |
+| [GET `/v1/brc20-swap/pre_remove_liq`](#prepare-remove-liquidity-operation) | Prepare remove liquidity operation |
+| [POST `/v1/brc20-swap/remove_liq`](#remove-the-liquidity-operation) | Remove the liquidity operation |
+| [GET `/v1/brc20-swap/pre_send`](#prepare-send-operation) | Prepare send operation |
+| [POST `/v1/brc20-swap/pre_batch_send`](#prepare-batch-send-operation) | Prepare batch send operation |
+| [GET `/v1/brc20-swap/pre_swap`](#prepare-swap-operation) | Prepare swap operation |
+| [POST `/v1/brc20-swap/send`](#the-send-operation) | The send operation. |
+| [POST `/v1/brc20-swap/batch_send`](#the-batch-send-operation) | The batch send operation. |
+| [POST `/v1/brc20-swap/swap`](#the-swap-operation) | The swap operation. |
+| [GET `/v1/brc20-swap/pool_list`](#gets-the-pool-list-information) | Gets the pool list information. |
+| [GET `/v1/brc20-swap/my_pool_list`](#gets-the-users-pool-list-information) | Gets the user's pool list information. |
+| [GET `/v1/brc20-swap/my_pool`](#gets-the-user-pool-information-for-the-specified-pair) | Gets the user pool information for the specified pair. |
+| [GET `/v1/brc20-swap/overview`](#an-overview-of-swap-information) | An overview of swap information |
+| [GET `/v1/brc20-swap/gas_history`](#gets-the-gas-consumption-records-for-a-user-aggregation-operation) | Gets the gas consumption records for a user aggregation operation. |
+| [GET `/v1/brc20-swap/send_history`](#gets-the-history-of-send-transaction) | Gets the history of send transaction. |
+| [GET `/v1/brc20-swap/liq_history`](#gets-the-history-of-a-pair-addition-pool) | Gets the history of a pair addition pool. |
+| [GET `/v1/brc20-swap/swap_history`](#gets-the-history-of-swap) | Gets the history of swap. |
+| [GET `/v1/brc20-swap/rollup_history`](#get-chain-history-of-rollup-inscription) | Get chain history of rollup inscription. |
+| [GET `/v1/brc20-swap/deposit_list`](#gets-the-deposit-list-for-a-user) | Gets the deposit list for a user. |
+| [GET `/v1/brc20-swap/create_deposit`](#create-a-deposit-psbt-to-be-signed-by-the-user) | Create a deposit psbt to be signed by the user. |
+| [POST `/v1/brc20-swap/confirm_deposit`](#user-signature-deposit-psbt-submit-confirmation) | User signature deposit psbt, submit confirmation. |
+| [GET `/v1/brc20-swap/system_status`](#gets-the-current-system-state) | Gets the current system state. |
+| [GET `/v1/brc20-swap/withdraw_history`](#gets-the-user-withdrawal-history) | Gets the user withdrawal history. |
+| [GET `/v1/brc20-swap/create_retry_withdraw`](#retry-create-a-withdraw-psbt-to-be-signed-by-the-user) | Retry create a withdraw psbt to be signed by the user. |
+| [POST `/v1/brc20-swap/confirm_retry_withdraw`](#user-signature-withdraw-psbt-submit-confirmation) | User signature withdraw psbt, submit confirmation. |
+| [GET `/v1/brc20-swap/create_withdraw`](#create-a-withdraw-psbt-to-be-signed-by-the-user) | Create a withdraw psbt to be signed by the user. |
+| [POST `/v1/brc20-swap/confirm_withdraw`](#user-signature-withdraw-psbt-submit-confirmation) | User signature withdraw psbt, submit confirmation. |
+| [GET `/v1/brc20-swap/withdraw_process`](#gets-the-withdrawal-progress-for-the-specified-id) | Gets the withdrawal progress for the specified ID. |
 
 ---
 
@@ -67,6 +67,7 @@ This interface provides the global configuration information for the BRC20 Swap 
   - `serviceGasTick` (string): The tick used for the second layer gas.
   - `pendingDepositDirectNum` (number): Number of confirmations required for direct deposit.
   - `pendingDepositMatchingNum` (number): Number of confirmations required for matching deposit.
+
 
 ---
 
@@ -94,6 +95,7 @@ This interface retrieves the balance for a specific address and tick in the BRC2
     - `pendingSwap` (string): The balance converted from pending to swap.
     - `pendingAvailable` (string): The balance converted from pending to module.
   - `decimal` (string): 
+
 
 ---
 
@@ -126,6 +128,7 @@ This interface retrieves the pool information for a specific trade pair in the B
   - `reward0` (string): 
   - `reward1` (string): 
 
+
 ---
 
 ### Select the tick information that you can use based on the address.
@@ -150,6 +153,7 @@ This interface retrieves the tick information that can be used for swapping base
   - `decimal` (string): 
   - `brc20Balance` (string): Module balance (not participate in swap calculations)
   - `swapBalance` (string): Swap balance
+
 
 ---
 
@@ -184,6 +188,7 @@ This interface pre-loads the /deploy_pool operation, providing the signature con
   - `feeBalance` (string): The user's fee tick balance
   - `usdPrice` (string): The dollar value of the fee
 
+
 ---
 
 ### Deploy the pool operation.
@@ -200,6 +205,7 @@ This interface deploys a pool in the BRC20 Swap service. It requires the address
 - `code` (number): 
 - `msg` (string): 
 - `data` (object):
+
 
 
 ---
@@ -238,6 +244,7 @@ This interface pre-loads the /add_liq operation, providing the signature content
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
 
+
 ---
 
 ### Add the liquidity operation
@@ -264,6 +271,7 @@ This interface adds liquidity to a pool in the BRC20 Swap service. It requires t
   - `amount1` (string): Input amount of tick1
   - `lp` (string): 
   - `ts` (number): 
+
 
 ---
 
@@ -302,6 +310,7 @@ This interface pre-loads the /remove_liq operation, providing the signature cont
   - `feeBalance` (string): The user's fee tick balance
   - `usdPrice` (string): The dollar value of the fee
 
+
 ---
 
 ### Remove the liquidity operation
@@ -328,6 +337,7 @@ This interface removes liquidity from a pool in the BRC20 Swap service. It requi
   - `amount1` (string): Input amount of tick1
   - `lp` (string): 
   - `ts` (number): 
+
 
 ---
 
@@ -363,6 +373,7 @@ This interface pre-loads the /send operation, providing the signature content, g
   - `feeBalance` (string): The user's fee tick balance
   - `usdPrice` (string): The dollar value of the fee
 
+
 ---
 
 ### Prepare batch send operation
@@ -387,6 +398,7 @@ This interface pre-loads the /batch_send operation, providing the signature cont
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
   - `usdPrice` (string): The dollar value of the fee
+
 
 ---
 
@@ -425,6 +437,7 @@ This interface pre-loads the /swap operation, providing the signature content, g
   - `feeBalance` (string): The user's fee tick balance
   - `usdPrice` (string): The dollar value of the fee
 
+
 ---
 
 ### The send operation.
@@ -443,6 +456,7 @@ This interface sends a tick in the BRC20 Swap service. It requires the address, 
 - `data` (object):
 
 
+
 ---
 
 ### The batch send operation.
@@ -459,6 +473,7 @@ This interface sends multiple ticks in the BRC20 Swap service. It requires the a
 - `code` (number): 
 - `msg` (string): 
 - `data` (object):
+
 
 
 ---
@@ -486,6 +501,7 @@ This interface swaps ticks in the BRC20 Swap service. It requires the address, i
   - `amountOut` (string): 
   - `exactType` (string): 
   - `ts` (number): 
+
 
 ---
 
@@ -516,6 +532,7 @@ This interface retrieves the pool list information in the BRC20 Swap service. It
     - `tvl` (string): Total pool value
     - `volume24h` (string): 
     - `volume7d` (string): 
+
 
 ---
 
@@ -552,6 +569,7 @@ This interface retrieves the user's pool list information in the BRC20 Swap serv
     - `unclaimedReward0` (string): 
     - `unclaimedReward1` (string): 
 
+
 ---
 
 ### Gets the user pool information for the specified pair.
@@ -580,6 +598,7 @@ This interface retrieves the user pool information for a specific pair in the BR
   - `amount0` (string): Amount of tick0
   - `amount1` (string): Amount of tick1
 
+
 ---
 
 ### An overview of swap information
@@ -601,6 +620,7 @@ This interface provides an overview of the swap information in the BRC20 Swap se
   - `volume24h` (string): 24 hours volume
   - `transactions` (number): Number of transactions in 24 hours
   - `pairs` (number): 
+
 
 ---
 
@@ -631,6 +651,7 @@ This interface retrieves the gas consumption records for a user aggregation oper
     - `gas` (string): 
     - `ts` (number): 
 
+
 ---
 
 ### Gets the history of send transaction.
@@ -659,6 +680,7 @@ This interface retrieves the history of send transactions in the BRC20 Swap serv
     - `amount` (string): 
     - `to` (string): 
     - `ts` (number): 
+
 
 ---
 
@@ -693,6 +715,7 @@ This interface retrieves the history of pair addition pools in the BRC20 Swap se
     - `lp` (string): 
     - `ts` (number): 
 
+
 ---
 
 ### Gets the history of swap.
@@ -724,6 +747,7 @@ This interface retrieves the history of swap transactions in the BRC20 Swap serv
     - `exactType` (string): 
     - `ts` (number): 
 
+
 ---
 
 ### Get chain history of rollup inscription.
@@ -752,6 +776,7 @@ This interface retrieves the chain history of rollup inscriptions in the BRC20 S
     - `inscriptionId` (string): Rollup inscription id
     - `inscriptionNumber` (number): Rollup inscription number
     - `ts` (number): 
+
 
 ---
 
@@ -785,6 +810,7 @@ This interface retrieves the deposit list for a user in the BRC20 Swap service. 
     - `txid` (string): 
     - `type` (string): 
 
+
 ---
 
 ### Create a deposit psbt to be signed by the user.
@@ -811,6 +837,7 @@ This interface creates a deposit PSBT to be signed by the user in the BRC20 Swap
   - `expiredTimestamp` (number): 
   - `recommendDeposit` (string): 
 
+
 ---
 
 ### User signature deposit psbt, submit confirmation.
@@ -827,6 +854,7 @@ This interface allows the user to sign the deposit PSBT and submit the confirmat
 - `code` (number): 
 - `msg` (string): 
 - `data` (object):
+
 
 
 ---
@@ -846,6 +874,7 @@ This interface retrieves the current system state of the BRC20 Swap service, inc
 - `msg` (string): 
 - `data` (object):
   - `committing` (boolean): Is rollup inscription committing
+
 
 ---
 
@@ -881,6 +910,7 @@ This interface retrieves the user withdrawal history in the BRC20 Swap service. 
     - `status` (string): 
     - `type` (string): 
 
+
 ---
 
 ### Retry create a withdraw psbt to be signed by the user.
@@ -906,6 +936,7 @@ This interface retries to create a withdrawal PSBT to be signed by the user in t
   - `approvePsbt` (string): The user psbt with approve insctiption
   - `networkFee` (number): 
 
+
 ---
 
 ### User signature withdraw psbt, submit confirmation.
@@ -922,6 +953,7 @@ This interface allows the user to sign the retry withdrawal PSBT and submit the 
 - `code` (number): 
 - `msg` (string): 
 - `data` (object):
+
 
 
 ---
@@ -950,6 +982,7 @@ This interface creates a withdrawal PSBT to be signed by the user in the BRC20 S
 - `data` (object):
 
 
+
 ---
 
 ### User signature withdraw psbt, submit confirmation.
@@ -966,6 +999,7 @@ This interface allows the user to sign the withdrawal PSBT and submit the confir
 - `code` (number): 
 - `msg` (string): 
 - `data` (object):
+
 
 
 ---
@@ -1015,6 +1049,7 @@ This interface retrieves the withdrawal progress for a specific ID in the BRC20 
     - `transferAddress` (string): Deposit user address
     - `txid` (string): Matching txid
     - `ts` (number): 
+
 
 ---
 

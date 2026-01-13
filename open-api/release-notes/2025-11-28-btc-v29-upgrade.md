@@ -29,7 +29,7 @@ With Bitcoin Core v29, UTXOs from low-fee transactions are now tracked and optio
 
 Documentation:
 
-- [/v1/indexer/address/{address}/utxo-data](../auto-generated/docs/blockchain-indexer.md#get-btcutxo-list-by-address)
+- [/v1/indexer/address/:address/utxo-data](../auto-generated/docs/blockchain-indexer.md#get-btcutxo-list-by-address)
 - [BTC Balance and UTXO](../btc-balance-utxo.md)
 
 ---
@@ -46,12 +46,12 @@ Documentation:
 Example:
 
 ```
-GET /v1/indexer/address/{address}/available-utxo-data?withLowFee=true
+GET /v1/indexer/address/:address/available-utxo-data?withLowFee=true
 ```
 
 Documentation:
 
-- [/v1/indexer/address/{address}/available-utxo-data](../auto-generated/docs/blockchain-indexer.md#get-available-utxo-list-by-address)
+- [/v1/indexer/address/:address/available-utxo-data](../auto-generated/docs/blockchain-indexer.md#get-available-utxo-list-by-address)
 - [BTC Balance and UTXO](../btc-balance-utxo.md)
 
 ---

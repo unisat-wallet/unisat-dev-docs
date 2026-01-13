@@ -3,6 +3,12 @@ const yaml = require("js-yaml");
 const path = require("path");
 
 const swaggerBaseUrl = "https://open-api.unisat.io/#/";
+const swaggerSpecUrl = "swagger/openapi-swagger.yaml";
+
+function escapeMdxText(route) {
+  if (!route) return route;
+  return route.replace(/{([^}]+)}/g, "TODO-$1");
+}
 
 function getParameters(params = []) {
   if (!params.length) return "";
@@ -130,7 +136,9 @@ ${swagger.info.description}
       .toLowerCase()
       .replace(/\s+/g, "-")
       .replace(/[^\w-]/g, "");
-    output += `| [${method.toUpperCase()} ${route}](#${anchor}) | ${summary} |\n`;
+    output += `| [${method.toUpperCase()} \`${escapeMdxText(
+      route
+    )}\`](#${anchor}) | ${summary} |\n`;
   });
 
   output += `\n---\n\n`;
@@ -186,7 +194,20 @@ ${swagger.info.description}
         output += `${notes.trim()}\n\n`;
       }
 
-      output += `---\n\n`;
+      output += `\n---\n\n`;
+
+      //       output += `
+      // #### Try it out
+
+      // <SwaggerEndpoint
+      //   specUrl="${swaggerSpecUrl}"
+      //   path="${route}"
+      //   method="${method.toLowerCase()}"
+      // />
+
+      // ---
+
+      // `;
     }
   }
 

@@ -9,19 +9,19 @@ The Alkanes Indexer API is developed by the UniSat team, providing a simplified 
 
 | Route | Summary |
 | ----- | ------- |
-| [GET /v1/indexer/alkanes/status](#get-alkanes-status) | Get alkanes status |
-| [GET /v1/indexer/alkanes/info-list](#get-alkanes-list) | Get alkanes list |
-| [GET /v1/indexer/alkanes/{alkaneid}/info](#get-alkane-info-by-alkaneid) | Get alkane info by alkaneid |
-| [GET /v1/indexer/alkanes/token-list](#get-alkanes-token-list) | Get alkanes token list |
-| [GET /v1/indexer/alkanes/{alkaneid}/holders](#get-alkanes-holders-by-alkaneid) | Get alkanes holders by alkaneid |
-| [GET /v1/indexer/alkanes/{alkaneid}/collection-items](#get-collection-items) | Get collection items |
-| [GET /v1/indexer/alkanes/{alkaneid}/contract-events](#get-contract-events) | Get contract events |
-| [GET /v1/indexer/alkanes/utxo/{txid}/{index}/balance](#get-alkanes-utxo-balance) | Get alkanes utxo balance |
-| [GET /v1/indexer/address/{address}/alkanes/{alkaneid}/utxo](#get-utxo-alkanes-balance-by-address-and-alkaneid) | Get utxo alkanes balance by address and alkaneid |
-| [GET /v1/indexer/address/{address}/alkanes/token-list](#get-address-alkanes-token-list) | Get address alkanes token list |
-| [GET /v1/indexer/address/{address}/alkanes/collection-list](#get-address-alkanes-collection-list) | Get address alkanes collection list |
-| [GET /v1/indexer/address/{address}/alkanes/{alkaneid}/collection-items](#get-address-collection-items-by-alkaneid) | Get address collection items by alkaneid |
-| [GET /v1/indexer/address/{address}/alkanes/{alkaneid}/transfer-history](#get-transfer-history) | Get transfer history |
+| [GET `/v1/indexer/alkanes/status`](#get-alkanes-status) | Get alkanes status |
+| [GET `/v1/indexer/alkanes/info-list`](#get-alkanes-list) | Get alkanes list |
+| [GET `/v1/indexer/alkanes/TODO-alkaneid/info`](#get-alkane-info-by-alkaneid) | Get alkane info by alkaneid |
+| [GET `/v1/indexer/alkanes/token-list`](#get-alkanes-token-list) | Get alkanes token list |
+| [GET `/v1/indexer/alkanes/TODO-alkaneid/holders`](#get-alkanes-holders-by-alkaneid) | Get alkanes holders by alkaneid |
+| [GET `/v1/indexer/alkanes/TODO-alkaneid/collection-items`](#get-collection-items) | Get collection items |
+| [GET `/v1/indexer/alkanes/TODO-alkaneid/contract-events`](#get-contract-events) | Get contract events |
+| [GET `/v1/indexer/alkanes/utxo/TODO-txid/TODO-index/balance`](#get-alkanes-utxo-balance) | Get alkanes utxo balance |
+| [GET `/v1/indexer/address/TODO-address/alkanes/TODO-alkaneid/utxo`](#get-utxo-alkanes-balance-by-address-and-alkaneid) | Get utxo alkanes balance by address and alkaneid |
+| [GET `/v1/indexer/address/TODO-address/alkanes/token-list`](#get-address-alkanes-token-list) | Get address alkanes token list |
+| [GET `/v1/indexer/address/TODO-address/alkanes/collection-list`](#get-address-alkanes-collection-list) | Get address alkanes collection list |
+| [GET `/v1/indexer/address/TODO-address/alkanes/TODO-alkaneid/collection-items`](#get-address-collection-items-by-alkaneid) | Get address collection items by alkaneid |
+| [GET `/v1/indexer/address/TODO-address/alkanes/TODO-alkaneid/transfer-history`](#get-transfer-history) | Get transfer history |
 
 ---
 
@@ -58,6 +58,7 @@ This endpoint is used to monitor the indexer’s sync status.
 
 - `alkanesRsVersion` The alkanesRsVersion field indicates the version of the alkanes-rs indexer in use.
   For more information, refer to the repository: https://github.com/kungfuflex/alkanes-rs.
+
 
 ---
 
@@ -113,6 +114,7 @@ This endpoint is used to monitor the indexer’s sync status.
       - `minted` (integer): 
       - `holders` (integer): 
 
+
 ---
 
 ### Get alkane info by alkaneid
@@ -159,6 +161,7 @@ This endpoint is used to monitor the indexer’s sync status.
     - `maxSupply` (string):  (example: `1000`)
     - `minted` (integer): 
     - `holders` (integer): 
+
 
 ---
 
@@ -215,6 +218,7 @@ This endpoint is used to monitor the indexer’s sync status.
       - `minted` (integer): 
       - `holders` (integer): 
 
+
 ---
 
 ### Get alkanes holders by alkaneid
@@ -238,6 +242,7 @@ This endpoint is used to monitor the indexer’s sync status.
   - `detail` (array):
     - `address` (string): 
     - `amount` (string):  (example: `10000`)
+
 
 ---
 
@@ -291,6 +296,7 @@ This endpoint is used to monitor the indexer’s sync status.
       - `minted` (integer): 
       - `holders` (integer): 
 
+
 ---
 
 ### Get contract events
@@ -325,6 +331,7 @@ This endpoint is used to monitor the indexer’s sync status.
     - `height` (integer): 
     - `txid` (string): 
     - `vout` (integer): 
+
 
 ---
 
@@ -373,6 +380,7 @@ This endpoint is used to monitor the indexer’s sync status.
     - `minted` (integer): 
     - `holders` (integer): 
 
+
 ---
 
 ### Get utxo alkanes balance by address and alkaneid
@@ -392,6 +400,7 @@ This endpoint is used to monitor the indexer’s sync status.
 - `code` (integer):  (example: `0`)
 - `msg` (string):  (example: ``)
 - `data` (object): 
+
 
 ---
 
@@ -445,6 +454,7 @@ This endpoint is used to monitor the indexer’s sync status.
       - `minted` (integer): 
       - `holders` (integer): 
 
+
 ---
 
 ### Get address alkanes collection list
@@ -496,6 +506,7 @@ This endpoint is used to monitor the indexer’s sync status.
       - `maxSupply` (string):  (example: `1000`)
       - `minted` (integer): 
       - `holders` (integer): 
+
 
 ---
 
@@ -550,6 +561,7 @@ This endpoint is used to monitor the indexer’s sync status.
       - `minted` (integer): 
       - `holders` (integer): 
 
+
 ---
 
 ### Get transfer history
@@ -581,6 +593,7 @@ This endpoint is used to monitor the indexer’s sync status.
     - `alkaneid` (string): 
     - `address` (string): 
     - `amount` (string):  (example: `10000`)
+
 
 ---
 
