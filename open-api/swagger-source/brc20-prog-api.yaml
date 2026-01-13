@@ -12,6 +12,7 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 servers:
   - url: https://open-api.unisat.io
+  - url: https://open-api-staging.unisat.io
   - url: https://open-api-signet.unisat.io
 tags:
   - name: BRC20-Prog
@@ -291,7 +292,15 @@ paths:
           required: false
           schema:
             type: string
-            enum: [deploy-inscribe, transfer, inscribe-mint, inscribe-transfer, brc20prog-withdraw-inscribe, brc20prog-withdraw-transfer]
+            enum:
+              [
+                deploy-inscribe,
+                transfer,
+                inscribe-mint,
+                inscribe-transfer,
+                brc20prog-withdraw-inscribe,
+                brc20prog-withdraw-transfer,
+              ]
         - name: height
           in: query
           description: "Filter by block height"
@@ -816,7 +825,15 @@ components:
           example: "ordi"
         type:
           type: string
-          enum: [inscribe-deploy, inscribe-mint, inscribe-transfer, transfer, send, receive]
+          enum:
+            [
+              inscribe-deploy,
+              inscribe-mint,
+              inscribe-transfer,
+              transfer,
+              send,
+              receive,
+            ]
           example: "inscribe-deploy"
         txid:
           type: string

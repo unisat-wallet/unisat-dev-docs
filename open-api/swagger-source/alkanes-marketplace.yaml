@@ -11,6 +11,7 @@ info:
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 servers:
   - url: https://open-api.unisat.io
+  - url: https://open-api-staging.unisat.io
 tags:
   - name: MarketPlace-Alkanes
     description: Alkanes MarketPlace Service
