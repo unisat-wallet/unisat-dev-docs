@@ -2,10 +2,10 @@
 
 ## Background
 
-UniSat is planning an upgrade to the **BRC20 indexing service (Indexer 2.0)**.  
+UniSat is planning an upgrade to the **BRC20 indexing service (Indexer 2.0)**.
 This upgrade focuses on improving **indexing stability, data consistency, and long-term maintainability**.
 
-Based on our current assessment, **this upgrade does NOT affect core deposit and withdrawal workflows**.  
+Based on our current assessment, **this upgrade does NOT affect core deposit and withdrawal workflows**.
 However, as some APIs will be deprecated and certain fields will be retired, **technical confirmation and adaptation by partner teams is still required**.
 
 ---
@@ -13,9 +13,9 @@ However, as some APIs will be deprecated and certain fields will be retired, **t
 ## Upgrade Plan
 
 - **Activation Height**: `2026-02-01`
-- **Early API Upgrade**:  
+- **Early API Upgrade**:
   The new indexer APIs will be rolled out **approximately one week before the activation height** to allow partners to perform integration testing and validation.
-- **Full Activation**:  
+- **Full Activation**:
   After the activation height, the new indexing logic will become the default behavior.
 
 ---
@@ -50,7 +50,7 @@ The `staging` environment is intended for:
 
 ### 1. BRC20 Token Recognition No Longer Supports Mempool Transactions
 
-- **Change**  
+- **Change**
   BRC20 token recognition will **no longer include mempool (unconfirmed) transactions**.
 - **Impact**
 - Only **confirmed on-chain transactions** will be indexed
@@ -61,12 +61,52 @@ The `staging` environment is intended for:
 
 ---
 
-### 2. Deprecated APIs (Will Be Removed)
+### 2. BRC20-prog Route Interface Deprecation
 
-The following APIs will be **sunset and removed** as part of this upgrade.  
+- **Change**
+  The previous `/brc20-prog/` route interface will be **deprecated** (will be retained for 1-2 weeks) and merged into `/brc20/` related interfaces.
+- **Timeline**
+  The `/brc20-prog/` route will be available for **1-2 weeks** before complete removal.
+- **Migration**
+  Partners should migrate to the corresponding `/brc20/` interfaces.
+
+---
+
+### 3. New Tick Filter Parameter for Selective BRC20 Queries
+
+The following APIs now support a `tick_filter` parameter to control which BRC20 token lengths are returned:
+
+- `/brc20/status`
+- `/brc20/list`
+- `/address/{address}/brc20/summary`
+- `/address/{address}/brc20/summary-by-height/{height}`
+
+#### Tick Filter Type Enum
+
+```
+enum TickFilterType {
+  TICK_4_BYTE = 8,   // 0b1000
+  TICK_5_BYTE = 16,  // 0b10000
+  TICK_6_BYTE = 32   // 0b100000
+}
+```
+
+#### Usage Examples
+
+- `tick_filter=8` - Returns only 4-character BRC20 tokens
+- `tick_filter=24` - Returns 4 and 5-character BRC20 tokens (bitwise combination: 8 | 16)
+- `tick_filter=56` - Returns 4, 5, and 6-character BRC20 tokens (bitwise combination: 8 | 16 | 32)
+
+> Note: Other interfaces will continue to return all BRC20 token lengths (4, 5, 6 characters) by default.
+
+---
+
+### 4. Deprecated APIs (Will Be Removed)
+
+The following APIs will be **sunset and removed** as part of this upgrade.
 Partners are advised to migrate away from them in advance.
 
-#### 2.1 BRC20 Module History API
+#### 4.1 BRC20 Module History API
 
 - **Path**
   `/v1/indexer/brc20-module/{module}/history`
@@ -76,7 +116,7 @@ Partners are advised to migrate away from them in advance.
 
 ---
 
-#### 2.2 BRC20 Withdraw History API
+#### 4.2 BRC20 Withdraw History API
 
 - **Path**
 
@@ -89,7 +129,7 @@ Partners are advised to migrate away from them in advance.
 
 ---
 
-#### 2.3 BRC20 History by Tx API
+#### 4.3 BRC20 History by Tx API
 
 - **Path**
 
@@ -102,7 +142,7 @@ Partners are advised to migrate away from them in advance.
 
 ---
 
-### 3. Field Deprecation in Existing API
+### 5. Field Deprecation in Existing API
 
 #### Affected API
 
@@ -119,7 +159,6 @@ The following fields will **no longer return meaningful business values** and ar
 - `overallBalance`
 - `transferBalance`
 - `availableBalance`
-- `txidx`
 - `h`
 
 #### Return Behavior
@@ -131,8 +170,6 @@ The following fields will **no longer return meaningful business values** and ar
 - These fields should **no longer be used for business logic**
 
 Partners are strongly encouraged to **remove dependencies on these fields**.
-
----
 
 ## Stability & Risk Notice
 
