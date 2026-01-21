@@ -147,8 +147,7 @@ Partners are advised to migrate away from them in advance.
 
 ### 5. Field Deprecation in Existing API
 
-#### Affected API
-
+#### 5.1 BRC20 History by Height
 ```
 /brc20/history-by-height
 ```
@@ -164,12 +163,25 @@ The following fields will **no longer return meaningful business values** and ar
 - `availableBalance`
 - `h`
 
+#### 5.1 Address ticker info
+```
+/address/:address/brc20/:ticker/info
+```
+
+#### Field Changes
+
+The following fields will **no longer return meaningful business values** and are retained **only for backward compatibility**:
+
+- `historyCount`
+- `historyInscriptions`
+
 #### Return Behavior
 
 - Fields will remain present in the response
 - Values will be:
   - `0` for numeric fields
   - Empty strings for string fields
+  - Empty strings list from []string fields
 - These fields should **no longer be used for business logic**
 
 Partners are strongly encouraged to **remove dependencies on these fields**.
