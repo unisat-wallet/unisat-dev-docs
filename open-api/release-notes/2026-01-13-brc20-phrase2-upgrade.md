@@ -97,7 +97,10 @@ enum TickFilterType {
 - `tick_filter=24` - Returns 4 and 5-character BRC20 tokens (bitwise combination: 8 | 16)
 - `tick_filter=56` - Returns 4, 5, and 6-character BRC20 tokens (bitwise combination: 8 | 16 | 32)
 
-> Note: Other interfaces will continue to return all BRC20 token lengths (4, 5, 6 characters) by default.
+> Note:
+
+1. The default value for `tick_filter` is 8, meaning it defaults to returning only 4-character BRC20 tokens.
+2. All other interfaces will continue to return all BRC20 token lengths (4, 5, 6 characters) by default.
 
 ---
 

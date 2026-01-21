@@ -11,7 +11,7 @@ This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free
 | ----- | ------- |
 | [GET `/v2/inscribe/order/summary`](#get-order-summary-of-current-apikey) | Get order summary of current apikey |
 | [GET `/v2/inscribe/order/list`](#get-order-list-of-current-apikey) | Get order list of current apikey |
-| [GET `/v2/inscribe/order/TODO-orderId`](#search-an-order-by-orderid) | Search an order by orderId |
+| [GET `/v2/inscribe/order/(orderId)`](#search-an-order-by-orderid) | Search an order by orderId |
 | [POST `/v2/inscribe/order/create`](#create-an-order) | Create an order |
 | [POST `/v2/inscribe/order/create/brc20-deploy`](#create-an-order-to-inscribe-brc-20-deploy-deprecated) | Create an order to inscribe BRC-20 DEPLOY (Deprecated) |
 | [POST `/v2/inscribe/order/create/brc20-mint`](#create-an-order-to-inscribe-brc-20-mint-deprecated) | Create an order to inscribe BRC-20 MINT (Deprecated) |
@@ -25,8 +25,8 @@ This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free
 | [POST `/v2/inscribe/order/sign-reveal/brc20-5byte-mint`](#sign-reveal-txs-of-brc20-5byte-mint-deprecated) | Sign reveal txs of brc20-5byte-mint (Deprecated) |
 | [POST `/v2/inscribe/order/create/runes-etch`](#create-an-order-to-etch-runes) | Create an order to etch Runes |
 | [POST `/v2/inscribe/order/create/runes-mint`](#create-an-order-to-mint-runes) | Create an order to mint Runes |
-| [POST `/v2/inscribe/order/TODO-orderId/refund`](#process-a-refund-for-an-order) | Process a refund for an order. |
-| [POST `/v2/inscribe/order/TODO-orderId/refund-estimate`](#estimate-the-size-of-the-refund-transaction) | Estimate the size of the refund transaction |
+| [POST `/v2/inscribe/order/(orderId)/refund`](#process-a-refund-for-an-order) | Process a refund for an order. |
+| [POST `/v2/inscribe/order/(orderId)/refund-estimate`](#estimate-the-size-of-the-refund-transaction) | Estimate the size of the refund transaction |
 
 ---
 

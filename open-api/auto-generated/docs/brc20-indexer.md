@@ -12,18 +12,18 @@ BRC-20 API is a RESTful API for BRC-20 token data indexing and querying. It prov
 | [GET `/v1/indexer/brc20/bestheight`](#get-the-best-block-height-of-brc20-data) | Get the best block height of BRC20 data |
 | [GET `/v1/indexer/brc20/list`](#get-the-tiker-list-of-brc20-token) | Get the tiker list of BRC20 token. |
 | [GET `/v1/indexer/brc20/status`](#get-the-status-of-brc20-list) | Get the status of BRC20 list. |
-| [GET `/v1/indexer/brc20/TODO-ticker/info`](#get-the-infomation-of-brc20-by-ticker) | Get the infomation of BRC20 by ticker |
-| [GET `/v1/indexer/brc20/TODO-ticker/holders`](#get-the-holders-of-brc20-by-ticker) | Get the holders of BRC20 by ticker. |
-| [GET `/v1/indexer/brc20/TODO-ticker/history`](#get-the-full-history-of-brc20-by-ticker) | Get the full history of BRC20 by ticker. |
-| [GET `/v1/indexer/brc20/TODO-ticker/tx/TODO-txid/history`](#get-the-full-history-of-brc20-by-address) | Get the full history of BRC20 by address. |
-| [GET `/v1/indexer/brc20/history-by-height/TODO-height`](#get-the-tiker-list-of-brc20-token-by-height) | Get the tiker list of BRC20 token by height. |
-| [GET `/v1/indexer/address/TODO-address/brc20/summary`](#get-the-brc20-token-summary-by-address) | Get the BRC20 token summary by address. |
-| [GET `/v1/indexer/address/TODO-address/brc20/summary-by-height/TODO-height`](#get-the-brc20-token-summary-by-address-and-height) | Get the BRC20 token summary by address and height. |
-| [GET `/v1/indexer/address/TODO-address/brc20/TODO-ticker/info`](#get-the-brc20-token-info-by-address-and-ticker) | Get the BRC20 token info by address and ticker. |
-| [GET `/v1/indexer/address/TODO-address/brc20/history`](#get-the-full-history-of-brc20-by-address) | Get the full history of BRC20 by address. |
-| [GET `/v1/indexer/address/TODO-address/brc20/TODO-ticker/history`](#get-the-full-history-of-brc20-by-address-and-ticker) | Get the full history of BRC20 by address and ticker. |
-| [GET `/v1/indexer/address/TODO-address/brc20/TODO-ticker/transferable-inscriptions`](#get-the-transferable-inscriptions-list-of-brc20-by-address) | Get the transferable inscriptions list of BRC20 by address. |
-| [GET `/v1/indexer/brc20-module/TODO-module/history`](#get-the-history-of-brc20-module-by-address) | Get the history of BRC20 Module by address. |
+| [GET `/v1/indexer/brc20/(ticker)/info`](#get-the-infomation-of-brc20-by-ticker) | Get the infomation of BRC20 by ticker |
+| [GET `/v1/indexer/brc20/(ticker)/holders`](#get-the-holders-of-brc20-by-ticker) | Get the holders of BRC20 by ticker. |
+| [GET `/v1/indexer/brc20/(ticker)/history`](#get-the-full-history-of-brc20-by-ticker) | Get the full history of BRC20 by ticker. |
+| [GET `/v1/indexer/brc20/(ticker)/tx/(txid)/history`](#get-the-full-history-of-brc20-by-address) | Get the full history of BRC20 by address. |
+| [GET `/v1/indexer/brc20/history-by-height/(height)`](#get-the-tiker-list-of-brc20-token-by-height) | Get the tiker list of BRC20 token by height. |
+| [GET `/v1/indexer/address/(address)/brc20/summary`](#get-the-brc20-token-summary-by-address) | Get the BRC20 token summary by address. |
+| [GET `/v1/indexer/address/(address)/brc20/summary-by-height/(height)`](#get-the-brc20-token-summary-by-address-and-height) | Get the BRC20 token summary by address and height. |
+| [GET `/v1/indexer/address/(address)/brc20/(ticker)/info`](#get-the-brc20-token-info-by-address-and-ticker) | Get the BRC20 token info by address and ticker. |
+| [GET `/v1/indexer/address/(address)/brc20/history`](#get-the-full-history-of-brc20-by-address) | Get the full history of BRC20 by address. |
+| [GET `/v1/indexer/address/(address)/brc20/(ticker)/history`](#get-the-full-history-of-brc20-by-address-and-ticker) | Get the full history of BRC20 by address and ticker. |
+| [GET `/v1/indexer/address/(address)/brc20/(ticker)/transferable-inscriptions`](#get-the-transferable-inscriptions-list-of-brc20-by-address) | Get the transferable inscriptions list of BRC20 by address. |
+| [GET `/v1/indexer/brc20-module/(module)/history`](#get-the-history-of-brc20-module-by-address) | Get the history of BRC20 Module by address. |
 | [GET `/v1/indexer/brc20-module/withdraw-history`](#get-the-withdraw-history-of-brc20) | Get the withdraw history of BRC20. |
 
 ---
@@ -223,7 +223,7 @@ Obtain BRC20 token summary by address, including available balance, transferable
 - `address` (path) **(required)**: Address
 - `start` (query) **(required)**: Start offset
 - `limit` (query) **(required)**: Number of inscriptions returned
-- `tick_filter` (query) : Filter by tick type (8 Filter ticks with selfMint set to false, 16 Filter ticks with selfMint set to true, 24 Return all ticks regardless of selfMint.)
+- `tick_filter` (query) : -> filter by tick type 8 - Returns only 4-character BRC20 tokens 16 - Returns only 5-character BRC20 tokens 32 - Returns only 6-character BRC20 tokens 24 - Returns 4 and 5-character BRC20 tokens (bitwise combination 8 | 16) 56 - Returns 4, 5, and 6-character BRC20 tokens (bitwise combination 8 | 16 | 32)
 - `exclude_zero` (query) : Exclude zero balance
 
 #### Response (200)

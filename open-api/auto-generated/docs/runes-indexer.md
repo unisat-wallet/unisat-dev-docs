@@ -11,12 +11,12 @@ This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free
 | ----- | ------- |
 | [GET `/v1/indexer/runes/status`](#get-runes-status) | Get runes status |
 | [GET `/v1/indexer/runes/info-list`](#get-runes-list) | Get runes list |
-| [GET `/v1/indexer/runes/TODO-runeid/info`](#get-rune-info-by-runeid) | Get rune info by runeid |
-| [GET `/v1/indexer/runes/TODO-runeid/holders`](#get-runes-holders-by-runeid) | Get runes holders by runeid |
-| [GET `/v1/indexer/address/TODO-address/runes/balance-list`](#get-runes-balance-list-by-address) | Get runes balance list by address |
-| [GET `/v1/indexer/address/TODO-address/runes/TODO-runeid/balance`](#get-runes-balance-by-address-and-runeid) | Get runes balance by address and runeid |
-| [GET `/v1/indexer/runes/utxo/TODO-txid/TODO-index/balance`](#get-runes-balance-by-utxo) | Get runes balance by utxo |
-| [GET `/v1/indexer/address/TODO-address/runes/TODO-runeid/utxo`](#get-utxo-runes-balance-by-address-and-runeid) | Get utxo runes balance by address and runeid |
+| [GET `/v1/indexer/runes/(runeid)/info`](#get-rune-info-by-runeid) | Get rune info by runeid |
+| [GET `/v1/indexer/runes/(runeid)/holders`](#get-runes-holders-by-runeid) | Get runes holders by runeid |
+| [GET `/v1/indexer/address/(address)/runes/balance-list`](#get-runes-balance-list-by-address) | Get runes balance list by address |
+| [GET `/v1/indexer/address/(address)/runes/(runeid)/balance`](#get-runes-balance-by-address-and-runeid) | Get runes balance by address and runeid |
+| [GET `/v1/indexer/runes/utxo/(txid)/(index)/balance`](#get-runes-balance-by-utxo) | Get runes balance by utxo |
+| [GET `/v1/indexer/address/(address)/runes/(runeid)/utxo`](#get-utxo-runes-balance-by-address-and-runeid) | Get utxo runes balance by address and runeid |
 | [GET `/v1/indexer/runes/event`](#get-runes-events) | Get Runes Events |
 
 ---

@@ -7,7 +7,7 @@ const swaggerSpecUrl = "swagger/openapi-swagger.yaml";
 
 function escapeMdxText(route) {
   if (!route) return route;
-  return route.replace(/{([^}]+)}/g, "TODO-$1");
+  return route.replace(/{([^}]+)}/g, "($1)");
 }
 
 function getParameters(params = []) {

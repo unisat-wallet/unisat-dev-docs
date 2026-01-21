@@ -76,7 +76,10 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "Release Notes",
-          items: ["open-api/release-notes/2025-11-28-btc-v29-upgrade"],
+          items: [
+            "open-api/release-notes/2026-01-13-brc20-phrase2-upgrade",
+            "open-api/release-notes/2025-11-28-btc-v29-upgrade",
+          ],
         },
       ],
     },

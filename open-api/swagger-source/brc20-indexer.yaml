@@ -54,6 +54,12 @@ paths:
                       height:
                         description: best block height of brc20
                         type: integer
+                      blockid:
+                        description: best block id of brc20
+                        type: string
+                      timestamp:
+                        description: timestamp of best block
+                        type: integer
                       total:
                         description: total number of brc20 tickers
                         type: integer
@@ -526,7 +532,13 @@ paths:
             type: integer
           example: 16
         - name: tick_filter
-          description: "Filter by tick type (8 Filter ticks with selfMint set to false, 16 Filter ticks with selfMint set to true, 24 Return all ticks regardless of selfMint.)"
+          description: ->
+            filter by tick type
+            8 - Returns only 4-character BRC20 tokens
+            16 - Returns only 5-character BRC20 tokens
+            32 - Returns only 6-character BRC20 tokens
+            24 - Returns 4 and 5-character BRC20 tokens (bitwise combination 8 | 16)
+            56 - Returns 4, 5, and 6-character BRC20 tokens (bitwise combination 8 | 16 | 32)
           in: query
           required: false
           schema:
