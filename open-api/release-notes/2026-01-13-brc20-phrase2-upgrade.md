@@ -147,9 +147,10 @@ Partners are advised to migrate away from them in advance.
 
 ### 5. Field Deprecation in Existing API
 
-#### 5.1 BRC20 History by Height
+#### 5.1 BRC20 History by Height/ticker
 ```
 /brc20/history-by-height
+/brc20/:ticker/history
 ```
 
 #### Field Changes
@@ -163,7 +164,20 @@ The following fields will **no longer return meaningful business values** and ar
 - `availableBalance`
 - `h`
 
-#### 5.1 Address ticker info
+#### 5.2 BRC20 History by address
+```
+/address/:address/brc20/history
+```
+
+#### Field Changes
+
+The following fields will **no longer return meaningful business values** and are retained **only for backward compatibility**:
+
+- `satoshi`
+- `fee`
+- `h`
+
+#### 5.3 Address ticker info
 ```
 /address/:address/brc20/:ticker/info
 ```
