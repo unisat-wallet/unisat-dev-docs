@@ -132,22 +132,10 @@ Partners are advised to migrate away from them in advance.
 
 ---
 
-#### 4.3 BRC20 History by Tx API
-
-- **Path**
-
-```
-/v1/indexer/brc20/{ticker}/tx/{txid}/history
-```
-
-- **Swagger**
-  https://open-api.unisat.io/#/BRC-20/getBrc20HistoryByTickerAndTxid
-
----
-
 ### 5. Field Deprecation in Existing API
 
 #### 5.1 BRC20 History by Height/ticker
+
 ```
 /brc20/history-by-height
 /brc20/:ticker/history
@@ -165,6 +153,7 @@ The following fields will **no longer return meaningful business values** and ar
 - `h`
 
 #### 5.2 BRC20 History by address
+
 ```
 /address/:address/brc20/history
 ```
@@ -177,7 +166,21 @@ The following fields will **no longer return meaningful business values** and ar
 - `fee`
 - `h`
 
-#### 5.3 Address ticker info
+#### 5.3 BRC20 Ticker History by txid
+
+```
+/brc20/:ticker/tx/:txid/history
+```
+
+#### Field Changes
+
+The following fields will **no longer return meaningful business values** and are retained **only for backward compatibility**:
+
+- `satoshi`
+- `fee`
+
+#### 5.4 Address ticker info
+
 ```
 /address/:address/brc20/:ticker/info
 ```
