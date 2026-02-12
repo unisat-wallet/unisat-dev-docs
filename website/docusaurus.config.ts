@@ -28,8 +28,6 @@ const config: Config = {
 
   onBrokenLinks: "warn", // Changed from 'throw' to 'warn' to handle broken links more gracefully
   onBrokenMarkdownLinks: "warn",
-  // @ts-ignore
-  onBrokenMarkdownImages: "warn",
   markdown: {
     format: "mdx",
     mermaid: true,
