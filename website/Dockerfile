@@ -4,7 +4,7 @@ WORKDIR /app
 
 
 # Copy website package files
-COPY website/package.json website/yarn.lock /app/
+COPY website/* /app/
 
 # Install dependencies
 RUN yarn install --frozen-lockfile
