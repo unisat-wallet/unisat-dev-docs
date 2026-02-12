@@ -4,29 +4,33 @@ FROM node:20-alpine AS builder
 # Build argument for URL base
 ARG URL_BASE=/
 
-# Set working directory
+# Set working directory to project root
 WORKDIR /app
 
-# Copy package files
-COPY package.json yarn.lock ./
+# Copy parent package files
+COPY package.json ./
 
-# Install dependencies
+# Copy website directory structure first (for better caching)
+COPY website/package.json website/yarn.lock website/
+
+# Install parent dependencies
+RUN npm install
+
+# Install website dependencies
+WORKDIR /app/website
 RUN yarn install --frozen-lockfile
 
 # Copy the entire project
+WORKDIR /app
 COPY . ./
-
-# Copy parent directory content needed for build
-COPY ../open-api ../open-api
-COPY ../package.json ../package.json
-COPY ../package-lock.json ../package-lock.json
 
 # Update baseUrl in docusaurus.config.ts if URL_BASE is provided
 RUN if [ "$URL_BASE" != "/" ]; then \
-        sed -i "s|baseUrl: \"/\"|baseUrl: \"$URL_BASE\"|g" docusaurus.config.ts; \
+        sed -i "s|baseUrl: \"/\"|baseUrl: \"$URL_BASE\"|g" website/docusaurus.config.ts; \
     fi
 
 # Build the website
+WORKDIR /app/website
 RUN chmod +x build-website.sh && ./build-website.sh
 
 # Production stage
@@ -39,7 +43,7 @@ RUN npm install -g serve
 WORKDIR /app
 
 # Copy built files from builder stage
-COPY --from=builder /app/build /app/build
+COPY --from=builder /app/website/build /app/build
 
 # Expose port
 EXPOSE 3000
