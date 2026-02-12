@@ -12,9 +12,7 @@ info:
     name: Apache 2.0
     url: http://www.apache.org/licenses/LICENSE-2.0.html
 servers:
-  - url: https://open-api.unisat.io
   - url: https://open-api-fractal.unisat.io
-  - url: https://open-api-fractal-testnet.unisat.io
 tags:
   - name: brc20-swap
     description: BRC20 Swap and InSwap Service
