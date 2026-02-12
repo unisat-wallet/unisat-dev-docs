@@ -7,6 +7,9 @@
     "build:openapi-swagger": "node tools/build-swagger.js",
     "build:openapi-doc": "node tools/build-doc.js",
     "build:error-codes": "node tools/build-error.js",
+    "sdk": "npm run sdk:generate -w sdk/open-api",
+    "sdk:generate": "cd sdk/open-api && npm run generate",
+    "sdk:build": "cd sdk/open-api && npm run build",
     "prepare": "npm run build"
   },
   "dependencies": {

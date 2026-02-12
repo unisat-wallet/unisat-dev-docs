@@ -10,7 +10,19 @@
       "Bash(chmod:*)",
       "Bash(true)",
       "Bash(grep:*)",
-      "Bash(sed:*)"
+      "Bash(sed:*)",
+      "Bash(xxd:*)",
+      "Bash(git init:*)",
+      "Bash(pnpm install:*)",
+      "Bash(git add:*)",
+      "Bash(git commit:*)",
+      "Bash(pnpm build:*)",
+      "Bash(echo:*)",
+      "Bash(UNISAT_API_KEY=test-key MCP_PORT=3000 node:*)",
+      "Bash(node:*)",
+      "Bash(./generate.sh:*)",
+      "Bash(npm install:*)",
+      "Bash(npm run build:*)"
     ],
     "deny": [],
     "ask": []
