@@ -145,8 +145,6 @@ Partners are advised to migrate away from them in advance.
 
 The following fields will **no longer return meaningful business values** and are retained **only for backward compatibility**:
 
-- `satoshi`
-- `fee`
 - `overallBalance`
 - `transferBalance`
 - `availableBalance`
@@ -162,24 +160,9 @@ The following fields will **no longer return meaningful business values** and ar
 
 The following fields will **no longer return meaningful business values** and are retained **only for backward compatibility**:
 
-- `satoshi`
-- `fee`
 - `h`
 
-#### 5.3 BRC20 Ticker History by txid
-
-```
-/brc20/:ticker/tx/:txid/history
-```
-
-#### Field Changes
-
-The following fields will **no longer return meaningful business values** and are retained **only for backward compatibility**:
-
-- `satoshi`
-- `fee`
-
-#### 5.4 Address ticker info
+#### 5.3 Address ticker info
 
 ```
 /address/:address/brc20/:ticker/info
