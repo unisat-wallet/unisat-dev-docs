@@ -1,0 +1,88 @@
+openapi: 3.0.3
+info:
+  title: Price API
+  version: 1.0.0
+  description: >-
+    This API provides real-time price information for BTC and FB (Fractal Bitcoin).
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+tags:
+  - name: Price
+    description: Price information
+paths:
+  /v1/price/btc:
+    get:
+      tags:
+        - Price
+      operationId: getBtcPrice
+      summary: Get BTC price
+      description: >-
+        Retrieves the current price of Bitcoin (BTC) in USD.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: ok
+                  data:
+                    $ref: "#/components/schemas/PriceInfo"
+        "401":
+          description: Invalid API Key
+  /v1/price/fb:
+    get:
+      tags:
+        - Price
+      operationId: getFbPrice
+      summary: Get FB price
+      description: >-
+        Retrieves the current price of Fractal Bitcoin (FB) in USD.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: ok
+                  data:
+                    $ref: "#/components/schemas/PriceInfo"
+        "401":
+          description: Invalid API Key
+components:
+  schemas:
+    PriceInfo:
+      type: object
+      properties:
+        price:
+          type: number
+          description: Current price in USD
+          example: 71373.42718545307
+        updateTime:
+          type: integer
+          format: int64
+          description: Unix timestamp of last price update
+          example: 1770558840
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []
