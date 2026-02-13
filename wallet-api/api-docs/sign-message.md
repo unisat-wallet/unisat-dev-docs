@@ -6,7 +6,7 @@
 unisat.signMessage(msg[, type])
 ```
 
-sign message
+Sign a message with the current account's private key.
 
 **Parameters**
 
@@ -15,7 +15,49 @@ sign message
 
 **Returns**
 
-- `Promise` - `string`: the signature.
+- `Promise` - `string`: the signature (Base64 encoded).
+
+---
+
+## Signature Types
+
+### ECDSA (Default)
+
+The default signature type uses **RFC6979 Deterministic ECDSA** with Bitcoin's standard message signing format.
+
+**How it works:**
+
+1. **Message Hashing**: The message is prefixed with `"Bitcoin Signed Message:\n"` and double SHA256 hashed:
+   ```
+   hash = SHA256(SHA256(varint(prefix.length) + prefix + varint(msg.length) + msg))
+   ```
+
+2. **Deterministic Signing (RFC6979)**: Instead of using a random nonce `k`, the signature uses HMAC-DRBG to deterministically generate `k` from the private key and message hash. This ensures:
+   - Same private key + same message = same signature (deterministic)
+   - No risk of private key leakage due to weak random number generation
+
+3. **Output Format**: Bitcoin compact signature format (65 bytes, Base64 encoded)
+   - 1 byte header: `27 + recovery_id + 4` (for compressed public key)
+   - 32 bytes `r` value
+   - 32 bytes `s` value (low-S, BIP-62/BIP-146 compliant)
+
+**Supported Address Types**: P2PKH, P2SH-P2WPKH, P2WPKH, P2TR
+
+### BIP-322 Simple
+
+BIP-322 is a generic message signing standard that works with all Bitcoin address types, including Taproot (P2TR).
+
+**How it works:**
+
+1. Creates a virtual "to_sign" transaction that spends from a "to_spend" transaction
+2. The witness/scriptSig of the "to_sign" transaction serves as the signature
+3. Supports all address types natively, including P2TR with Schnorr signatures
+
+**Output Format**: Base64 encoded witness stack
+
+**Recommended for**: Taproot addresses (P2TR) or when cross-wallet compatibility is required.
+
+---
 
 **Example**
 
