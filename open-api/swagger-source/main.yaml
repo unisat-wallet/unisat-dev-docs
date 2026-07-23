@@ -13,16 +13,12 @@ servers:
     description: Bitcoin Mainnet endpoint for public.
   - url: https://open-api-staging.unisat.io
     description: Bitcoin Mainnet endpoint for staging test.
-  - url: https://open-api-testnet.unisat.io
-    description: Bitcoin Testnet endpoint for public.
   - url: https://open-api-testnet4.unisat.io
     description: Bitcoin Testnet4 endpoint for public.
   - url: https://open-api-signet.unisat.io
     description: Bitcoin Signet endpoint for public.
   - url: https://open-api-fractal.unisat.io
     description: Fractal Mainnet endpoint for public.
-  - url: https://open-api-fractal-testnet.unisat.io
-    description: Fractal Testnet endpoint for public.
 tags: []
 paths: []
 components:

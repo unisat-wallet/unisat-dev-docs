@@ -40,7 +40,21 @@ This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/getOrderSummary)  
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)):
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `orderCount` (object):
+    - `total` (integer):
+    - `pendingCount` (integer):
+    - `inscribingCount` (integer):
+    - `mintedCount` (integer):
+    - `closedCount` (integer):
+    - `refundedCount` (integer):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -56,16 +70,49 @@ This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free
 Get order list of current apikey
 
 #### Parameters
-- `cursor` (query) **(required)**: Start offset
-- `size` (query) **(required)**: Number of items returned
-- `sort` (query) : Sort by (asc/desc)
-- `status` (query) : Status of order
-- `receiveAddress` (query) : ReceiveAddress of order
-- `clientId` (query) : ClientId of order
-- `withFiles` (query) : Whether to include files
+- `cursor` (query, integer) **(required)**: Start offset
+- `size` (query, integer) **(required)**: Number of items returned
+- `sort` (query, string): Sort by (asc/desc); enum: `asc`, `desc`
+- `status` (query, string): Status of order; enum: `pending`, `inscribing`, `minted`, `closed`, `refunded`
+- `receiveAddress` (query, string): ReceiveAddress of order
+- `clientId` (query, string): ClientId of order
+- `withFiles` (query, boolean): Whether to include files
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `detail` (array):
+    - `orderId` (string): example: `""`
+    - `status` (string): Order Status; enum: `pending`, `inscribing`, `minted`; example: `"pending"`
+    - `payAddress` (string): Pay to this address to start inscribing; example: `""`
+    - `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+    - `amount` (integer): The BTC amount (in satoshis) need to pay; example: `3000`
+    - `paidAmount` (integer): The paid BTC amount (in satoshis)
+    - `outputValue` (integer): The outputValue of each inscription
+    - `feeRate` (number): The feeRate of inscribing transactions
+    - `minerFee` (number): The miner fee of this order
+    - `serviceFee` (number): The service fee of this order
+    - `devFee` (number): The developer fee of this order
+    - `files` (array):
+      - `filename` (string): example: `"10000.sats"`
+      - `inscriptionId` (string): example: `""`
+      - `status` (string): enum: `pending`, `unconfirmed`, `confirmed`
+    - `count` (integer): The total inscriptions count; example: `1`
+    - `pendingCount` (integer): The pending inscriptions count; example: `1`
+    - `unconfirmedCount` (integer (int32)): The unconfirmed inscriptions count; example: `0`
+    - `confirmedCount` (integer (int32)): The confirmed inscriptions count; example: `0`
+    - `createTime` (integer): example: `1693439128100`
+    - `refundTxid` (string): example: `""`
+    - `refundAmount` (integer):
+    - `refundFeeRate` (number):
+  - `start` (integer):
+  - `total` (integer):
+
+#### Response (401)
+Invalid API Key
 
 ### Notes
 
@@ -89,10 +136,40 @@ It's recommended to query the latest status every 10 seconds.
 _amount = outputValue*count + minerFee + serviceFee + devFee_
 
 #### Parameters
-- `orderId` (path) **(required)**: 
+- `orderId` (path, string) **(required)**: 
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)):
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `orderId` (string): example: `""`
+  - `status` (string): Order Status; enum: `pending`, `inscribing`, `minted`; example: `"pending"`
+  - `payAddress` (string): Pay to this address to start inscribing; example: `""`
+  - `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+  - `amount` (integer): The BTC amount (in satoshis) need to pay; example: `3000`
+  - `paidAmount` (integer): The paid BTC amount (in satoshis)
+  - `outputValue` (integer): The outputValue of each inscription
+  - `feeRate` (number): The feeRate of inscribing transactions
+  - `minerFee` (number): The miner fee of this order
+  - `serviceFee` (number): The service fee of this order
+  - `devFee` (number): The developer fee of this order
+  - `files` (array):
+    - `filename` (string): example: `"10000.sats"`
+    - `inscriptionId` (string): example: `""`
+    - `status` (string): enum: `pending`, `unconfirmed`, `confirmed`
+  - `count` (integer): The total inscriptions count; example: `1`
+  - `pendingCount` (integer): The pending inscriptions count; example: `1`
+  - `unconfirmedCount` (integer (int32)): The unconfirmed inscriptions count; example: `0`
+  - `confirmedCount` (integer (int32)): The confirmed inscriptions count; example: `0`
+  - `createTime` (integer): example: `1693439128100`
+  - `refundTxid` (string): example: `""`
+  - `refundAmount` (integer):
+  - `refundFeeRate` (number):
+
+#### Response (401)
+Invalid API Key
 
 ### Notes
 
@@ -145,8 +222,50 @@ enum InscriptionStatus {
 #### Description
 Create an order to inscribe something
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `receiveAddress` (string): Bitcoin address to receive the inscriptions
+- `feeRate` (number (float)): The fee rate of transaction; example: `1`
+- `outputValue` (integer (int32)): The balance of inscription; example: `546`
+- `files` (array): example: `[{"filename":"1000.sats","dataURL":"data:text/plain;charset=utf-8;base64,eyJwIjoic25zIiwib3AiOiJyZWciLCJuYW1lIjoiMTAwMDAuc2F0cyJ9"}]`
+  - `filename` (string):
+  - `dataURL` (string):
+- `devAddress` (string): Developer address to receive extra fee
+- `devFee` (integer (int32)): Extra fee to pay to developer's address
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)):
+- `msg` (string):
+- `data` (object):
+  - `orderId` (string): example: `""`
+  - `status` (string): Order Status; enum: `pending`, `inscribing`, `minted`; example: `"pending"`
+  - `payAddress` (string): Pay to this address to start inscribing; example: `""`
+  - `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+  - `amount` (integer): The BTC amount (in satoshis) need to pay; example: `3000`
+  - `paidAmount` (integer): The paid BTC amount (in satoshis)
+  - `outputValue` (integer): The outputValue of each inscription
+  - `feeRate` (number): The feeRate of inscribing transactions
+  - `minerFee` (number): The miner fee of this order
+  - `serviceFee` (number): The service fee of this order
+  - `devFee` (number): The developer fee of this order
+  - `files` (array):
+    - `filename` (string): example: `"10000.sats"`
+    - `inscriptionId` (string): example: `""`
+    - `status` (string): enum: `pending`, `unconfirmed`, `confirmed`
+  - `count` (integer): The total inscriptions count; example: `1`
+  - `pendingCount` (integer): The pending inscriptions count; example: `1`
+  - `unconfirmedCount` (integer (int32)): The unconfirmed inscriptions count; example: `0`
+  - `confirmedCount` (integer (int32)): The confirmed inscriptions count; example: `0`
+  - `createTime` (integer): example: `1693439128100`
+  - `refundTxid` (string): example: `""`
+  - `refundAmount` (integer):
+  - `refundFeeRate` (number):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -158,8 +277,26 @@ Create an order to inscribe something
 **Path**: `/v2/inscribe/order/request-commit`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/requestCommit)  
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `orderId` (string): orderId; example: `""`
+- `payerAddress` (string): payer's bitcoin address; example: `""`
+- `payerPubkey` (string): payer's pubkey; example: `""`
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)):
+- `msg` (string):
+- `data` (object):
+  - `psbtHex` (string): psbt hex string; example: `""`
+  - `inputsToSign` (array):
+    - `address` (string):
+    - `signingIndexes` (array):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -171,8 +308,25 @@ Create an order to inscribe something
 **Path**: `/v2/inscribe/order/sign-commit`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/signCommit)  
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `orderId` (string): orderId; example: `""`
+- `psbt` (string): psbt hex string; example: `""`
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)):
+- `msg` (string):
+- `data` (object):
+  - `psbtHex` (string): psbt hex string; example: `""`
+  - `inputsToSign` (array):
+    - `address` (string):
+    - `signingIndexes` (array):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -184,8 +338,22 @@ Create an order to inscribe something
 **Path**: `/v2/inscribe/order/sign-reveal`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/signReveal)  
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `orderId` (string): orderId; example: `""`
+- `psbt` (string): psbt hex string; example: `""`
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)):
+- `msg` (string):
+- `data` (object):
+  - `inscriptionId` (string): inscriptionId; example: `""`
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -197,8 +365,61 @@ Create an order to inscribe something
 **Path**: `/v2/inscribe/order/create/runes-etch`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/createOrderRunesEtch)  
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+- `feeRate` (number (float)): The fee rate of transaction; example: `1`
+- `outputValue` (integer (int32)): The balance of inscription; example: `546`
+- `files` (array): example: `[{"filename":"logo","dataURL":"data:text/plain;charset=utf-8;base64,eyJwIjoic25zIiwib3AiOiJyZWciLCJuYW1lIjoiMTAwMDAuc2F0cyJ9","runes_etch":{"etching":{"spacedRune":"AAAABBBBB","symbol":"G","divisibility":0,"premine":100,"terms":{"amount":1000,"cap":21000000,"height":[840000,880000],"offset":[0,10000]}}}}]`
+  - `filename` (string):
+  - `dataURL` (string):
+  - `runes_etch` (object):
+    - `etching` (object):
+      - `spacedRune` (string):
+      - `symbol` (string):
+      - `divisibility` (integer):
+      - `premine` (string):
+      - `terms` (object):
+        - `amount` (string):
+        - `cap` (string):
+        - `height` (array):
+        - `offset` (array):
+- `devAddress` (string): Developer address to receive extra fee
+- `devFee` (integer (int32)): Extra fee to pay to developer's address
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)):
+- `msg` (string):
+- `data` (object):
+  - `orderId` (string): example: `""`
+  - `status` (string): Order Status; enum: `pending`, `inscribing`, `minted`; example: `"pending"`
+  - `payAddress` (string): Pay to this address to start inscribing; example: `""`
+  - `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+  - `amount` (integer): The BTC amount (in satoshis) need to pay; example: `3000`
+  - `paidAmount` (integer): The paid BTC amount (in satoshis)
+  - `outputValue` (integer): The outputValue of each inscription
+  - `feeRate` (number): The feeRate of inscribing transactions
+  - `minerFee` (number): The miner fee of this order
+  - `serviceFee` (number): The service fee of this order
+  - `devFee` (number): The developer fee of this order
+  - `files` (array):
+    - `filename` (string): example: `"10000.sats"`
+    - `inscriptionId` (string): example: `""`
+    - `status` (string): enum: `pending`, `unconfirmed`, `confirmed`
+  - `count` (integer): The total inscriptions count; example: `1`
+  - `pendingCount` (integer): The pending inscriptions count; example: `1`
+  - `unconfirmedCount` (integer (int32)): The unconfirmed inscriptions count; example: `0`
+  - `confirmedCount` (integer (int32)): The confirmed inscriptions count; example: `0`
+  - `createTime` (integer): example: `1693439128100`
+  - `refundTxid` (string): example: `""`
+  - `refundAmount` (integer):
+  - `refundFeeRate` (number):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -210,8 +431,49 @@ Create an order to inscribe something
 **Path**: `/v2/inscribe/order/create/runes-mint`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe/createOrderRunesMint)  
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+- `feeRate` (number (float)): The fee rate of transaction; example: `1`
+- `outputValue` (integer (int32)): The balance of inscription; example: `546`
+- `runeid` (string): example: `"848484:10"`
+- `count` (integer): example: `2`
+- `devAddress` (string): Developer address to receive extra fee
+- `devFee` (integer (int32)): Extra fee to pay to developer's address
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)):
+- `msg` (string):
+- `data` (object):
+  - `orderId` (string): example: `""`
+  - `status` (string): Order Status; enum: `pending`, `inscribing`, `minted`; example: `"pending"`
+  - `payAddress` (string): Pay to this address to start inscribing; example: `""`
+  - `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+  - `amount` (integer): The BTC amount (in satoshis) need to pay; example: `3000`
+  - `paidAmount` (integer): The paid BTC amount (in satoshis)
+  - `outputValue` (integer): The outputValue of each inscription
+  - `feeRate` (number): The feeRate of inscribing transactions
+  - `minerFee` (number): The miner fee of this order
+  - `serviceFee` (number): The service fee of this order
+  - `devFee` (number): The developer fee of this order
+  - `files` (array):
+    - `filename` (string): example: `"10000.sats"`
+    - `inscriptionId` (string): example: `""`
+    - `status` (string): enum: `pending`, `unconfirmed`, `confirmed`
+  - `count` (integer): The total inscriptions count; example: `1`
+  - `pendingCount` (integer): The pending inscriptions count; example: `1`
+  - `unconfirmedCount` (integer (int32)): The unconfirmed inscriptions count; example: `0`
+  - `confirmedCount` (integer (int32)): The confirmed inscriptions count; example: `0`
+  - `createTime` (integer): example: `1693439128100`
+  - `refundTxid` (string): example: `""`
+  - `refundAmount` (integer):
+  - `refundFeeRate` (number):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -227,10 +489,23 @@ Create an order to inscribe something
 When the amount paid by the user includes inscriptions, inscribing cannot be performed. Refund can be requested through this method.
 
 #### Parameters
-- `orderId` (path) **(required)**: 
+- `orderId` (path, string) **(required)**: 
+
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `refundFeeRate` (number (float)): example: `1`
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `txid` (string): txid of refunded transaction
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -246,10 +521,20 @@ When the amount paid by the user includes inscriptions, inscribing cannot be per
 RefundAmount = PaidAmount - RefundTxSize * RefundFeeRate. This value must be greater than SafeRefundAmount, otherwise there's a risk of losing inscriptions used for payment due to errors.
 
 #### Parameters
-- `orderId` (path) **(required)**: 
+- `orderId` (path, string) **(required)**: 
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `paidAmount` (integer (int32)):
+  - `refundTxSize` (integer (int32)): The refund amount = size * refundFeeRate
+  - `safeRefundAmount` (integer (int32)):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -266,8 +551,50 @@ RefundAmount = PaidAmount - RefundTxSize * RefundFeeRate. This value must be gre
 #### Description
 Deprecated, please use /order/create instead
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+- `feeRate` (number (float)): The fee rate of transaction; example: `1`
+- `outputValue` (integer (int32)): The balance of inscription; example: `546`
+- `devAddress` (string): Developer address to receive extra fee; example: `""`
+- `devFee` (integer (int32)): Extra fee to pay to developer's address
+- `brc20Ticker` (string): tick in brc20-deploy; example: `""`
+- `brc20Max` (string): max in brc20-deploy; example: `""`
+- `brc20Limit` (string): lim in brc20-deploy; example: `""`
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)):
+- `msg` (string):
+- `data` (object):
+  - `orderId` (string): example: `""`
+  - `status` (string): Order Status; enum: `pending`, `inscribing`, `minted`; example: `"pending"`
+  - `payAddress` (string): Pay to this address to start inscribing; example: `""`
+  - `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+  - `amount` (integer): The BTC amount (in satoshis) need to pay; example: `3000`
+  - `paidAmount` (integer): The paid BTC amount (in satoshis)
+  - `outputValue` (integer): The outputValue of each inscription
+  - `feeRate` (number): The feeRate of inscribing transactions
+  - `minerFee` (number): The miner fee of this order
+  - `serviceFee` (number): The service fee of this order
+  - `devFee` (number): The developer fee of this order
+  - `files` (array):
+    - `filename` (string): example: `"10000.sats"`
+    - `inscriptionId` (string): example: `""`
+    - `status` (string): enum: `pending`, `unconfirmed`, `confirmed`
+  - `count` (integer): The total inscriptions count; example: `1`
+  - `pendingCount` (integer): The pending inscriptions count; example: `1`
+  - `unconfirmedCount` (integer (int32)): The unconfirmed inscriptions count; example: `0`
+  - `confirmedCount` (integer (int32)): The confirmed inscriptions count; example: `0`
+  - `createTime` (integer): example: `1693439128100`
+  - `refundTxid` (string): example: `""`
+  - `refundAmount` (integer):
+  - `refundFeeRate` (number):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -282,8 +609,50 @@ Deprecated, please use /order/create instead
 #### Description
 Deprecated, please use /order/create instead
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+- `feeRate` (number (float)): The fee rate of transaction; example: `1`
+- `outputValue` (integer (int32)): The balance of inscription; example: `546`
+- `devAddress` (string): Developer address to receive extra fee; example: `""`
+- `devFee` (integer (int32)): Extra fee to pay to developer's address
+- `brc20Ticker` (string): tick in brc20-mint; example: `""`
+- `brc20Amount` (string): amt in brc20-mint; example: `""`
+- `count` (integer (int32)): Repetition count; example: `1`
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)):
+- `msg` (string):
+- `data` (object):
+  - `orderId` (string): example: `""`
+  - `status` (string): Order Status; enum: `pending`, `inscribing`, `minted`; example: `"pending"`
+  - `payAddress` (string): Pay to this address to start inscribing; example: `""`
+  - `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+  - `amount` (integer): The BTC amount (in satoshis) need to pay; example: `3000`
+  - `paidAmount` (integer): The paid BTC amount (in satoshis)
+  - `outputValue` (integer): The outputValue of each inscription
+  - `feeRate` (number): The feeRate of inscribing transactions
+  - `minerFee` (number): The miner fee of this order
+  - `serviceFee` (number): The service fee of this order
+  - `devFee` (number): The developer fee of this order
+  - `files` (array):
+    - `filename` (string): example: `"10000.sats"`
+    - `inscriptionId` (string): example: `""`
+    - `status` (string): enum: `pending`, `unconfirmed`, `confirmed`
+  - `count` (integer): The total inscriptions count; example: `1`
+  - `pendingCount` (integer): The pending inscriptions count; example: `1`
+  - `unconfirmedCount` (integer (int32)): The unconfirmed inscriptions count; example: `0`
+  - `confirmedCount` (integer (int32)): The confirmed inscriptions count; example: `0`
+  - `createTime` (integer): example: `1693439128100`
+  - `refundTxid` (string): example: `""`
+  - `refundAmount` (integer):
+  - `refundFeeRate` (number):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -298,8 +667,49 @@ Deprecated, please use /order/create instead
 #### Description
 Deprecated, please use /order/create instead
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+- `feeRate` (number (float)): The fee rate of transaction; example: `1`
+- `outputValue` (integer (int32)): The balance of inscription; example: `546`
+- `devAddress` (string): Developer address to receive extra fee; example: `""`
+- `devFee` (integer (int32)): Extra fee to pay to developer's address
+- `brc20Ticker` (string): tick in brc20-transfer; example: `""`
+- `brc20Amount` (string): amt in brc20-transfer; example: `""`
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)):
+- `msg` (string):
+- `data` (object):
+  - `orderId` (string): example: `""`
+  - `status` (string): Order Status; enum: `pending`, `inscribing`, `minted`; example: `"pending"`
+  - `payAddress` (string): Pay to this address to start inscribing; example: `""`
+  - `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+  - `amount` (integer): The BTC amount (in satoshis) need to pay; example: `3000`
+  - `paidAmount` (integer): The paid BTC amount (in satoshis)
+  - `outputValue` (integer): The outputValue of each inscription
+  - `feeRate` (number): The feeRate of inscribing transactions
+  - `minerFee` (number): The miner fee of this order
+  - `serviceFee` (number): The service fee of this order
+  - `devFee` (number): The developer fee of this order
+  - `files` (array):
+    - `filename` (string): example: `"10000.sats"`
+    - `inscriptionId` (string): example: `""`
+    - `status` (string): enum: `pending`, `unconfirmed`, `confirmed`
+  - `count` (integer): The total inscriptions count; example: `1`
+  - `pendingCount` (integer): The pending inscriptions count; example: `1`
+  - `unconfirmedCount` (integer (int32)): The unconfirmed inscriptions count; example: `0`
+  - `confirmedCount` (integer (int32)): The confirmed inscriptions count; example: `0`
+  - `createTime` (integer): example: `1693439128100`
+  - `refundTxid` (string): example: `""`
+  - `refundAmount` (integer):
+  - `refundFeeRate` (number):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -314,8 +724,51 @@ Deprecated, please use /order/create instead
 #### Description
 Deprecated, please use /order/create instead
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `deployerAddress` (string): The deployer address that deployed the ticker; example: `""`
+- `deployerPubkey` (string): The deployer pubkey that deployed the ticker; example: `""`
+- `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+- `feeRate` (number (float)): The fee rate of transaction; example: `1`
+- `outputValue` (integer (int32)): The balance of inscription; example: `546`
+- `devAddress` (string): Developer address to receive extra fee; example: `""`
+- `devFee` (integer (int32)): Extra fee to pay to developer's address
+- `brc20Ticker` (string): tick in brc20-mint; example: `""`
+- `brc20Amount` (string): amt in brc20-mint; example: `""`
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)):
+- `msg` (string):
+- `data` (object):
+  - `orderId` (string): example: `""`
+  - `status` (string): Order Status; enum: `pending`, `inscribing`, `minted`; example: `"pending"`
+  - `payAddress` (string): Pay to this address to start inscribing; example: `""`
+  - `receiveAddress` (string): Bitcoin address to receive the inscriptions; example: `""`
+  - `amount` (integer): The BTC amount (in satoshis) need to pay; example: `3000`
+  - `paidAmount` (integer): The paid BTC amount (in satoshis)
+  - `outputValue` (integer): The outputValue of each inscription
+  - `feeRate` (number): The feeRate of inscribing transactions
+  - `minerFee` (number): The miner fee of this order
+  - `serviceFee` (number): The service fee of this order
+  - `devFee` (number): The developer fee of this order
+  - `files` (array):
+    - `filename` (string): example: `"10000.sats"`
+    - `inscriptionId` (string): example: `""`
+    - `status` (string): enum: `pending`, `unconfirmed`, `confirmed`
+  - `count` (integer): The total inscriptions count; example: `1`
+  - `pendingCount` (integer): The pending inscriptions count; example: `1`
+  - `unconfirmedCount` (integer (int32)): The unconfirmed inscriptions count; example: `0`
+  - `confirmedCount` (integer (int32)): The confirmed inscriptions count; example: `0`
+  - `createTime` (integer): example: `1693439128100`
+  - `refundTxid` (string): example: `""`
+  - `refundAmount` (integer):
+  - `refundFeeRate` (number):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -330,8 +783,26 @@ Deprecated, please use /order/create instead
 #### Description
 Deprecated, please use /order/request-commit instead
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `orderId` (string): orderId; example: `""`
+- `payerAddress` (string): payer's bitcoin address; example: `""`
+- `payerPubkey` (string): payer's pubkey; example: `""`
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)):
+- `msg` (string):
+- `data` (object):
+  - `psbtHex` (string): psbt hex string; example: `""`
+  - `inputsToSign` (array):
+    - `address` (string):
+    - `signingIndexes` (array):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -346,8 +817,25 @@ Deprecated, please use /order/request-commit instead
 #### Description
 Deprecated, please use /order/sign-commit instead
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `orderId` (string): orderId; example: `""`
+- `psbt` (string): psbt hex string; example: `""`
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)):
+- `msg` (string):
+- `data` (object):
+  - `psbtHex` (string): psbt hex string; example: `""`
+  - `inputsToSign` (array):
+    - `address` (string):
+    - `signingIndexes` (array):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -362,8 +850,22 @@ Deprecated, please use /order/sign-commit instead
 #### Description
 Deprecated, please use /order/sign-reveal instead
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `orderId` (string): orderId; example: `""`
+- `psbt` (string): psbt hex string; example: `""`
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)):
+- `msg` (string):
+- `data` (object):
+  - `inscriptionId` (string): inscriptionId; example: `""`
+
+#### Response (401)
+Invalid API Key
 
 
 ---

@@ -33,12 +33,14 @@ This is the API for collections. Currently, it only indexes a single whitelisted
 Returns the latest height of the collection indexer, the last handled height, and the total number of collections.
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `newestHeight` (number): 
-  - `lastHandledHeight` (number): 
-  - `totalCollection` (number): 
+  - `newestHeight` (number):
+  - `lastHandledHeight` (number):
+  - `totalCollection` (number):
 
 
 ---
@@ -54,16 +56,18 @@ Returns the latest height of the collection indexer, the last handled height, an
 Returns the details of a specific collection, including its name, icon, supply, description, and social media links.
 
 #### Parameters
-- `height` (query) : 
-- `collectionId` (path) **(required)**: 
+- `height` (query, number): 
+- `collectionId` (path, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `height` (number): 
-  - `holders` (number): 
-  - `totalItems` (number): 
+  - `height` (number):
+  - `holders` (number):
+  - `totalItems` (number):
 
 
 ---
@@ -79,19 +83,21 @@ Returns the details of a specific collection, including its name, icon, supply, 
 Returns the list of addresses that hold items from a specific collection, along with the count of items each address holds.
 
 #### Parameters
-- `height` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
-- `collectionId` (path) **(required)**: 
+- `height` (query, number): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
+- `collectionId` (path, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `address` (string): 
-    - `count` (number): 
+    - `address` (string):
+    - `count` (number):
 
 
 ---
@@ -107,28 +113,30 @@ Returns the list of addresses that hold items from a specific collection, along 
 Returns the summary of all collections that the specified address holds, including collection name, icon, supply, and social media links.
 
 #### Parameters
-- `height` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
-- `address` (path) **(required)**: 
+- `height` (query, number): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
+- `address` (path, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `count` (number): 
-    - `name` (string): 
-    - `iconInscription` (string): 
-    - `iconUrl` (string): 
-    - `iconContentType` (string): 
-    - `supply` (string): 
-    - `collectionId` (string): 
-    - `desc` (string): 
-    - `twitter` (string): 
-    - `discord` (string): 
-    - `website` (string): 
+    - `count` (number):
+    - `name` (string):
+    - `iconInscription` (string):
+    - `iconUrl` (string):
+    - `iconContentType` (string):
+    - `supply` (string):
+    - `collectionId` (string):
+    - `desc` (string):
+    - `twitter` (string):
+    - `discord` (string):
+    - `website` (string):
 
 
 ---
@@ -144,29 +152,31 @@ Returns the summary of all collections that the specified address holds, includi
 Returns the list of inscriptions that belong to a specific collection, including details such as inscription ID, name, content type, and height.
 
 #### Parameters
-- `height` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
-- `collectionId` (path) **(required)**: 
+- `height` (query, number): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
+- `collectionId` (path, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `inscriptionId` (string): 
-    - `collectionId` (string): 
-    - `collectionItemName` (string): 
-    - `inscriptionIndex` (number): 
-    - `inscriptionNumber` (number): 
-    - `inscriptionName` (string): 
-    - `contentBody` (string): 
-    - `contentLength` (number): 
-    - `contentType` (string): 
-    - `height` (number): 
-    - `holders` (number): 
-    - `totalItems` (number): 
+    - `inscriptionId` (string):
+    - `collectionId` (string):
+    - `collectionItemName` (string):
+    - `inscriptionIndex` (number):
+    - `inscriptionNumber` (number):
+    - `inscriptionName` (string):
+    - `contentBody` (string):
+    - `contentLength` (number):
+    - `contentType` (string):
+    - `height` (number):
+    - `holders` (number):
+    - `totalItems` (number):
 
 
 ---
@@ -182,25 +192,27 @@ Returns the list of inscriptions that belong to a specific collection, including
 Returns the summary of a specific collection for a designated address, including collection name, icon, supply, description, and social media links.
 
 #### Parameters
-- `height` (query) : 
-- `address` (path) **(required)**: 
-- `collectionId` (path) **(required)**: 
+- `height` (query, number): 
+- `address` (path, string) **(required)**: 
+- `collectionId` (path, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `count` (number): 
-  - `name` (string): 
-  - `iconInscription` (string): 
-  - `iconUrl` (string): 
-  - `iconContentType` (string): 
-  - `supply` (string): 
-  - `collectionId` (string): 
-  - `desc` (string): 
-  - `twitter` (string): 
-  - `discord` (string): 
-  - `website` (string): 
+  - `count` (number):
+  - `name` (string):
+  - `iconInscription` (string):
+  - `iconUrl` (string):
+  - `iconContentType` (string):
+  - `supply` (string):
+  - `collectionId` (string):
+  - `desc` (string):
+  - `twitter` (string):
+  - `discord` (string):
+  - `website` (string):
 
 
 ---
@@ -216,30 +228,32 @@ Returns the summary of a specific collection for a designated address, including
 Returns the list of inscriptions that belong to a specific collection at a designated address, including details such as inscription ID, name,
 
 #### Parameters
-- `height` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
-- `address` (path) **(required)**: 
-- `collectionId` (path) **(required)**: 
+- `height` (query, number): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
+- `address` (path, string) **(required)**: 
+- `collectionId` (path, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `inscriptionId` (string): 
-    - `collectionId` (string): 
-    - `collectionItemName` (string): 
-    - `inscriptionIndex` (number): 
-    - `inscriptionNumber` (number): 
-    - `inscriptionName` (string): 
-    - `contentBody` (string): 
-    - `contentLength` (number): 
-    - `contentType` (string): 
-    - `height` (number): 
-    - `holders` (number): 
-    - `totalItems` (number): 
+    - `inscriptionId` (string):
+    - `collectionId` (string):
+    - `collectionItemName` (string):
+    - `inscriptionIndex` (number):
+    - `inscriptionNumber` (number):
+    - `inscriptionName` (string):
+    - `contentBody` (string):
+    - `contentLength` (number):
+    - `contentType` (string):
+    - `height` (number):
+    - `holders` (number):
+    - `totalItems` (number):
 
 
 ---
@@ -255,24 +269,26 @@ Returns the list of inscriptions that belong to a specific collection at a desig
 Returns the list of collections that a specific inscription belongs to, including collection name, icon, supply, and social media links.
 
 #### Parameters
-- `inscriptionId` (path) **(required)**: 
+- `inscriptionId` (path, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `name` (string): 
-    - `iconInscription` (string): 
-    - `iconUrl` (string): 
-    - `iconContentType` (string): 
-    - `supply` (string): 
-    - `collectionId` (string): 
-    - `desc` (string): 
-    - `twitter` (string): 
-    - `discord` (string): 
-    - `website` (string): 
+    - `name` (string):
+    - `iconInscription` (string):
+    - `iconUrl` (string):
+    - `iconContentType` (string):
+    - `supply` (string):
+    - `collectionId` (string):
+    - `desc` (string):
+    - `twitter` (string):
+    - `discord` (string):
+    - `website` (string):
 
 
 ---

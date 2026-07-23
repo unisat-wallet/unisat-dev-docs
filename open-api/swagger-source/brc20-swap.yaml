@@ -226,7 +226,7 @@ paths:
                     type: object
                     properties:
                       existed:
-                        description: Is the pool existed
+                        description: Whether the pool exists
                         type: boolean
                       addLiq:
                         description: Has LP been added to the pool
@@ -378,13 +378,16 @@ paths:
           in: query
           name: feeTick
           required: true
-          description: Tick used as fee
+          description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
         - schema:
+            enum:
+              - tick
+              - freeQuota
             type: string
           in: query
           name: payType
           required: false
-          description: "Pay Type: tick, freeQuota"
+          description: Pay type. Allowed values are tick and freeQuota.
       responses:
         "200":
           description: Default Response
@@ -426,7 +429,7 @@ paths:
                         description: The dollar value of the fee
                         type: string
                       feeTick:
-                        description: Tick used as fee
+                        description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                         type: string
                       totalFreeQuota:
                         description: Total free quota
@@ -493,7 +496,7 @@ paths:
                   description: Timestamp (seconds)
                   type: number
                 feeTick:
-                  description: Tick used as fee
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay
@@ -507,7 +510,11 @@ paths:
                   items:
                     type: string
                 payType:
+                  enum:
+                    - tick
+                    - freeQuota
                   type: string
+                  description: Pay type. Allowed values are tick and freeQuota.
                 rememberPayType:
                   type: boolean
               additionalProperties: false
@@ -592,13 +599,16 @@ paths:
           in: query
           name: feeTick
           required: true
-          description: Tick used as fee
+          description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
         - schema:
+            enum:
+              - tick
+              - freeQuota
             type: string
           in: query
           name: payType
           required: false
-          description: "Pay Type: tick, freeQuota"
+          description: Pay type. Allowed values are tick and freeQuota.
       responses:
         "200":
           description: Default Response
@@ -640,7 +650,7 @@ paths:
                         description: The dollar value of the fee
                         type: string
                       feeTick:
-                        description: Tick used as fee
+                        description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                         type: string
                       totalFreeQuota:
                         description: Total free quota
@@ -720,7 +730,7 @@ paths:
                   description: Timestamp (seconds)
                   type: number
                 feeTick:
-                  description: Tick used as fee
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay
@@ -734,7 +744,11 @@ paths:
                   items:
                     type: string
                 payType:
+                  enum:
+                    - tick
+                    - freeQuota
                   type: string
+                  description: Pay type. Allowed values are tick and freeQuota.
                 rememberPayType:
                   type: boolean
               additionalProperties: false
@@ -856,13 +870,16 @@ paths:
           in: query
           name: feeTick
           required: true
-          description: Tick used as fee
+          description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
         - schema:
+            enum:
+              - tick
+              - freeQuota
             type: string
           in: query
           name: payType
           required: false
-          description: "Pay Type: tick, freeQuota"
+          description: Pay type. Allowed values are tick and freeQuota.
       responses:
         "200":
           description: Default Response
@@ -904,7 +921,7 @@ paths:
                         description: The dollar value of the fee
                         type: string
                       feeTick:
-                        description: Tick used as fee
+                        description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                         type: string
                       totalFreeQuota:
                         description: Total free quota
@@ -990,7 +1007,7 @@ paths:
                   description: Timestamp (seconds)
                   type: number
                 feeTick:
-                  description: Tick used as fee
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay
@@ -1004,7 +1021,11 @@ paths:
                   items:
                     type: string
                 payType:
+                  enum:
+                    - tick
+                    - freeQuota
                   type: string
+                  description: Pay type. Allowed values are tick and freeQuota.
                 rememberPayType:
                   type: boolean
               additionalProperties: false
@@ -1112,13 +1133,16 @@ paths:
           in: query
           name: feeTick
           required: true
-          description: Tick used as fee
+          description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
         - schema:
+            enum:
+              - tick
+              - freeQuota
             type: string
           in: query
           name: payType
           required: false
-          description: "Pay Type: tick, freeQuota"
+          description: Pay type. Allowed values are tick and freeQuota.
       responses:
         "200":
           description: Default Response
@@ -1172,6 +1196,7 @@ paths:
       description: >-
         This interface pre-loads the /batch_send operation, providing the signature content,
         gas, and byte information required for sending multiple ticks in the BRC20 Swap service.
+        The request can provide either a shared amount or an amountList aligned with the recipients.
       requestBody:
         required: true
         content:
@@ -1188,8 +1213,12 @@ paths:
                   description: Send tick
                 amount:
                   type: string
-                  required: true
-                  description: The amount of send tick
+                  description: The amount of send tick. Either amount or amountList must be provided.
+                amountList:
+                  type: array
+                  items:
+                    type: string
+                  description: Optional per-recipient amounts. When provided, its length must match to.
                 to:
                   type: array
                   items:
@@ -1203,15 +1232,17 @@ paths:
                 feeTick:
                   type: string
                   required: true
-                  description: Tick used as fee
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                 payType:
+                  enum:
+                    - tick
+                    - freeQuota
                   type: string
                   required: false
-                  description: "Pay Type: tick, freeQuota"
+                  description: Pay type. Allowed values are tick and freeQuota.
               required:
                 - address
                 - tick
-                - amount
                 - to
                 - ts
                 - feeTick
@@ -1324,13 +1355,17 @@ paths:
           in: query
           name: feeTick
           required: true
-          description: Tick used as fee
+          description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
         - schema:
+            enum:
+              - tick
+              - freeQuota
+              - assetFeeTick
             type: string
           in: query
           name: payType
           required: false
-          description: "Pay Type: tick, freeQuota"
+          description: Pay type. Allowed values are tick, freeQuota, and assetFeeTick.
       responses:
         "200":
           description: Default Response
@@ -1392,7 +1427,6 @@ paths:
               required:
                 - address
                 - tick
-                - amount
                 - to
                 - ts
                 - feeTick
@@ -1406,8 +1440,13 @@ paths:
                   description: Send tick
                   type: string
                 amount:
-                  description: The amount of send tick
+                  description: The amount of send tick. Either amount or amountList must be provided.
                   type: string
+                amountList:
+                  type: array
+                  items:
+                    type: string
+                  description: Optional per-recipient amounts. When provided, its length must match to.
                 to:
                   description: The receiver of send tick
                   type: string
@@ -1415,7 +1454,7 @@ paths:
                   description: Timestamp (seconds)
                   type: number
                 feeTick:
-                  description: Tick used as fee
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay
@@ -1429,7 +1468,11 @@ paths:
                   items:
                     type: string
                 payType:
+                  enum:
+                    - tick
+                    - freeQuota
                   type: string
+                  description: Pay type. Allowed values are tick and freeQuota.
                 rememberPayType:
                   type: boolean
               additionalProperties: false
@@ -1462,7 +1505,7 @@ paths:
       summary: The batch send operation.
       description: >-
         This interface sends multiple ticks in the BRC20 Swap service. It requires the address, tick,
-        amount, receivers, timestamp, fee tick, and user signatures to complete the operation.
+        amount or amountList, receivers, timestamp, fee tick, and user signatures to complete the operation.
       requestBody:
         content:
           application/json:
@@ -1496,7 +1539,7 @@ paths:
                   description: Timestamp (seconds)
                   type: number
                 feeTick:
-                  description: Tick used as fee
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay
@@ -1510,7 +1553,11 @@ paths:
                   items:
                     type: string
                 payType:
+                  enum:
+                    - tick
+                    - freeQuota
                   type: string
+                  description: Pay type. Allowed values are tick and freeQuota.
                 rememberPayType:
                   type: boolean
               additionalProperties: false
@@ -1578,6 +1625,7 @@ paths:
                   description: The amount of output tick
                   type: string
                 feeTick:
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 slippage:
                   type: string
@@ -1600,6 +1648,24 @@ paths:
                   type: array
                   items:
                     type: string
+                payType:
+                  enum:
+                    - tick
+                    - freeQuota
+                    - assetFeeTick
+                  type: string
+                  description: Pay type. Allowed values are tick, freeQuota, and assetFeeTick.
+                rememberPayType:
+                  type: boolean
+                assetFeeTick:
+                  type: string
+                  description: Required when payType is assetFeeTick. Used as the fee asset tick for swap.
+                assetFeeAmount:
+                  type: string
+                  description: Required when payType is assetFeeTick. Fee amount charged in assetFeeTick.
+                assetFeeTickPrice:
+                  type: string
+                  description: Required when payType is assetFeeTick. Price of assetFeeTick.
               additionalProperties: false
         required: true
       responses:
@@ -2095,11 +2161,14 @@ paths:
           name: tick
           required: false
         - schema:
+            enum:
+              - add
+              - remove
             type: string
           in: query
           name: type
           required: false
-          description: "Optional: add, remove"
+          description: Optional liquidity history type filter.
         - schema:
             type: number
           in: query
@@ -2389,14 +2458,15 @@ paths:
       summary: Create a deposit psbt to be signed by the user.
       description: >-
         This interface creates a deposit PSBT to be signed by the user in the BRC20 Swap service.
-        It requires the inscription ID, public key, and address parameters to generate the PSBT.
+        Fractal BRC20 deposits only require the public key and address, while bridge deposits also require
+        amount, tick, assetType, and networkType.
 
       parameters:
         - schema:
             type: string
           in: query
           name: inscriptionId
-          required: true
+          required: false
         - schema:
             type: string
           in: query
@@ -2407,6 +2477,47 @@ paths:
           in: query
           name: address
           required: true
+        - schema:
+            type: string
+          in: query
+          name: amount
+          required: false
+          description: Required for bridge deposits.
+        - schema:
+            type: string
+          in: query
+          name: tick
+          required: false
+          description: Required for bridge deposits.
+        - schema:
+            enum:
+              - btc
+              - brc20
+              - runes
+              - alkanes
+            type: string
+          in: query
+          name: assetType
+          required: false
+          description: Asset type. Required for bridge deposits.
+        - schema:
+            enum:
+              - FRACTAL_BITCOIN_MAINNET
+              - FRACTAL_BITCOIN_TESTNET
+              - BITCOIN_MAINNET
+              - BITCOIN_TESTNET
+              - BITCOIN_TESTNET4
+              - BITCOIN_SIGNET
+            type: string
+          in: query
+          name: networkType
+          required: false
+          description: Network type. Required for bridge deposits.
+        - schema:
+            type: number
+          in: query
+          name: feeRate
+          required: false
       responses:
         "200":
           description: Default Response
@@ -2425,7 +2536,11 @@ paths:
                       psbt:
                         type: string
                       type:
-                        description: Direct or matching
+                        description: Deposit type.
+                        enum:
+                          - direct
+                          - matching
+                          - bridge
                         type: string
                       expiredTimestamp:
                         type: number
@@ -2444,20 +2559,46 @@ paths:
       summary: User signature deposit psbt, submit confirmation.
       description: >-
         This interface allows the user to sign the deposit PSBT and submit the confirmation in the BRC20 Swap service.
-        It requires the PSBT and inscription ID to complete the operation.
+        It always requires the PSBT. Bridge deposits also require the deposit context fields such as
+        pubkey, address, amount, tick, assetType, and networkType.
       requestBody:
         content:
           application/json:
             schema:
               required:
                 - psbt
-                - inscriptionId
               type: object
               properties:
                 psbt:
                   type: string
                 inscriptionId:
                   type: string
+                pubkey:
+                  type: string
+                address:
+                  type: string
+                amount:
+                  type: string
+                tick:
+                  type: string
+                assetType:
+                  enum:
+                    - btc
+                    - brc20
+                    - runes
+                    - alkanes
+                  type: string
+                networkType:
+                  enum:
+                    - FRACTAL_BITCOIN_MAINNET
+                    - FRACTAL_BITCOIN_TESTNET
+                    - BITCOIN_MAINNET
+                    - BITCOIN_TESTNET
+                    - BITCOIN_TESTNET4
+                    - BITCOIN_SIGNET
+                  type: string
+                feeRate:
+                  type: number
               additionalProperties: false
         required: true
       responses:
@@ -2706,7 +2847,7 @@ paths:
       summary: Create a withdraw psbt to be signed by the user.
       description: >-
         This interface creates a withdrawal PSBT to be signed by the user in the BRC20 Swap service.
-        It requires the public key, address, tick, amount, timestamp, and fee tick parameters to generate the PSBT.
+        It requires the public key, address, tick, amount, timestamp, fee tick, and payType parameters to generate the PSBT.
 
       parameters:
         - schema:
@@ -2739,6 +2880,44 @@ paths:
           in: query
           name: feeTick
           required: true
+          description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+        - schema:
+            enum:
+              - tick
+            type: string
+          in: query
+          name: payType
+          required: true
+          description: Withdraw creation currently only supports tick.
+        - schema:
+            type: number
+          in: query
+          name: feeRate
+          required: false
+        - schema:
+            enum:
+              - btc
+              - brc20
+              - runes
+              - alkanes
+            type: string
+          in: query
+          name: assetType
+          required: false
+          description: Required for bridge withdrawals.
+        - schema:
+            enum:
+              - FRACTAL_BITCOIN_MAINNET
+              - FRACTAL_BITCOIN_TESTNET
+              - BITCOIN_MAINNET
+              - BITCOIN_TESTNET
+              - BITCOIN_TESTNET4
+              - BITCOIN_SIGNET
+            type: string
+          in: query
+          name: networkType
+          required: false
+          description: Required for bridge withdrawals.
       responses:
         "200":
           description: Default Response
@@ -2767,7 +2946,8 @@ paths:
       summary: User signature withdraw psbt, submit confirmation.
       description: >-
         This interface allows the user to sign the withdrawal PSBT and submit the confirmation in the BRC20 Swap service.
-        It requires the withdrawal order ID, payment PSBT, approve PSBT, fee tick, and optional fee amount to complete the operation.
+        It requires the withdrawal order ID, payment PSBT, approve PSBT, fee tick, and payType.
+        Bridge withdrawals also carry assetType and networkType.
 
       requestBody:
         content:
@@ -2778,6 +2958,7 @@ paths:
                 - paymentPsbt
                 - approvePsbt
                 - feeTick
+                - payType
               type: object
               properties:
                 id:
@@ -2788,6 +2969,7 @@ paths:
                 approvePsbt:
                   type: string
                 feeTick:
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay
@@ -2800,6 +2982,39 @@ paths:
                   type: array
                   items:
                     type: string
+                payType:
+                  enum:
+                    - tick
+                  type: string
+                  description: Withdraw confirmation currently only supports tick.
+                rememberPayType:
+                  type: boolean
+                ts:
+                  type: number
+                pubkey:
+                  type: string
+                address:
+                  type: string
+                amount:
+                  type: string
+                tick:
+                  type: string
+                assetType:
+                  enum:
+                    - btc
+                    - brc20
+                    - runes
+                    - alkanes
+                  type: string
+                networkType:
+                  enum:
+                    - FRACTAL_BITCOIN_MAINNET
+                    - FRACTAL_BITCOIN_TESTNET
+                    - BITCOIN_MAINNET
+                    - BITCOIN_TESTNET
+                    - BITCOIN_TESTNET4
+                    - BITCOIN_SIGNET
+                  type: string
               additionalProperties: false
         required: true
       responses:
@@ -2883,9 +3098,7 @@ paths:
                       cancelTotalNum:
                         type: number
                       rollUpTxid:
-                        description:
-                          Decrease operation is required to withdraw, which in rollup
-                          inscription
+                        description: Transaction ID of the rollup inscription required for a withdrawal decrease operation.
                         type: string
                       paymentTxid:
                         type: string
@@ -3178,13 +3391,16 @@ paths:
           in: query
           name: feeTick
           required: true
-          description: Tick used as fee
+          description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
         - schema:
+            enum:
+              - tick
+              - freeQuota
             type: string
           in: query
           name: payType
           required: false
-          description: "Pay Type: tick, freeQuota"
+          description: Pay type. Allowed values are tick and freeQuota.
       responses:
         "200":
           description: Default Response
@@ -3267,13 +3483,16 @@ paths:
           in: query
           name: feeTick
           required: true
-          description: Tick used as fee
+          description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
         - schema:
+            enum:
+              - tick
+              - freeQuota
             type: string
           in: query
           name: payType
           required: false
-          description: "Pay Type: tick, freeQuota"
+          description: Pay type. Allowed values are tick and freeQuota.
       responses:
         "200":
           description: Default Response
@@ -3350,13 +3569,16 @@ paths:
           in: query
           name: feeTick
           required: true
-          description: Tick used as fee
+          description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
         - schema:
+            enum:
+              - tick
+              - freeQuota
             type: string
           in: query
           name: payType
           required: false
-          description: "Pay Type: tick, freeQuota"
+          description: Pay type. Allowed values are tick and freeQuota.
       responses:
         "200":
           description: Default Response
@@ -3452,13 +3674,16 @@ paths:
           in: query
           name: feeTick
           required: true
-          description: Tick used as fee
+          description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
         - schema:
+            enum:
+              - tick
+              - freeQuota
             type: string
           in: query
           name: payType
           required: false
-          description: "Pay Type: tick, freeQuota"
+          description: Pay type. Allowed values are tick and freeQuota.
       responses:
         "200":
           description: Default Response
@@ -3551,7 +3776,7 @@ paths:
                   description: Timestamp (seconds)
                   type: number
                 feeTick:
-                  description: Tick used as fee
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay
@@ -3565,7 +3790,11 @@ paths:
                   items:
                     type: string
                 payType:
+                  enum:
+                    - tick
+                    - freeQuota
                   type: string
+                  description: Pay type. Allowed values are tick and freeQuota.
                 rememberPayType:
                   type: boolean
               additionalProperties: false
@@ -3624,7 +3853,7 @@ paths:
                   description: Timestamp (seconds)
                   type: number
                 feeTick:
-                  description: Tick used as fee
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay
@@ -3638,7 +3867,11 @@ paths:
                   items:
                     type: string
                 payType:
+                  enum:
+                    - tick
+                    - freeQuota
                   type: string
+                  description: Pay type. Allowed values are tick and freeQuota.
                 rememberPayType:
                   type: boolean
               additionalProperties: false
@@ -3697,7 +3930,7 @@ paths:
                   description: Timestamp (seconds)
                   type: number
                 feeTick:
-                  description: Tick used as fee
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay
@@ -3711,7 +3944,11 @@ paths:
                   items:
                     type: string
                 payType:
+                  enum:
+                    - tick
+                    - freeQuota
                   type: string
+                  description: Pay type. Allowed values are tick and freeQuota.
                 rememberPayType:
                   type: boolean
               additionalProperties: false
@@ -3766,7 +4003,7 @@ paths:
                   description: Timestamp (seconds)
                   type: number
                 feeTick:
-                  description: Tick used as fee
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay
@@ -3780,7 +4017,11 @@ paths:
                   items:
                     type: string
                 payType:
+                  enum:
+                    - tick
+                    - freeQuota
                   type: string
+                  description: Pay type. Allowed values are tick and freeQuota.
                 rememberPayType:
                   type: boolean
               additionalProperties: false
@@ -3913,10 +4154,16 @@ paths:
           name: address
           required: true
         - schema:
+            enum:
+              - all
+              - stake
+              - unstake
+              - claim
             type: string
           in: query
           name: type
           required: true
+          description: Stake history type.
         - schema:
             type: number
           in: query
@@ -4174,7 +4421,13 @@ paths:
                     type: object
                     properties:
                       defaultPayType:
+                        enum:
+                          - tick
+                          - freeQuota
+                          - assetFeeTick
                         type: string
+                        nullable: true
+                        description: User default pay type.
                       rememberPayType:
                         type: boolean
                     additionalProperties: false
@@ -4444,10 +4697,17 @@ paths:
           name: tick1
           required: true
         - schema:
+            enum:
+              - 24h
+              - 7d
+              - 30d
+              - 90d
+              - all
             type: string
           in: query
           name: timeRange
           required: true
+          description: Time range for price line aggregation.
       responses:
         "200":
           description: Default Response
@@ -4474,150 +4734,6 @@ paths:
                               type: number
                             ts:
                               type: number
-                          additionalProperties: false
-                    additionalProperties: false
-                required:
-                  - msg
-                  - code
-                  - data
-  /v1/brc20-swap/community_info:
-    get:
-      tags:
-        - brc20-swap
-      operationId: getBrc20SwapCommunityInfo
-      summary: Gets the community info.
-      description: >-
-        This interface retrieves the community information for a specific tick in the BRC20 Swap service.
-      parameters:
-        - schema:
-            type: string
-          in: query
-          name: tick
-          required: true
-      responses:
-        "200":
-          description: Default Response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: number
-                  msg:
-                    type: string
-                  data:
-                    type: object
-                    properties:
-                      tick:
-                        type: string
-                      twitter:
-                        type: string
-                      telegram:
-                        type: string
-                      website:
-                        type: string
-                      discord:
-                        type: string
-                      desc:
-                        type: string
-                    additionalProperties: false
-                required:
-                  - msg
-                  - code
-                  - data
-  /v1/brc20-swap/add_community_info:
-    post:
-      tags:
-        - brc20-swap
-      operationId: postBrc20SwapAddCommunityInfo
-      summary: Adds community info.
-      description: >-
-        This interface adds or updates community information for a specific tick in the BRC20 Swap service.
-      requestBody:
-        content:
-          application/json:
-            schema:
-              required:
-                - tick
-              type: object
-              properties:
-                tick:
-                  type: string
-                twitter:
-                  type: string
-                telegram:
-                  type: string
-                website:
-                  type: string
-                discord:
-                  type: string
-                desc:
-                  type: string
-              additionalProperties: false
-        required: true
-      responses:
-        "200":
-          description: Default Response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: number
-                  msg:
-                    type: string
-                  data:
-                    type: object
-                    properties: {}
-                    additionalProperties: false
-                required:
-                  - msg
-                  - code
-                  - data
-  /v1/brc20-swap/community_list:
-    get:
-      tags:
-        - brc20-swap
-      operationId: getBrc20SwapCommunityList
-      summary: Gets the community info list.
-      description: >-
-        This interface retrieves the list of all community information in the BRC20 Swap service.
-      responses:
-        "200":
-          description: Default Response
-          content:
-            application/json:
-              schema:
-                type: object
-                properties:
-                  code:
-                    type: number
-                  msg:
-                    type: string
-                  data:
-                    type: object
-                    properties:
-                      total:
-                        type: number
-                      list:
-                        type: array
-                        items:
-                          type: object
-                          properties:
-                            tick:
-                              type: string
-                            twitter:
-                              type: string
-                            telegram:
-                              type: string
-                            website:
-                              type: string
-                            discord:
-                              type: string
-                            desc:
-                              type: string
                           additionalProperties: false
                     additionalProperties: false
                 required:
@@ -5123,13 +5239,16 @@ paths:
           in: query
           name: feeTick
           required: true
-          description: Tick used as fee
+          description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
         - schema:
+            enum:
+              - tick
+              - freeQuota
             type: string
           in: query
           name: payType
           required: false
-          description: "Pay Type: tick, freeQuota"
+          description: Pay type. Allowed values are tick and freeQuota.
       responses:
         "200":
           description: Default Response
@@ -5219,7 +5338,7 @@ paths:
                   description: Timestamp (seconds)
                   type: number
                 feeTick:
-                  description: Tick used as fee
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay
@@ -5233,7 +5352,11 @@ paths:
                   items:
                     type: string
                 payType:
+                  enum:
+                    - tick
+                    - freeQuota
                   type: string
+                  description: Pay type. Allowed values are tick and freeQuota.
                 rememberPayType:
                   type: boolean
               additionalProperties: false
@@ -5302,13 +5425,16 @@ paths:
           in: query
           name: feeTick
           required: true
-          description: Tick used as fee
+          description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
         - schema:
+            enum:
+              - tick
+              - freeQuota
             type: string
           in: query
           name: payType
           required: false
-          description: "Pay Type: tick, freeQuota"
+          description: Pay type. Allowed values are tick and freeQuota.
       responses:
         "200":
           description: Default Response
@@ -5395,7 +5521,7 @@ paths:
                   description: Timestamp (seconds)
                   type: number
                 feeTick:
-                  description: Tick used as fee
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay
@@ -5409,7 +5535,11 @@ paths:
                   items:
                     type: string
                 payType:
+                  enum:
+                    - tick
+                    - freeQuota
                   type: string
+                  description: Pay type. Allowed values are tick and freeQuota.
                 rememberPayType:
                   type: boolean
               additionalProperties: false
@@ -5843,13 +5973,17 @@ paths:
           in: query
           name: feeTick
           required: true
-          description: Tick used as fee
+          description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
         - schema:
+            enum:
+              - tick
+              - freeQuota
+              - assetFeeTick
             type: string
           in: query
           name: payType
           required: false
-          description: "Pay Type: tick, freeQuota"
+          description: Pay type. Allowed values are tick, freeQuota, and assetFeeTick.
       responses:
         "200":
           description: Default Response
@@ -5947,6 +6081,7 @@ paths:
                         description: The amount of output tick
                         type: string
                       feeTick:
+                        description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                         type: string
                       slippage:
                         type: string
@@ -5970,14 +6105,22 @@ paths:
                         items:
                           type: string
                       payType:
+                        enum:
+                          - tick
+                          - freeQuota
+                          - assetFeeTick
                         type: string
+                        description: Pay type. Allowed values are tick, freeQuota, and assetFeeTick.
                       rememberPayType:
                         type: boolean
                       assetFeeTick:
+                        description: Required when payType is assetFeeTick. Used as the fee asset tick for swap.
                         type: string
                       assetFeeAmount:
+                        description: Required when payType is assetFeeTick. Fee amount charged in assetFeeTick.
                         type: string
                       assetFeeTickPrice:
+                        description: Required when payType is assetFeeTick. Price of assetFeeTick.
                         type: string
                     additionalProperties: false
               additionalProperties: false
@@ -6230,6 +6373,466 @@ paths:
                                   type: string
                               additionalProperties: false
                           additionalProperties: false
+                    additionalProperties: false
+                required:
+                  - msg
+                  - code
+                  - data
+  /v1/brc20-swap/batch_history:
+    post:
+      tags:
+        - brc20-swap
+      operationId: postBrc20SwapBatchHistory
+      summary: Batch query multiple history types in a single request.
+      description: >-
+        This interface retrieves multiple history types in a single request in the BRC20 Swap service.
+        It supports querying multiple history types (gas, send, liq, swap, withdraw, stake, send_lp, burn, lock_lp, unlock_lp, multi_swap)
+        with shared pagination parameters (start, limit, address).
+      requestBody:
+        content:
+          application/json:
+            schema:
+              required:
+                - start
+                - limit
+                - address
+                - types
+              type: object
+              properties:
+                start:
+                  type: number
+                  description: Start index for pagination
+                limit:
+                  maximum: 100
+                  exclusiveMaximum: true
+                  type: number
+                  description: Maximum number of items to return
+                address:
+                  type: string
+                  description: User address
+                types:
+                  description: Array of history types to query
+                  type: array
+                  minItems: 1
+                  items:
+                    enum:
+                      - gas
+                      - send
+                      - liq
+                      - swap
+                      - withdraw
+                      - stake
+                      - send_lp
+                      - burn
+                      - lock_lp
+                      - unlock_lp
+                      - multi_swap
+                    type: string
+              additionalProperties: false
+        required: true
+      responses:
+        "200":
+          description: Default Response
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                  msg:
+                    type: string
+                  data:
+                    type: object
+                    properties:
+                      gas:
+                        description: Gas history data (if requested)
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                          list:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                funcType:
+                                  description: Function type
+                                  type: string
+                                  example: swap
+                                tickA:
+                                  type: string
+                                tickB:
+                                  type: string
+                                gas:
+                                  type: string
+                                tick:
+                                  description: Fee tick
+                                  type: string
+                                to:
+                                  description: Recipient address
+                                  type: string
+                                ts:
+                                  type: number
+                              additionalProperties: false
+                        additionalProperties: false
+                      send:
+                        description: Send history data (if requested)
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                          list:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                tick:
+                                  type: string
+                                amount:
+                                  type: string
+                                to:
+                                  type: string
+                                ts:
+                                  type: number
+                              additionalProperties: false
+                        additionalProperties: false
+                      liq:
+                        description: Liquidity history data (if requested)
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                          list:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                type:
+                                  type: string
+                                tick0:
+                                  type: string
+                                tick1:
+                                  type: string
+                                amount0:
+                                  type: string
+                                amount1:
+                                  type: string
+                                reward0:
+                                  description: Reward amount for tick0
+                                  type: string
+                                reward1:
+                                  description: Reward amount for tick1
+                                  type: string
+                                lp:
+                                  type: string
+                                ts:
+                                  type: number
+                              additionalProperties: false
+                        additionalProperties: false
+                      swap:
+                        description: Swap history data (if requested)
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                          list:
+                            type: array
+                            items:
+                              required:
+                                - tickIn
+                                - tickOut
+                                - amountIn
+                                - amountOut
+                              type: object
+                              properties:
+                                tickIn:
+                                  description: Input tick
+                                  type: string
+                                tickOut:
+                                  description: Output tick
+                                  type: string
+                                amountIn:
+                                  description: The amount of input tick
+                                  type: string
+                                amountOut:
+                                  description: The amount of output tick
+                                  type: string
+                                exactType:
+                                  type: string
+                                ts:
+                                  type: number
+                              additionalProperties: false
+                        additionalProperties: false
+                      withdraw:
+                        description: Withdraw history data (if requested)
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                          list:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                tick:
+                                  type: string
+                                totalAmount:
+                                  description: Total amount withdrawal
+                                  type: string
+                                completedAmount:
+                                  description: The number of withdrawal completed
+                                  type: string
+                                ts:
+                                  type: number
+                                totalConfirmedNum:
+                                  description: The current number of confirmations
+                                  type: number
+                                totalNum:
+                                  description: The total number of confirmations
+                                  type: number
+                                status:
+                                  type: string
+                                type:
+                                  type: string
+                              additionalProperties: false
+                        additionalProperties: false
+                      stake:
+                        description: Stake history data (if requested)
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                          list:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                pid:
+                                  type: string
+                                address:
+                                  type: string
+                                poolTick0:
+                                  type: string
+                                poolTick1:
+                                  type: string
+                                type:
+                                  type: string
+                                amount:
+                                  type: string
+                                tick:
+                                  type: string
+                                ts:
+                                  type: number
+                              additionalProperties: false
+                        additionalProperties: false
+                      send_lp:
+                        description: Send LP history data (if requested)
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                          list:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                tick:
+                                  type: string
+                                amount:
+                                  type: string
+                                to:
+                                  type: string
+                                ts:
+                                  type: number
+                              additionalProperties: false
+                        additionalProperties: false
+                      burn:
+                        description: Burn history data (if requested)
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                          totalLp:
+                            description: Total LP amount
+                            type: string
+                          burnedLp:
+                            description: Burned LP amount
+                            type: string
+                          list:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                tick:
+                                  type: string
+                                amount:
+                                  type: string
+                                to:
+                                  type: string
+                                ts:
+                                  type: number
+                              additionalProperties: false
+                        additionalProperties: false
+                      lock_lp:
+                        description: Lock LP history data (if requested)
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                          list:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                address:
+                                  type: string
+                                tick0:
+                                  type: string
+                                tick1:
+                                  type: string
+                                lp:
+                                  type: string
+                                amount0:
+                                  type: string
+                                amount1:
+                                  type: string
+                                amount0USD:
+                                  type: string
+                                amount1USD:
+                                  type: string
+                                lockDay:
+                                  type: number
+                                unlockTime:
+                                  type: string
+                                ts:
+                                  type: number
+                                shareOfPool:
+                                  type: string
+                              additionalProperties: false
+                        additionalProperties: false
+                      unlock_lp:
+                        description: Unlock LP history data (if requested)
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                          list:
+                            type: array
+                            items:
+                              type: object
+                              properties:
+                                id:
+                                  type: string
+                                address:
+                                  type: string
+                                tick0:
+                                  type: string
+                                tick1:
+                                  type: string
+                                lp:
+                                  type: string
+                                amount0:
+                                  type: string
+                                amount1:
+                                  type: string
+                                amount0USD:
+                                  type: string
+                                amount1USD:
+                                  type: string
+                                ts:
+                                  type: number
+                              additionalProperties: false
+                        additionalProperties: false
+                      multi_swap:
+                        description: Multi swap history data (if requested)
+                        type: object
+                        properties:
+                          total:
+                            type: number
+                          list:
+                            type: array
+                            items:
+                              required:
+                                - tickIn
+                                - tickOut
+                                - amountIn
+                                - amountOut
+                              type: object
+                              properties:
+                                address:
+                                  type: string
+                                tickIn:
+                                  description: Input tick
+                                  type: string
+                                tickOut:
+                                  description: Output tick
+                                  type: string
+                                amountIn:
+                                  description: The amount of input tick
+                                  type: string
+                                amountOut:
+                                  description: The amount of output tick
+                                  type: string
+                                exactType:
+                                  type: string
+                                ts:
+                                  type: number
+                                value:
+                                  description: Swap value
+                                  type: number
+                                route0:
+                                  description: First route details
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: string
+                                    tickIn:
+                                      type: string
+                                    tickOut:
+                                      type: string
+                                    amountIn:
+                                      type: string
+                                    amountOut:
+                                      type: string
+                                    exactType:
+                                      type: string
+                                    ts:
+                                      type: number
+                                    success:
+                                      type: boolean
+                                    failureReason:
+                                      type: string
+                                  additionalProperties: false
+                                route1:
+                                  description: Second route details
+                                  type: object
+                                  properties:
+                                    id:
+                                      type: string
+                                    tickIn:
+                                      type: string
+                                    tickOut:
+                                      type: string
+                                    amountIn:
+                                      type: string
+                                    amountOut:
+                                      type: string
+                                    exactType:
+                                      type: string
+                                    ts:
+                                      type: number
+                                    success:
+                                      type: boolean
+                                    failureReason:
+                                      type: string
+                                  additionalProperties: false
+                              additionalProperties: false
+                        additionalProperties: false
                     additionalProperties: false
                 required:
                   - msg

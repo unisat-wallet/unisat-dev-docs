@@ -244,7 +244,7 @@ paths:
       description: Get tx info by txid.
       parameters:
         - name: txid
-          description: Tx id
+          description: Transaction ID
           in: path
           required: true
           schema:
@@ -278,7 +278,7 @@ paths:
       description: Get the inputs of a tx.
       parameters:
         - name: txid
-          description: Tx id
+          description: Transaction ID
           in: path
           required: true
           schema:
@@ -373,7 +373,7 @@ paths:
       description: Get the outputs of a tx.
       parameters:
         - name: txid
-          description: Tx id
+          description: Transaction ID
           in: path
           required: true
           schema:
@@ -447,7 +447,7 @@ paths:
       description: Get the raw tx by txid.
       parameters:
         - name: txid
-          description: Tx id
+          description: Transaction ID
           in: path
           required: true
           schema:
@@ -482,13 +482,13 @@ paths:
       description: Get the UTXO by txid and index.
       parameters:
         - name: txid
-          description: Tx id
+          description: Transaction ID
           in: path
           required: true
           schema:
             type: string
         - name: index
-          description: Tx id
+          description: Output index (vout) of the transaction
           in: path
           required: true
           schema:
@@ -732,7 +732,7 @@ paths:
         - Addresses
       operationId: getUtxoDataByAddress
       summary: Get BTCUTXO list by address
-      description:
+      description: >-
         Retrieve the UTXOs of an address that do not contain inscriptions. Note that this excludes, but does not completely cover, assets from protocols such as Alkanes, Runes, and others.
         To obtain the UTXOs of an address that are available for spending as BTC, please use the available-utxo endpoint.
       parameters:
@@ -914,7 +914,7 @@ paths:
         - Addresses
       operationId: getAvailableUtxoDataByAddress
       summary: Get available UTXO list by address
-      description:
+      description: >-
         This interface will return the current address's available UTXO list that can be used for BTC spending. UTXOs of assets such as inscriptions, runes, and alkanes will not be included. The UTXO management tool (https://unisat.io/utxo) can unlock these UTXOs, making them available again.
         Additionally, UTXOs with less than 600 satoshis will not be returned to avoid potential unspendable outputs from unrecognized asset protocols or burns.
       parameters:
@@ -1022,7 +1022,7 @@ components:
           example: ""
         maxFeeRate:
           type: number
-          description: maxfeerate btc/kvB(optional and must less than 1 btc/kvB)
+          description: Maximum fee rate in BTC/kvB. Optional; must be less than 1 BTC/kvB.
     LocalPushtxsParams:
       type: object
       properties:
@@ -1034,7 +1034,7 @@ components:
             example: ""
         maxFeeRate:
           type: number
-          description: maxfeerate btc/kvB(optional and must less than 1 btc/kvB)
+          description: Maximum fee rate in BTC/kvB. Optional; must be less than 1 BTC/kvB.
     TxHistoryItem:
       type: object
       properties:

@@ -84,6 +84,15 @@ fs.mkdirSync(swaggerDir, { recursive: true });
 fs.cpSync("./build", swaggerDir, { recursive: true });
 fs.writeFileSync(`${swaggerDir}/swagger.yaml`, str);
 
-fs.writeFileSync(`./open-api/auto-generated/swagger/openapi-swagger.yaml`, str);
+const openApiSwaggerPath = `./open-api/auto-generated/swagger/openapi-swagger.yaml`;
+const websiteSwaggerDir = `./website/static/swagger`;
+const websiteSwaggerPath = `${websiteSwaggerDir}/openapi-swagger.yaml`;
+
+fs.mkdirSync(`./open-api/auto-generated/swagger`, { recursive: true });
+fs.mkdirSync(websiteSwaggerDir, { recursive: true });
+fs.writeFileSync(openApiSwaggerPath, str);
+fs.writeFileSync(websiteSwaggerPath, str);
 
 console.log("build swagger success");
+console.log(`wrote ${openApiSwaggerPath}`);
+console.log(`wrote ${websiteSwaggerPath}`);

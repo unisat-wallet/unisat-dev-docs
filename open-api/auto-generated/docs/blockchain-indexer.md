@@ -44,7 +44,21 @@ Get the current blockchain information, including chain type, block count, and b
 
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `chain` (string):
+  - `blocks` (integer):
+  - `headers` (integer):
+  - `bestBlockHash` (string):
+  - `prevBlockHash` (string):
+  - `medianTime` (integer):
+  - `chainwork` (string):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -60,7 +74,20 @@ Get the current blockchain information, including chain type, block count, and b
 Get the recommended fees for different confirmation times. (like mempool.space)
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `fastestFee` (integer):
+  - `halfHourFee` (integer):
+  - `hourFee` (integer):
+  - `economyFee` (integer):
+  - `minimumFee` (integer):
+  - `updateTime` (integer):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -76,10 +103,31 @@ Get the recommended fees for different confirmation times. (like mempool.space)
 Get block info by height.
 
 #### Parameters
-- `height` (path) **(required)**: Block height
+- `height` (path, integer) **(required)**: Block height
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `height` (integer):
+  - `version` (string):
+  - `auxpow` (boolean):
+  - `id` (string):
+  - `prev` (string):
+  - `next` (string):
+  - `merkle` (string):
+  - `ntx` (integer):
+  - `inSatoshi` (integer):
+  - `outSatoshi` (integer):
+  - `coinbaseOut` (number):
+  - `timestamp` (integer):
+  - `bits` (number):
+  - `size` (integer):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -95,10 +143,31 @@ Get block info by height.
 Get block info by blockid.
 
 #### Parameters
-- `blockid` (path) **(required)**: Block id
+- `blockid` (path, string) **(required)**: Block id
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `height` (integer):
+  - `version` (string):
+  - `auxpow` (boolean):
+  - `id` (string):
+  - `prev` (string):
+  - `next` (string):
+  - `merkle` (string):
+  - `ntx` (integer):
+  - `inSatoshi` (integer):
+  - `outSatoshi` (integer):
+  - `coinbaseOut` (number):
+  - `timestamp` (integer):
+  - `bits` (number):
+  - `size` (integer):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -114,12 +183,35 @@ Get block info by blockid.
 Get txs by block height.
 
 #### Parameters
-- `height` (path) **(required)**: Block height
-- `cursor` (query) **(required)**: Start offset
-- `size` (query) **(required)**: Number of items returned
+- `height` (path, integer) **(required)**: Block height
+- `cursor` (query, integer) **(required)**: Start offset
+- `size` (query, integer) **(required)**: Number of items returned
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `detail` (array):
+    - `txid` (string):
+    - `nIn` (integer):
+    - `nOut` (integer):
+    - `inSatoshi` (integer):
+    - `outSatoshi` (integer):
+    - `locktime` (integer):
+    - `size` (integer):
+    - `witOffset` (integer):
+    - `height` (integer):
+    - `idx` (integer):
+    - `blkid` (string):
+    - `confirmations` (integer):
+    - `timestamp` (integer):
+  - `start` (integer):
+  - `total` (integer):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -137,10 +229,30 @@ Get txs by block height.
 Get tx info by txid.
 
 #### Parameters
-- `txid` (path) **(required)**: Tx id
+- `txid` (path, string) **(required)**: Transaction ID
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `txid` (string):
+  - `nIn` (integer):
+  - `nOut` (integer):
+  - `inSatoshi` (integer):
+  - `outSatoshi` (integer):
+  - `locktime` (integer):
+  - `size` (integer):
+  - `witOffset` (integer):
+  - `height` (integer):
+  - `idx` (integer):
+  - `blkid` (string):
+  - `confirmations` (integer):
+  - `timestamp` (integer):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -156,12 +268,39 @@ Get tx info by txid.
 Get the inputs of a tx.
 
 #### Parameters
-- `txid` (path) **(required)**: Tx id
-- `cursor` (query) **(required)**: Start offset
-- `size` (query) **(required)**: Number of items returned
+- `txid` (path, string) **(required)**: Transaction ID
+- `cursor` (query, integer) **(required)**: Start offset
+- `size` (query, integer) **(required)**: Number of items returned
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `address` (string):
+  - `codeType` (integer): 0~3: Reserved , 4: CodeType_P2PK, 5: CodeType_P2PKH, 6: CodeType_P2SH, 7: CodeType_P2WPKH, 8: CodeType_P2WSH, 9: CodeType_P2TR; enum: `0`, `1`, `2`, `3`, `4`, `5`, `6`, `7`, `8`, `9`
+  - `inscriptions` (array):
+    - `inscriptionId` (string):
+    - `inscriptionNumber` (integer):
+    - `isBRC20` (boolean):
+    - `moved` (boolean):
+    - `offset` (integer):
+  - `satoshi` (integer):
+  - `scriptPk` (string):
+  - `scriptSig` (string):
+  - `scriptType` (string):
+  - `scriptWits` (string):
+  - `sequence` (integer):
+  - `height` (integer):
+  - `txid` (string):
+  - `idx` (integer):
+  - `heightTxo` (integer):
+  - `utxid` (string):
+  - `vout` (integer):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -177,12 +316,36 @@ Get the inputs of a tx.
 Get the outputs of a tx.
 
 #### Parameters
-- `txid` (path) **(required)**: Tx id
-- `cursor` (query) **(required)**: Start offset
-- `size` (query) **(required)**: Number of items returned
+- `txid` (path, string) **(required)**: Transaction ID
+- `cursor` (query, integer) **(required)**: Start offset
+- `size` (query, integer) **(required)**: Number of items returned
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `address` (string):
+  - `codeType` (integer):
+  - `inscriptions` (array):
+    - `inscriptionId` (string):
+    - `inscriptionNumber` (integer):
+    - `isBRC20` (boolean):
+    - `moved` (boolean):
+    - `offset` (integer):
+  - `satoshi` (integer):
+  - `scriptPk` (string):
+  - `scriptType` (string):
+  - `height` (integer):
+  - `txid` (string):
+  - `idx` (integer):
+  - `heightSpent` (integer):
+  - `txidSpent` (string):
+  - `vout` (integer):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -198,10 +361,17 @@ Get the outputs of a tx.
 Get the raw tx by txid.
 
 #### Parameters
-- `txid` (path) **(required)**: Tx id
+- `txid` (path, string) **(required)**: Transaction ID
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (string):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -217,11 +387,35 @@ Get the raw tx by txid.
 Get the UTXO by txid and index.
 
 #### Parameters
-- `txid` (path) **(required)**: Tx id
-- `index` (path) **(required)**: Tx id
+- `txid` (path, string) **(required)**: Transaction ID
+- `index` (path, string) **(required)**: Output index (vout) of the transaction
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `txid` (string):
+  - `vout` (integer): example: `0`
+  - `satoshi` (integer): example: `10000`
+  - `scriptType` (string):
+  - `scriptPk` (string):
+  - `codeType` (integer):
+  - `address` (string):
+  - `height` (integer):
+  - `idx` (integer):
+  - `inscriptions` (array):
+    - `inscriptionId` (string):
+    - `inscriptionNumber` (integer):
+    - `isBRC20` (boolean):
+    - `moved` (boolean):
+    - `offset` (integer):
+  - `isOpInRBF` (boolean): example: `false`
+  - `isSpent` (boolean): example: `false`
+
+#### Response (401)
+Invalid API Key
 
 ### Notes
 
@@ -342,8 +536,21 @@ Migration Guidance:
 #### Description
 Push rawtx to bitcoin node.
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `txHex` (string): rawtx; example: `""`
+- `maxFeeRate` (number): Maximum fee rate in BTC/kvB. Optional; must be less than 1 BTC/kvB.
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (string):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -358,8 +565,21 @@ Push rawtx to bitcoin node.
 #### Description
 Push rawtxs to bitcoin node.
 
-#### Response (200)
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `txsHex` (array):
+- `maxFeeRate` (number): Maximum fee rate in BTC/kvB. Optional; must be less than 1 BTC/kvB.
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (array):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -377,10 +597,27 @@ Push rawtxs to bitcoin node.
 Get the balance by address.
 
 #### Parameters
-- `address` (path) **(required)**: Address
+- `address` (path, string) **(required)**: Address
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `address` (string):
+  - `satoshi` (integer):
+  - `pendingSatoshi` (integer):
+  - `utxoCount` (integer):
+  - `btcSatoshi` (integer):
+  - `btcPendingSatoshi` (integer):
+  - `btcUtxoCount` (integer):
+  - `inscriptionSatoshi` (integer):
+  - `inscriptionPendingSatoshi` (integer):
+  - `inscriptionUtxoCount` (integer):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -396,12 +633,35 @@ Get the balance by address.
 Get transaction history by address.
 
 #### Parameters
-- `address` (path) **(required)**: Address
-- `cursor` (query) **(required)**: Start offset
-- `size` (query) **(required)**: Number of items returned
+- `address` (path, string) **(required)**: Address
+- `cursor` (query, integer) **(required)**: Start offset
+- `size` (query, integer) **(required)**: Number of items returned
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `detail` (array):
+    - `txid` (string):
+    - `nIn` (integer):
+    - `nOut` (integer):
+    - `inSatoshi` (integer):
+    - `outSatoshi` (integer):
+    - `locktime` (integer):
+    - `size` (integer):
+    - `witOffset` (integer):
+    - `height` (integer):
+    - `idx` (integer):
+    - `blkid` (string):
+    - `confirmations` (integer):
+    - `timestamp` (integer):
+  - `start` (integer):
+  - `total` (integer):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -417,12 +677,42 @@ Get transaction history by address.
 Retrieve the UTXOs of an address that do not contain inscriptions. Note that this excludes, but does not completely cover, assets from protocols such as Alkanes, Runes, and others. To obtain the UTXOs of an address that are available for spending as BTC, please use the available-utxo endpoint.
 
 #### Parameters
-- `address` (path) **(required)**: Address
-- `cursor` (query) **(required)**: Start offset
-- `size` (query) **(required)**: Number of items returned
+- `address` (path, string) **(required)**: Address
+- `cursor` (query, integer) **(required)**: Start offset
+- `size` (query, integer) **(required)**: Number of items returned
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `cursor` (integer):
+  - `total` (integer):
+  - `totalConfirmed` (integer):
+  - `totalUnconfirmed` (integer):
+  - `totalUnconfirmedSpend` (integer):
+  - `utxo` (array):
+    - `address` (string):
+    - `codeType` (integer):
+    - `height` (integer):
+    - `idx` (integer):
+    - `inscriptions` (array):
+      - `inscriptionId` (string):
+      - `inscriptionNumber` (integer):
+      - `isBRC20` (boolean):
+      - `moved` (boolean):
+      - `offset` (integer):
+    - `isOpInRBF` (boolean): example: `false`
+    - `satoshi` (integer): example: `10000`
+    - `scriptPk` (string):
+    - `scriptType` (string):
+    - `txid` (string):
+    - `vout` (integer): example: `0`
+    - `isLowFee` (boolean): Whether the UTXO has a low fee rate (less than 1 sat/vB)
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -438,12 +728,42 @@ Retrieve the UTXOs of an address that do not contain inscriptions. Note that thi
 Retrieve all UTXOs of an address.
 
 #### Parameters
-- `address` (path) **(required)**: Address
-- `cursor` (query) **(required)**: Start offset
-- `size` (query) **(required)**: Number of items returned
+- `address` (path, string) **(required)**: Address
+- `cursor` (query, integer) **(required)**: Start offset
+- `size` (query, integer) **(required)**: Number of items returned
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `cursor` (integer):
+  - `total` (integer):
+  - `totalConfirmed` (integer):
+  - `totalUnconfirmed` (integer):
+  - `totalUnconfirmedSpend` (integer):
+  - `utxo` (array):
+    - `address` (string):
+    - `codeType` (integer):
+    - `height` (integer):
+    - `idx` (integer):
+    - `inscriptions` (array):
+      - `inscriptionId` (string):
+      - `inscriptionNumber` (integer):
+      - `isBRC20` (boolean):
+      - `moved` (boolean):
+      - `offset` (integer):
+    - `isOpInRBF` (boolean): example: `false`
+    - `satoshi` (integer): example: `10000`
+    - `scriptPk` (string):
+    - `scriptType` (string):
+    - `txid` (string):
+    - `vout` (integer): example: `0`
+    - `isLowFee` (boolean): Whether the UTXO has a low fee rate (less than 1 sat/vB)
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -459,11 +779,24 @@ Retrieve all UTXOs of an address.
 This interface will return the current address's available balance that can be used for BTC spending. Balances of assets such as inscriptions, runes, and alkanes will not be included.
 
 #### Parameters
-- `address` (path) **(required)**: Address
-- `withLowFee` (query) : Whether to include UTXOs balance with low fee rate (less than 1 sat/vB)
+- `address` (path, string) **(required)**: Address
+- `withLowFee` (query, boolean): Whether to include UTXOs balance with low fee rate (less than 1 sat/vB)
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `totalBalance` (integer):
+  - `totalUtxoCount` (integer):
+  - `availableBalance` (integer):
+  - `availableUtxoCount` (integer):
+  - `unavailableBalance` (integer):
+  - `unavailableUtxoCount` (integer):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -479,13 +812,43 @@ This interface will return the current address's available balance that can be u
 This interface will return the current address's available UTXO list that can be used for BTC spending. UTXOs of assets such as inscriptions, runes, and alkanes will not be included. The UTXO management tool (https://unisat.io/utxo) can unlock these UTXOs, making them available again. Additionally, UTXOs with less than 600 satoshis will not be returned to avoid potential unspendable outputs from unrecognized asset protocols or burns.
 
 #### Parameters
-- `address` (path) **(required)**: Address
-- `cursor` (query) **(required)**: Start offset
-- `size` (query) **(required)**: Number of items returned
-- `withLowFee` (query) : Whether to include UTXOs with low fee rate (less than 1 sat/vB)
+- `address` (path, string) **(required)**: Address
+- `cursor` (query, integer) **(required)**: Start offset
+- `size` (query, integer) **(required)**: Number of items returned
+- `withLowFee` (query, boolean): Whether to include UTXOs with low fee rate (less than 1 sat/vB)
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `cursor` (integer):
+  - `total` (integer):
+  - `totalConfirmed` (integer):
+  - `totalUnconfirmed` (integer):
+  - `totalUnconfirmedSpend` (integer):
+  - `utxo` (array):
+    - `address` (string):
+    - `codeType` (integer):
+    - `height` (integer):
+    - `idx` (integer):
+    - `inscriptions` (array):
+      - `inscriptionId` (string):
+      - `inscriptionNumber` (integer):
+      - `isBRC20` (boolean):
+      - `moved` (boolean):
+      - `offset` (integer):
+    - `isOpInRBF` (boolean): example: `false`
+    - `satoshi` (integer): example: `10000`
+    - `scriptPk` (string):
+    - `scriptType` (string):
+    - `txid` (string):
+    - `vout` (integer): example: `0`
+    - `isLowFee` (boolean): Whether the UTXO has a low fee rate (less than 1 sat/vB)
+
+#### Response (401)
+Invalid API Key
 
 
 ---

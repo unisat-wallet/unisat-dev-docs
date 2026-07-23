@@ -399,7 +399,7 @@ components:
         outSatoshi:
           type: integer
         brc20:
-          description: Only BRC20 transfer have this value
+          description: Only BRC-20 transfer inscriptions include this value
           type: object
           properties:
             amt:

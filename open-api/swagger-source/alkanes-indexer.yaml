@@ -49,7 +49,7 @@ paths:
         - Alkanes
       operationId: getAlkanesInfoList
       summary: Get alkanes list
-      description: ""
+      description: Retrieve a paginated list of Alkanes assets with optional type, sorting, and pagination filters.
       parameters:
         - name: type
           in: query
@@ -122,11 +122,11 @@ paths:
         - Alkanes
       operationId: getAlkanesInfo
       summary: Get alkane info by alkaneid
-      description: ""
+      description: Retrieve detailed information for a specific Alkane asset by Alkane ID.
       parameters:
         - name: alkaneid
           in: path
-          description: ""
+          description: Alkane ID
           required: true
           schema:
             type: string
@@ -153,7 +153,7 @@ paths:
         - Alkanes
       operationId: getAlkanesTokenList
       summary: Get alkanes token list
-      description: ""
+      description: Retrieve a paginated list of Alkanes token assets with optional filters.
       parameters:
         - name: alkaneid
           in: query
@@ -232,11 +232,11 @@ paths:
         - Alkanes
       operationId: getAlkanesHolders
       summary: Get alkanes holders by alkaneid
-      description: ""
+      description: Retrieve holders for a specific Alkane asset by Alkane ID.
       parameters:
         - name: alkaneid
           in: path
-          description: ""
+          description: Alkane ID
           required: true
           schema:
             type: string
@@ -288,11 +288,11 @@ paths:
         - Alkanes
       operationId: getAlkanesCollectionItems
       summary: Get collection items
-      description: ""
+      description: Retrieve collection items for a specific Alkanes collection by Alkane ID.
       parameters:
         - name: alkaneid
           in: path
-          description: ""
+          description: Alkane ID
           required: true
           schema:
             type: string
@@ -342,11 +342,11 @@ paths:
         - Alkanes
       operationId: getAlkanesContractEvents
       summary: Get contract events
-      description: ""
+      description: Retrieve contract events for a specific Alkane asset within a block height range.
       parameters:
         - name: alkaneid
           in: path
-          description: ""
+          description: Alkane ID
           required: true
           schema:
             type: string
@@ -408,17 +408,17 @@ paths:
         - Alkanes
       operationId: getAlkanesUtxoBalance
       summary: Get alkanes utxo balance
-      description: ""
+      description: Retrieve Alkanes balances held by a specific transaction output.
       parameters:
         - name: txid
           in: path
-          description: ""
+          description: Transaction ID
           required: true
           schema:
             type: string
         - name: index
           in: path
-          description: ""
+          description: Output index (vout) of the transaction
           required: true
           schema:
             type: string
@@ -447,17 +447,17 @@ paths:
         - Alkanes
       operationId: getAddressAlkanesUtxo
       summary: Get utxo alkanes balance by address and alkaneid
-      description: ""
+      description: Retrieve UTXOs containing a specific Alkane asset for an address.
       parameters:
         - name: address
           in: path
-          description: ""
+          description: Bitcoin address
           required: true
           schema:
             type: string
         - name: alkaneid
           in: path
-          description: ""
+          description: Alkane ID
           required: true
           schema:
             type: string
@@ -506,11 +506,11 @@ paths:
         - Alkanes
       operationId: getAddressAlkanesTokenList
       summary: Get address alkanes token list
-      description: ""
+      description: Retrieve Alkanes token balances owned by an address.
       parameters:
         - name: address
           in: path
-          description: ""
+          description: Bitcoin address
           required: true
           schema:
             type: string
@@ -562,11 +562,11 @@ paths:
         - Alkanes
       operationId: getAddressAlkanesCollectionList
       summary: Get address alkanes collection list
-      description: ""
+      description: Retrieve Alkanes collections owned by an address.
       parameters:
         - name: address
           in: path
-          description: ""
+          description: Bitcoin address
           required: true
           schema:
             type: string
@@ -618,17 +618,17 @@ paths:
         - Alkanes
       operationId: getAddressAlkanesCollectionItems
       summary: Get address collection items by alkaneid
-      description: ""
+      description: Retrieve items from a specific Alkanes collection owned by an address.
       parameters:
         - name: address
           in: path
-          description: ""
+          description: Bitcoin address
           required: true
           schema:
             type: string
         - name: alkaneid
           in: path
-          description: ""
+          description: Alkane ID
           required: true
           schema:
             type: string
@@ -680,17 +680,17 @@ paths:
         - Alkanes
       operationId: getAddressAlkanesTransferHistory
       summary: Get transfer history
-      description: ""
+      description: Retrieve transfer history for a specific Alkane asset and address within a block height range.
       parameters:
         - name: address
           in: path
-          description: ""
+          description: Bitcoin address
           required: true
           schema:
             type: string
         - name: alkaneid
           in: path
-          description: ""
+          description: Alkane ID
           required: true
           schema:
             type: string

@@ -27,10 +27,22 @@ Fractal Only API for CAT20 DEX operations. This API provides endpoints to intera
 Retrieves the current price of a CAT20 token. If the token has no trades in the last 30 days, it will return the last price.
 
 #### Parameters
-- `tokenId` (query) **(required)**: tokenId
+- `tokenId` (query, string) **(required)**: tokenId
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)):
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `askPrice` (number):
+  - `bidPrice` (number):
+  - `latestTradePrice` (number):
+  - `timestamp` (string):
+  - `height` (integer):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -46,13 +58,42 @@ Retrieves the current price of a CAT20 token. If the token has no trades in the 
 Retrieves the market stats for all tokens which have trades in the last 30 days
 
 #### Parameters
-- `sortField` (query) : The field to sort by ('volume', 'volume30d', 'volume7d', 'volume24h', 'volume6h')
-- `tokenId` (query) : tokenId
-- `offset` (query) : The offset to start from
-- `limit` (query) : The limit of the stats (default 20, max 100)
+- `sortField` (query, string): The field to sort by ('volume', 'volume30d', 'volume7d', 'volume24h', 'volume6h'); enum: `volume`, `volume30d`, `volume7d`, `volume24h`, `volume6h`
+- `tokenId` (query, string): tokenId
+- `offset` (query, integer): The offset to start from; example: `0`
+- `limit` (query, integer): The limit of the stats (default 20, max 100); example: `20`
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)):
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `tokenStats` (object):
+    - `tokenId` (string):
+    - `volume` (string):
+    - `volume30d` (string):
+    - `volume24h` (string):
+    - `volume7d` (string):
+    - `volume6h` (string):
+    - `price` (number):
+    - `price6h` (number):
+    - `price24h` (number):
+    - `price7d` (number):
+    - `price30d` (number):
+    - `name` (string):
+    - `symbol` (string):
+    - `decimals` (integer):
+    - `max` (integer):
+    - `volumeToken` (string):
+    - `volumeToken30d` (string):
+    - `volumeToken24h` (string):
+    - `volumeToken7d` (string):
+    - `volumeToken6h` (string):
+  - `total` (integer):
+
+#### Response (401)
+Invalid API Key
 
 
 ---

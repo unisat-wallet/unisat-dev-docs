@@ -10,56 +10,126 @@ function escapeMdxText(route) {
   return route.replace(/{([^}]+)}/g, "($1)");
 }
 
-function getParameters(params = []) {
+function escapeMdx(value) {
+  return String(value).replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function resolveSchema(schema, schemas) {
+  if (!schema) return schema;
+  if (schema.$ref) {
+    const refName = schema.$ref.split("/").pop();
+    return resolveSchema(schemas[refName], schemas);
+  }
+  return schema;
+}
+
+function formatSchemaType(schema, schemas) {
+  const resolved = resolveSchema(schema, schemas) || {};
+  if (resolved.type === "array") {
+    return "array";
+  }
+  if (resolved.type) {
+    return resolved.format ? `${escapeMdx(resolved.type)} (${escapeMdx(resolved.format)})` : escapeMdx(resolved.type);
+  }
+  if (resolved.properties || resolved.allOf || resolved.oneOf || resolved.anyOf) {
+    return "object";
+  }
+  return "object";
+}
+
+function formatSchemaMeta(schema, schemas) {
+  const resolved = resolveSchema(schema, schemas) || {};
+  const meta = [];
+  if (resolved.description) meta.push(escapeMdx(resolved.description));
+  if (resolved.enum) meta.push(`enum: ${resolved.enum.map((v) => `\`${escapeMdx(v)}\``).join(", ")}`);
+  if (resolved.default !== undefined) meta.push(`default: \`${escapeMdx(resolved.default)}\``);
+  if (resolved.example !== undefined) meta.push(`example: \`${escapeMdx(JSON.stringify(resolved.example))}\``);
+  return meta.join("; ");
+}
+
+function getParameters(params = [], schemas = {}) {
   if (!params.length) return "";
   return params
     .map((p) => {
-      const required = p.required ? "**(required)**" : "";
-      return `- \`${p.name}\` (${p.in}) ${required}: ${p.description || ""}`;
+      const required = p.required ? " **(required)**" : "";
+      const schema = resolveSchema(p.schema, schemas) || {};
+      const type = formatSchemaType(schema, schemas);
+      const meta = [p.description ? escapeMdx(p.description) : "", formatSchemaMeta(schema, schemas)].filter(Boolean).join("; ");
+      return `- \`${p.name}\` (${p.in}, ${type})${required}: ${meta}`;
     })
     .join("\n");
 }
 
-function renderSchema(schema, schemas, indent = 0) {
-  if (!schema) return "";
+function renderSchema(schema, schemas, indent = 0, name = "") {
+  const resolved = resolveSchema(schema, schemas);
+  if (!resolved) return "";
+
   const lines = [];
   const prefix = "  ".repeat(indent);
+  const label = name ? `\`${name}\` ` : "";
+  const type = formatSchemaType(resolved, schemas);
+  const meta = formatSchemaMeta(resolved, schemas);
+  const requiredFields = new Set(Array.isArray(resolved.required) ? resolved.required : []);
 
-  if (schema.$ref) {
-    const refName = schema.$ref.split("/").pop();
-    return renderSchema(schemas[refName], schemas, indent);
-  }
-
-  if (schema.type === "array" && schema.items) {
-    lines.push(`${prefix}- (array):`);
-    lines.push(renderSchema(schema.items, schemas, indent + 1));
+  if (resolved.allOf || resolved.oneOf || resolved.anyOf) {
+    const variants = resolved.allOf || resolved.oneOf || resolved.anyOf;
+    if (name) lines.push(`${prefix}- ${label}(${type}): ${meta}`.trimEnd());
+    variants.forEach((item) => {
+      const rendered = renderSchema(item, schemas, indent + (name ? 1 : 0));
+      if (rendered) lines.push(rendered);
+    });
     return lines.join("\n");
   }
 
-  if (schema.type === "object" && schema.properties) {
-    for (const [key, val] of Object.entries(schema.properties)) {
-      if (val.$ref) {
-        lines.push(`${prefix}- \`${key}\` (object):`);
-        lines.push(renderSchema({ $ref: val.$ref }, schemas, indent + 1));
-      } else if (val.type === "array") {
-        lines.push(`${prefix}- \`${key}\` (array):`);
-        lines.push(renderSchema(val.items, schemas, indent + 1));
-      } else if (val.type === "object" && val.properties) {
-        lines.push(`${prefix}- \`${key}\` (object):`);
-        lines.push(renderSchema(val, schemas, indent + 1));
+  if (resolved.type === "array" && resolved.items) {
+    lines.push(`${prefix}- ${label}(array): ${meta}`.trimEnd());
+    const rendered = renderSchema(resolved.items, schemas, indent + 1);
+    if (rendered) lines.push(rendered);
+    return lines.join("\n");
+  }
+
+  if (resolved.properties) {
+    if (name) lines.push(`${prefix}- ${label}(${type}): ${meta}`.trimEnd());
+    for (const [key, val] of Object.entries(resolved.properties)) {
+      const child = resolveSchema(val, schemas) || val;
+      const childMeta = [requiredFields.has(key) ? "required" : "", formatSchemaMeta(child, schemas)]
+        .filter(Boolean)
+        .join("; ");
+      const childType = formatSchemaType(child, schemas);
+
+      if (child.properties || child.items || child.allOf || child.oneOf || child.anyOf || child.$ref) {
+        const rendered = renderSchema(child, schemas, indent + (name ? 1 : 0), key);
+        if (rendered) lines.push(rendered);
       } else {
-        const example =
-          val.example !== undefined ? ` (example: \`${val.example}\`)` : "";
-        lines.push(
-          `${prefix}- \`${key}\` (${val.type || "object"}): ${
-            val.description || ""
-          }${example}`
-        );
+        lines.push(`${prefix}${name ? "  " : ""}- \`${key}\` (${childType}): ${childMeta}`.trimEnd());
       }
     }
+    return lines.join("\n");
+  }
+
+  if (resolved.additionalProperties) {
+    lines.push(`${prefix}- ${label}(object): ${meta}`.trimEnd());
+    const rendered = renderSchema(resolved.additionalProperties, schemas, indent + 1);
+    if (rendered) lines.push(rendered);
+    return lines.join("\n");
+  }
+
+  if (name) {
+    lines.push(`${prefix}- ${label}(${type}): ${meta}`.trimEnd());
   }
 
   return lines.join("\n");
+}
+
+function getRequestBody(operation, schemas) {
+  const requestBody = operation.requestBody;
+  if (!requestBody) return "";
+  const content = requestBody.content || {};
+  const json = content["application/json"] || content["multipart/form-data"] || content["application/x-www-form-urlencoded"];
+  if (!json?.schema) return "";
+  const required = requestBody.required ? " **(required)**" : "";
+  const rendered = renderSchema(json.schema, schemas);
+  return `Content-Type: \`${Object.keys(content)[0]}\`${required}\n\n${rendered}`;
 }
 
 function getExtraNotes(extraNotesDir, operationId) {
@@ -170,22 +240,24 @@ ${swagger.info.description}
       }
 
       if (operation.parameters?.length) {
-        output += `#### Parameters\n${getParameters(operation.parameters)}\n\n`;
+        output += `#### Parameters\n${getParameters(operation.parameters, schemas)}\n\n`;
+      }
+
+      const requestBody = getRequestBody(operation, schemas);
+      if (requestBody) {
+        output += `#### Request Body\n${requestBody}\n\n`;
       }
 
       const responses = operation.responses || {};
-      if (responses["200"]) {
-        output += `#### Response (200)\n`;
-        const content = responses["200"].content?.["application/json"];
-        const ref = content?.schema?.$ref;
-        const directSchema = content?.schema;
-
-        if (ref) {
-          const refName = ref.split("/").pop();
-          const schema = schemas[refName];
-          output += `${renderSchema(schema, schemas)}\n\n`;
-        } else if (directSchema) {
-          output += `${renderSchema(directSchema, schemas)}\n\n`;
+      for (const [statusCode, response] of Object.entries(responses)) {
+        output += `#### Response (${statusCode})\n`;
+        if (response.description) {
+          output += `${escapeMdx(response.description)}\n\n`;
+        }
+        const content = response.content?.["application/json"];
+        const rendered = renderSchema(content?.schema, schemas);
+        if (rendered) {
+          output += `${rendered}\n\n`;
         }
       }
 

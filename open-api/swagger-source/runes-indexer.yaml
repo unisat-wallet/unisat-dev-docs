@@ -52,7 +52,7 @@ paths:
         - Runes
       operationId: getRunesList
       summary: Get runes list
-      description: ""
+      description: Retrieve a paginated list of Runes with optional search, completion, sorting, and pagination filters.
       parameters:
         - name: rune
           in: query
@@ -122,11 +122,11 @@ paths:
         - Runes
       operationId: getRuneInfo
       summary: Get rune info by runeid
-      description: ""
+      description: Retrieve detailed information for a specific Rune by Rune ID.
       parameters:
         - name: runeid
           in: path
-          description: ""
+          description: Rune ID
           required: true
           schema:
             type: string
@@ -153,11 +153,11 @@ paths:
         - Runes
       operationId: getRuneHolders
       summary: Get runes holders by runeid
-      description: ""
+      description: Retrieve holders for a specific Rune by Rune ID.
       parameters:
         - name: runeid
           in: path
-          description: ""
+          description: Rune ID
           required: true
           schema:
             type: string
@@ -209,11 +209,11 @@ paths:
         - Runes
       operationId: getRunesBalanceList
       summary: Get runes balance list by address
-      description: ""
+      description: Retrieve Rune balances held by an address.
       parameters:
         - name: address
           in: path
-          description: ""
+          description: Bitcoin address
           required: true
           schema:
             type: string
@@ -262,17 +262,17 @@ paths:
         - Runes
       operationId: getRunesBalance
       summary: Get runes balance by address and runeid
-      description: ""
+      description: Retrieve the balance of a specific Rune held by an address.
       parameters:
         - name: address
           in: path
-          description: ""
+          description: Bitcoin address
           required: true
           schema:
             type: string
         - name: runeid
           in: path
-          description: ""
+          description: Rune ID
           required: true
           schema:
             type: string
@@ -299,17 +299,17 @@ paths:
         - Runes
       operationId: getRunesUtxoBalance
       summary: Get runes balance by utxo
-      description: ""
+      description: Retrieve Rune balances held by a specific transaction output.
       parameters:
         - name: txid
           in: path
-          description: ""
+          description: Transaction ID
           required: true
           schema:
             type: string
         - name: index
           in: path
-          description: ""
+          description: Output index (vout) of the transaction
           required: true
           schema:
             type: string
@@ -338,17 +338,17 @@ paths:
         - Runes
       operationId: getRunesUtxoByAddressAndRuneid
       summary: Get utxo runes balance by address and runeid
-      description: ""
+      description: Retrieve UTXOs containing a specific Rune for an address.
       parameters:
         - name: address
           in: path
-          description: ""
+          description: Bitcoin address
           required: true
           schema:
             type: string
         - name: runeid
           in: path
-          description: ""
+          description: Rune ID
           required: true
           schema:
             type: string

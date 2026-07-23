@@ -69,9 +69,6 @@ BRC20 Swap API provides a set of interfaces for BRC20 Swap and InSwap services. 
 | [GET `/v1/brc20-swap/tick_price`](#gets-the-tick-price) | Gets the tick price |
 | [GET `/v1/brc20-swap/address_gas`](#gets-the-addresss-total-tick-fee) | Gets the address's total tick fee |
 | [GET `/v1/brc20-swap/price_line`](#gets-the-price-line) | Gets the price line. |
-| [GET `/v1/brc20-swap/community_info`](#gets-the-community-info) | Gets the community info. |
-| [POST `/v1/brc20-swap/add_community_info`](#adds-community-info) | Adds community info. |
-| [GET `/v1/brc20-swap/community_list`](#gets-the-community-info-list) | Gets the community info list. |
 | [GET `/v1/brc20-swap/tick_holders`](#gets-the-tick-holders) | Gets the tick holders. |
 | [GET `/v1/brc20-swap/pool_holders`](#gets-the-pool-holders) | Gets the pool holders. |
 | [GET `/v1/brc20-swap/reward_curve`](#get-reward-curve-data) | Get reward curve data. |
@@ -92,6 +89,7 @@ BRC20 Swap API provides a set of interfaces for BRC20 Swap and InSwap services. 
 | [POST `/v1/brc20-swap/multi_swap`](#the-multi-swap-operation) | The multi swap operation. |
 | [GET `/v1/brc20-swap/quote_multi_swap`](#returns-the-estimated-number-of-multi-swaps-based-on-the-input-and-exact-type) | Returns the estimated number of multi swaps based on the input and exact type. |
 | [GET `/v1/brc20-swap/multi_swap_history`](#gets-the-history-of-multi-swap) | Gets the history of multi swap. |
+| [POST `/v1/brc20-swap/batch_history`](#batch-query-multiple-history-types-in-a-single-request) | Batch query multiple history types in a single request. |
 
 ---
 
@@ -108,10 +106,12 @@ BRC20 Swap API provides a set of interfaces for BRC20 Swap and InSwap services. 
 This interface provides the global configuration information for the BRC20 Swap service. It includes details such as the module ID, service gas tick, and pending deposit confirmation numbers.
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `moduleId` (string): 
+  - `moduleId` (string):
   - `serviceGasTick` (string): The tick used for the second layer gas.
   - `pendingDepositDirectNum` (number): Number of confirmations required for direct deposit.
   - `pendingDepositMatchingNum` (number): Number of confirmations required for matching deposit.
@@ -130,19 +130,21 @@ This interface provides the global configuration information for the BRC20 Swap 
 This interface retrieves the balance for a specific address and tick in the BRC20 Swap service. It returns the confirmed module balance, swap balance, pending swap balance, and pending available balance.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick` (query) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `tick` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `balance` (object):
     - `module` (string): Confirmed module balance.
     - `swap` (string): Confirmed swap balance.
     - `pendingSwap` (string): The balance converted from pending to swap.
     - `pendingAvailable` (string): The balance converted from pending to module.
-  - `decimal` (string): 
+  - `decimal` (string):
 
 
 ---
@@ -158,13 +160,15 @@ This interface retrieves the balance for a specific address and tick in the BRC2
 This interface retrieves the complete list of all BRC20 token balances for a specific wallet address in the BRC20 Swap service. For each tick, it returns detailed balance information including the confirmed module balance, swap balance, pending swap balance, and pending available balance.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `pubkey` (query) : 
+- `address` (query, string) **(required)**: 
+- `pubkey` (query, string): 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object): A map where each key is a token ticker symbol.
+Successful response returning all token balances for the address.
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object): required; A map where each key is a token ticker symbol.
 
 
 ---
@@ -180,23 +184,25 @@ This interface retrieves the complete list of all BRC20 token balances for a spe
 This interface retrieves the pool information for a specific trade pair in the BRC20 Swap service. It includes details such as whether the pool exists, if liquidity has been added, tick prices, LP quantity, TVL, volume, and rewards.
 
 #### Parameters
-- `tick0` (query) : 
-- `tick1` (query) : 
+- `tick0` (query, string): 
+- `tick1` (query, string): 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `existed` (boolean): Is the pool existed
+  - `existed` (boolean): Whether the pool exists
   - `addLiq` (boolean): Has LP been added to the pool
-  - `tick0` (string): 
-  - `tick1` (string): 
+  - `tick0` (string):
+  - `tick1` (string):
   - `lp` (string): Quantity of pool lp
-  - `tvl` (string): 
-  - `volume24h` (string): 
-  - `volume7d` (string): 
-  - `reward0` (string): 
-  - `reward1` (string): 
+  - `tvl` (string):
+  - `volume24h` (string):
+  - `volume7d` (string):
+  - `reward0` (string):
+  - `reward1` (string):
   - `activedPid` (string): Active pool ID
   - `marketCap` (number): Market cap
   - `marketCapTick` (string): Market cap tick
@@ -224,15 +230,17 @@ This interface retrieves the pool information for a specific trade pair in the B
 This interface retrieves the tick information that can be used for swapping based on the provided address. It returns the tick, decimal, BRC20 balance, and swap balance for each available tick.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `search` (query) : Fuzzy matching
+- `address` (query, string) **(required)**: 
+- `search` (query, string): Fuzzy matching
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (array):
-  - `tick` (string): 
-  - `decimal` (string): 
+  - `tick` (string):
+  - `decimal` (string):
   - `brc20Balance` (string): Module balance (not participate in swap calculations)
   - `swapBalance` (string): Swap balance
 
@@ -250,26 +258,26 @@ This interface retrieves the tick information that can be used for swapping base
 This interface pre-loads the /deploy_pool operation, providing the signature content, gas, and byte information required for deploying a pool in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick0` (query) **(required)**: 
-- `tick1` (query) **(required)**: 
-- `ts` (query) **(required)**: Timestamp (seconds)
-- `feeTick` (query) **(required)**: Tick used as fee
-- `payType` (query) : Pay Type: tick, freeQuota
+- `address` (query, string) **(required)**: 
+- `tick0` (query, string) **(required)**: 
+- `tick1` (query, string) **(required)**: 
+- `ts` (query, number) **(required)**: Timestamp (seconds)
+- `feeTick` (query, string) **(required)**: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (query, string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `ids` (array):
-
-  - `signMsgs` (array):
-
+  - `ids` (array): User signature id
+  - `signMsgs` (array): User signature information
   - `feeAmount` (string): The fee that the user needs to pay
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
   - `usdPrice` (string): The dollar value of the fee
-  - `feeTick` (string): Tick used as fee
+  - `feeTick` (string): Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
   - `totalFreeQuota` (string): Total free quota
   - `remainingFreeQuota` (string): Remaining free quota
   - `totalUsedFreeQuota` (string): Total used free quota
@@ -293,11 +301,26 @@ This interface pre-loads the /deploy_pool operation, providing the signature con
 #### Description
 This interface deploys a pool in the BRC20 Swap service. It requires the address, tick0, tick1, timestamp, fee tick, and user signatures to complete the operation.
 
-#### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `address` (string): required
+- `tick0` (string): required
+- `tick1` (string): required
+- `ts` (number): required; Timestamp (seconds)
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `feeAmount` (string): required; The fee that the user needs to pay
+- `feeTickPrice` (string): required; The price of fee tick
+- `sigs` (array): User signature
+- `payType` (string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
+- `rememberPayType` (boolean):
+
+#### Response (200)
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object):
 
 
 ---
@@ -313,30 +336,30 @@ This interface deploys a pool in the BRC20 Swap service. It requires the address
 This interface pre-loads the /add_liq operation, providing the signature content, gas, and byte information required for adding liquidity in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick0` (query) **(required)**: 
-- `tick1` (query) **(required)**: 
-- `amount0` (query) **(required)**: Input amount of tick0
-- `amount1` (query) **(required)**: Input amount of tick1
-- `lp` (query) **(required)**: Expect amount of lp
-- `slippage` (query) **(required)**: 
-- `ts` (query) **(required)**: Timestamp (seconds)
-- `feeTick` (query) **(required)**: Tick used as fee
-- `payType` (query) : Pay Type: tick, freeQuota
+- `address` (query, string) **(required)**: 
+- `tick0` (query, string) **(required)**: 
+- `tick1` (query, string) **(required)**: 
+- `amount0` (query, string) **(required)**: Input amount of tick0
+- `amount1` (query, string) **(required)**: Input amount of tick1
+- `lp` (query, string) **(required)**: Expect amount of lp
+- `slippage` (query, string) **(required)**: 
+- `ts` (query, number) **(required)**: Timestamp (seconds)
+- `feeTick` (query, string) **(required)**: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (query, string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `ids` (array):
-
-  - `signMsgs` (array):
-
+  - `ids` (array): User signature id
+  - `signMsgs` (array): User signature information
   - `feeAmount` (string): The fee that the user needs to pay
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
   - `usdPrice` (string): The dollar value of the fee
-  - `feeTick` (string): Tick used as fee
+  - `feeTick` (string): Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
   - `totalFreeQuota` (string): Total free quota
   - `remainingFreeQuota` (string): Remaining free quota
   - `totalUsedFreeQuota` (string): Total used free quota
@@ -360,20 +383,40 @@ This interface pre-loads the /add_liq operation, providing the signature content
 #### Description
 This interface adds liquidity to a pool in the BRC20 Swap service. It requires the address, tick0, tick1, amounts, LP, slippage, timestamp, fee tick, and user signatures to complete the operation.
 
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `address` (string): required
+- `tick0` (string): required
+- `tick1` (string): required
+- `amount0` (string): required; Input amount of tick0
+- `amount1` (string): required; Input amount of tick1
+- `lp` (string): required
+- `slippage` (string): required
+- `ts` (number): required; Timestamp (seconds)
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `feeAmount` (string): required; The fee that the user needs to pay
+- `feeTickPrice` (string): required; The price of fee tick
+- `sigs` (array): User signature
+- `payType` (string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
+- `rememberPayType` (boolean):
+
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `id` (string): Function id
   - `rollupInscriptionId` (string): The rollup inscription id where the function is located
-  - `address` (string): 
-  - `type` (string): 
-  - `tick0` (string): 
-  - `tick1` (string): 
-  - `amount0` (string): Input amount of tick0
-  - `amount1` (string): Input amount of tick1
-  - `lp` (string): 
-  - `ts` (number): 
+  - `address` (string):
+  - `type` (string):
+  - `tick0` (string):
+  - `tick1` (string):
+  - `amount0` (string): required; Input amount of tick0
+  - `amount1` (string): required; Input amount of tick1
+  - `lp` (string):
+  - `ts` (number):
   - `success` (boolean): Operation success status
   - `value` (number): Operation value
   - `preResult` (object): Pre-operation result
@@ -393,30 +436,30 @@ This interface adds liquidity to a pool in the BRC20 Swap service. It requires t
 This interface pre-loads the /remove_liq operation, providing the signature content, gas, and byte information required for removing liquidity in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick0` (query) **(required)**: 
-- `tick1` (query) **(required)**: 
-- `amount0` (query) **(required)**: Input amount of tick0
-- `amount1` (query) **(required)**: Input amount of tick1
-- `lp` (query) **(required)**: 
-- `slippage` (query) **(required)**: 
-- `ts` (query) **(required)**: 
-- `feeTick` (query) **(required)**: Tick used as fee
-- `payType` (query) : Pay Type: tick, freeQuota
+- `address` (query, string) **(required)**: 
+- `tick0` (query, string) **(required)**: 
+- `tick1` (query, string) **(required)**: 
+- `amount0` (query, string) **(required)**: Input amount of tick0
+- `amount1` (query, string) **(required)**: Input amount of tick1
+- `lp` (query, string) **(required)**: 
+- `slippage` (query, string) **(required)**: 
+- `ts` (query, number) **(required)**: 
+- `feeTick` (query, string) **(required)**: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (query, string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `ids` (array):
-
-  - `signMsgs` (array):
-
+  - `ids` (array): User signature id
+  - `signMsgs` (array): User signature information
   - `feeAmount` (string): The fee that the user needs to pay
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
   - `usdPrice` (string): The dollar value of the fee
-  - `feeTick` (string): Tick used as fee
+  - `feeTick` (string): Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
   - `totalFreeQuota` (string): Total free quota
   - `remainingFreeQuota` (string): Remaining free quota
   - `totalUsedFreeQuota` (string): Total used free quota
@@ -442,20 +485,40 @@ This interface pre-loads the /remove_liq operation, providing the signature cont
 #### Description
 This interface removes liquidity from a pool in the BRC20 Swap service. It requires the address, tick0, tick1, amounts, LP, slippage, timestamp, fee tick, and user signatures to complete the operation.
 
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `address` (string): required
+- `tick0` (string): required
+- `tick1` (string): required
+- `lp` (string): required
+- `amount0` (string): required; Input amount of tick0
+- `amount1` (string): required; Input amount of tick1
+- `slippage` (string): required
+- `ts` (number): required; Timestamp (seconds)
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `feeAmount` (string): required; The fee that the user needs to pay
+- `feeTickPrice` (string): required; The price of fee tick
+- `sigs` (array): User signature
+- `payType` (string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
+- `rememberPayType` (boolean):
+
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `id` (string): Function id
   - `rollupInscriptionId` (string): The rollup inscription id where the function is located
-  - `address` (string): 
-  - `type` (string): 
-  - `tick0` (string): 
-  - `tick1` (string): 
-  - `amount0` (string): Input amount of tick0
-  - `amount1` (string): Input amount of tick1
-  - `lp` (string): 
-  - `ts` (number): 
+  - `address` (string):
+  - `type` (string):
+  - `tick0` (string):
+  - `tick1` (string):
+  - `amount0` (string): required; Input amount of tick0
+  - `amount1` (string): required; Input amount of tick1
+  - `lp` (string):
+  - `ts` (number):
   - `success` (boolean): Operation success status
   - `value` (number): Operation value
   - `preResult` (object): Pre-operation result
@@ -475,22 +538,22 @@ This interface removes liquidity from a pool in the BRC20 Swap service. It requi
 This interface pre-loads the /send operation, providing the signature content, gas, and byte information required for sending a tick in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick` (query) **(required)**: Send tick
-- `amount` (query) **(required)**: The amount of send tick
-- `to` (query) **(required)**: The receiver of send tick
-- `ts` (query) **(required)**: Timestamp (seconds)
-- `feeTick` (query) **(required)**: Tick used as fee
-- `payType` (query) : Pay Type: tick, freeQuota
+- `address` (query, string) **(required)**: 
+- `tick` (query, string) **(required)**: Send tick
+- `amount` (query, string) **(required)**: The amount of send tick
+- `to` (query, string) **(required)**: The receiver of send tick
+- `ts` (query, number) **(required)**: Timestamp (seconds)
+- `feeTick` (query, string) **(required)**: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (query, string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `ids` (array):
-
-  - `signMsgs` (array):
-
+  - `ids` (array): User signature id
+  - `signMsgs` (array): User signature information
   - `feeAmount` (string): The fee that the user needs to pay
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
@@ -507,16 +570,28 @@ This interface pre-loads the /send operation, providing the signature content, g
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/undefined)  
 
 #### Description
-This interface pre-loads the /batch_send operation, providing the signature content, gas, and byte information required for sending multiple ticks in the BRC20 Swap service.
+This interface pre-loads the /batch_send operation, providing the signature content, gas, and byte information required for sending multiple ticks in the BRC20 Swap service. The request can provide either a shared amount or an amountList aligned with the recipients.
+
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `address` (string): required
+- `tick` (string): required; Send tick
+- `amount` (string): The amount of send tick. Either amount or amountList must be provided.
+- `amountList` (array): Optional per-recipient amounts. When provided, its length must match to.
+- `to` (array): The receiver of send tick
+- `ts` (number): required; Timestamp (seconds)
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `ids` (array):
-
-  - `signMsgs` (array):
-
+  - `ids` (array): User signature id
+  - `signMsgs` (array): User signature information
   - `feeAmount` (string): The fee that the user needs to pay
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
@@ -536,25 +611,25 @@ This interface pre-loads the /batch_send operation, providing the signature cont
 This interface pre-loads the /swap operation, providing the signature content, gas, and byte information required for swapping ticks in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tickIn` (query) **(required)**: Input tick
-- `tickOut` (query) **(required)**: Output tick
-- `amountIn` (query) **(required)**: The amount of input tick
-- `amountOut` (query) **(required)**: The amount of output tick
-- `slippage` (query) **(required)**: 
-- `exactType` (query) **(required)**: 
-- `ts` (query) **(required)**: Timestamp(seconds)
-- `feeTick` (query) **(required)**: Tick used as fee
-- `payType` (query) : Pay Type: tick, freeQuota
+- `address` (query, string) **(required)**: 
+- `tickIn` (query, string) **(required)**: Input tick
+- `tickOut` (query, string) **(required)**: Output tick
+- `amountIn` (query, string) **(required)**: The amount of input tick
+- `amountOut` (query, string) **(required)**: The amount of output tick
+- `slippage` (query, string) **(required)**: 
+- `exactType` (query, string) **(required)**: enum: `exactIn`, `exactOut`; example: `"exactIn"`
+- `ts` (query, number) **(required)**: Timestamp(seconds)
+- `feeTick` (query, string) **(required)**: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (query, string): Pay type. Allowed values are tick, freeQuota, and assetFeeTick.; enum: `tick`, `freeQuota`, `assetFeeTick`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `ids` (array):
-
-  - `signMsgs` (array):
-
+  - `ids` (array): User signature id
+  - `signMsgs` (array): User signature information
   - `feeAmount` (string): The fee that the user needs to pay
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
@@ -573,11 +648,28 @@ This interface pre-loads the /swap operation, providing the signature content, g
 #### Description
 This interface sends a tick in the BRC20 Swap service. It requires the address, tick, amount, receiver, timestamp, fee tick, and user signatures to complete the operation.
 
-#### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `address` (string): required
+- `tick` (string): required; Send tick
+- `amount` (string): The amount of send tick. Either amount or amountList must be provided.
+- `amountList` (array): Optional per-recipient amounts. When provided, its length must match to.
+- `to` (string): required; The receiver of send tick
+- `ts` (number): required; Timestamp (seconds)
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `feeAmount` (string): required; The fee that the user needs to pay
+- `feeTickPrice` (string): required; The price of fee tick
+- `sigs` (array): User signature
+- `payType` (string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
+- `rememberPayType` (boolean):
+
+#### Response (200)
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object):
 
 
 ---
@@ -590,13 +682,29 @@ This interface sends a tick in the BRC20 Swap service. It requires the address, 
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapBatchSend)  
 
 #### Description
-This interface sends multiple ticks in the BRC20 Swap service. It requires the address, tick, amount, receivers, timestamp, fee tick, and user signatures to complete the operation.
+This interface sends multiple ticks in the BRC20 Swap service. It requires the address, tick, amount or amountList, receivers, timestamp, fee tick, and user signatures to complete the operation.
+
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `address` (string): required
+- `tick` (string): required; Send tick
+- `amount` (string): required; The amount of send tick
+- `to` (array): The receiver of send tick
+- `ts` (number): required; Timestamp (seconds)
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `feeAmount` (string): required; The fee that the user needs to pay
+- `feeTickPrice` (string): required; The price of fee tick
+- `sigs` (array): User signature
+- `payType` (string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
+- `rememberPayType` (boolean):
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
+Default Response
 
+- `code` (number): required
+- `msg` (string): required
+- `data` (object):
 
 
 ---
@@ -611,19 +719,42 @@ This interface sends multiple ticks in the BRC20 Swap service. It requires the a
 #### Description
 This interface swaps ticks in the BRC20 Swap service. It requires the address, input tick, output tick, input amount, output amount, slippage, exact type, timestamp, fee tick, and user signatures to complete the operation.
 
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `address` (string): required
+- `tickIn` (string): required; Input tick
+- `tickOut` (string): required; Output tick
+- `amountIn` (string): required; The amount of input tick
+- `amountOut` (string): required; The amount of output tick
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `slippage` (string): required
+- `exactType` (string): required; enum: `exactIn`, `exactOut`
+- `ts` (number): required; Timestamp (seconds)
+- `feeAmount` (string): required; The fee that the user needs to pay
+- `feeTickPrice` (string): required; The price of fee tick
+- `sigs` (array): User signature
+- `payType` (string): Pay type. Allowed values are tick, freeQuota, and assetFeeTick.; enum: `tick`, `freeQuota`, `assetFeeTick`
+- `rememberPayType` (boolean):
+- `assetFeeTick` (string): Required when payType is assetFeeTick. Used as the fee asset tick for swap.
+- `assetFeeAmount` (string): Required when payType is assetFeeTick. Fee amount charged in assetFeeTick.
+- `assetFeeTickPrice` (string): Required when payType is assetFeeTick. Price of assetFeeTick.
+
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `id` (string): Function id
   - `rollupInscriptionId` (string): The rollup inscription id where the function is located
-  - `address` (string): 
-  - `tickIn` (string): 
-  - `tickOut` (string): 
-  - `amountIn` (string): 
-  - `amountOut` (string): 
-  - `exactType` (string): 
-  - `ts` (number): 
+  - `address` (string):
+  - `tickIn` (string):
+  - `tickOut` (string):
+  - `amountIn` (string):
+  - `amountOut` (string):
+  - `exactType` (string):
+  - `ts` (number):
   - `success` (boolean): Operation success status
   - `value` (number): Operation value
   - `preResult` (object): Pre-operation result
@@ -643,22 +774,24 @@ This interface swaps ticks in the BRC20 Swap service. It requires the address, i
 This interface retrieves the pool list information in the BRC20 Swap service. It supports filtering by address, tick, and fuzzy matching, and allows pagination through start and limit parameters.
 
 #### Parameters
-- `search` (query) : Fuzzy matching
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `search` (query, string): Fuzzy matching
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `tick0` (string): 
-    - `tick1` (string): 
-    - `lp` (string): 
+    - `tick0` (string):
+    - `tick1` (string):
+    - `lp` (string):
     - `tvl` (string): Total pool value
-    - `volume24h` (string): 
-    - `volume7d` (string): 
+    - `volume24h` (string):
+    - `volume7d` (string):
     - `volume30d` (string): 30 days volume
     - `amount0` (string): Amount of tick0
     - `amount1` (string): Amount of tick1
@@ -677,27 +810,29 @@ This interface retrieves the pool list information in the BRC20 Swap service. It
 This interface retrieves the user's pool list information in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `tick` (query, string): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `lp` (string): 
-    - `shareOfPool` (string): 
-    - `tick0` (string): 
-    - `tick1` (string): 
-    - `amount0` (string): Amount of tick0
-    - `amount1` (string): Amount of tick1
-    - `claimedReward0` (string): 
-    - `claimedReward1` (string): 
-    - `unclaimedReward0` (string): 
-    - `unclaimedReward1` (string): 
+    - `lp` (string):
+    - `shareOfPool` (string):
+    - `tick0` (string):
+    - `tick1` (string):
+    - `amount0` (string): required; Amount of tick0
+    - `amount1` (string): required; Amount of tick1
+    - `claimedReward0` (string):
+    - `claimedReward1` (string):
+    - `unclaimedReward0` (string):
+    - `unclaimedReward1` (string):
 
 
 ---
@@ -713,20 +848,22 @@ This interface retrieves the user's pool list information in the BRC20 Swap serv
 This interface retrieves the user pool information for a specific pair in the BRC20 Swap service. It requires the address, tick0, and tick1 parameters to identify the pool.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick0` (query) **(required)**: 
-- `tick1` (query) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `tick0` (query, string) **(required)**: 
+- `tick1` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `lp` (string): 
-  - `shareOfPool` (string): 
-  - `tick0` (string): 
-  - `tick1` (string): 
-  - `amount0` (string): Amount of tick0
-  - `amount1` (string): Amount of tick1
+  - `lp` (string):
+  - `shareOfPool` (string):
+  - `tick0` (string):
+  - `tick1` (string):
+  - `amount0` (string): required; Amount of tick0
+  - `amount1` (string): required; Amount of tick1
   - `lockedLp` (string): Locked LP amount
   - `claimedReward0` (string): Claimed reward for tick0
   - `claimedReward1` (string): Claimed reward for tick1
@@ -747,14 +884,16 @@ This interface retrieves the user pool information for a specific pair in the BR
 This interface provides an overview of the swap information in the BRC20 Swap service, including total liquidity, 7-day volume, 24-hour volume, number of transactions, and number of pairs.
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `liquidity` (string): Total value of all pools
   - `volume7d` (string): 7 days volume
   - `volume24h` (string): 24 hours volume
   - `transactions` (number): Number of transactions in 24 hours
-  - `pairs` (number): 
+  - `pairs` (number):
 
 
 ---
@@ -770,23 +909,25 @@ This interface provides an overview of the swap information in the BRC20 Swap se
 This interface retrieves the gas consumption records for a user aggregation operation in the BRC20 Swap service. It supports filtering by address and pagination through start and limit parameters.
 
 #### Parameters
-- `address` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `address` (query, string): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `funcType` (string): Function type (example: `swap`)
-    - `tickA` (string): 
-    - `tickB` (string): 
-    - `gas` (string): 
+    - `funcType` (string): Function type; example: `"swap"`
+    - `tickA` (string):
+    - `tickB` (string):
+    - `gas` (string):
     - `tick` (string): Fee tick
     - `to` (string): Recipient address
-    - `ts` (number): 
+    - `ts` (number):
 
 
 ---
@@ -802,21 +943,23 @@ This interface retrieves the gas consumption records for a user aggregation oper
 This interface retrieves the history of send transactions in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
 
 #### Parameters
-- `address` (query) : 
-- `tick` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `address` (query, string): 
+- `tick` (query, string): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `tick` (string): 
-    - `amount` (string): 
-    - `to` (string): 
-    - `ts` (number): 
+    - `tick` (string):
+    - `amount` (string):
+    - `to` (string):
+    - `ts` (number):
 
 
 ---
@@ -832,27 +975,29 @@ This interface retrieves the history of send transactions in the BRC20 Swap serv
 This interface retrieves the history of pair addition pools in the BRC20 Swap service. It supports filtering by address, tick, type (add or remove), and pagination through start and limit parameters.
 
 #### Parameters
-- `address` (query) : 
-- `tick` (query) : 
-- `type` (query) : Optional: add, remove
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `address` (query, string): 
+- `tick` (query, string): 
+- `type` (query, string): Optional liquidity history type filter.; enum: `add`, `remove`
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `type` (string): 
-    - `tick0` (string): 
-    - `tick1` (string): 
-    - `amount0` (string): 
-    - `amount1` (string): 
+    - `type` (string):
+    - `tick0` (string):
+    - `tick1` (string):
+    - `amount0` (string):
+    - `amount1` (string):
     - `reward0` (string): Reward amount for tick0
     - `reward1` (string): Reward amount for tick1
-    - `lp` (string): 
-    - `ts` (number): 
+    - `lp` (string):
+    - `ts` (number):
 
 
 ---
@@ -868,23 +1013,25 @@ This interface retrieves the history of pair addition pools in the BRC20 Swap se
 This interface retrieves the history of swap transactions in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
 
 #### Parameters
-- `address` (query) : 
-- `tick` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `address` (query, string): 
+- `tick` (query, string): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `tickIn` (string): Input tick
-    - `tickOut` (string): Output tick
-    - `amountIn` (string): The amount of input tick
-    - `amountOut` (string): The amount of output tick
-    - `exactType` (string): 
-    - `ts` (number): 
+    - `tickIn` (string): required; Input tick
+    - `tickOut` (string): required; Output tick
+    - `amountIn` (string): required; The amount of input tick
+    - `amountOut` (string): required; The amount of output tick
+    - `exactType` (string):
+    - `ts` (number):
 
 
 ---
@@ -900,21 +1047,23 @@ This interface retrieves the history of swap transactions in the BRC20 Swap serv
 This interface retrieves the chain history of rollup inscriptions in the BRC20 Swap service. It supports filtering by inscription ID and pagination through start and limit parameters.
 
 #### Parameters
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `txid` (string): 
-    - `height` (number): 
+    - `txid` (string):
+    - `height` (number):
     - `transactionNum` (number): Number of transactions in the inscription
     - `inscriptionId` (string): Rollup inscription id
     - `inscriptionNumber` (number): Rollup inscription number
-    - `ts` (number): 
+    - `ts` (number):
 
 
 ---
@@ -930,24 +1079,26 @@ This interface retrieves the chain history of rollup inscriptions in the BRC20 S
 This interface retrieves the deposit list for a user in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `tick` (query, string): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `tick` (string): 
-    - `amount` (string): 
+    - `tick` (string):
+    - `amount` (string):
     - `cur` (number): Current number of confirmations
     - `sum` (number): Total number of confirmations
-    - `ts` (number): 
-    - `txid` (string): 
-    - `type` (string): 
+    - `ts` (number):
+    - `txid` (string):
+    - `type` (string):
 
 
 ---
@@ -960,21 +1111,28 @@ This interface retrieves the deposit list for a user in the BRC20 Swap service. 
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapCreateDeposit)  
 
 #### Description
-This interface creates a deposit PSBT to be signed by the user in the BRC20 Swap service. It requires the inscription ID, public key, and address parameters to generate the PSBT.
+This interface creates a deposit PSBT to be signed by the user in the BRC20 Swap service. Fractal BRC20 deposits only require the public key and address, while bridge deposits also require amount, tick, assetType, and networkType.
 
 #### Parameters
-- `inscriptionId` (query) **(required)**: 
-- `pubkey` (query) **(required)**: 
-- `address` (query) **(required)**: 
+- `inscriptionId` (query, string): 
+- `pubkey` (query, string) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `amount` (query, string): Required for bridge deposits.
+- `tick` (query, string): Required for bridge deposits.
+- `assetType` (query, string): Asset type. Required for bridge deposits.; enum: `btc`, `brc20`, `runes`, `alkanes`
+- `networkType` (query, string): Network type. Required for bridge deposits.; enum: `FRACTAL_BITCOIN_MAINNET`, `FRACTAL_BITCOIN_TESTNET`, `BITCOIN_MAINNET`, `BITCOIN_TESTNET`, `BITCOIN_TESTNET4`, `BITCOIN_SIGNET`
+- `feeRate` (query, number): 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `psbt` (string): 
-  - `type` (string): Direct or matching
-  - `expiredTimestamp` (number): 
-  - `recommendDeposit` (string): 
+  - `psbt` (string):
+  - `type` (string): Deposit type.; enum: `direct`, `matching`, `bridge`
+  - `expiredTimestamp` (number):
+  - `recommendDeposit` (string):
 
 
 ---
@@ -987,11 +1145,26 @@ This interface creates a deposit PSBT to be signed by the user in the BRC20 Swap
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapConfirmDeposit)  
 
 #### Description
-This interface allows the user to sign the deposit PSBT and submit the confirmation in the BRC20 Swap service. It requires the PSBT and inscription ID to complete the operation.
+This interface allows the user to sign the deposit PSBT and submit the confirmation in the BRC20 Swap service. It always requires the PSBT. Bridge deposits also require the deposit context fields such as pubkey, address, amount, tick, assetType, and networkType.
+
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `psbt` (string): required
+- `inscriptionId` (string):
+- `pubkey` (string):
+- `address` (string):
+- `amount` (string):
+- `tick` (string):
+- `assetType` (string): enum: `btc`, `brc20`, `runes`, `alkanes`
+- `networkType` (string): enum: `FRACTAL_BITCOIN_MAINNET`, `FRACTAL_BITCOIN_TESTNET`, `BITCOIN_MAINNET`, `BITCOIN_TESTNET`, `BITCOIN_TESTNET4`, `BITCOIN_SIGNET`
+- `feeRate` (number):
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `txid` (string): Transaction ID
   - `pendingNum` (number): Number of pending confirmations
@@ -1010,8 +1183,10 @@ This interface allows the user to sign the deposit PSBT and submit the confirmat
 This interface retrieves the current system state of the BRC20 Swap service, including whether rollup inscription committing is enabled.
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `committing` (boolean): Is rollup inscription committing
 
@@ -1029,26 +1204,28 @@ This interface retrieves the current system state of the BRC20 Swap service, inc
 This interface retrieves the user withdrawal history in the BRC20 Swap service. It supports filtering by address, pagination through start and limit parameters, and an optional tick parameter.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
-- `tick` (query) : 
+- `address` (query, string) **(required)**: 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
+- `tick` (query, string): 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `id` (string): 
-    - `tick` (string): 
+    - `id` (string):
+    - `tick` (string):
     - `totalAmount` (string): Total amount withdrawal
     - `completedAmount` (string): The number of withdrawal completed
-    - `ts` (number): 
+    - `ts` (number):
     - `totalConfirmedNum` (number): The current number of confirmations
     - `totalNum` (number): The total number of confirmations
-    - `status` (string): 
-    - `type` (string): 
+    - `status` (string):
+    - `type` (string):
 
 
 ---
@@ -1064,17 +1241,19 @@ This interface retrieves the user withdrawal history in the BRC20 Swap service. 
 This interface retries to create a withdrawal PSBT to be signed by the user in the BRC20 Swap service. It requires the withdrawal order ID, public key, and address parameters to generate the PSBT.
 
 #### Parameters
-- `id` (query) **(required)**: 
-- `pubkey` (query) **(required)**: 
-- `address` (query) **(required)**: 
+- `id` (query, string) **(required)**: 
+- `pubkey` (query, string) **(required)**: 
+- `address` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `paymentPsbt` (string): The user psbt with payment
   - `approvePsbt` (string): The user psbt with approve insctiption
-  - `networkFee` (number): 
+  - `networkFee` (number):
 
 
 ---
@@ -1089,11 +1268,19 @@ This interface retries to create a withdrawal PSBT to be signed by the user in t
 #### Description
 This interface allows the user to sign the retry withdrawal PSBT and submit the confirmation in the BRC20 Swap service. It requires the withdrawal order ID, payment PSBT, and approve PSBT to complete the operation.
 
-#### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `id` (string): required; The withdraw order id
+- `paymentPsbt` (string): required
+- `approvePsbt` (string): required
+
+#### Response (200)
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object):
 
 
 ---
@@ -1106,21 +1293,26 @@ This interface allows the user to sign the retry withdrawal PSBT and submit the 
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapCreateWithdraw)  
 
 #### Description
-This interface creates a withdrawal PSBT to be signed by the user in the BRC20 Swap service. It requires the public key, address, tick, amount, timestamp, and fee tick parameters to generate the PSBT.
+This interface creates a withdrawal PSBT to be signed by the user in the BRC20 Swap service. It requires the public key, address, tick, amount, timestamp, fee tick, and payType parameters to generate the PSBT.
 
 #### Parameters
-- `pubkey` (query) **(required)**: 
-- `address` (query) **(required)**: 
-- `tick` (query) **(required)**: 
-- `amount` (query) **(required)**: 
-- `ts` (query) **(required)**: 
-- `feeTick` (query) **(required)**: 
+- `pubkey` (query, string) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `tick` (query, string) **(required)**: 
+- `amount` (query, string) **(required)**: 
+- `ts` (query, number) **(required)**: 
+- `feeTick` (query, string) **(required)**: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (query, string) **(required)**: Withdraw creation currently only supports tick.; enum: `tick`
+- `feeRate` (query, number): 
+- `assetType` (query, string): Required for bridge withdrawals.; enum: `btc`, `brc20`, `runes`, `alkanes`
+- `networkType` (query, string): Required for bridge withdrawals.; enum: `FRACTAL_BITCOIN_MAINNET`, `FRACTAL_BITCOIN_TESTNET`, `BITCOIN_MAINNET`, `BITCOIN_TESTNET`, `BITCOIN_TESTNET4`, `BITCOIN_SIGNET`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
+Default Response
 
+- `code` (number): required
+- `msg` (string): required
+- `data` (object):
 
 
 ---
@@ -1133,13 +1325,34 @@ This interface creates a withdrawal PSBT to be signed by the user in the BRC20 S
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapConfirmWithdraw)  
 
 #### Description
-This interface allows the user to sign the withdrawal PSBT and submit the confirmation in the BRC20 Swap service. It requires the withdrawal order ID, payment PSBT, approve PSBT, fee tick, and optional fee amount to complete the operation.
+This interface allows the user to sign the withdrawal PSBT and submit the confirmation in the BRC20 Swap service. It requires the withdrawal order ID, payment PSBT, approve PSBT, fee tick, and payType. Bridge withdrawals also carry assetType and networkType.
+
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `id` (string): required; The withdraw order id
+- `paymentPsbt` (string): required
+- `approvePsbt` (string): required
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `feeAmount` (string): The fee that the user needs to pay
+- `feeTickPrice` (string): The price of fee tick
+- `sigs` (array): User signature
+- `payType` (string): required; Withdraw confirmation currently only supports tick.; enum: `tick`
+- `rememberPayType` (boolean):
+- `ts` (number):
+- `pubkey` (string):
+- `address` (string):
+- `amount` (string):
+- `tick` (string):
+- `assetType` (string): enum: `btc`, `brc20`, `runes`, `alkanes`
+- `networkType` (string): enum: `FRACTAL_BITCOIN_MAINNET`, `FRACTAL_BITCOIN_TESTNET`, `BITCOIN_MAINNET`, `BITCOIN_TESTNET`, `BITCOIN_TESTNET4`, `BITCOIN_SIGNET`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
+Default Response
 
+- `code` (number): required
+- `msg` (string): required
+- `data` (object):
 
 
 ---
@@ -1155,40 +1368,42 @@ This interface allows the user to sign the withdrawal PSBT and submit the confir
 This interface retrieves the withdrawal progress for a specific ID in the BRC20 Swap service. It requires the ID parameter to identify the withdrawal order.
 
 #### Parameters
-- `id` (query) **(required)**: 
+- `id` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `id` (string): 
-  - `tick` (string): 
-  - `amount` (string): 
-  - `ts` (number): 
-  - `status` (string): 
-  - `totalConfirmedNum` (number): 
+  - `id` (string):
+  - `tick` (string):
+  - `amount` (string):
+  - `ts` (number):
+  - `status` (string):
+  - `totalConfirmedNum` (number):
   - `totalNum` (number): Total number of confirmations (rollUp + approve)
-  - `rollUpConfirmNum` (number): 
+  - `rollUpConfirmNum` (number):
   - `rollUpTotalNum` (number): Total number of rollUp confirmations
-  - `approveConfirmNum` (number): 
+  - `approveConfirmNum` (number):
   - `approveTotalNum` (number): Total number of approve confirmations
-  - `cancelConfirmedNum` (number): 
-  - `cancelTotalNum` (number): 
-  - `rollUpTxid` (string): Decrease operation is required to withdraw, which in rollup inscription
-  - `paymentTxid` (string): 
-  - `inscribeTxid` (string): 
-  - `approveTxid` (string): 
-  - `completedAmount` (string): 
+  - `cancelConfirmedNum` (number):
+  - `cancelTotalNum` (number):
+  - `rollUpTxid` (string): Transaction ID of the rollup inscription required for a withdrawal decrease operation.
+  - `paymentTxid` (string):
+  - `inscribeTxid` (string):
+  - `approveTxid` (string):
+  - `completedAmount` (string):
   - `matchHistory` (array):
     - `approveInscriptionId` (string): Withdraw inscription
     - `transferInscriptionId` (string): Deposit inscription
-    - `tick` (string): 
-    - `consumeAmount` (string): 
+    - `tick` (string):
+    - `consumeAmount` (string):
     - `remainAmount` (string): Residual cash withdrawal
     - `approveAddress` (string): Withdraw user address
     - `transferAddress` (string): Deposit user address
     - `txid` (string): Matching txid
-    - `ts` (number): 
+    - `ts` (number):
 
 
 ---
@@ -1201,15 +1416,17 @@ This interface retrieves the withdrawal progress for a specific ID in the BRC20 
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapQuoteSwap)  
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tickIn` (query) **(required)**: Input tick
-- `tickOut` (query) **(required)**: Output tick
-- `amount` (query) **(required)**: If it is exactIn, it is the amount of input tick, else is the amount of output tick
-- `exactType` (query) **(required)**: Exact input or exact output
+- `address` (query, string) **(required)**: 
+- `tickIn` (query, string) **(required)**: Input tick
+- `tickOut` (query, string) **(required)**: Output tick
+- `amount` (query, string) **(required)**: If it is exactIn, it is the amount of input tick, else is the amount of output tick
+- `exactType` (query, string) **(required)**: Exact input or exact output; enum: `exactIn`, `exactOut`; example: `"exactIn"`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `amountUSD` (string): Input amount of usd value
   - `expectUSD` (string): Estimated amount of usd value
@@ -1226,15 +1443,17 @@ This interface retrieves the withdrawal progress for a specific ID in the BRC20 
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapQuoteAddLiq)  
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick0` (query) **(required)**: 
-- `tick1` (query) **(required)**: 
-- `amount0` (query) : The expect amount of tick0
-- `amount1` (query) : The expect amount of tick1
+- `address` (query, string) **(required)**: 
+- `tick0` (query, string) **(required)**: 
+- `tick1` (query, string) **(required)**: 
+- `amount0` (query, string): The expect amount of tick0
+- `amount1` (query, string): The expect amount of tick1
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `amount0` (string): The real amount of tick0
   - `amount1` (string): The real amount of tick1
@@ -1256,21 +1475,23 @@ This interface retrieves the withdrawal progress for a specific ID in the BRC20 
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapQuoteRemoveLiq)  
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick0` (query) **(required)**: 
-- `tick1` (query) **(required)**: 
-- `lp` (query) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `tick0` (query, string) **(required)**: 
+- `tick1` (query, string) **(required)**: 
+- `lp` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `tick0` (string): 
-  - `tick1` (string): 
-  - `amount0` (string): Amount of tick0
-  - `amount1` (string): Amount of tick1
-  - `amount0USD` (string): 
-  - `amount1USD` (string): 
+  - `tick0` (string):
+  - `tick1` (string):
+  - `amount0` (string): required; Amount of tick0
+  - `amount1` (string): required; Amount of tick1
+  - `amount0USD` (string):
+  - `amount1USD` (string):
 
 
 ---
@@ -1286,21 +1507,21 @@ This interface retrieves the withdrawal progress for a specific ID in the BRC20 
 This interface pre-loads the /stake operation, providing the signature content, gas, and byte information required for staking in the BRC20 Swap service.
 
 #### Parameters
-- `pid` (query) **(required)**: 
-- `address` (query) **(required)**: 
-- `amount` (query) **(required)**: The amount of send tick
-- `ts` (query) **(required)**: Timestamp (seconds)
-- `feeTick` (query) **(required)**: Tick used as fee
-- `payType` (query) : Pay Type: tick, freeQuota
+- `pid` (query, string) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `amount` (query, string) **(required)**: The amount of send tick
+- `ts` (query, number) **(required)**: Timestamp (seconds)
+- `feeTick` (query, string) **(required)**: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (query, string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `ids` (array):
-
-  - `signMsgs` (array):
-
+  - `ids` (array): User signature id
+  - `signMsgs` (array): User signature information
   - `feeAmount` (string): The fee that the user needs to pay
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
@@ -1320,21 +1541,21 @@ This interface pre-loads the /stake operation, providing the signature content, 
 This interface pre-loads the /unstake operation, providing the signature content, gas, and byte information required for unstaking in the BRC20 Swap service.
 
 #### Parameters
-- `pid` (query) **(required)**: 
-- `address` (query) **(required)**: 
-- `amount` (query) **(required)**: The amount of send tick
-- `ts` (query) **(required)**: Timestamp (seconds)
-- `feeTick` (query) **(required)**: Tick used as fee
-- `payType` (query) : Pay Type: tick, freeQuota
+- `pid` (query, string) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `amount` (query, string) **(required)**: The amount of send tick
+- `ts` (query, number) **(required)**: Timestamp (seconds)
+- `feeTick` (query, string) **(required)**: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (query, string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `ids` (array):
-
-  - `signMsgs` (array):
-
+  - `ids` (array): User signature id
+  - `signMsgs` (array): User signature information
   - `feeAmount` (string): The fee that the user needs to pay
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
@@ -1354,20 +1575,20 @@ This interface pre-loads the /unstake operation, providing the signature content
 This interface pre-loads the /claim operation, providing the signature content, gas, and byte information required for claiming rewards in the BRC20 Swap service.
 
 #### Parameters
-- `pid` (query) **(required)**: 
-- `address` (query) **(required)**: 
-- `ts` (query) **(required)**: Timestamp (seconds)
-- `feeTick` (query) **(required)**: Tick used as fee
-- `payType` (query) : Pay Type: tick, freeQuota
+- `pid` (query, string) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `ts` (query, number) **(required)**: Timestamp (seconds)
+- `feeTick` (query, string) **(required)**: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (query, string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `ids` (array):
-
-  - `signMsgs` (array):
-
+  - `ids` (array): User signature id
+  - `signMsgs` (array): User signature information
   - `feeAmount` (string): The fee that the user needs to pay
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
@@ -1387,29 +1608,29 @@ This interface pre-loads the /claim operation, providing the signature content, 
 This interface pre-loads the /send_lp operation, providing the signature content, gas, and byte information required for sending LP in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick0` (query) **(required)**: Lp tick0
-- `tick1` (query) **(required)**: Lp tick1
-- `amount` (query) **(required)**: The amount of send tick
-- `to` (query) **(required)**: The receiver of send tick
-- `ts` (query) **(required)**: Timestamp (seconds)
-- `feeTick` (query) **(required)**: Tick used as fee
-- `payType` (query) : Pay Type: tick, freeQuota
+- `address` (query, string) **(required)**: 
+- `tick0` (query, string) **(required)**: Lp tick0
+- `tick1` (query, string) **(required)**: Lp tick1
+- `amount` (query, string) **(required)**: The amount of send tick
+- `to` (query, string) **(required)**: The receiver of send tick
+- `ts` (query, number) **(required)**: Timestamp (seconds)
+- `feeTick` (query, string) **(required)**: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (query, string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `ids` (array):
-
-  - `signMsgs` (array):
-
+  - `ids` (array): User signature id
+  - `signMsgs` (array): User signature information
   - `feeAmount` (string): The fee that the user needs to pay
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
   - `usdPrice` (string): The dollar value of the fee
-  - `amount0PerLp` (string): 
-  - `amount1PerLp` (string): 
+  - `amount0PerLp` (string):
+  - `amount1PerLp` (string):
 
 
 ---
@@ -1424,11 +1645,28 @@ This interface pre-loads the /send_lp operation, providing the signature content
 #### Description
 This interface sends LP in the BRC20 Swap service. It requires the address, tick0, tick1, amount, receiver, timestamp, fee tick, and user signatures to complete the operation.
 
-#### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `address` (string): required
+- `tick0` (string): required; Lp tick0
+- `tick1` (string): required; Lp tick1
+- `amount` (string): required; The amount of send tick
+- `to` (string): required; The receiver of send tick
+- `ts` (number): required; Timestamp (seconds)
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `feeAmount` (string): required; The fee that the user needs to pay
+- `feeTickPrice` (string): required; The price of fee tick
+- `sigs` (array): User signature
+- `payType` (string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
+- `rememberPayType` (boolean):
+
+#### Response (200)
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object):
 
 
 ---
@@ -1443,11 +1681,26 @@ This interface sends LP in the BRC20 Swap service. It requires the address, tick
 #### Description
 This interface stakes LP in the BRC20 Swap service. It requires the pid, address, amount, timestamp, fee tick, and user signatures to complete the operation.
 
-#### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `pid` (string): required
+- `address` (string): required
+- `amount` (string): required; The amount of send tick
+- `ts` (number): required; Timestamp (seconds)
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `feeAmount` (string): required; The fee that the user needs to pay
+- `feeTickPrice` (string): required; The price of fee tick
+- `sigs` (array): User signature
+- `payType` (string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
+- `rememberPayType` (boolean):
+
+#### Response (200)
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object):
 
 
 ---
@@ -1462,11 +1715,26 @@ This interface stakes LP in the BRC20 Swap service. It requires the pid, address
 #### Description
 This interface unstakes LP in the BRC20 Swap service. It requires the pid, address, amount, timestamp, fee tick, and user signatures to complete the operation.
 
-#### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `pid` (string): required
+- `address` (string): required
+- `amount` (string): required; The amount of send tick
+- `ts` (number): required; Timestamp (seconds)
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `feeAmount` (string): required; The fee that the user needs to pay
+- `feeTickPrice` (string): required; The price of fee tick
+- `sigs` (array): User signature
+- `payType` (string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
+- `rememberPayType` (boolean):
+
+#### Response (200)
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object):
 
 
 ---
@@ -1481,9 +1749,24 @@ This interface unstakes LP in the BRC20 Swap service. It requires the pid, addre
 #### Description
 This interface claims rewards in the BRC20 Swap service. It requires the pid, address, timestamp, fee tick, and user signatures to complete the operation.
 
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `pid` (string): required
+- `address` (string): required
+- `ts` (number): required; Timestamp (seconds)
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `feeAmount` (string): required; The fee that the user needs to pay
+- `feeTickPrice` (string): required; The price of fee tick
+- `sigs` (array): User signature
+- `payType` (string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
+- `rememberPayType` (boolean):
+
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `amount` (string): Claimed reward amount
 
@@ -1501,26 +1784,28 @@ This interface claims rewards in the BRC20 Swap service. It requires the pid, ad
 This interface retrieves the LP reward history for a specific pair in the BRC20 Swap service. It requires the address, tick0, tick1, and pagination parameters.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick0` (query) **(required)**: 
-- `tick1` (query) **(required)**: 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `tick0` (query, string) **(required)**: 
+- `tick1` (query, string) **(required)**: 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `id` (string): 
-    - `type` (string): 
-    - `address` (string): 
-    - `tick0` (string): 
-    - `tick1` (string): 
-    - `reward0` (string): 
-    - `reward1` (string): 
-    - `ts` (number): 
+    - `id` (string):
+    - `type` (string):
+    - `address` (string):
+    - `tick0` (string):
+    - `tick1` (string):
+    - `reward0` (string):
+    - `reward1` (string):
+    - `ts` (number):
 
 
 ---
@@ -1536,27 +1821,29 @@ This interface retrieves the LP reward history for a specific pair in the BRC20 
 This interface retrieves the stake history in the BRC20 Swap service. It supports filtering by pid, address, type, and pagination through start and limit parameters.
 
 #### Parameters
-- `pid` (query) : 
-- `search` (query) : 
-- `address` (query) **(required)**: 
-- `type` (query) **(required)**: 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `pid` (query, string): 
+- `search` (query, string): 
+- `address` (query, string) **(required)**: 
+- `type` (query, string) **(required)**: Stake history type.; enum: `all`, `stake`, `unstake`, `claim`
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `pid` (string): 
-    - `address` (string): 
-    - `poolTick0` (string): 
-    - `poolTick1` (string): 
-    - `type` (string): 
-    - `amount` (string): 
-    - `tick` (string): 
-    - `ts` (number): 
+    - `pid` (string):
+    - `address` (string):
+    - `poolTick0` (string):
+    - `poolTick1` (string):
+    - `type` (string):
+    - `amount` (string):
+    - `tick` (string):
+    - `ts` (number):
 
 
 ---
@@ -1572,24 +1859,24 @@ This interface retrieves the stake history in the BRC20 Swap service. It support
 This interface retrieves the stake list in the BRC20 Swap service.
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `list` (array):
-    - `startBlock` (number): 
-    - `endBlock` (number): 
+    - `startBlock` (number):
+    - `endBlock` (number):
     - `stakePools` (array):
       - `summary` (object):
-        - `pid` (string): 
-        - `poolTick0` (string): 
-        - `poolTick1` (string): 
-        - `rewardTick` (string): 
-        - `curTotalLp` (string): 
-        - `baseReward` (string): 
+        - `pid` (string):
+        - `poolTick0` (string):
+        - `poolTick1` (string):
+        - `rewardTick` (string):
+        - `curTotalLp` (string):
+        - `baseReward` (string):
         - `stageNeedLp` (array):
-
         - `stageAddedRewards` (array):
-
 
 
 ---
@@ -1602,28 +1889,28 @@ This interface retrieves the stake list in the BRC20 Swap service.
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapStakeItem)  
 
 #### Parameters
-- `eid` (query) **(required)**: 
+- `eid` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `item` (object):
-    - `startBlock` (number): 
-    - `endBlock` (number): 
+    - `startBlock` (number):
+    - `endBlock` (number):
     - `stakePools` (array):
       - `summary` (object):
-        - `pid` (string): 
-        - `poolTick0` (string): 
-        - `poolTick1` (string): 
-        - `rewardTick` (string): 
-        - `curTotalLp` (string): 
-        - `baseReward` (string): 
+        - `pid` (string):
+        - `poolTick0` (string):
+        - `poolTick1` (string):
+        - `rewardTick` (string):
+        - `curTotalLp` (string):
+        - `baseReward` (string):
         - `stageNeedLp` (array):
-
         - `stageAddedRewards` (array):
-
-  - `newestHeight` (number): 
+  - `newestHeight` (number):
 
 
 ---
@@ -1639,12 +1926,14 @@ This interface retrieves the stake list in the BRC20 Swap service.
 This interface retrieves the stake user information in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) : 
+- `address` (query, string): 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object): required
 
 
 ---
@@ -1660,14 +1949,16 @@ This interface retrieves the stake user information in the BRC20 Swap service.
 This interface retrieves the user information in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) **(required)**: 
+- `address` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `defaultPayType` (string): 
-  - `rememberPayType` (boolean): 
+  - `defaultPayType` (string): User default pay type.; enum: `tick`, `freeQuota`, `assetFeeTick`
+  - `rememberPayType` (boolean):
 
 
 ---
@@ -1680,14 +1971,16 @@ This interface retrieves the user information in the BRC20 Swap service.
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapSelectDeposit)  
 
 #### Parameters
-- `pubkey` (query) **(required)**: 
-- `address` (query) **(required)**: 
-- `v` (query) : 
+- `pubkey` (query, string) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `v` (query, string): 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object): required
 
 
 ---
@@ -1700,12 +1993,14 @@ This interface retrieves the user information in the BRC20 Swap service.
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapFuncInfo)  
 
 #### Parameters
-- `id` (query) **(required)**: 
+- `id` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object): required
 
 
 ---
@@ -1718,14 +2013,16 @@ This interface retrieves the user information in the BRC20 Swap service.
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapDepositBalance)  
 
 #### Parameters
-- `pubkey` (query) **(required)**: 
-- `address` (query) **(required)**: 
-- `tick` (query) **(required)**: 
+- `pubkey` (query, string) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `tick` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object): required
 
 
 ---
@@ -1741,20 +2038,22 @@ This interface retrieves the user information in the BRC20 Swap service.
 This interface retrieves the deposit process for a specific transaction ID in the BRC20 Swap service.
 
 #### Parameters
-- `txid` (query) **(required)**: 
+- `txid` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `tick` (string): 
-  - `amount` (string): 
+  - `tick` (string):
+  - `amount` (string):
   - `cur` (number): Current number of confirmations
   - `sum` (number): Total number of confirmations
-  - `ts` (number): 
-  - `txid` (string): 
-  - `type` (string): 
-  - `status` (string): 
+  - `ts` (number):
+  - `txid` (string):
+  - `type` (string):
+  - `status` (string):
 
 
 ---
@@ -1770,13 +2069,15 @@ This interface retrieves the deposit process for a specific transaction ID in th
 This interface retrieves the price for a specific tick in the BRC20 Swap service.
 
 #### Parameters
-- `tick` (query) **(required)**: 
+- `tick` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `price` (number): 
+  - `price` (number):
 
 
 ---
@@ -1792,14 +2093,16 @@ This interface retrieves the price for a specific tick in the BRC20 Swap service
 This interface retrieves the total gas consumption for a specific address and fee tick in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `feeTick` (query) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `feeTick` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
 
 
 ---
@@ -1815,90 +2118,20 @@ This interface retrieves the total gas consumption for a specific address and fe
 This interface retrieves the price line data for a specific pair in the BRC20 Swap service.
 
 #### Parameters
-- `tick0` (query) **(required)**: 
-- `tick1` (query) **(required)**: 
-- `timeRange` (query) **(required)**: 
+- `tick0` (query, string) **(required)**: 
+- `tick1` (query, string) **(required)**: 
+- `timeRange` (query, string) **(required)**: Time range for price line aggregation.; enum: `24h`, `7d`, `30d`, `90d`, `all`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `list` (array):
-    - `price` (number): 
-    - `usdPrice` (number): 
-    - `ts` (number): 
-
-
----
-
-### Gets the community info.
-<a id="gets-the-community-info"></a>
-
-**Method**: `GET`  
-**Path**: `/v1/brc20-swap/community_info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapCommunityInfo)  
-
-#### Description
-This interface retrieves the community information for a specific tick in the BRC20 Swap service.
-
-#### Parameters
-- `tick` (query) **(required)**: 
-
-#### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
-  - `tick` (string): 
-  - `twitter` (string): 
-  - `telegram` (string): 
-  - `website` (string): 
-  - `discord` (string): 
-  - `desc` (string): 
-
-
----
-
-### Adds community info.
-<a id="adds-community-info"></a>
-
-**Method**: `POST`  
-**Path**: `/v1/brc20-swap/add_community_info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapAddCommunityInfo)  
-
-#### Description
-This interface adds or updates community information for a specific tick in the BRC20 Swap service.
-
-#### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
-
-
-
----
-
-### Gets the community info list.
-<a id="gets-the-community-info-list"></a>
-
-**Method**: `GET`  
-**Path**: `/v1/brc20-swap/community_list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapCommunityList)  
-
-#### Description
-This interface retrieves the list of all community information in the BRC20 Swap service.
-
-#### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
-  - `total` (number): 
-  - `list` (array):
-    - `tick` (string): 
-    - `twitter` (string): 
-    - `telegram` (string): 
-    - `website` (string): 
-    - `discord` (string): 
-    - `desc` (string): 
+    - `price` (number):
+    - `usdPrice` (number):
+    - `ts` (number):
 
 
 ---
@@ -1914,20 +2147,22 @@ This interface retrieves the list of all community information in the BRC20 Swap
 This interface retrieves the list of tick holders for a specific tick in the BRC20 Swap service.
 
 #### Parameters
-- `tick` (query) **(required)**: 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `tick` (query, string) **(required)**: 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `address` (string): 
-    - `amount` (string): 
-    - `percentage` (number): 
-    - `relativePercentage` (number): 
+    - `address` (string):
+    - `amount` (string):
+    - `percentage` (number):
+    - `relativePercentage` (number):
 
 
 ---
@@ -1943,26 +2178,28 @@ This interface retrieves the list of tick holders for a specific tick in the BRC
 This interface retrieves the list of pool holders for a specific pair in the BRC20 Swap service.
 
 #### Parameters
-- `tick0` (query) **(required)**: 
-- `tick1` (query) **(required)**: 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `tick0` (query, string) **(required)**: 
+- `tick1` (query, string) **(required)**: 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `address` (string): 
-    - `amount0` (string): 
-    - `amount1` (string): 
-    - `lp` (string): 
-    - `shareOfPool` (string): 
+    - `address` (string):
+    - `amount0` (string):
+    - `amount1` (string):
+    - `lp` (string):
+    - `shareOfPool` (string):
     - `lockLp` (object):
-      - `lp` (string): 
-      - `amount0` (string): 
-      - `amount1` (string): 
+      - `lp` (string):
+      - `amount0` (string):
+      - `amount1` (string):
 
 
 ---
@@ -1978,16 +2215,18 @@ This interface retrieves the list of pool holders for a specific pair in the BRC
 This interface retrieves the reward curve data for a specific pair and time range in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick0` (query) **(required)**: 
-- `tick1` (query) **(required)**: 
-- `startTime` (query) **(required)**: 
-- `endTime` (query) **(required)**: 
+- `address` (query, string) **(required)**: 
+- `tick0` (query, string) **(required)**: 
+- `tick1` (query, string) **(required)**: 
+- `startTime` (query, number) **(required)**: 
+- `endTime` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object): required
 
 
 ---
@@ -2003,22 +2242,24 @@ This interface retrieves the reward curve data for a specific pair and time rang
 This interface retrieves the history of send LP transactions in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
 
 #### Parameters
-- `address` (query) : 
-- `tick` (query) : 
-- `fuzzySearch` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `address` (query, string): 
+- `tick` (query, string): 
+- `fuzzySearch` (query, boolean): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `tick` (string): 
-    - `amount` (string): 
-    - `to` (string): 
-    - `ts` (number): 
+    - `tick` (string):
+    - `amount` (string):
+    - `to` (string):
+    - `ts` (number):
 
 
 ---
@@ -2034,25 +2275,27 @@ This interface retrieves the history of send LP transactions in the BRC20 Swap s
 This interface retrieves the history of burn transactions in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
 
 #### Parameters
-- `address` (query) : 
-- `tick` (query) : 
-- `fuzzySearch` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
-- `ts` (query) : 
+- `address` (query, string): 
+- `tick` (query, string): 
+- `fuzzySearch` (query, boolean): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
+- `ts` (query, number): 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `totalLp` (string): Total LP amount
   - `burnedLp` (string): Burned LP amount
   - `list` (array):
-    - `tick` (string): 
-    - `amount` (string): 
-    - `to` (string): 
-    - `ts` (number): 
+    - `tick` (string):
+    - `amount` (string):
+    - `to` (string):
+    - `ts` (number):
 
 
 ---
@@ -2068,19 +2311,21 @@ This interface retrieves the history of burn transactions in the BRC20 Swap serv
 This interface retrieves the task list for a specific address in the BRC20 Swap service.
 
 #### Parameters
-- `tid` (query) : 
-- `address` (query) **(required)**: 
+- `tid` (query, string): 
+- `address` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `tid` (string): 
+  - `tid` (string):
   - `list` (array):
-    - `tid` (string): 
-    - `itemId` (string): 
-    - `address` (string): 
-    - `done` (boolean): 
+    - `tid` (string):
+    - `itemId` (string):
+    - `address` (string):
+    - `done` (boolean):
 
 
 ---
@@ -2096,14 +2341,16 @@ This interface retrieves the task list for a specific address in the BRC20 Swap 
 This interface retrieves the USD value of assets for a specific address in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) **(required)**: 
+- `address` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (array):
-  - `assetsUSD` (string): 
-  - `lpUSD` (string): 
+  - `assetsUSD` (string):
+  - `lpUSD` (string):
 
 
 ---
@@ -2119,29 +2366,29 @@ This interface retrieves the USD value of assets for a specific address in the B
 This interface pre-loads the /lock_lp operation, providing the signature content, gas, and byte information required for locking LP in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `lockDay` (query) **(required)**: 
-- `tick0` (query) **(required)**: Lp tick0
-- `tick1` (query) **(required)**: Lp tick1
-- `amount` (query) **(required)**: The amount of lock tick
-- `ts` (query) **(required)**: Timestamp (seconds)
-- `feeTick` (query) **(required)**: Tick used as fee
-- `payType` (query) : Pay Type: tick, freeQuota
+- `address` (query, string) **(required)**: 
+- `lockDay` (query, string) **(required)**: 
+- `tick0` (query, string) **(required)**: Lp tick0
+- `tick1` (query, string) **(required)**: Lp tick1
+- `amount` (query, string) **(required)**: The amount of lock tick
+- `ts` (query, number) **(required)**: Timestamp (seconds)
+- `feeTick` (query, string) **(required)**: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (query, string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `ids` (array):
-
-  - `signMsgs` (array):
-
+  - `ids` (array): User signature id
+  - `signMsgs` (array): User signature information
   - `feeAmount` (string): The fee that the user needs to pay
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
   - `usdPrice` (string): The dollar value of the fee
-  - `amount0PerLp` (string): 
-  - `amount1PerLp` (string): 
+  - `amount0PerLp` (string):
+  - `amount1PerLp` (string):
 
 
 ---
@@ -2156,11 +2403,28 @@ This interface pre-loads the /lock_lp operation, providing the signature content
 #### Description
 This interface locks LP in the BRC20 Swap service. It requires the address, lockDay, tick0, tick1, amount, timestamp, fee tick, and user signatures to complete the operation.
 
-#### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `address` (string): required
+- `lockDay` (string): required
+- `tick0` (string): required
+- `tick1` (string): required
+- `amount` (string): required; The amount of lock tick
+- `ts` (number): required; Timestamp (seconds)
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `feeAmount` (string): required; The fee that the user needs to pay
+- `feeTickPrice` (string): required; The price of fee tick
+- `sigs` (array): User signature
+- `payType` (string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
+- `rememberPayType` (boolean):
+
+#### Response (200)
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object):
 
 
 ---
@@ -2176,28 +2440,28 @@ This interface locks LP in the BRC20 Swap service. It requires the address, lock
 This interface pre-loads the /unlock_lp operation, providing the signature content, gas, and byte information required for unlocking LP in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tick0` (query) **(required)**: Lp tick0
-- `tick1` (query) **(required)**: Lp tick1
-- `amount` (query) **(required)**: The amount of unlock tick
-- `ts` (query) **(required)**: Timestamp (seconds)
-- `feeTick` (query) **(required)**: Tick used as fee
-- `payType` (query) : Pay Type: tick, freeQuota
+- `address` (query, string) **(required)**: 
+- `tick0` (query, string) **(required)**: Lp tick0
+- `tick1` (query, string) **(required)**: Lp tick1
+- `amount` (query, string) **(required)**: The amount of unlock tick
+- `ts` (query, number) **(required)**: Timestamp (seconds)
+- `feeTick` (query, string) **(required)**: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (query, string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `ids` (array):
-
-  - `signMsgs` (array):
-
+  - `ids` (array): User signature id
+  - `signMsgs` (array): User signature information
   - `feeAmount` (string): The fee that the user needs to pay
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
   - `usdPrice` (string): The dollar value of the fee
-  - `amount0PerLp` (string): 
-  - `amount1PerLp` (string): 
+  - `amount0PerLp` (string):
+  - `amount1PerLp` (string):
 
 
 ---
@@ -2212,11 +2476,27 @@ This interface pre-loads the /unlock_lp operation, providing the signature conte
 #### Description
 This interface unlocks LP in the BRC20 Swap service. It requires the address, tick0, tick1, amount, timestamp, fee tick, and user signatures to complete the operation.
 
-#### Response (200)
-- `code` (number): 
-- `msg` (string): 
-- `data` (object):
+#### Request Body
+Content-Type: `application/json` **(required)**
 
+- `address` (string): required
+- `tick0` (string): required
+- `tick1` (string): required
+- `amount` (string): required; The amount of unlock tick
+- `ts` (number): required; Timestamp (seconds)
+- `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `feeAmount` (string): required; The fee that the user needs to pay
+- `feeTickPrice` (string): required; The price of fee tick
+- `sigs` (array): User signature
+- `payType` (string): Pay type. Allowed values are tick and freeQuota.; enum: `tick`, `freeQuota`
+- `rememberPayType` (boolean):
+
+#### Response (200)
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object):
 
 
 ---
@@ -2232,33 +2512,35 @@ This interface unlocks LP in the BRC20 Swap service. It requires the address, ti
 This interface retrieves the history of lock LP transactions in the BRC20 Swap service. It supports filtering by address, tick, lockDay, and pagination through start and limit parameters.
 
 #### Parameters
-- `tick` (query) : 
-- `tick0` (query) : 
-- `tick1` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
-- `address` (query) : 
-- `lockDay` (query) : 
+- `tick` (query, string): 
+- `tick0` (query, string): 
+- `tick1` (query, string): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
+- `address` (query, string): 
+- `lockDay` (query, number): 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `id` (string): 
-    - `address` (string): 
-    - `tick0` (string): 
-    - `tick1` (string): 
-    - `lp` (string): 
-    - `amount0` (string): 
-    - `amount1` (string): 
-    - `amount0USD` (string): 
-    - `amount1USD` (string): 
-    - `lockDay` (number): 
-    - `unlockTime` (string): 
-    - `ts` (number): 
-    - `shareOfPool` (string): 
+    - `id` (string):
+    - `address` (string):
+    - `tick0` (string):
+    - `tick1` (string):
+    - `lp` (string):
+    - `amount0` (string):
+    - `amount1` (string):
+    - `amount0USD` (string):
+    - `amount1USD` (string):
+    - `lockDay` (number):
+    - `unlockTime` (string):
+    - `ts` (number):
+    - `shareOfPool` (string):
 
 
 ---
@@ -2274,29 +2556,31 @@ This interface retrieves the history of lock LP transactions in the BRC20 Swap s
 This interface retrieves the history of unlock LP transactions in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
 
 #### Parameters
-- `tick` (query) : 
-- `tick0` (query) : 
-- `tick1` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
-- `address` (query) : 
+- `tick` (query, string): 
+- `tick0` (query, string): 
+- `tick1` (query, string): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
+- `address` (query, string): 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `id` (string): 
-    - `address` (string): 
-    - `tick0` (string): 
-    - `tick1` (string): 
-    - `lp` (string): 
-    - `amount0` (string): 
-    - `amount1` (string): 
-    - `amount0USD` (string): 
-    - `amount1USD` (string): 
-    - `ts` (number): 
+    - `id` (string):
+    - `address` (string):
+    - `tick0` (string):
+    - `tick1` (string):
+    - `lp` (string):
+    - `amount0` (string):
+    - `amount1` (string):
+    - `amount0USD` (string):
+    - `amount1USD` (string):
+    - `ts` (number):
 
 
 ---
@@ -2312,12 +2596,14 @@ This interface retrieves the history of unlock LP transactions in the BRC20 Swap
 This interface exports the lock LP history to a CSV file in the BRC20 Swap service.
 
 #### Parameters
-- `tick0` (query) **(required)**: 
-- `tick1` (query) **(required)**: 
-- `lockDay` (query) : 
-- `lockTime` (query) : 
+- `tick0` (query, string) **(required)**: 
+- `tick1` (query, string) **(required)**: 
+- `lockDay` (query, number): 
+- `lockTime` (query, number): 
 
 #### Response (200)
+CSV file download
+
 
 ---
 
@@ -2332,20 +2618,22 @@ This interface exports the lock LP history to a CSV file in the BRC20 Swap servi
 This interface retrieves the user's lock LP information for a specific pair in the BRC20 Swap service.
 
 #### Parameters
-- `tick0` (query) **(required)**: 
-- `tick1` (query) **(required)**: 
-- `address` (query) **(required)**: 
+- `tick0` (query, string) **(required)**: 
+- `tick1` (query, string) **(required)**: 
+- `address` (query, string) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `lp` (string): 
-  - `lockLp` (string): 
-  - `availableLp` (string): 
-  - `availableAmount0` (string): 
-  - `availableAmount1` (string): 
-  - `shareOfPool` (string): 
+  - `lp` (string):
+  - `lockLp` (string):
+  - `availableLp` (string):
+  - `availableAmount0` (string):
+  - `availableAmount1` (string):
+  - `shareOfPool` (string):
 
 
 ---
@@ -2361,21 +2649,22 @@ This interface retrieves the user's lock LP information for a specific pair in t
 This interface retrieves the tick information that can be used for swapping based on the provided address and optional filters.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tickIn` (query) : 
-- `tickOut` (query) : 
-- `search` (query) : 
+- `address` (query, string) **(required)**: 
+- `tickIn` (query, string): 
+- `tickOut` (query, string): 
+- `search` (query, string): 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (array):
-  - `tick` (string): 
-  - `decimal` (string): 
+  - `tick` (string):
+  - `decimal` (string):
   - `brc20Balance` (string): Module balance (not participate in swap calculations)
   - `swapBalance` (string): Swap balance
-  - `routes` (array):
-
+  - `routes` (array): Available routes for swapping
 
 
 ---
@@ -2391,25 +2680,25 @@ This interface retrieves the tick information that can be used for swapping base
 This interface pre-loads the /multi_swap operation, providing the signature content and gas information required for multi swapping in the BRC20 Swap service.
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tickIn` (query) **(required)**: Input tick
-- `tickOut` (query) **(required)**: Output tick
-- `amountIn` (query) **(required)**: The amount of input tick
-- `amountOut` (query) **(required)**: The amount of output tick
-- `slippage` (query) **(required)**: 
-- `exactType` (query) **(required)**: 
-- `ts` (query) **(required)**: Timestamp(seconds)
-- `feeTick` (query) **(required)**: Tick used as fee
-- `payType` (query) : Pay Type: tick, freeQuota
+- `address` (query, string) **(required)**: 
+- `tickIn` (query, string) **(required)**: Input tick
+- `tickOut` (query, string) **(required)**: Output tick
+- `amountIn` (query, string) **(required)**: The amount of input tick
+- `amountOut` (query, string) **(required)**: The amount of output tick
+- `slippage` (query, string) **(required)**: 
+- `exactType` (query, string) **(required)**: enum: `exactIn`, `exactOut`; example: `"exactIn"`
+- `ts` (query, number) **(required)**: Timestamp(seconds)
+- `feeTick` (query, string) **(required)**: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+- `payType` (query, string): Pay type. Allowed values are tick, freeQuota, and assetFeeTick.; enum: `tick`, `freeQuota`, `assetFeeTick`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (array):
-  - `ids` (array):
-
-  - `signMsgs` (array):
-
+  - `ids` (array): User signature id
+  - `signMsgs` (array): User signature information
   - `feeAmount` (string): The fee that the user needs to pay
   - `feeTickPrice` (string): The price of fee tick
   - `feeBalance` (string): The user's fee tick balance
@@ -2428,20 +2717,44 @@ This interface pre-loads the /multi_swap operation, providing the signature cont
 #### Description
 This interface performs multi swaps in the BRC20 Swap service. It requires an array of swap items, each with address, input tick, output tick, amounts, slippage, exact type, timestamp, fee tick, and user signatures to complete the operation.
 
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `items` (array):
+  - `address` (string): required
+  - `tickIn` (string): required; Input tick
+  - `tickOut` (string): required; Output tick
+  - `amountIn` (string): required; The amount of input tick
+  - `amountOut` (string): required; The amount of output tick
+  - `feeTick` (string): required; Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+  - `slippage` (string): required
+  - `exactType` (string): required; enum: `exactIn`, `exactOut`
+  - `ts` (number): required; Timestamp (seconds)
+  - `feeAmount` (string): required; The fee that the user needs to pay
+  - `feeTickPrice` (string): required; The price of fee tick
+  - `sigs` (array): User signature
+  - `payType` (string): Pay type. Allowed values are tick, freeQuota, and assetFeeTick.; enum: `tick`, `freeQuota`, `assetFeeTick`
+  - `rememberPayType` (boolean):
+  - `assetFeeTick` (string): Required when payType is assetFeeTick. Used as the fee asset tick for swap.
+  - `assetFeeAmount` (string): Required when payType is assetFeeTick. Fee amount charged in assetFeeTick.
+  - `assetFeeTickPrice` (string): Required when payType is assetFeeTick. Price of assetFeeTick.
+
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (array):
-  - `address` (string): 
-  - `tickIn` (string): 
-  - `tickOut` (string): 
-  - `success` (boolean): 
-  - `amountIn` (string): 
-  - `amountOut` (string): 
-  - `exactType` (string): 
-  - `value` (number): 
-  - `ts` (number): 
-  - `failureReason` (string): 
+  - `address` (string):
+  - `tickIn` (string):
+  - `tickOut` (string):
+  - `success` (boolean):
+  - `amountIn` (string):
+  - `amountOut` (string):
+  - `exactType` (string):
+  - `value` (number):
+  - `ts` (number):
+  - `failureReason` (string):
 
 
 ---
@@ -2454,21 +2767,22 @@ This interface performs multi swaps in the BRC20 Swap service. It requires an ar
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapQuoteMultiSwap)  
 
 #### Parameters
-- `address` (query) **(required)**: 
-- `tickIn` (query) **(required)**: Input tick
-- `tickOut` (query) **(required)**: Output tick
-- `amount` (query) **(required)**: If it is exactIn, it is the amount of input tick, else is the amount of output tick
-- `exactType` (query) **(required)**: Exact input or exact output
+- `address` (query, string) **(required)**: 
+- `tickIn` (query, string) **(required)**: Input tick
+- `tickOut` (query, string) **(required)**: Output tick
+- `amount` (query, string) **(required)**: If it is exactIn, it is the amount of input tick, else is the amount of output tick
+- `exactType` (query, string) **(required)**: Exact input or exact output; enum: `exactIn`, `exactOut`; example: `"exactIn"`
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
   - `amountUSD` (string): Input amount of usd value
   - `expectUSD` (string): Estimated amount of usd value
   - `expect` (string): Estimated amount
-  - `routesExpect` (array):
-
+  - `routesExpect` (array): Estimated amounts for each route
 
 
 ---
@@ -2484,46 +2798,213 @@ This interface performs multi swaps in the BRC20 Swap service. It requires an ar
 This interface retrieves the history of multi swap transactions in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
 
 #### Parameters
-- `address` (query) : 
-- `tick` (query) : 
-- `fuzzySearch` (query) : 
-- `start` (query) **(required)**: 
-- `limit` (query) **(required)**: 
+- `address` (query, string): 
+- `tick` (query, string): 
+- `fuzzySearch` (query, boolean): 
+- `start` (query, number) **(required)**: 
+- `limit` (query, number) **(required)**: 
 
 #### Response (200)
-- `code` (number): 
-- `msg` (string): 
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
 - `data` (object):
-  - `total` (number): 
+  - `total` (number):
   - `list` (array):
-    - `address` (string): 
-    - `tickIn` (string): Input tick
-    - `tickOut` (string): Output tick
-    - `amountIn` (string): The amount of input tick
-    - `amountOut` (string): The amount of output tick
-    - `exactType` (string): 
-    - `ts` (number): 
+    - `address` (string):
+    - `tickIn` (string): required; Input tick
+    - `tickOut` (string): required; Output tick
+    - `amountIn` (string): required; The amount of input tick
+    - `amountOut` (string): required; The amount of output tick
+    - `exactType` (string):
+    - `ts` (number):
     - `value` (number): Swap value
-    - `route0` (object):
-      - `id` (string): 
-      - `tickIn` (string): 
-      - `tickOut` (string): 
-      - `amountIn` (string): 
-      - `amountOut` (string): 
-      - `exactType` (string): 
-      - `ts` (number): 
-      - `success` (boolean): 
-      - `failureReason` (string): 
-    - `route1` (object):
-      - `id` (string): 
-      - `tickIn` (string): 
-      - `tickOut` (string): 
-      - `amountIn` (string): 
-      - `amountOut` (string): 
-      - `exactType` (string): 
-      - `ts` (number): 
-      - `success` (boolean): 
-      - `failureReason` (string): 
+    - `route0` (object): First route details
+      - `id` (string):
+      - `tickIn` (string):
+      - `tickOut` (string):
+      - `amountIn` (string):
+      - `amountOut` (string):
+      - `exactType` (string):
+      - `ts` (number):
+      - `success` (boolean):
+      - `failureReason` (string):
+    - `route1` (object): Second route details
+      - `id` (string):
+      - `tickIn` (string):
+      - `tickOut` (string):
+      - `amountIn` (string):
+      - `amountOut` (string):
+      - `exactType` (string):
+      - `ts` (number):
+      - `success` (boolean):
+      - `failureReason` (string):
+
+
+---
+
+### Batch query multiple history types in a single request.
+<a id="batch-query-multiple-history-types-in-a-single-request"></a>
+
+**Method**: `POST`  
+**Path**: `/v1/brc20-swap/batch_history`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapBatchHistory)  
+
+#### Description
+This interface retrieves multiple history types in a single request in the BRC20 Swap service. It supports querying multiple history types (gas, send, liq, swap, withdraw, stake, send_lp, burn, lock_lp, unlock_lp, multi_swap) with shared pagination parameters (start, limit, address).
+
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `start` (number): required; Start index for pagination
+- `limit` (number): required; Maximum number of items to return
+- `address` (string): required; User address
+- `types` (array): Array of history types to query
+
+#### Response (200)
+Default Response
+
+- `code` (number): required
+- `msg` (string): required
+- `data` (object):
+  - `gas` (object): Gas history data (if requested)
+    - `total` (number):
+    - `list` (array):
+      - `funcType` (string): Function type; example: `"swap"`
+      - `tickA` (string):
+      - `tickB` (string):
+      - `gas` (string):
+      - `tick` (string): Fee tick
+      - `to` (string): Recipient address
+      - `ts` (number):
+  - `send` (object): Send history data (if requested)
+    - `total` (number):
+    - `list` (array):
+      - `tick` (string):
+      - `amount` (string):
+      - `to` (string):
+      - `ts` (number):
+  - `liq` (object): Liquidity history data (if requested)
+    - `total` (number):
+    - `list` (array):
+      - `type` (string):
+      - `tick0` (string):
+      - `tick1` (string):
+      - `amount0` (string):
+      - `amount1` (string):
+      - `reward0` (string): Reward amount for tick0
+      - `reward1` (string): Reward amount for tick1
+      - `lp` (string):
+      - `ts` (number):
+  - `swap` (object): Swap history data (if requested)
+    - `total` (number):
+    - `list` (array):
+      - `tickIn` (string): required; Input tick
+      - `tickOut` (string): required; Output tick
+      - `amountIn` (string): required; The amount of input tick
+      - `amountOut` (string): required; The amount of output tick
+      - `exactType` (string):
+      - `ts` (number):
+  - `withdraw` (object): Withdraw history data (if requested)
+    - `total` (number):
+    - `list` (array):
+      - `id` (string):
+      - `tick` (string):
+      - `totalAmount` (string): Total amount withdrawal
+      - `completedAmount` (string): The number of withdrawal completed
+      - `ts` (number):
+      - `totalConfirmedNum` (number): The current number of confirmations
+      - `totalNum` (number): The total number of confirmations
+      - `status` (string):
+      - `type` (string):
+  - `stake` (object): Stake history data (if requested)
+    - `total` (number):
+    - `list` (array):
+      - `pid` (string):
+      - `address` (string):
+      - `poolTick0` (string):
+      - `poolTick1` (string):
+      - `type` (string):
+      - `amount` (string):
+      - `tick` (string):
+      - `ts` (number):
+  - `send_lp` (object): Send LP history data (if requested)
+    - `total` (number):
+    - `list` (array):
+      - `tick` (string):
+      - `amount` (string):
+      - `to` (string):
+      - `ts` (number):
+  - `burn` (object): Burn history data (if requested)
+    - `total` (number):
+    - `totalLp` (string): Total LP amount
+    - `burnedLp` (string): Burned LP amount
+    - `list` (array):
+      - `tick` (string):
+      - `amount` (string):
+      - `to` (string):
+      - `ts` (number):
+  - `lock_lp` (object): Lock LP history data (if requested)
+    - `total` (number):
+    - `list` (array):
+      - `id` (string):
+      - `address` (string):
+      - `tick0` (string):
+      - `tick1` (string):
+      - `lp` (string):
+      - `amount0` (string):
+      - `amount1` (string):
+      - `amount0USD` (string):
+      - `amount1USD` (string):
+      - `lockDay` (number):
+      - `unlockTime` (string):
+      - `ts` (number):
+      - `shareOfPool` (string):
+  - `unlock_lp` (object): Unlock LP history data (if requested)
+    - `total` (number):
+    - `list` (array):
+      - `id` (string):
+      - `address` (string):
+      - `tick0` (string):
+      - `tick1` (string):
+      - `lp` (string):
+      - `amount0` (string):
+      - `amount1` (string):
+      - `amount0USD` (string):
+      - `amount1USD` (string):
+      - `ts` (number):
+  - `multi_swap` (object): Multi swap history data (if requested)
+    - `total` (number):
+    - `list` (array):
+      - `address` (string):
+      - `tickIn` (string): required; Input tick
+      - `tickOut` (string): required; Output tick
+      - `amountIn` (string): required; The amount of input tick
+      - `amountOut` (string): required; The amount of output tick
+      - `exactType` (string):
+      - `ts` (number):
+      - `value` (number): Swap value
+      - `route0` (object): First route details
+        - `id` (string):
+        - `tickIn` (string):
+        - `tickOut` (string):
+        - `amountIn` (string):
+        - `amountOut` (string):
+        - `exactType` (string):
+        - `ts` (number):
+        - `success` (boolean):
+        - `failureReason` (string):
+      - `route1` (object): Second route details
+        - `id` (string):
+        - `tickIn` (string):
+        - `tickOut` (string):
+        - `amountIn` (string):
+        - `amountOut` (string):
+        - `exactType` (string):
+        - `ts` (number):
+        - `success` (boolean):
+        - `failureReason` (string):
 
 
 ---

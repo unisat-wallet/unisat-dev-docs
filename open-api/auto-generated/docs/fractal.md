@@ -29,7 +29,16 @@ This API is limited to Fractal only. It provides endpoints to interact with the 
 Retrieves the circulating supply of Fractal Bitcoin (FB) in the mainnet.
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)):
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `blocks` (number):
+  - `supply` (number):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -45,7 +54,16 @@ Retrieves the circulating supply of Fractal Bitcoin (FB) in the mainnet.
 Retrieves the total supply of Fractal Bitcoin (FB) in the mainnet.
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)):
+- `msg` (string): example: `"OK"`
+- `data` (object):
+  - `blocks` (number):
+  - `supply` (number):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -61,7 +79,14 @@ Retrieves the total supply of Fractal Bitcoin (FB) in the mainnet.
 Retrieves the total number of addresses in the Fractal network.
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)):
+- `msg` (string): example: `"OK"`
+- `data` (number):
+
+#### Response (401)
+Invalid API Key
 
 
 ---
@@ -77,11 +102,20 @@ Retrieves the total number of addresses in the Fractal network.
 Retrieves a list of addresses sorted by their balance in descending order.
 
 #### Parameters
-- `cursor` (query) **(required)**: Start offset
-- `size` (query) **(required)**: Number of items returned (Max 10000)
+- `cursor` (query, integer) **(required)**: Start offset
+- `size` (query, integer) **(required)**: Number of items returned (Max 10000)
 
 #### Response (200)
+Successful operation
 
+- `code` (integer (int32)):
+- `msg` (string): example: `"OK"`
+- `data` (array):
+  - `address` (string):
+  - `balance` (number):
+
+#### Response (401)
+Invalid API Key
 
 
 ---

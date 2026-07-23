@@ -12,8 +12,9 @@ swagger:
   - domain-marketplace
   - brc20-swap
   - fractal
-  - cat20-dex
   - collection-indexer
+  - brc20-prog-api
+  - price
 doc:
   - blockchain-indexer
   - inscription-indexer
@@ -28,5 +29,6 @@ doc:
   - domain-marketplace
   - brc20-swap
   - fractal
-  - cat20-dex
   - collection-indexer
+  - brc20-prog-api
+  - price
