@@ -1,0 +1,2540 @@
+openapi: 3.0.3
+info:
+  title: Inscribe API V5
+  version: 5.0.0
+  description: Current inscription API. V5 replaces the deprecated /v2/inscribe endpoints and uses the order workflow implemented by the minting service.
+tags:
+  - name: Inscribe V5
+    description: Current multi-network inscription workflow. V5 endpoints require a bearer API key and scope orders to the calling OpenAPI application.
+paths:
+  /inscribe-v5/order/list:
+    get:
+      summary: get address status
+      description: get address status
+      parameters:
+        - name: cursor
+          required: true
+          description: Starting cursor
+          schema:
+            type: number
+            default: 0
+          in: query
+        - name: size
+          required: true
+          description: The amount returned
+          schema:
+            type: number
+            default: 10
+          in: query
+        - name: filter
+          required: true
+          description: ''
+          schema:
+            type: string
+            default: ''
+          in: query
+        - name: status
+          required: false
+          description: ''
+          schema:
+            type: string
+            default: ''
+          in: query
+        - name: clientId
+          required: false
+          description: ''
+          schema:
+            type: string
+            default: ''
+          in: query
+        - name: receiveAddress
+          required: false
+          description: ''
+          schema:
+            type: string
+            default: ''
+          in: query
+        - name: withFiles
+          required: false
+          description: ''
+          schema:
+            type: string
+            default: ''
+          in: query
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: string
+                    properties:
+                      total:
+                        type: number
+                      list:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            orderId:
+                              type: string
+                            status:
+                              type: string
+                            payAddress:
+                              type: string
+                            receiveAddress:
+                              type: string
+                            amount:
+                              type: number
+                            balance:
+                              type: number
+                            feeRate:
+                              type: number
+                            minerFee:
+                              type: number
+                            outputValueFee:
+                              type: number
+                            serviceFee:
+                              type: number
+                            count:
+                              type: number
+                            pendingCount:
+                              type: number
+                            unconfirmedCount:
+                              type: number
+                            confirmedCount:
+                              type: number
+                            createTimestamp:
+                              type: number
+                            point:
+                              type: number
+                            batch1:
+                              type: number
+                            batch2:
+                              type: number
+      tags:
+        - Inscribe V5
+      operationId: v5GetOrderList
+  /inscribe-v5/order/{orderId}:
+    get:
+      summary: get order info
+      description: get order info
+      parameters:
+        - name: orderId
+          required: true
+          description: orderId
+          schema:
+            type: string
+            default: ''
+          in: path
+        - name: orderId
+          required: true
+          description: orderId
+          schema:
+            type: string
+            default: ''
+          in: query
+        - name: compactFiles
+          required: false
+          description: Return compact file template, numeric statuses, and sparse broadcast references instead of files.
+          schema:
+            type: boolean
+            default: false
+          in: query
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties:
+                      orderId:
+                        type: string
+                      status:
+                        type: string
+                      payAddress:
+                        type: string
+                      receiveAddress:
+                        type: string
+                      amount:
+                        type: number
+                      balance:
+                        type: number
+                      feeRate:
+                        type: number
+                      minerFee:
+                        type: number
+                      outputValueFee:
+                        type: number
+                      serviceFee:
+                        type: number
+                      devFee:
+                        type: number
+                      files:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            filename:
+                              type: string
+                            size:
+                              type: number
+                            inscriptionId:
+                              type: string
+                            txid:
+                              type: string
+                            status:
+                              type: string
+                            title:
+                              type: string
+                            traits:
+                              type: object
+                            gallery:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  title:
+                                    type: string
+                                  traits:
+                                    type: object
+                      count:
+                        type: number
+                      pendingCount:
+                        type: number
+                      unconfirmedCount:
+                        type: number
+                      confirmedCount:
+                        type: number
+                      createTimestamp:
+                        type: number
+                      point:
+                        type: number
+                      batch1:
+                        type: number
+                      batch2:
+                        type: number
+                      paidInscriptions:
+                        type: array
+                        required: false
+                        items:
+                          type: object
+                          properties:
+                            inscriptionId:
+                              type: string
+                            inscriptionNumber:
+                              type: number
+                            contentType:
+                              type: string
+                            timestamp:
+                              type: number
+      tags:
+        - Inscribe V5
+      operationId: v5GetOrder
+  /inscribe-v5/cancel/estimate:
+    post:
+      summary: get address assets
+      description: get address assets
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  description: orderId
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: ''
+              required:
+                - orderId
+                - feeRate
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties:
+                      paidAmount:
+                        type: number
+                      extraPayAmount:
+                        type: number
+                      refundMethod:
+                        type: string
+      tags:
+        - Inscribe V5
+      operationId: v5PostCancelEstimate
+  /inscribe-v5/cancel:
+    post:
+      summary: accelerate
+      description: accelerate
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  description: orderId
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+              required:
+                - orderId
+                - feeRate
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties:
+                      txid:
+                        type: string
+                        default: ''
+      tags:
+        - Inscribe V5
+      operationId: v5PostCancel
+  /inscribe-v5/refund/estimate:
+    post:
+      summary: get address assets
+      description: get address assets
+      parameters:
+        - name: orderId
+          required: true
+          schema:
+            type: string
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  description: orderId
+                  type: string
+                  default: ''
+              required:
+                - orderId
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties:
+                      size:
+                        type: number
+                      paidAmount:
+                        type: number
+                      safeRefundAmount:
+                        type: number
+      tags:
+        - Inscribe V5
+      operationId: v5PostRefundEstimate
+  /inscribe-v5/refund:
+    post:
+      summary: refund
+      description: refund
+      parameters:
+        - name: orderId
+          required: true
+          schema:
+            type: string
+          in: path
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  description: orderId
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+              required:
+                - orderId
+                - feeRate
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties:
+                      txid:
+                        type: string
+                        default: ''
+      tags:
+        - Inscribe V5
+      operationId: v5PostRefund
+  /inscribe-v5/order/create:
+    post:
+      summary: create order
+      description: create order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId:
+                  description: clientId
+                  type: string
+                  default: ''
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                files:
+                  description: files
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      filename:
+                        type: string
+                      dataURL:
+                        type: string
+                      address:
+                        type: string
+                      title:
+                        type: string
+                      traits:
+                        type: object
+                      gallery:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            title:
+                              type: string
+                            traits:
+                              type: object
+                      metadata:
+                        type: string
+                      metaprotocol:
+                        type: string
+                      delegate:
+                        type: string
+                  default: []
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+                userAddress:
+                  type: string
+                  description: ''
+                userPubkey:
+                  type: string
+                  description: ''
+                parents:
+                  type: array
+                  description: ''
+                satpoint:
+                  type: string
+                  description: ''
+                brc20:
+                  type: object
+                  description: ''
+                brc20_prog_deploy:
+                  type: object
+                  description: ''
+                brc20_prog_unwrap:
+                  type: object
+                  description: ''
+                brc20_prog_wrap:
+                  type: object
+                  description: ''
+                count:
+                  type: number
+                  description: ''
+                singleStep:
+                  type: boolean
+                  description: ''
+                mintRuneId:
+                  type: string
+                  description: ''
+              required:
+                - clientId
+                - receiver
+                - feeRate
+                - outputValue
+                - refundAddress
+                - userAddress
+                - userPubkey
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties:
+                      orderId:
+                        type: string
+                        default: ''
+                      channel:
+                        type: string
+                        default: ''
+                      status:
+                        type: string
+                        default: pending
+                      payAddress:
+                        type: string
+                      receiveAddress:
+                        type: string
+                      amount:
+                        type: number
+                      balance:
+                        type: number
+                      feeRate:
+                        type: number
+                      minerFee:
+                        type: number
+                      serviceFee:
+                        type: number
+                      devFee:
+                        type: number
+                      files:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            filename:
+                              type: string
+                            size:
+                              type: number
+                            inscriptionId:
+                              type: string
+                            txid:
+                              type: string
+                            status:
+                              type: string
+                            title:
+                              type: string
+                            traits:
+                              type: object
+                            gallery:
+                              type: array
+                              items:
+                                type: object
+                                properties:
+                                  id:
+                                    type: string
+                                  title:
+                                    type: string
+                                  traits:
+                                    type: object
+                      count:
+                        type: number
+                      pendingCount:
+                        type: number
+                      unconfirmedCount:
+                        type: number
+                      confirmedCount:
+                        type: number
+                      createTimestamp:
+                        type: number
+                      point:
+                        type: number
+                      batch1:
+                        type: number
+                      batch2:
+                        type: number
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderCreate
+  /inscribe-v5/order/create/brc20-5byte-mint:
+    post:
+      summary: create order
+      description: create order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId:
+                  description: clientId
+                  type: string
+                  default: ''
+                userAddress:
+                  type: string
+                  description: ''
+                userPubkey:
+                  type: string
+                  description: ''
+                deployerAddress:
+                  type: string
+                  description: ''
+                deployerPubkey:
+                  type: string
+                  description: ''
+                parents:
+                  type: array
+                  description: ''
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                brc20Ticker:
+                  description: brc20Ticker
+                  type: string
+                  default: ''
+                brc20Amount:
+                  description: brc20Amount
+                  type: string
+                  default: ''
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+              required:
+                - clientId
+                - userAddress
+                - userPubkey
+                - receiver
+                - feeRate
+                - outputValue
+                - brc20Ticker
+                - brc20Amount
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderCreateBrc205byteMint
+  /inscribe-v5/order/create/runes-etch:
+    post:
+      summary: create order
+      description: create order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId:
+                  description: clientId
+                  type: string
+                  default: ''
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                userAddress:
+                  description: connected wallet ordinals address
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                files:
+                  description: files
+                  type: array
+                  default: []
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+              required:
+                - clientId
+                - receiver
+                - feeRate
+                - outputValue
+                - files
+                - refundAddress
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderCreateRunesEtch
+  /inscribe-v5/order/create/runes-mint:
+    post:
+      summary: create order
+      description: create order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId:
+                  description: clientId
+                  type: string
+                  default: ''
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                userAddress:
+                  description: connected wallet ordinals address
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                files:
+                  description: files
+                  type: array
+                  default: []
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+              required:
+                - clientId
+                - receiver
+                - feeRate
+                - outputValue
+                - files
+                - refundAddress
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties:
+                      orderId:
+                        type: string
+                        default: ''
+                      status:
+                        type: string
+                        default: pending
+                      payAddress:
+                        type: string
+                      receiveAddress:
+                        type: string
+                      amount:
+                        type: number
+                      balance:
+                        type: number
+                      feeRate:
+                        type: number
+                      minerFee:
+                        type: number
+                      serviceFee:
+                        type: number
+                      files:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            filename:
+                              type: string
+                            size:
+                              type: number
+                            inscriptionId:
+                              type: string
+                            status:
+                              type: string
+                      count:
+                        type: number
+                      pendingCount:
+                        type: number
+                      unconfirmedCount:
+                        type: number
+                      confirmedCount:
+                        type: number
+                      createTimestamp:
+                        type: number
+                      point:
+                        type: number
+                      batch1:
+                        type: number
+                      batch2:
+                        type: number
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderCreateRunesMint
+  /inscribe-v5/order/request-commit:
+    post:
+      summary: create order
+      description: create order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  type: string
+                  description: ''
+                payerAddress:
+                  type: string
+                  description: Payer address for the order
+                payerPubkey:
+                  type: string
+                  description: Payer public key for the order
+              required:
+                - orderId
+                - payerAddress
+                - payerPubkey
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties: {}
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderRequestCommit
+  /inscribe-v5/order/sign-commit:
+    post:
+      summary: create order
+      description: create order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  type: string
+                  description: ''
+                psbt:
+                  type: string
+                  description: ''
+              required:
+                - orderId
+                - psbt
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties: {}
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderSignCommit
+  /inscribe-v5/order/sign-reveal:
+    post:
+      summary: create order
+      description: create order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  type: string
+                  description: ''
+                psbt:
+                  type: string
+                  description: ''
+              required:
+                - orderId
+                - psbt
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties: {}
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderSignReveal
+  /inscribe-v5/fees-config:
+    get:
+      summary: get order info
+      description: get order info
+      parameters:
+        - name: address
+          required: false
+          description: orderId
+          schema:
+            type: string
+            default: ''
+          in: query
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5GetFeesConfig
+  /inscribe-v5/order/estimate-fee:
+    post:
+      summary: quote normal inscription order fee
+      description: Returns the current payable amount for a normal inscription order without creating an order or consuming free quota.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                files:
+                  description: files
+                  type: array
+                  items:
+                    type: object
+                    properties:
+                      filename:
+                        type: string
+                      dataURL:
+                        type: string
+                      address:
+                        type: string
+                      title:
+                        type: string
+                      traits:
+                        type: object
+                      gallery:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            id:
+                              type: string
+                            title:
+                              type: string
+                            traits:
+                              type: object
+                      metadata:
+                        type: string
+                      metaprotocol:
+                        type: string
+                      delegate:
+                        type: string
+                  default: []
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                userAddress:
+                  type: string
+                  description: ''
+                userPubkey:
+                  type: string
+                  description: ''
+                parents:
+                  type: array
+                  description: ''
+                satpoint:
+                  type: string
+                  description: ''
+                brc20:
+                  type: object
+                  description: ''
+                brc20_prog_deploy:
+                  type: object
+                  description: ''
+                brc20_prog_unwrap:
+                  type: object
+                  description: ''
+                brc20_prog_wrap:
+                  type: object
+                  description: ''
+                count:
+                  type: number
+                  description: ''
+                singleStep:
+                  type: boolean
+                  description: ''
+              required:
+                - receiver
+                - feeRate
+                - outputValue
+                - refundAddress
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderEstimateFee
+  /inscribe-v5/order/continue:
+    post:
+      summary: continue order
+      description: continue order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  description: orderId
+                  type: string
+                  default: ''
+              required:
+                - orderId
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderContinue
+  /inscribe-v5/cancel/prepare:
+    post:
+      summary: prepare wallet RBF cancellation
+      description: Create a wallet-signable replacement PSBT when the first mint transaction spends payer-owned inputs.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  description: orderId
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+              required:
+                - orderId
+                - feeRate
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostCancelPrepare
+  /inscribe-v5/cancel/submit:
+    post:
+      summary: submit wallet RBF cancellation
+      description: Submit a wallet-signed replacement PSBT when the first mint transaction spends payer-owned inputs.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  description: orderId
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                psbt:
+                  description: signed cancellation PSBT in hex or base64
+                  type: string
+                  default: ''
+              required:
+                - orderId
+                - feeRate
+                - psbt
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostCancelSubmit
+  /inscribe-v5/pause/estimate:
+    post:
+      summary: estimate multi-protocol mint pause
+      description: Estimate the remaining refund for an inscribing multi-protocol mint order.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  description: orderId
+                  type: string
+                  default: ''
+              required:
+                - orderId
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostPauseEstimate
+  /inscribe-v5/pause:
+    post:
+      summary: pause multi-protocol mint
+      description: Stop future multi-protocol mint transactions and return the remaining continuation value.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  description: orderId
+                  type: string
+                  default: ''
+              required:
+                - orderId
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostPause
+  /inscribe-v5/cancel2:
+    post:
+      summary: cancel2
+      description: cancel2
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId:
+                  description: orderId
+                  type: string
+                  default: ''
+              required:
+                - orderId
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties:
+                      txid:
+                        type: string
+                        default: ''
+      tags:
+        - Inscribe V5
+      operationId: v5PostCancel2
+  /inscribe-v5/status:
+    get:
+      summary: get system status
+      description: get system status
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties: {}
+      tags:
+        - Inscribe V5
+      operationId: v5GetStatus
+  /inscribe-v5/order/quote/alkanes-deploy:
+    post:
+      summary: quote alkanes deploy order
+      description: Returns the current payable amount without creating an order or consuming free quota.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                files:
+                  description: files
+                  type: array
+                  default: []
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+              required:
+                - receiver
+                - feeRate
+                - outputValue
+                - files
+                - refundAddress
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderQuoteAlkanesDeploy
+  /inscribe-v5/order/quote/alkanes-mint:
+    post:
+      summary: quote alkanes mint order
+      description: Returns the current payable amount without creating an order or consuming free quota.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                alkaneid:
+                  description: alkane id
+                  type: string
+                  default: ''
+                count:
+                  description: count
+                  type: number
+                  default: 1
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+              required:
+                - receiver
+                - feeRate
+                - outputValue
+                - alkaneid
+                - count
+                - refundAddress
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderQuoteAlkanesMint
+  /inscribe-v5/order/create/alkanes-deploy:
+    post:
+      summary: create order
+      description: create order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId:
+                  description: clientId
+                  type: string
+                  default: ''
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                userAddress:
+                  description: connected wallet ordinals address
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                files:
+                  description: files
+                  type: array
+                  default: []
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+              required:
+                - clientId
+                - receiver
+                - feeRate
+                - outputValue
+                - files
+                - refundAddress
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties:
+                      orderId:
+                        type: string
+                        default: ''
+                      status:
+                        type: string
+                        default: pending
+                      payAddress:
+                        type: string
+                      receiveAddress:
+                        type: string
+                      amount:
+                        type: number
+                      balance:
+                        type: number
+                      feeRate:
+                        type: number
+                      minerFee:
+                        type: number
+                      serviceFee:
+                        type: number
+                      files:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            filename:
+                              type: string
+                            size:
+                              type: number
+                            inscriptionId:
+                              type: string
+                            status:
+                              type: string
+                      count:
+                        type: number
+                      pendingCount:
+                        type: number
+                      unconfirmedCount:
+                        type: number
+                      confirmedCount:
+                        type: number
+                      createTimestamp:
+                        type: number
+                      point:
+                        type: number
+                      batch1:
+                        type: number
+                      batch2:
+                        type: number
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderCreateAlkanesDeploy
+  /inscribe-v5/order/create/alkanes-mint:
+    post:
+      summary: create order
+      description: create order
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId:
+                  description: clientId
+                  type: string
+                  default: ''
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                userAddress:
+                  description: connected wallet ordinals address
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                files:
+                  description: files
+                  type: array
+                  default: []
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+              required:
+                - clientId
+                - receiver
+                - feeRate
+                - outputValue
+                - files
+                - refundAddress
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+                    properties:
+                      orderId:
+                        type: string
+                        default: ''
+                      status:
+                        type: string
+                        default: pending
+                      payAddress:
+                        type: string
+                      receiveAddress:
+                        type: string
+                      amount:
+                        type: number
+                      balance:
+                        type: number
+                      feeRate:
+                        type: number
+                      minerFee:
+                        type: number
+                      serviceFee:
+                        type: number
+                      files:
+                        type: array
+                        items:
+                          type: object
+                          properties:
+                            filename:
+                              type: string
+                            size:
+                              type: number
+                            inscriptionId:
+                              type: string
+                            status:
+                              type: string
+                      count:
+                        type: number
+                      pendingCount:
+                        type: number
+                      unconfirmedCount:
+                        type: number
+                      confirmedCount:
+                        type: number
+                      createTimestamp:
+                        type: number
+                      point:
+                        type: number
+                      batch1:
+                        type: number
+                      batch2:
+                        type: number
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderCreateAlkanesMint
+  /inscribe-v5/order/quote/multi-protocol-mint:
+    post:
+      summary: quote multi protocol mint order
+      description: Returns the current payable amount without creating an order or consuming free quota.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                count:
+                  description: count
+                  type: number
+                  default: 1
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+                brc20_mint:
+                  description: brc20 mint payload
+                  type: object
+                runes_mint:
+                  description: runes mint payload
+                  type: object
+                alkanes_mint:
+                  description: alkanes mint payload
+                  type: object
+              required:
+                - receiver
+                - feeRate
+                - outputValue
+                - refundAddress
+                - count
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderQuoteMultiProtocolMint
+  /inscribe-v5/order/quote/repeat/multi-protocol-mint:
+    post:
+      summary: quote repeated multi protocol mint order
+      description: Quote a new Alkanes+Runes or Alkanes+BRC20+Runes order from a previous multi-protocol mint order.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sourceOrderId:
+                  description: source multi-protocol mint order id
+                  type: string
+                  default: ''
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                count:
+                  description: count
+                  type: number
+                  default: 1
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+              required:
+                - sourceOrderId
+                - receiver
+                - feeRate
+                - outputValue
+                - refundAddress
+                - count
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderQuoteRepeatMultiProtocolMint
+  /inscribe-v5/order/create/multi-protocol-mint:
+    post:
+      summary: create multi protocol mint order
+      description: Create a linear mint order for Alkanes+Runes or Alkanes+BRC20+Runes.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                clientId:
+                  description: clientId
+                  type: string
+                  default: ''
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                userAddress:
+                  description: connected wallet ordinals address
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                count:
+                  description: count
+                  type: number
+                  default: 1
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+                brc20_mint:
+                  description: brc20 mint payload
+                  type: object
+                runes_mint:
+                  description: runes mint payload
+                  type: object
+                alkanes_mint:
+                  description: alkanes mint payload
+                  type: object
+              required:
+                - clientId
+                - receiver
+                - feeRate
+                - outputValue
+                - refundAddress
+                - count
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderCreateMultiProtocolMint
+  /inscribe-v5/order/repeat/multi-protocol-mint:
+    post:
+      summary: repeat multi protocol mint order
+      description: Create a new Alkanes+Runes or Alkanes+BRC20+Runes order from a previous multi-protocol mint order.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sourceOrderId:
+                  description: source multi-protocol mint order id
+                  type: string
+                  default: ''
+                clientId:
+                  description: clientId
+                  type: string
+                  default: ''
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                userAddress:
+                  description: connected wallet ordinals address
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                count:
+                  description: count
+                  type: number
+                  default: 1
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+              required:
+                - sourceOrderId
+                - clientId
+                - receiver
+                - feeRate
+                - outputValue
+                - refundAddress
+                - count
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderRepeatMultiProtocolMint
+  /inscribe-v5/order/quote/repeat:
+    post:
+      summary: quote repeated mint order
+      description: Quote a new Alkanes, Runes, BRC20, or supported multi-protocol mint order from a previous mint order.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sourceOrderId:
+                  description: source mint order id
+                  type: string
+                  default: ''
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                count:
+                  description: count
+                  type: number
+                  default: 1
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+              required:
+                - sourceOrderId
+                - receiver
+                - feeRate
+                - outputValue
+                - refundAddress
+                - count
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderQuoteRepeat
+  /inscribe-v5/order/repeat:
+    post:
+      summary: repeat mint order
+      description: Create a new Alkanes, Runes, BRC20, or supported multi-protocol mint order from a previous mint order.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                sourceOrderId:
+                  description: source mint order id
+                  type: string
+                  default: ''
+                clientId:
+                  description: clientId
+                  type: string
+                  default: ''
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                userAddress:
+                  description: connected wallet ordinals address
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                count:
+                  description: count
+                  type: number
+                  default: 1
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+              required:
+                - sourceOrderId
+                - clientId
+                - receiver
+                - feeRate
+                - outputValue
+                - refundAddress
+                - count
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderRepeat
+  /inscribe-v5/order/quote/runes-etch:
+    post:
+      summary: quote runes etch order
+      description: Returns the current payable amount without creating an order or consuming free quota.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                files:
+                  description: files
+                  type: array
+                  default: []
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+              required:
+                - receiver
+                - feeRate
+                - outputValue
+                - files
+                - refundAddress
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderQuoteRunesEtch
+  /inscribe-v5/order/quote/runes-mint:
+    post:
+      summary: quote runes mint order
+      description: Returns the current payable amount without creating an order or consuming free quota.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                receiver:
+                  description: receiver
+                  type: string
+                  default: ''
+                feeRate:
+                  description: feeRate
+                  type: number
+                  default: 1
+                outputValue:
+                  description: outputValue
+                  type: number
+                  default: 546
+                runeId:
+                  description: rune id
+                  type: string
+                  default: ''
+                count:
+                  description: count
+                  type: number
+                  default: 1
+                devAddress:
+                  description: developer fee recipient address
+                  type: string
+                  default: ''
+                devFee:
+                  description: developer fee in sats
+                  type: number
+                  default: 0
+                refundAddress:
+                  description: refundAddress
+                  type: string
+                  default: ''
+                channel:
+                  description: channel
+                  type: string
+                  default: ''
+                useCredit:
+                  description: useCredit
+                  type: boolean
+                  default: false
+              required:
+                - receiver
+                - feeRate
+                - outputValue
+                - runeId
+                - count
+                - refundAddress
+      responses:
+        '200':
+          description: success
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: number
+                    description: An API call that encounters an error  will return 0 as its status code and display the cause of the error under the result field.
+                  msg:
+                    type: string
+                    description: The cause of the error
+                  data:
+                    type: object
+      tags:
+        - Inscribe V5
+      operationId: v5PostOrderQuoteRunesMint
+components:
+  schemas: {}

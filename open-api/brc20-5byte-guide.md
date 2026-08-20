@@ -1,5 +1,7 @@
 # BRC-20 (5-byte) Protocol Guide
 
+> **V2 is deprecated.** Use the [Inscribe API V5 migration guide](./inscribe-v5-migration.md). V5 provides `POST /inscribe-v5/order/create/brc20-5byte-mint`; its Request-Commit and signature submission steps are not publicly available.
+
 ## 📖 Overview
 
 BRC-20 (5-byte) is a special BRC-20 token protocol with a ticker consisting of 5 characters. Unlike 4-byte, minting 5-byte tokens requires the deployer's signature authorization, providing stronger control.

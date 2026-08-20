@@ -1,5 +1,7 @@
 # Inscribe Service Guide
 
+> **V2 is deprecated.** Use the [Inscribe API V5 migration guide](./inscribe-v5-migration.md) and the [V5 API reference](./inscribe-v5.md) for new integrations. The V2 endpoint examples below are retained only for existing integrations during migration.
+
 ## 📖 Overview
 
 UniSat Inscribe API provides complete Bitcoin inscription services, supporting standard inscriptions and various protocol templates (BRC-20, Runes, etc.). This document provides detailed instructions on how to use the Inscribe API to create orders, make payments, and track order status.

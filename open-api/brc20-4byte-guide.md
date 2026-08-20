@@ -1,5 +1,7 @@
 # BRC-20 (4-byte) Standard Protocol Guide
 
+> **V2 is deprecated.** For new integrations, follow the [Inscribe API V5 migration guide](./inscribe-v5-migration.md). This guide's V2 examples are retained for existing integrations only.
+
 ## 📖 Overview
 
 BRC-20 (4-byte) is the most standard and commonly used BRC-20 token protocol, with a ticker consisting of 4 characters. It supports three operations: Deploy, Mint, and Transfer.

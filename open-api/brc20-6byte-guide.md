@@ -1,5 +1,7 @@
 # BRC-20 (6-byte) Protocol Guide
 
+> **V2 is deprecated.** For new integrations, use `POST /inscribe-v5/order/create` and the [Inscribe API V5 migration guide](./inscribe-v5-migration.md). This guide's V2 requests are for existing integrations only.
+
 ## 📖 Overview
 
 BRC-20 (6-byte) is a special BRC-20 token protocol with a ticker consisting of 6 characters. Unlike 4-byte and 5-byte, 6-byte tokens support setting activation height and minting permission control, and deployment requires completion through a PSBT signing process.

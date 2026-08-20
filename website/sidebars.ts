@@ -35,6 +35,7 @@ const sidebars: SidebarsConfig = {
             "open-api/runes-indexer",
             "open-api/alkanes-indexer",
             "open-api/inscribe",
+            "open-api/inscribe-v5",
             "open-api/brc20-marketplace",
             "open-api/runes-marketplace",
             "open-api/alkanes-marketplace",
@@ -62,6 +63,7 @@ const sidebars: SidebarsConfig = {
           type: "category",
           label: "Inscribe API Guides",
           items: [
+            "open-api/inscribe-v5-migration",
             "open-api/inscribe-guide",
             "open-api/inscribe-faq",
             "open-api/brc20-4byte-guide",

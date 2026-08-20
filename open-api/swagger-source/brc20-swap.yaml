@@ -777,7 +777,7 @@ paths:
                   description: Timestamp (seconds)
                   type: number
                 feeTick:
-                description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay

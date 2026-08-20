@@ -5,6 +5,7 @@ swagger:
   - runes-indexer
   - alkanes-indexer
   - inscribe
+  - inscribe-v5
   - brc20-marketplace
   - runes-marketplace
   - alkanes-marketplace
@@ -22,6 +23,7 @@ doc:
   - runes-indexer
   - alkanes-indexer
   - inscribe
+  - inscribe-v5
   - brc20-marketplace
   - runes-marketplace
   - alkanes-marketplace

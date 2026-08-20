@@ -3,7 +3,7 @@ info:
   title: Inscribe API
   version: 1.0.0
   description: >-
-    Inscribe API provides order-based inscription workflows, including reading order summaries and status, creating inscription orders, and checking fees. Order creation endpoints are POST operations that create payment/order state and require explicit user confirmation before execution.
+    Legacy V2 inscription API. `GET /v2/inscribe/order/summary` remains supported; all other V2 inscription endpoints are deprecated and new integrations must use the Inscribe API V5 endpoints under /inscribe-v5. See open-api/inscribe-v5-migration.md.
   contact:
     email: contact@unisat.io
   license:
@@ -19,7 +19,7 @@ servers:
   - url: https://open-api-fractal-testnet.unisat.io
 tags:
   - name: Inscribe
-    description: Multi-network inscription order workflow for querying orders, creating payment-backed orders, requesting commit data, submitting signatures, broadcasting reveal/refund transactions, and checking refund estimates.
+    description: Legacy V2 inscription workflow. The order summary endpoint remains supported; all other V2 endpoints are deprecated in favor of Inscribe V5.
 paths:
   /v2/inscribe/order/summary:
     get:
@@ -55,6 +55,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/list:
     get:
+      deprecated: true
       tags:
         - Inscribe
       operationId: getOrderList
@@ -154,6 +155,7 @@ paths:
 
   /v2/inscribe/order/{orderId}:
     get:
+      deprecated: true
       tags:
         - Inscribe
       operationId: getOrderById
@@ -192,6 +194,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/create:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: createOrder
@@ -230,6 +233,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/create/brc20-deploy:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: createOrderBRC20Deploy
@@ -268,6 +272,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/create/brc20-mint:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: createOrderBRC20Mint
@@ -306,6 +311,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/create/brc20-transfer:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: createOrderBRC20Transfer
@@ -344,6 +350,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/request-commit:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: requestCommit
@@ -381,6 +388,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/sign-commit:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: signCommit
@@ -418,6 +426,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/sign-reveal:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: signReveal
@@ -455,6 +464,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/create/brc20-5byte-mint:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: createOrderBRC205ByteMint
@@ -493,6 +503,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/request-commit/brc20-5byte-mint:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: requestCommitBRC205ByteMint
@@ -530,6 +541,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/sign-commit/brc20-5byte-mint:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: signCommitBRC205ByteMint
@@ -567,6 +579,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/sign-reveal/brc20-5byte-mint:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: signRevealBRC205ByteMint
@@ -604,6 +617,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/create/runes-etch:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: createOrderRunesEtch
@@ -642,6 +656,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/create/runes-mint:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: createOrderRunesMint
@@ -681,6 +696,7 @@ paths:
 
   /v2/inscribe/order/{orderId}/refund:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: refundOrder
@@ -736,6 +752,7 @@ paths:
           description: Invalid API Key
   /v2/inscribe/order/{orderId}/refund-estimate:
     post:
+      deprecated: true
       tags:
         - Inscribe
       operationId: estimateRefundOrder
