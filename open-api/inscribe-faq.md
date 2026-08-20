@@ -4,7 +4,7 @@
 The order will start inscribing once the "payAddress" receives the required "amount". For example, if an order requires 3000 satoshis, you have to send 3000 satoshis to the payAddress. After that, the inscription will be processed.
 
 ## How is the open-api order charged?
-Please refer to the latest [Fractal Inscribe Fee Rules](./fractal-openapi-inscribe-fee-rules.md), [Fractal Standard Inscribe Fee Rules](./fractal-openapi-inscribe-fee-rules-standard.md), and [Bitcoin Inscribe Fee Rules](./btc-inscribe-fee-rules.md) for detailed charging standards.
+Please refer to the current [Inscribe API V5 Fee Guide](./inscribe-v5-fee-guide.md) for the active Bitcoin OpenAPI and Fractal OpenAPI fee configuration. The older V2 fee-rule documents are retained for historical reference.
 
 ## Are the orders on the open-api and the UniSat website interoperable?
 No. Open API and UniSat website inscribing services do not share data. This ensures the stability of the Open API interface and prevents it from being affected by frequent changes to the website inscribing service. For similar reasons, the orders on open-api do not enjoy discounts from the OG card or .unisat domain.
@@ -19,11 +19,11 @@ The total amount is:
 
 - **minUtxoTotal**: The total minimum UTXO required for all inscriptions (e.g., 546 sats × file count)
 - **networkSats**: Estimated miner fee (depends on file size, content type, fee rate)
-- **serviceFee**: Platform fee, see [Fractal Inscribe Fee Rules](./fractal-openapi-inscribe-fee-rules.md) or [Bitcoin Inscribe Fee Rules](./btc-inscribe-fee-rules.md)
+- **serviceFee**: Platform fee, see the [Inscribe API V5 Fee Guide](./inscribe-v5-fee-guide.md)
 - **devFee**: Developer fee (if any)
 
 ## How to estimate the service fee?
-Please use the formulas and examples provided in the [Fractal Inscribe Fee Rules](./fractal-openapi-inscribe-fee-rules.md) and [Bitcoin Inscribe Fee Rules](./btc-inscribe-fee-rules.md). If you need programmatic estimation, please use the official SDK or tools that follow the latest rules.
+Use the formulas in the [Inscribe API V5 Fee Guide](./inscribe-v5-fee-guide.md) only for planning. For programmatic estimation, call the matching V5 quote endpoint and use its `payableAmount`.
 
 ## What are the file and network fee limits?
 - **Maximum file size per inscription:** 390 KB
