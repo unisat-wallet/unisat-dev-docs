@@ -9,22 +9,22 @@ This API provides real-time price information for BTC and FB (Fractal Bitcoin).
 
 | Route | Summary |
 | ----- | ------- |
-| [GET `/v1/price/btc`](#get-btc-price) | Get BTC price |
-| [GET `/v1/price/fb`](#get-fb-price) | Get FB price |
+| [GET `/v1/price/btc`](#get-latest-btc-price-in-usd) | Get latest BTC price in USD |
+| [GET `/v1/price/fb`](#get-latest-fractal-bitcoin-price-in-usd) | Get latest Fractal Bitcoin price in USD |
 
 ---
 
 ## Price
 
-### Get BTC price
-<a id="get-btc-price"></a>
+### Get latest BTC price in USD
+<a id="get-latest-btc-price-in-usd"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/price/btc`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Price/getBtcPrice)  
 
 #### Description
-Retrieves the current price of Bitcoin (BTC) in USD.
+Returns the latest BTC price quote with the USD price and Unix updateTime timestamp. Use this read-only endpoint for wallets, marketplaces, fee estimators, and portfolio views that need a public BTC reference price without creating orders, signatures, or transactions.
 
 #### Response (200)
 Successful operation
@@ -41,15 +41,15 @@ Invalid API Key
 
 ---
 
-### Get FB price
-<a id="get-fb-price"></a>
+### Get latest Fractal Bitcoin price in USD
+<a id="get-latest-fractal-bitcoin-price-in-usd"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/price/fb`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Price/getFbPrice)  
 
 #### Description
-Retrieves the current price of Fractal Bitcoin (FB) in USD.
+Returns the latest FB (Fractal Bitcoin) price quote with the USD price and Unix updateTime timestamp. Use this read-only endpoint for Fractal wallets, marketplaces, analytics, and portfolio screens that need a public FB reference price without side effects or user confirmation.
 
 #### Response (200)
 Successful operation

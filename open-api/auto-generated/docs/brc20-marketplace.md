@@ -1,6 +1,6 @@
-# BRC20 MarketPlace API
+# BRC20 Marketplace API
 
-This API provides endpoints for BRC20 marketplace services
+BRC-20 marketplace APIs for address binding, market discovery, listing inspection, activity history, and PSBT-based listing, purchase, delisting, and price update workflows.
 
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
@@ -9,35 +9,38 @@ This API provides endpoints for BRC20 marketplace services
 
 | Route | Summary |
 | ----- | ------- |
-| [POST `/v3/market/brc20/auction/bind_info`](#get-the-address-bind-info) | Get the address bind info. |
-| [POST `/v3/market/brc20/auction/brc20_kline`](#get-tick-k-line) | Get tick k line. |
-| [POST `/v3/market/brc20/auction/brc20_types`](#get-statistical-data-price-market-capitalization-etc-for-brc20) | Get statistical data, price, market capitalization, etc. for BRC20. |
-| [POST `/v3/market/brc20/auction/brc20_types_specified`](#get-statistical-data-price-market-capitalization-etc-for-brc20) | Get statistical data, price, market capitalization, etc. for BRC20. |
-| [POST `/v3/market/brc20/auction/bind`](#bind-btcaddress-and-nftaddress) | Bind btcAddress and nftAddress. |
-| [POST `/v3/market/brc20/auction/list`](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
-| [POST `/v3/market/brc20/auction/inscription_info`](#retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services) | Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services. |
-| [POST `/v3/market/brc20/auction/inscription_info_list`](#get-the-basic-listing-information-of-the-specified-inscription-list) | Get the basic listing information of the specified inscription list |
-| [POST `/v3/market/brc20/auction/actions`](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
-| [POST `/v3/market/brc20/auction/create_put_on`](#create-listing-order) | Create listing order. |
-| [POST `/v3/market/brc20/auction/confirm_put_on`](#confirm-listing-order) | Confirm listing order. |
-| [POST `/v3/market/brc20/auction/create_bid_prepare`](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
-| [POST `/v3/market/brc20/auction/create_bid`](#create-purchase-order) | Create purchase order. |
-| [POST `/v3/market/brc20/auction/confirm_bid`](#confirm-purchase-order) | Confirm purchase order. |
-| [POST `/v3/market/brc20/auction/create_put_off`](#create-delisting-order) | Create delisting order. |
-| [POST `/v3/market/brc20/auction/confirm_put_off`](#confirm-delisting-order) | Confirm delisting order. |
-| [POST `/v3/market/brc20/auction/create_modify_price`](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
-| [POST `/v3/market/brc20/auction/confirm_modify_price`](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
+| [POST `/v3/market/brc20/auction/bind_info`](#get-marketplace-payment-and-inscription-addresses-for-an-account) | Get marketplace payment and inscription addresses for an account |
+| [POST `/v3/market/brc20/auction/brc20_kline`](#get-brc-20-marketplace-price-candles) | Get BRC-20 marketplace price candles |
+| [POST `/v3/market/brc20/auction/brc20_types`](#rank-brc-20-tickers-by-marketplace-metrics) | Rank BRC-20 tickers by marketplace metrics |
+| [POST `/v3/market/brc20/auction/brc20_types_specified`](#get-marketplace-metrics-for-selected-brc-20-tickers) | Get marketplace metrics for selected BRC-20 tickers |
+| [POST `/v3/market/brc20/auction/bind`](#bind-marketplace-payment-and-inscription-addresses) | Bind marketplace payment and inscription addresses |
+| [POST `/v3/market/brc20/auction/list`](#search-brc-20-token-listings-for-sale) | Search BRC-20 token listings for sale |
+| [POST `/v3/market/brc20/auction/inscription_info`](#get-brc-20-listing-detail-by-inscription) | Get BRC-20 listing detail by inscription |
+| [POST `/v3/market/brc20/auction/inscription_info_list`](#get-brc-20-listing-details-for-multiple-inscriptions) | Get BRC-20 listing details for multiple inscriptions |
+| [POST `/v3/market/brc20/auction/actions`](#list-brc-20-marketplace-listing-and-sale-events) | List BRC-20 marketplace listing and sale events |
+| [POST `/v3/market/brc20/auction/create_put_on`](#create-a-brc-20-fixed-price-listing-psbt) | Create a BRC-20 fixed-price listing PSBT |
+| [POST `/v3/market/brc20/auction/confirm_put_on`](#publish-a-signed-brc-20-listing) | Publish a signed BRC-20 listing |
+| [POST `/v3/market/brc20/auction/create_bid_prepare`](#estimate-fees-and-balance-for-a-brc-20-purchase) | Estimate fees and balance for a BRC-20 purchase |
+| [POST `/v3/market/brc20/auction/create_bid`](#create-a-brc-20-purchase-psbt) | Create a BRC-20 purchase PSBT |
+| [POST `/v3/market/brc20/auction/confirm_bid`](#submit-a-signed-brc-20-purchase) | Submit a signed BRC-20 purchase |
+| [POST `/v3/market/brc20/auction/create_put_off`](#create-a-brc-20-delisting-psbt) | Create a BRC-20 delisting PSBT |
+| [POST `/v3/market/brc20/auction/confirm_put_off`](#remove-a-signed-brc-20-listing) | Remove a signed BRC-20 listing |
+| [POST `/v3/market/brc20/auction/create_modify_price`](#create-a-brc-20-listing-price-update-psbt) | Create a BRC-20 listing price-update PSBT |
+| [POST `/v3/market/brc20/auction/confirm_modify_price`](#apply-a-signed-brc-20-listing-price-update) | Apply a signed BRC-20 listing price update |
 
 ---
 
-## MarketPlace-BRC20
+## Marketplace-BRC20
 
-### Get the address bind info.
-<a id="get-the-address-bind-info"></a>
+### Get marketplace payment and inscription addresses for an account
+<a id="get-marketplace-payment-and-inscription-addresses-for-an-account"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/bind_info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/bindInfo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/bindInfo)  
+
+#### Description
+Returns the BTC payment address and NFT/inscription receiving address currently bound for BRC-20 marketplace trading. Use it before listing or buying to confirm which wallet addresses the marketplace will use.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -53,12 +56,15 @@ Default Response
 
 ---
 
-### Get tick k line.
-<a id="get-tick-k-line"></a>
+### Get BRC-20 marketplace price candles
+<a id="get-brc-20-marketplace-price-candles"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/brc20_kline`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/getBrc20Kline)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/getBrc20Kline)  
+
+#### Description
+Returns time-series price points for a ticker over the requested time range and granularity. Use it to draw marketplace price charts or analyze short-term trading trends.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -80,12 +86,15 @@ Default Response
 
 ---
 
-### Get statistical data, price, market capitalization, etc. for BRC20.
-<a id="get-statistical-data-price-market-capitalization-etc-for-brc20"></a>
+### Rank BRC-20 tickers by marketplace metrics
+<a id="rank-brc-20-tickers-by-marketplace-metrics"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/brc20_types`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/getBrc20Types)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/getBrc20Types)  
+
+#### Description
+Returns paginated market statistics for BRC-20 tickers, including current price, price change, BTC volume, token volume, market cap, and featured deploy entries. Supports ticker length, time window, explicit ticker list, and pagination filters.
 
 #### Request Body
 Content-Type: `application/json`
@@ -128,12 +137,15 @@ Default Response
 
 ---
 
-### Get statistical data, price, market capitalization, etc. for BRC20.
-<a id="get-statistical-data-price-market-capitalization-etc-for-brc20"></a>
+### Get marketplace metrics for selected BRC-20 tickers
+<a id="get-marketplace-metrics-for-selected-brc-20-tickers"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/brc20_types_specified`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/getBrc20TypesSpecified)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/getBrc20TypesSpecified)  
+
+#### Description
+Returns market statistics for specific BRC-20 tickers, such as price, price change, volume, market cap, and related ticker metadata. Use it when the client already knows which tickers to compare or display.
 
 #### Request Body
 Content-Type: `application/json`
@@ -156,12 +168,15 @@ Default Response
 
 ---
 
-### Bind btcAddress and nftAddress.
-<a id="bind-btcaddress-and-nftaddress"></a>
+### Bind marketplace payment and inscription addresses
+<a id="bind-marketplace-payment-and-inscription-addresses"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/bind`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/bindBrc20NftAddress)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/bindBrc20NftAddress)  
+
+#### Description
+Records the BTC payment address and NFT/inscription receiving address pair used by BRC-20 marketplace workflows. Confirm both addresses carefully because later listing and purchase flows may rely on this binding.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -180,12 +195,15 @@ Default Response
 
 ---
 
-### Retrieve the list information of the market.
-<a id="retrieve-the-list-information-of-the-market"></a>
+### Search BRC-20 token listings for sale
+<a id="search-brc-20-token-listings-for-sale"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/getBrc20AuctionList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/getBrc20AuctionList)  
+
+#### Description
+Returns paginated marketplace listings with auction id, inscription id, seller address, ticker, token amount, total price, unit price, market type, and latest listing context. Use it to power order books, ticker detail pages, and buy-flow listing selection.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -231,12 +249,15 @@ Default Response
 
 ---
 
-### Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services.
-<a id="retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services"></a>
+### Get BRC-20 listing detail by inscription
+<a id="get-brc-20-listing-detail-by-inscription"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/inscription_info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/getBrc20InscriptionInfo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/getBrc20InscriptionInfo)  
+
+#### Description
+Returns marketplace and asset metadata for one inscription, including whether it is listed, its auction context when available, ticker amount, price fields, owner or seller information, and inscription identifiers.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -277,12 +298,15 @@ Default Response
 
 ---
 
-### Get the basic listing information of the specified inscription list
-<a id="get-the-basic-listing-information-of-the-specified-inscription-list"></a>
+### Get BRC-20 listing details for multiple inscriptions
+<a id="get-brc-20-listing-details-for-multiple-inscriptions"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/inscription_info_list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/getBrc20InscriptionInfoList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/getBrc20InscriptionInfoList)  
+
+#### Description
+Returns listing and asset metadata for a batch of inscription ids. Use it to hydrate search results, wallet views, or candidate listings without calling the single-inscription endpoint repeatedly.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -309,12 +333,15 @@ Default Response
 
 ---
 
-### Get information on listings, delistings, and sales.
-<a id="get-information-on-listings-delistings-and-sales"></a>
+### List BRC-20 marketplace listing and sale events
+<a id="list-brc-20-marketplace-listing-and-sale-events"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/actions`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/getBrc20AuctionActions)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/getBrc20AuctionActions)  
+
+#### Description
+Returns paginated activity records for BRC-20 marketplace events such as listing, delisting, sale, claim, and price update. Records include auction id, inscription id, event type, price, addresses, timestamp, confirmation count, and ticker-specific metadata.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -365,12 +392,15 @@ Default Response
 
 ---
 
-### Create listing order.
-<a id="create-listing-order"></a>
+### Create a BRC-20 fixed-price listing PSBT
+<a id="create-a-brc-20-fixed-price-listing-psbt"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/create_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/createBrc20PutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/createBrc20PutOn)  
+
+#### Description
+Builds the seller-side listing draft for a transferable BRC-20 inscription and returns the auction id, PSBT, and signing indexes. Review the inscription id, ticker amount, total price, unit price, market type, public key, and payout address before signing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -396,12 +426,15 @@ Default Response
 
 ---
 
-### Confirm listing order.
-<a id="confirm-listing-order"></a>
+### Publish a signed BRC-20 listing
+<a id="publish-a-signed-brc-20-listing"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/confirm_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/confirmBrc20PutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/confirmBrc20PutOn)  
+
+#### Description
+Submits the seller-signed listing PSBT for an auction id and activates the marketplace order. Success means the token amount can become visible for purchase, so verify the signed PSBT, price, ticker amount, seller address, and market type before calling.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -420,12 +453,15 @@ Default Response
 
 ---
 
-### Return params before creating purchase order.
-<a id="return-params-before-creating-purchase-order"></a>
+### Estimate fees and balance for a BRC-20 purchase
+<a id="estimate-fees-and-balance-for-a-brc-20-purchase"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/create_bid_prepare`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/createBrc20BidPrepare)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/createBrc20BidPrepare)  
+
+#### Description
+Calculates purchase preparation data for an auction id and bid price, including service fee, network fee, fee rate, estimated transaction size, inscription satoshi value, available balance, and total balance. Use it to decide whether a buy order can be created safely.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -453,12 +489,15 @@ Default Response
 
 ---
 
-### Create purchase order.
-<a id="create-purchase-order"></a>
+### Create a BRC-20 purchase PSBT
+<a id="create-a-brc-20-purchase-psbt"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/create_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/createBrc20Bid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/createBrc20Bid)  
+
+#### Description
+Builds the buyer-side order for a listed BRC-20 inscription and returns bid id, purchase PSBT, signing indexes, platform fee, network fee, fee rate, and inscription value. Confirm the auction id, bid price, buyer address, ticker amount, and total fees before signing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -492,12 +531,15 @@ Default Response
 
 ---
 
-### Confirm purchase order.
-<a id="confirm-purchase-order"></a>
+### Submit a signed BRC-20 purchase
+<a id="submit-a-signed-brc-20-purchase"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/confirm_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/confirmBrc20Bid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/confirmBrc20Bid)  
+
+#### Description
+Confirms the signed purchase PSBT for an auction id and bid id, then returns the settlement transaction id when accepted. This can complete the transfer, so verify the PSBT, final price, ticker amount, buyer and seller addresses, and fee values before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -520,12 +562,15 @@ Default Response
 
 ---
 
-### Create delisting order.
-<a id="create-delisting-order"></a>
+### Create a BRC-20 delisting PSBT
+<a id="create-a-brc-20-delisting-psbt"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/create_put_off`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/createBrc20PutOff)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/createBrc20PutOff)  
+
+#### Description
+Builds the seller-side cancellation transaction for an active BRC-20 listing and returns the signing material needed to remove it. Review the auction id, owner addresses, listed ticker amount, fee settings, and returned signing payload before signing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -553,12 +598,15 @@ Default Response
 
 ---
 
-### Confirm delisting order.
-<a id="confirm-delisting-order"></a>
+### Remove a signed BRC-20 listing
+<a id="remove-a-signed-brc-20-listing"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/confirm_put_off`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/confirmBrc20PutOff)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/confirmBrc20PutOff)  
+
+#### Description
+Submits the signed delisting payload for an auction id and removes the listing when accepted. Verify the PSBT or signature payload, owner address, ticker amount, and target listing before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -579,12 +627,15 @@ Default Response
 
 ---
 
-### Create the order for price adjustment.
-<a id="create-the-order-for-price-adjustment"></a>
+### Create a BRC-20 listing price-update PSBT
+<a id="create-a-brc-20-listing-price-update-psbt"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/create_modify_price`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/createBrc20ModifyPrice)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/createBrc20ModifyPrice)  
+
+#### Description
+Builds signing material to change the total and unit price of an existing BRC-20 listing. Review the auction id, current ticker amount, current price, new price, seller address, and returned PSBT or sign indexes before signing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -605,12 +656,15 @@ Default Response
 
 ---
 
-### Confirm the order for price adjustment.
-<a id="confirm-the-order-for-price-adjustment"></a>
+### Apply a signed BRC-20 listing price update
+<a id="apply-a-signed-brc-20-listing-price-update"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/brc20/auction/confirm_modify_price`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-BRC20/confirmBrc20ModifyPrice)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-BRC20/confirmBrc20ModifyPrice)  
+
+#### Description
+Submits the signed price-update payload for an auction id and updates the active listing price when accepted. Verify the signed PSBT, ticker amount, seller address, and final total and unit prices before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**

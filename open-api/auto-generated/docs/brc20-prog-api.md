@@ -1,6 +1,6 @@
 # BRC20 Prog API
 
-BRC20 Prog API provides comprehensive BRC20 token data query services, including token information, holder data, historical records, and more. The system uses global memory caching technology to quickly respond to various query requests and supports efficient filtering queries based on indexes.
+BRC20 Prog API provides comprehensive BRC20-Prog token data query services, including token information, holder data, historical records, and more. BRC20-Prog interfaces are Bitcoin-only and are intended for 6-character BRC20-Prog tickers. Classic BRC-20 tickers such as ordi should use the /v1/indexer/brc20/* interfaces instead. The system uses global memory caching technology to quickly respond to various query requests and supports efficient filtering queries based on indexes.
 
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
@@ -9,31 +9,31 @@ BRC20 Prog API provides comprehensive BRC20 token data query services, including
 
 | Route | Summary |
 | ----- | ------- |
-| [GET `/v1/indexer/brc20-prog/bestheight`](#get-best-height) | Get best height |
-| [GET `/v1/indexer/brc20-prog/list`](#get-ticker-list) | Get ticker list |
-| [GET `/v1/indexer/brc20-prog/status`](#get-ticker-status) | Get ticker status |
-| [GET `/v1/indexer/brc20-prog/(ticker)/info`](#get-ticker-info) | Get ticker info |
-| [GET `/v1/indexer/brc20-prog/history-by-height/(height)`](#get-ticker-history-by-height) | Get ticker history by height |
-| [GET `/v1/indexer/brc20-prog/(ticker)/holders`](#get-ticker-holders) | Get ticker holders |
-| [GET `/v1/indexer/brc20-prog/(ticker)/history`](#get-ticker-history) | Get ticker history |
-| [GET `/v1/indexer/address/(address)/brc20-prog/summary`](#get-address-token-summary) | Get address token summary |
-| [GET `/v1/indexer/address/(address)/brc20-prog/ticker/(ticker)/balance`](#get-address-ticker-balance) | Get address ticker balance |
-| [GET `/v1/indexer/address/(address)/brc20-prog/ticker/(ticker)/balance-by-height/(height)`](#get-address-ticker-balance-by-height) | Get address ticker balance by height |
-| [GET `/v1/indexer/address/(address)/brc20-prog/ticker/(ticker)/transferable-inscriptions`](#get-address-ticker-transferable-inscriptions) | Get address ticker transferable inscriptions |
+| [GET `/v1/indexer/brc20-prog/bestheight`](#get-brc20-prog-indexer-height-for-bitcoin) | Get BRC20-Prog indexer height for Bitcoin |
+| [GET `/v1/indexer/brc20-prog/list`](#list-indexed-6-character-brc20-prog-tickers) | List indexed 6-character BRC20-Prog tickers |
+| [GET `/v1/indexer/brc20-prog/status`](#search-brc20-prog-ticker-status-and-mint-state) | Search BRC20-Prog ticker status and mint state |
+| [GET `/v1/indexer/brc20-prog/(ticker)/info`](#get-brc20-prog-ticker-deployment-and-supply-details) | Get BRC20-Prog ticker deployment and supply details |
+| [GET `/v1/indexer/brc20-prog/history-by-height/(height)`](#list-brc20-prog-events-indexed-at-a-bitcoin-height) | List BRC20-Prog events indexed at a Bitcoin height |
+| [GET `/v1/indexer/brc20-prog/(ticker)/holders`](#list-holders-and-balances-for-a-brc20-prog-ticker) | List holders and balances for a BRC20-Prog ticker |
+| [GET `/v1/indexer/brc20-prog/(ticker)/history`](#list-brc20-prog-history-events-for-a-ticker) | List BRC20-Prog history events for a ticker |
+| [GET `/v1/indexer/address/(address)/brc20-prog/summary`](#list-an-addresss-brc20-prog-token-balances) | List an address's BRC20-Prog token balances |
+| [GET `/v1/indexer/address/(address)/brc20-prog/ticker/(ticker)/balance`](#get-an-addresss-current-brc20-prog-ticker-balance) | Get an address's current BRC20-Prog ticker balance |
+| [GET `/v1/indexer/address/(address)/brc20-prog/ticker/(ticker)/balance-by-height/(height)`](#get-an-addresss-brc20-prog-ticker-balance-at-a-height) | Get an address's BRC20-Prog ticker balance at a height |
+| [GET `/v1/indexer/address/(address)/brc20-prog/ticker/(ticker)/transferable-inscriptions`](#list-transferable-brc20-prog-inscriptions-for-an-address) | List transferable BRC20-Prog inscriptions for an address |
 
 ---
 
-## BRC20-Prog
+## BRC20-Prog Indexer
 
-### Get best height
-<a id="get-best-height"></a>
+### Get BRC20-Prog indexer height for Bitcoin
+<a id="get-brc20-prog-indexer-height-for-bitcoin"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20-prog/bestheight`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog/getBestHeight)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog Indexer/getBestHeight)  
 
 #### Description
-Get current blockchain best height
+Returns the latest Bitcoin block height, block hash, and timestamp indexed for BRC20-Prog. Use it to check indexer freshness before querying 6-character BRC20-Prog tickers; this API is Bitcoin-only and should not be used for Classic BRC-20 tokens.
 
 #### Response (200)
 Successful response
@@ -48,15 +48,15 @@ Successful response
 
 ---
 
-### Get ticker list
-<a id="get-ticker-list"></a>
+### List indexed 6-character BRC20-Prog tickers
+<a id="list-indexed-6-character-brc20-prog-tickers"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20-prog/list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog/getTickerList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog Indexer/getTickerList)  
 
 #### Description
-Get all BRC20 token list
+Returns paginated BRC20-Prog ticker symbols with indexed height, total, and start offset. Use this for Bitcoin-only BRC20-Prog discovery and route Classic BRC-20 tickers such as ordi to the /v1/indexer/brc20/* APIs.
 
 #### Parameters
 - `start` (query, integer): Start offset, default 0; default: `0`
@@ -71,23 +71,23 @@ Successful response
   - `height` (integer): example: `800000`
   - `total` (integer): example: `100`
   - `start` (integer): example: `0`
-  - `detail` (array): example: `["ordi","pups","rats"]`
+  - `detail` (array): example: `["abc123","def456","ghi789"]`
 
 
 ---
 
-### Get ticker status
-<a id="get-ticker-status"></a>
+### Search BRC20-Prog ticker status and mint state
+<a id="search-brc20-prog-ticker-status-and-mint-state"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20-prog/status`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog/getTickerStatus)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog Indexer/getTickerStatus)  
 
 #### Description
-Get ticker status information with multiple filtering and sorting options
+Returns BRC20-Prog status records including deployment inscription, max supply, minted supply, holder and transaction counts, decimals, and mint completion state. Use it for 6-character ticker discovery, filtering, and ranking on Bitcoin; indexer data may lag new block confirmations.
 
 #### Parameters
-- `ticker` (query, string): Filter by ticker name
+- `ticker` (query, string): Filter by 6-character BRC20-Prog ticker name. Do not use classic BRC-20 tickers such as ordi here.
 - `complete` (query, string): Filter by mint status; enum: `yes`, `no`, `all`
 - `sort` (query, string): Sort field; enum: `holders`, `deploy`, `transactions`
 - `start` (query, integer): Start offset, default 0; default: `0`
@@ -103,7 +103,7 @@ Successful response
   - `total` (integer): example: `1`
   - `start` (integer): example: `0`
   - `detail` (array):
-    - `ticker` (string): example: `"ordi"`
+    - `ticker` (string): example: `"abc123"`
     - `selfMint` (boolean): example: `false`
     - `holdersCount` (integer): example: `15000`
     - `historyCount` (integer): example: `50000`
@@ -126,18 +126,18 @@ Successful response
 
 ---
 
-### Get ticker info
-<a id="get-ticker-info"></a>
+### Get BRC20-Prog ticker deployment and supply details
+<a id="get-brc20-prog-ticker-deployment-and-supply-details"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20-prog/{ticker}/info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog/getTickerInfo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog Indexer/getTickerInfo)  
 
 #### Description
-Get detailed information of specified ticker
+Returns Bitcoin-only BRC20-Prog ticker metadata such as original tick, max supply, remaining supply, burned supply, decimals, deploy inscription, creator address, and mint counters. Use it for 6-character BRC20-Prog detail pages; Classic BRC-20 tickers are not supported here.
 
 #### Parameters
-- `ticker` (path, string) **(required)**: 
+- `ticker` (path, string) **(required)**: 6-character BRC20-Prog ticker. Classic BRC-20 tickers such as ordi are not supported by brc20-prog endpoints.
 
 #### Response (200)
 Successful response
@@ -146,8 +146,8 @@ Successful response
 - `msg` (string): example: `""`
 - `data` (object):
   - `id` (integer (int64)): example: `1`
-  - `originalTick` (string): example: `"ordi"`
-  - `tick` (string): example: `"ordi"`
+  - `originalTick` (string): example: `"abc123"`
+  - `tick` (string): example: `"abc123"`
   - `maxSupply` (string): example: `"21000000"`
   - `decimals` (integer): example: `8`
   - `limitPerMint` (string): example: `"1000"`
@@ -165,15 +165,15 @@ Successful response
 
 ---
 
-### Get ticker history by height
-<a id="get-ticker-history-by-height"></a>
+### List BRC20-Prog events indexed at a Bitcoin height
+<a id="list-brc20-prog-events-indexed-at-a-bitcoin-height"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20-prog/history-by-height/{height}`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog/getTickerHistoryByHeight)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog Indexer/getTickerHistoryByHeight)  
 
 #### Description
-Get ticker history records at specified block height
+Returns BRC20-Prog history events for one block height with ticker, transaction, event type, inscription, amount, balance, and validity data. Use it for Bitcoin block-level audits or backfills; data is read-only indexer state and may depend on confirmation progress.
 
 #### Parameters
 - `height` (path, integer) **(required)**: Block height
@@ -187,7 +187,7 @@ Successful response
 - `msg` (string): example: `""`
 - `data` (array):
   - `id` (integer (int64)): example: `1`
-  - `ticker` (string): example: `"ordi"`
+  - `ticker` (string): example: `"abc123"`
   - `type` (string): enum: `inscribe-deploy`, `inscribe-mint`, `inscribe-transfer`, `transfer`, `send`, `receive`; example: `"inscribe-deploy"`
   - `txid` (string): example: `"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"`
   - `vout` (integer (uint32)): example: `0`
@@ -199,8 +199,8 @@ Successful response
   - `amount` (string): example: `"21000000"`
   - `height` (integer (uint32)): Block height; example: `800000`
   - `event` (object):
-    - `tick` (string): example: `"ordi"`
-    - `original_tick` (string): example: `"ordi"`
+    - `tick` (string): example: `"abc123"`
+    - `original_tick` (string): example: `"abc123"`
     - `minted_pkScript` (string): example: `"001234567890abcdef"`
     - `minted_wallet` (string): example: `"bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"`
     - `amount` (string): example: `"1000"`
@@ -232,18 +232,18 @@ Successful response
 
 ---
 
-### Get ticker holders
-<a id="get-ticker-holders"></a>
+### List holders and balances for a BRC20-Prog ticker
+<a id="list-holders-and-balances-for-a-brc20-prog-ticker"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20-prog/{ticker}/holders`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog/getTickerHolders)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog Indexer/getTickerHolders)  
 
 #### Description
-Get holder list of specified ticker
+Returns holder addresses with overall, transferable, and available balances for a 6-character BRC20-Prog ticker. Use it for holder distribution and balance checks on Bitcoin; it reports indexed balances only and performs no signing or transfer action.
 
 #### Parameters
-- `ticker` (path, string) **(required)**: 
+- `ticker` (path, string) **(required)**: 6-character BRC20-Prog ticker. Classic BRC-20 tickers such as ordi are not supported by brc20-prog endpoints.
 - `start` (query, integer): Start offset, default 0; default: `0`
 - `limit` (query, integer): Number of items returned, default 20; default: `20`
 
@@ -265,18 +265,18 @@ Successful response
 
 ---
 
-### Get ticker history
-<a id="get-ticker-history"></a>
+### List BRC20-Prog history events for a ticker
+<a id="list-brc20-prog-history-events-for-a-ticker"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20-prog/{ticker}/history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog/getTickerHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog Indexer/getTickerHistory)  
 
 #### Description
-Get history records of specified ticker with event type and block height filtering
+Returns deploy, mint, transfer, and BRC20-Prog withdrawal events for a 6-character ticker, including event type, block height, transaction, inscription, amount, balance, and validity fields. Use it for token activity feeds or reconciliation; this is read-only Bitcoin indexer data.
 
 #### Parameters
-- `ticker` (path, string) **(required)**: 
+- `ticker` (path, string) **(required)**: 6-character BRC20-Prog ticker. Classic BRC-20 tickers such as ordi are not supported by brc20-prog endpoints.
 - `type` (query, string): Filter by event type; enum: `deploy-inscribe`, `transfer`, `inscribe-mint`, `inscribe-transfer`, `brc20prog-withdraw-inscribe`, `brc20prog-withdraw-transfer`
 - `height` (query, integer): Filter by block height
 - `start` (query, integer): Start offset, default 0; default: `0`
@@ -293,7 +293,7 @@ Successful response
   - `start` (integer): example: `0`
   - `detail` (array):
     - `id` (integer (int64)): example: `1`
-    - `ticker` (string): example: `"ordi"`
+    - `ticker` (string): example: `"abc123"`
     - `type` (string): enum: `inscribe-deploy`, `inscribe-mint`, `inscribe-transfer`, `transfer`, `send`, `receive`; example: `"inscribe-deploy"`
     - `txid` (string): example: `"1234567890abcdef1234567890abcdef1234567890abcdef1234567890abcdef"`
     - `vout` (integer (uint32)): example: `0`
@@ -305,8 +305,8 @@ Successful response
     - `amount` (string): example: `"21000000"`
     - `height` (integer (uint32)): Block height; example: `800000`
     - `event` (object):
-      - `tick` (string): example: `"ordi"`
-      - `original_tick` (string): example: `"ordi"`
+      - `tick` (string): example: `"abc123"`
+      - `original_tick` (string): example: `"abc123"`
       - `minted_pkScript` (string): example: `"001234567890abcdef"`
       - `minted_wallet` (string): example: `"bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"`
       - `amount` (string): example: `"1000"`
@@ -338,19 +338,19 @@ Successful response
 
 ---
 
-### Get address token summary
-<a id="get-address-token-summary"></a>
+### List an address's BRC20-Prog token balances
+<a id="list-an-addresss-brc20-prog-token-balances"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/brc20-prog/summary`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog/getAddressTokenSummary)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog Indexer/getAddressTokenSummary)  
 
 #### Description
-Get token summary information of specified address
+Returns paginated BRC20-Prog balance summaries for a Bitcoin address, including indexed height, module height, ticker, decimals, overall, transferable, available, and module balances. Use it for Bitcoin-only wallet portfolio views; Classic BRC-20 balances require the brc20 indexer API.
 
 #### Parameters
 - `address` (path, string) **(required)**: Bitcoin address
-- `ticker` (query, string): Filter by ticker name
+- `ticker` (query, string): Filter by 6-character BRC20-Prog ticker name. Do not use classic BRC-20 tickers such as ordi here.
 - `start` (query, integer): Start offset, default 0; default: `0`
 - `limit` (query, integer): Number of items returned, default 20; default: `20`
 
@@ -365,7 +365,7 @@ Successful response
   - `total` (integer): example: `5`
   - `start` (integer): example: `0`
   - `detail` (array):
-    - `ticker` (string): example: `"ordi"`
+    - `ticker` (string): example: `"abc123"`
     - `selfMint` (boolean): example: `false`
     - `decimal` (integer): example: `8`
     - `overallBalance` (string): example: `"1000"`
@@ -376,19 +376,19 @@ Successful response
 
 ---
 
-### Get address ticker balance
-<a id="get-address-ticker-balance"></a>
+### Get an address's current BRC20-Prog ticker balance
+<a id="get-an-addresss-current-brc20-prog-ticker-balance"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/brc20-prog/ticker/{ticker}/balance`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog/getAddressTickerBalance)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog Indexer/getAddressTickerBalance)  
 
 #### Description
-Get specific ticker balance of specified address
+Returns current indexed balance fields for one Bitcoin address and 6-character BRC20-Prog ticker, including overall, transferable, available, module balance, decimals, and self-mint state. Use it before displaying or preparing token actions; it reports state only and does not verify spend authorization.
 
 #### Parameters
 - `address` (path, string) **(required)**: Bitcoin address
-- `ticker` (path, string) **(required)**: 
+- `ticker` (path, string) **(required)**: 6-character BRC20-Prog ticker. Classic BRC-20 tickers such as ordi are not supported by brc20-prog endpoints.
 
 #### Response (200)
 Successful response
@@ -396,7 +396,7 @@ Successful response
 - `code` (integer): example: `0`
 - `msg` (string): example: `""`
 - `data` (object):
-  - `ticker` (string): example: `"ordi"`
+  - `ticker` (string): example: `"abc123"`
   - `selfMint` (boolean): example: `false`
   - `decimal` (integer): example: `8`
   - `overallBalance` (string): example: `"1000"`
@@ -407,19 +407,19 @@ Successful response
 
 ---
 
-### Get address ticker balance by height
-<a id="get-address-ticker-balance-by-height"></a>
+### Get an address's BRC20-Prog ticker balance at a height
+<a id="get-an-addresss-brc20-prog-ticker-balance-at-a-height"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/brc20-prog/ticker/{ticker}/balance-by-height/{height}`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog/getAddressTickerBalanceByHeight)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog Indexer/getAddressTickerBalanceByHeight)  
 
 #### Description
-Get ticker balance of specified address at specified height
+Returns historical indexed balance fields for one Bitcoin address and 6-character BRC20-Prog ticker at a specific block height, including overall, transferable, and available balances. Use it for snapshots or reconciliation; historical balances may not reflect current spendability.
 
 #### Parameters
 - `address` (path, string) **(required)**: Bitcoin address
-- `ticker` (path, string) **(required)**: 
+- `ticker` (path, string) **(required)**: 6-character BRC20-Prog ticker. Classic BRC-20 tickers such as ordi are not supported by brc20-prog endpoints.
 - `height` (path, integer) **(required)**: Block height
 
 #### Response (200)
@@ -428,7 +428,7 @@ Successful response
 - `code` (integer): example: `0`
 - `msg` (string): example: `""`
 - `data` (object):
-  - `ticker` (string): example: `"ordi"`
+  - `ticker` (string): example: `"abc123"`
   - `selfMint` (boolean): example: `false`
   - `decimal` (integer): example: `8`
   - `overallBalance` (string): example: `"1000"`
@@ -438,19 +438,19 @@ Successful response
 
 ---
 
-### Get address ticker transferable inscriptions
-<a id="get-address-ticker-transferable-inscriptions"></a>
+### List transferable BRC20-Prog inscriptions for an address
+<a id="list-transferable-brc20-prog-inscriptions-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/brc20-prog/ticker/{ticker}/transferable-inscriptions`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog/getAddressTickerTransferableInscriptions)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20-Prog Indexer/getAddressTickerTransferableInscriptions)  
 
 #### Description
-Get transferable inscription list of specific ticker for specified address
+Returns unused transferable inscriptions for a Bitcoin address and 6-character BRC20-Prog ticker, including inscription id, amount, holder script or wallet, event id, block height, and inscription number. Use it to choose transfer candidates; callers must still validate UTXO ownership, confirmation policy, and signing context before spending.
 
 #### Parameters
 - `address` (path, string) **(required)**: Bitcoin address
-- `ticker` (path, string) **(required)**: 
+- `ticker` (path, string) **(required)**: 6-character BRC20-Prog ticker. Classic BRC-20 tickers such as ordi are not supported by brc20-prog endpoints.
 - `start` (query, integer): Start offset, default 0; default: `0`
 - `limit` (query, integer): Number of items returned, default 20; default: `20`
 
@@ -466,7 +466,7 @@ Successful response
   - `detail` (array):
     - `id` (integer (int64)): example: `1`
     - `inscriptionId` (string): example: `"1234567890abcdef"`
-    - `tick` (string): example: `"ordi"`
+    - `tick` (string): example: `"abc123"`
     - `amount` (string): example: `"1000"`
     - `currentHolderPkscript` (string): example: `"001234567890abcdef"`
     - `currentHolderWallet` (string): example: `"bc1qxy2kgdygjrsqtzq2n0yrf2493p83kkfjhx0wlh"`

@@ -9,26 +9,29 @@ Inscription Indexer API is a RESTful API for accessing and managing inscriptions
 
 | Route | Summary |
 | ----- | ------- |
-| [GET `/v1/indexer/inscription/info/(inscriptionId)`](#get-inscription-info-by-inscriptionid) | Get inscription info by inscriptionId |
-| [GET `/v1/indexer/inscription/content/(inscriptionId)`](#get-inscription-content-info-by-inscriptionid) | Get inscription content info by inscriptionId |
-| [GET `/v1/indexer/inscription/events`](#get-inscription-events) | Get inscription events |
-| [GET `/v1/indexer/address/(address)/inscription-data`](#get-inscription-utxo-list-by-address) | Get inscription UTXO list by address |
-| [GET `/v1/indexer/address/(address)/inscription-utxo-data`](#get-inscription-utxo-list-by-address) | Get inscription UTXO list by address |
-| [GET `/v1/indexer/address/(address)/abandon-nft-utxo-data`](#get-abandon-nft-utxo-list-by-address) | Get abandon nft UTXO list by address |
+| [GET `/v1/indexer/inscription/info/(inscriptionId)`](#get-inscription-metadata-by-id-or-number) | Get inscription metadata by id or number |
+| [GET `/v1/indexer/inscription/content/(inscriptionId)`](#fetch-raw-inscription-content-by-id-or-number) | Fetch raw inscription content by id or number |
+| [GET `/v1/indexer/inscription/events`](#list-inscription-mint-and-transfer-events-by-block-range) | List inscription mint and transfer events by block range |
+| [GET `/v1/indexer/address/(address)/inscription-data`](#list-inscriptions-currently-associated-with-an-address) | List inscriptions currently associated with an address |
+| [GET `/v1/indexer/address/(address)/inscription-utxo-data`](#list-inscription-bearing-utxos-for-an-address) | List inscription-bearing UTXOs for an address |
+| [GET `/v1/indexer/address/(address)/abandon-nft-utxo-data`](#list-abandoned-nft-style-inscription-utxos-for-an-address) | List abandoned NFT-style inscription UTXOs for an address |
 
 ---
 
-## Inscriptions
+## Inscription Indexer
 
-### Get inscription info by inscriptionId
-<a id="get-inscription-info-by-inscriptionid"></a>
+### Get inscription metadata by id or number
+<a id="get-inscription-metadata-by-id-or-number"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/inscription/info/{inscriptionId}`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscriptions/getInscriptionInfo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscription Indexer/getInscriptionInfo)  
+
+#### Description
+Returns inscription owner, number, content metadata, parent and delegate flags, metaprotocol fields, BRC-20 payload when present, and current UTXO context. Use either an inscription id or inscription number; verify network and confirmation state before relying on ownership-sensitive results.
 
 #### Parameters
-- `inscriptionId` (path, string) **(required)**: 
+- `inscriptionId` (path, string) **(required)**: Inscription id, or an inscription number accepted by this endpoint.
 
 #### Response (200)
 Successful operation
@@ -43,12 +46,12 @@ Successful operation
   - `inscriptionNumber` (integer):
   - `hasPointer` (boolean):
   - `hasParent` (boolean):
-  - `hasDeligate` (boolean): Indicates whether the inscription has the historical delegate field. The field name is kept for backward compatibility.
-  - `hasMetaProtocal` (boolean): Indicates whether the inscription has the historical metaprotocol field. The field name is kept for backward compatibility.
+  - `hasDeligate` (boolean):
+  - `hasMetaProtocal` (boolean):
   - `hasContentEncoding` (boolean):
   - `pointer` (integer):
   - `parent` (string):
-  - `deligate` (string): Historical delegate value for the inscription. The field name is kept for backward compatibility.
+  - `deligate` (string):
   - `metaprotocol` (string):
   - `metadata` (string):
   - `contentEncoding` (string):
@@ -58,7 +61,7 @@ Successful operation
   - `timestamp` (integer):
   - `inSatoshi` (integer):
   - `outSatoshi` (integer):
-  - `brc20` (object): Only BRC-20 transfer inscriptions include this value
+  - `brc20` (object): Only BRC20 transfer have this value
     - `amt` (string):
     - `decimal` (string):
     - `lim` (string):
@@ -74,15 +77,18 @@ Invalid API Key
 
 ---
 
-### Get inscription content info by inscriptionId
-<a id="get-inscription-content-info-by-inscriptionid"></a>
+### Fetch raw inscription content by id or number
+<a id="fetch-raw-inscription-content-by-id-or-number"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/inscription/content/{inscriptionId}`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscriptions/getInscriptionContent)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscription Indexer/getInscriptionContent)  
+
+#### Description
+Streams the inscription content body for rendering, preview, or archival workflows. The identifier may be an inscription id or inscription number where supported; callers should trust the returned content type from inscription metadata and avoid executing untrusted content directly.
 
 #### Parameters
-- `inscriptionId` (path, string) **(required)**: 
+- `inscriptionId` (path, string) **(required)**: Inscription id, or an inscription number accepted by this endpoint.
 
 #### Response (200)
 Successful operation
@@ -93,12 +99,15 @@ Invalid API Key
 
 ---
 
-### Get inscription events
-<a id="get-inscription-events"></a>
+### List inscription mint and transfer events by block range
+<a id="list-inscription-mint-and-transfer-events-by-block-range"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/inscription/events`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscriptions/getInscriptionEvents)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscription Indexer/getInscriptionEvents)  
+
+#### Description
+Returns paginated inscription events with transfer flag, inscription id and number, address, content fields for mint events, transaction data, satoshi value, timestamp, and block metadata. Use it for indexer backfills, activity feeds, or monitoring; end=0 may include mempool-visible data that is not final.
 
 #### Parameters
 - `start` (query, integer) **(required)**: Start blockheight
@@ -139,12 +148,15 @@ Invalid API Key
 
 ---
 
-### Get inscription UTXO list by address
-<a id="get-inscription-utxo-list-by-address"></a>
+### List inscriptions currently associated with an address
+<a id="list-inscriptions-currently-associated-with-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/inscription-data`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscriptions/getInscriptionDataByAddress)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscription Indexer/getInscriptionDataByAddress)  
+
+#### Description
+Returns paginated inscription metadata for an address with confirmed and unconfirmed totals, spend-pending counts, content metadata, optional BRC-20 payload, and UTXO context. Use it for wallet galleries and ownership views; unconfirmed and unconfirmed-spend values require extra caution before spending.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address
@@ -170,12 +182,12 @@ Successful operation
     - `inscriptionNumber` (integer):
     - `hasPointer` (boolean):
     - `hasParent` (boolean):
-    - `hasDeligate` (boolean): Indicates whether the inscription has the historical delegate field. The field name is kept for backward compatibility.
-    - `hasMetaProtocal` (boolean): Indicates whether the inscription has the historical metaprotocol field. The field name is kept for backward compatibility.
+    - `hasDeligate` (boolean):
+    - `hasMetaProtocal` (boolean):
     - `hasContentEncoding` (boolean):
     - `pointer` (integer):
     - `parent` (string):
-    - `deligate` (string): Historical delegate value for the inscription. The field name is kept for backward compatibility.
+    - `deligate` (string):
     - `metaprotocol` (string):
     - `metadata` (string):
     - `contentEncoding` (string):
@@ -185,7 +197,7 @@ Successful operation
     - `timestamp` (integer):
     - `inSatoshi` (integer):
     - `outSatoshi` (integer):
-    - `brc20` (object): Only BRC-20 transfer inscriptions include this value
+    - `brc20` (object): Only BRC20 transfer have this value
       - `amt` (string):
       - `decimal` (string):
       - `lim` (string):
@@ -201,23 +213,15 @@ Invalid API Key
 
 ---
 
-### Get inscription UTXO list by address
-<a id="get-inscription-utxo-list-by-address"></a>
+### List inscription-bearing UTXOs for an address
+<a id="list-inscription-bearing-utxos-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/inscription-utxo-data`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscriptions/getInscriptionUtxoDataByAddress)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscription Indexer/getInscriptionUtxoDataByAddress)  
 
 #### Description
-Returns the list of inscription UTXOs for the given address. 
-**Note:** In previous versions, this endpoint returned all inscription UTXOs. After a recent upgrade, UTXOs corresponding to "abandoned inscriptions" are now filtered out. 
-
-**Abandoned inscriptions** refer to:
-- BRC20 MINT inscriptions
-- BRC20 TRANSFER inscriptions that have already been transferred
-
-These inscriptions do not carry BRC20 assets and account for a large proportion of the index. To improve efficiency, they are now excluded from the normal inscription list. If you still need access to these UTXOs, please use the `/abandon-nft-utxo-data` endpoint.
-
+Returns paginated UTXO records that carry inscriptions for an address, along with confirmed, unconfirmed, and unconfirmed-spend totals. Use it to prepare wallet coin selection or inscription transfer screens; always revalidate UTXO ownership and mempool status before signing.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address
@@ -243,22 +247,15 @@ Invalid API Key
 
 ---
 
-### Get abandon nft UTXO list by address
-<a id="get-abandon-nft-utxo-list-by-address"></a>
+### List abandoned NFT-style inscription UTXOs for an address
+<a id="list-abandoned-nft-style-inscription-utxos-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/abandon-nft-utxo-data`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscriptions/getAbandonNftUtxoDataByAddress)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscription Indexer/getAbandonNftUtxoDataByAddress)  
 
 #### Description
-Returns the list of UTXOs for "abandoned inscriptions" for the given address. 
-
-**Abandoned inscriptions** are defined as:
-- BRC20 MINT inscriptions
-- BRC20 TRANSFER inscriptions that have already been transferred
-
-These inscriptions do not carry BRC20 assets and are excluded from the normal `/inscription-utxo-data` results. Use this endpoint if you specifically need to access these UTXOs.
-
+Returns abandoned inscription UTXO candidates with balance, counts, pagination, and UTXO details for an address. Use it for cleanup or wallet diagnostics; because these are spend-related candidates, verify current chain and mempool state before constructing any transaction.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address

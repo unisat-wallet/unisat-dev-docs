@@ -1,6 +1,6 @@
-# Ordinals Collection MarketPlace API
+# Ordinals Collection Marketplace API
 
-This API provides endpoints for ordinals collection marketplace services
+This API provides endpoints for Ordinals collection marketplace services, including collection statistics, listing search, address collection summaries, inscription listing details, order preparation, and order submission.
 
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
@@ -9,34 +9,37 @@ This API provides endpoints for ordinals collection marketplace services
 
 | Route | Summary |
 | ----- | ------- |
-| [POST `/v3/market/collection/auction/collection_statistic`](#return-a-summary-of-collection) | Return a summary of collection. |
-| [POST `/v3/market/collection/auction/collection_statistic_list`](#return-a-summary-of-collection) | Return a summary of collection. |
-| [POST `/v3/market/collection/auction/collection_summary`](#get-the-collection-statistics-information-at-a-certain-address) | Get the collection statistics information at a certain address |
-| [POST `/v3/market/collection/auction/collection_inscriptions`](#get-the-list-details-of-a-certain-collection-at-a-certain-address) | Get the list details of a certain collection at a certain address |
-| [POST `/v3/market/collection/auction/inscription_info`](#retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services) | Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services. |
-| [POST `/v3/market/collection/auction/inscription_info_list`](#get-the-basic-listing-information-of-the-specified-inscription-list) | Get the basic listing information of the specified inscription list |
-| [POST `/v3/market/collection/auction/list`](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
-| [POST `/v3/market/collection/auction/actions`](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
-| [POST `/v3/market/collection/auction/create_put_on`](#create-listing-order) | Create listing order. |
-| [POST `/v3/market/collection/auction/confirm_put_on`](#confirm-listing-order) | Confirm listing order. |
-| [POST `/v3/market/collection/auction/create_bid_prepare`](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
-| [POST `/v3/market/collection/auction/create_bid`](#create-purchase-order) | Create purchase order. |
-| [POST `/v3/market/collection/auction/confirm_bid`](#confirm-purchase-order) | Confirm purchase order. |
-| [POST `/v3/market/collection/auction/create_put_off`](#create-delisting-order) | Create delisting order. |
-| [POST `/v3/market/collection/auction/confirm_put_off`](#confirm-delisting-order) | Confirm delisting order. |
-| [POST `/v3/market/collection/auction/create_modify_price`](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
-| [POST `/v3/market/collection/auction/confirm_modify_price`](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
+| [POST `/v3/market/collection/auction/collection_statistic`](#get-collection-market-statistics) | Get collection market statistics |
+| [POST `/v3/market/collection/auction/collection_statistic_list`](#list-collection-market-statistics) | List collection market statistics |
+| [POST `/v3/market/collection/auction/collection_summary`](#get-address-collection-summary) | Get address collection summary |
+| [POST `/v3/market/collection/auction/collection_inscriptions`](#list-address-collection-inscriptions) | List address collection inscriptions |
+| [POST `/v3/market/collection/auction/inscription_info`](#get-marketplace-inscription-detail) | Get marketplace inscription detail |
+| [POST `/v3/market/collection/auction/inscription_info_list`](#get-marketplace-inscription-details-in-batch) | Get marketplace inscription details in batch |
+| [POST `/v3/market/collection/auction/list`](#search-ordinals-collection-marketplace-listings) | Search Ordinals collection marketplace listings |
+| [POST `/v3/market/collection/auction/actions`](#list-ordinals-collection-marketplace-activity-history) | List Ordinals collection marketplace activity history |
+| [POST `/v3/market/collection/auction/create_put_on`](#create-collection-listing-psbt-draft) | Create collection listing PSBT draft |
+| [POST `/v3/market/collection/auction/confirm_put_on`](#publish-signed-collection-listing) | Publish signed collection listing |
+| [POST `/v3/market/collection/auction/create_bid_prepare`](#estimate-collection-purchase-fees-and-balance) | Estimate collection purchase fees and balance |
+| [POST `/v3/market/collection/auction/create_bid`](#create-collection-purchase-psbt-order) | Create collection purchase PSBT order |
+| [POST `/v3/market/collection/auction/confirm_bid`](#submit-signed-collection-purchase-order) | Submit signed collection purchase order |
+| [POST `/v3/market/collection/auction/create_put_off`](#create-collection-delisting-psbt-draft) | Create collection delisting PSBT draft |
+| [POST `/v3/market/collection/auction/confirm_put_off`](#remove-signed-collection-listing) | Remove signed collection listing |
+| [POST `/v3/market/collection/auction/create_modify_price`](#create-collection-price-update-psbt-draft) | Create collection price-update PSBT draft |
+| [POST `/v3/market/collection/auction/confirm_modify_price`](#apply-signed-collection-listing-price-update) | Apply signed collection listing price update |
 
 ---
 
-## MarketPlace-Collection
+## Marketplace-Collections
 
-### Return a summary of collection.
-<a id="return-a-summary-of-collection"></a>
+### Get collection market statistics
+<a id="get-collection-market-statistics"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/collection_statistic`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/getCollectionStatistic)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/getCollectionStatistic)  
+
+#### Description
+Query read-only marketplace statistics for a specific Ordinals collection, including floor price, listed count, and volume. This query-style POST only reads market data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -68,12 +71,15 @@ Default Response
 
 ---
 
-### Return a summary of collection.
-<a id="return-a-summary-of-collection"></a>
+### List collection market statistics
+<a id="list-collection-market-statistics"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/collection_statistic_list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/getCollectionStatisticList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/getCollectionStatisticList)  
+
+#### Description
+Query read-only marketplace statistics for Ordinals collections with filters and pagination. This query-style POST only reads market data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -112,12 +118,15 @@ Default Response
 
 ---
 
-### Get the collection statistics information at a certain address
-<a id="get-the-collection-statistics-information-at-a-certain-address"></a>
+### Get address collection summary
+<a id="get-address-collection-summary"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/collection_summary`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/getCollectionSummary)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/getCollectionSummary)  
+
+#### Description
+Query read-only Ordinals collection holdings summary for an address. This query-style POST only reads address and collection data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -141,12 +150,15 @@ Default Response
 
 ---
 
-### Get the list details of a certain collection at a certain address
-<a id="get-the-list-details-of-a-certain-collection-at-a-certain-address"></a>
+### List address collection inscriptions
+<a id="list-address-collection-inscriptions"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/collection_inscriptions`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/getCollectionInscriptions)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/getCollectionInscriptions)  
+
+#### Description
+Query read-only inscription details for a collection held by an address. This query-style POST only reads collection data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -176,12 +188,15 @@ Default Response
 
 ---
 
-### Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services.
-<a id="retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services"></a>
+### Get marketplace inscription detail
+<a id="get-marketplace-inscription-detail"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/inscription_info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/getInscriptionInfo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/getCollectionMarketInscriptionInfo)  
+
+#### Description
+Query read-only marketplace inscription detail for one inscription, including listing and asset metadata. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -222,12 +237,15 @@ Default Response
 
 ---
 
-### Get the basic listing information of the specified inscription list
-<a id="get-the-basic-listing-information-of-the-specified-inscription-list"></a>
+### Get marketplace inscription details in batch
+<a id="get-marketplace-inscription-details-in-batch"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/inscription_info_list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/getInscriptionInfoList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/getInscriptionInfoList)  
+
+#### Description
+Query read-only marketplace listing details for multiple inscriptions. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -254,12 +272,15 @@ Default Response
 
 ---
 
-### Retrieve the list information of the market.
-<a id="retrieve-the-list-information-of-the-market"></a>
+### Search Ordinals collection marketplace listings
+<a id="search-ordinals-collection-marketplace-listings"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/getMarketList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/getMarketList)  
+
+#### Description
+Query read-only Ordinals collection marketplace listings with filters, sorting, and pagination. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -324,12 +345,15 @@ Default Response
 
 ---
 
-### Get information on listings, delistings, and sales.
-<a id="get-information-on-listings-delistings-and-sales"></a>
+### List Ordinals collection marketplace activity history
+<a id="list-ordinals-collection-marketplace-activity-history"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/actions`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/getMarketActions)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/getMarketActions)  
+
+#### Description
+Query read-only Ordinals collection marketplace activity history such as listings, delistings, sales, claims, and updates. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -382,12 +406,15 @@ Default Response
 
 ---
 
-### Create listing order.
-<a id="create-listing-order"></a>
+### Create collection listing PSBT draft
+<a id="create-collection-listing-psbt-draft"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/create_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/createMarketPutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/createMarketPutOn)  
+
+#### Description
+Creates an Ordinals collection listing draft and returns auctionId, PSBT, and signing indexes for the seller. Review inscriptionId, collectionId, item metadata, initPrice, unitPrice, marketType, and receiving address before signing or confirming the listing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -413,12 +440,15 @@ Default Response
 
 ---
 
-### Confirm listing order.
-<a id="confirm-listing-order"></a>
+### Publish signed collection listing
+<a id="publish-signed-collection-listing"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/confirm_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/confirmMarketPutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/confirmMarketPutOn)  
+
+#### Description
+Confirms the seller-signed listing PSBT and activates the Ordinals collection marketplace listing. Verify auctionId, PSBT encoding, inscriptionId, collection item, listing price, seller address, and market type before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -437,12 +467,15 @@ Default Response
 
 ---
 
-### Return params before creating purchase order.
-<a id="return-params-before-creating-purchase-order"></a>
+### Estimate collection purchase fees and balance
+<a id="estimate-collection-purchase-fees-and-balance"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/create_bid_prepare`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/createMarketBidPrepare)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/createMarketBidPrepare)  
+
+#### Description
+Returns pre-purchase fee estimates, available balances, network fee rate, transaction size, and inscription value for an Ordinals collection listing. This is a quote/material preparation step only; before any later purchase submission, verify auctionId, bidPrice, buyer address, feeRate, and inscription details.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -470,12 +503,15 @@ Default Response
 
 ---
 
-### Create purchase order.
-<a id="create-purchase-order"></a>
+### Create collection purchase PSBT order
+<a id="create-collection-purchase-psbt-order"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/create_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/createMarketBid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/createMarketBid)  
+
+#### Description
+Creates an Ordinals collection purchase order and returns bidId, PSBT data, signing indexes, server/network fees, feeRate, and inscription value. Confirm auctionId, bidPrice, buyer address, inscriptionId, collection item, and fee totals before requesting signatures.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -509,12 +545,15 @@ Default Response
 
 ---
 
-### Confirm purchase order.
-<a id="confirm-purchase-order"></a>
+### Submit signed collection purchase order
+<a id="submit-signed-collection-purchase-order"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/confirm_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/confirmMarketBid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/confirmMarketBid)  
+
+#### Description
+Submits the signed collection purchase PSBT and returns the settlement transaction id when accepted. Before calling, verify auctionId, bidId, PSBT content, final price, inscriptionId, buyer/seller addresses, and fee values because this can settle the purchase.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -537,12 +576,15 @@ Default Response
 
 ---
 
-### Create delisting order.
-<a id="create-delisting-order"></a>
+### Create collection delisting PSBT draft
+<a id="create-collection-delisting-psbt-draft"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/create_put_off`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/createMarketPutOff)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/createMarketPutOff)  
+
+#### Description
+Creates delisting signing material for an active Ordinals collection marketplace order, including PSBT/signing data when needed. Confirm auctionId, owner addresses, inscriptionId, and collection item before signing because the next confirmation removes the listing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -570,12 +612,15 @@ Default Response
 
 ---
 
-### Confirm delisting order.
-<a id="confirm-delisting-order"></a>
+### Remove signed collection listing
+<a id="remove-signed-collection-listing"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/confirm_put_off`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/confirmMarketPutOff)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/confirmMarketPutOff)  
+
+#### Description
+Confirms signed delisting data and removes the Ordinals collection listing from the marketplace. Verify auctionId, PSBT/signature payload, owner address, inscriptionId, and collection item before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -596,12 +641,15 @@ Default Response
 
 ---
 
-### Create the order for price adjustment.
-<a id="create-the-order-for-price-adjustment"></a>
+### Create collection price-update PSBT draft
+<a id="create-collection-price-update-psbt-draft"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/create_modify_price`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/createMarketModifyPrice)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/createMarketModifyPrice)  
+
+#### Description
+Creates signing material to update an existing Ordinals collection listing price. Verify auctionId, inscriptionId, collection item, old and new prices, seller address, and returned PSBT/sign indexes before signing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -622,12 +670,15 @@ Default Response
 
 ---
 
-### Confirm the order for price adjustment.
-<a id="confirm-the-order-for-price-adjustment"></a>
+### Apply signed collection listing price update
+<a id="apply-signed-collection-listing-price-update"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/collection/auction/confirm_modify_price`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Collection/confirmMarketModifyPrice)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Collections/confirmMarketModifyPrice)  
+
+#### Description
+Confirms signed price-update data and changes the active Ordinals collection listing price. Verify auctionId, signed PSBT, inscriptionId, seller address, and final price before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**

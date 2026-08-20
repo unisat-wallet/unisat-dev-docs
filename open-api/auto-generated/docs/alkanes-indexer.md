@@ -9,33 +9,33 @@ The Alkanes Indexer API is developed by the UniSat team, providing a simplified 
 
 | Route | Summary |
 | ----- | ------- |
-| [GET `/v1/indexer/alkanes/status`](#get-alkanes-status) | Get alkanes status |
-| [GET `/v1/indexer/alkanes/info-list`](#get-alkanes-list) | Get alkanes list |
-| [GET `/v1/indexer/alkanes/(alkaneid)/info`](#get-alkane-info-by-alkaneid) | Get alkane info by alkaneid |
-| [GET `/v1/indexer/alkanes/token-list`](#get-alkanes-token-list) | Get alkanes token list |
-| [GET `/v1/indexer/alkanes/(alkaneid)/holders`](#get-alkanes-holders-by-alkaneid) | Get alkanes holders by alkaneid |
-| [GET `/v1/indexer/alkanes/(alkaneid)/collection-items`](#get-collection-items) | Get collection items |
-| [GET `/v1/indexer/alkanes/(alkaneid)/contract-events`](#get-contract-events) | Get contract events |
-| [GET `/v1/indexer/alkanes/utxo/(txid)/(index)/balance`](#get-alkanes-utxo-balance) | Get alkanes utxo balance |
-| [GET `/v1/indexer/address/(address)/alkanes/(alkaneid)/utxo`](#get-utxo-alkanes-balance-by-address-and-alkaneid) | Get utxo alkanes balance by address and alkaneid |
-| [GET `/v1/indexer/address/(address)/alkanes/token-list`](#get-address-alkanes-token-list) | Get address alkanes token list |
-| [GET `/v1/indexer/address/(address)/alkanes/collection-list`](#get-address-alkanes-collection-list) | Get address alkanes collection list |
-| [GET `/v1/indexer/address/(address)/alkanes/(alkaneid)/collection-items`](#get-address-collection-items-by-alkaneid) | Get address collection items by alkaneid |
-| [GET `/v1/indexer/address/(address)/alkanes/(alkaneid)/transfer-history`](#get-transfer-history) | Get transfer history |
+| [GET `/v1/indexer/alkanes/status`](#get-alkanes-indexer-status-indexed-height-and-asset-count) | Get Alkanes indexer status, indexed height, and asset count |
+| [GET `/v1/indexer/alkanes/info-list`](#list-indexed-alkanes-assets-across-tokens-nfts-and-collections) | List indexed Alkanes assets across tokens, NFTs, and collections |
+| [GET `/v1/indexer/alkanes/(alkaneid)/info`](#get-metadata-for-one-alkane-asset-by-alkaneid) | Get metadata for one Alkane asset by alkaneid |
+| [GET `/v1/indexer/alkanes/token-list`](#list-fungible-alkanes-tokens-with-supply-and-holder-metadata) | List fungible Alkanes tokens with supply and holder metadata |
+| [GET `/v1/indexer/alkanes/(alkaneid)/holders`](#list-holders-and-balances-for-an-alkane-asset) | List holders and balances for an Alkane asset |
+| [GET `/v1/indexer/alkanes/(alkaneid)/collection-items`](#list-nft-or-child-assets-that-belong-to-an-alkane-collection) | List NFT or child assets that belong to an Alkane collection |
+| [GET `/v1/indexer/alkanes/(alkaneid)/contract-events`](#list-contract-execution-events-for-an-alkane-over-a-block-range) | List contract execution events for an Alkane over a block range |
+| [GET `/v1/indexer/alkanes/utxo/(txid)/(index)/balance`](#get-all-alkane-balances-attached-to-a-specific-utxo) | Get all Alkane balances attached to a specific UTXO |
+| [GET `/v1/indexer/address/(address)/alkanes/(alkaneid)/utxo`](#list-an-addresss-utxos-that-carry-a-specific-alkane) | List an address's UTXOs that carry a specific Alkane |
+| [GET `/v1/indexer/address/(address)/alkanes/token-list`](#list-fungible-alkanes-tokens-held-by-an-address) | List fungible Alkanes tokens held by an address |
+| [GET `/v1/indexer/address/(address)/alkanes/collection-list`](#list-alkane-collections-associated-with-an-address) | List Alkane collections associated with an address |
+| [GET `/v1/indexer/address/(address)/alkanes/(alkaneid)/collection-items`](#list-an-addresss-items-from-a-specific-alkane-collection) | List an address's items from a specific Alkane collection |
+| [GET `/v1/indexer/address/(address)/alkanes/(alkaneid)/transfer-history`](#list-an-addresss-transfer-history-for-a-specific-alkane) | List an address's transfer history for a specific Alkane |
 
 ---
 
-## Alkanes
+## Indexer-Alkanes
 
-### Get alkanes status
-<a id="get-alkanes-status"></a>
+### Get Alkanes indexer status, indexed height, and asset count
+<a id="get-alkanes-indexer-status-indexed-height-and-asset-count"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/status`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesStatus)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Alkanes/getAlkanesStatus)  
 
 #### Description
-Get alkanes global status
+Returns the current Alkanes indexer progress and runtime versions, including indexed block height, total tracked Alkane assets, metashrew version, and alkanes-rs version.
 
 #### Response (200)
 successful operation
@@ -64,15 +64,15 @@ This endpoint is used to monitor the indexer’s sync status.
 
 ---
 
-### Get alkanes list
-<a id="get-alkanes-list"></a>
+### List indexed Alkanes assets across tokens, NFTs, and collections
+<a id="list-indexed-alkanes-assets-across-tokens-nfts-and-collections"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/info-list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesInfoList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Alkanes/getAlkanesInfoList)  
 
 #### Description
-Retrieve a paginated list of Alkanes assets with optional type, sorting, and pagination filters.
+Returns a paginated catalog of Alkane asset metadata. Use it for global discovery across asset types, with optional type filtering and sorting by creation time or alkaneid.
 
 #### Parameters
 - `type` (query, string): search by type,optional; enum: `token`, `collection`, `nft`, `contract`
@@ -124,18 +124,18 @@ successful operation
 
 ---
 
-### Get alkane info by alkaneid
-<a id="get-alkane-info-by-alkaneid"></a>
+### Get metadata for one Alkane asset by alkaneid
+<a id="get-metadata-for-one-alkane-asset-by-alkaneid"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/{alkaneid}/info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesInfo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Alkanes/getAlkanesInfo)  
 
 #### Description
-Retrieve detailed information for a specific Alkane asset by Alkane ID.
+Returns the asset type and type-specific metadata for a single Alkane, such as token supply fields, NFT content fields, or collection supply and holder counts.
 
 #### Parameters
-- `alkaneid` (path, string) **(required)**: Alkane ID
+- `alkaneid` (path, string) **(required)**: Alkane id in block:tx format, for example 2:1.
 
 #### Response (200)
 successful operation
@@ -177,15 +177,15 @@ successful operation
 
 ---
 
-### Get alkanes token list
-<a id="get-alkanes-token-list"></a>
+### List fungible Alkanes tokens with supply and holder metadata
+<a id="list-fungible-alkanes-tokens-with-supply-and-holder-metadata"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/token-list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesTokenList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Alkanes/getAlkanesTokenList)  
 
 #### Description
-Retrieve a paginated list of Alkanes token assets with optional filters.
+Returns token-type Alkanes only, including token name, symbol, divisibility, supply, mint progress, and holder count. Supports lookup by alkaneid or name and sorted pagination.
 
 #### Parameters
 - `alkaneid` (query, string): search by alkaneid; example: `"2:1"`
@@ -238,18 +238,18 @@ successful operation
 
 ---
 
-### Get alkanes holders by alkaneid
-<a id="get-alkanes-holders-by-alkaneid"></a>
+### List holders and balances for an Alkane asset
+<a id="list-holders-and-balances-for-an-alkane-asset"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/{alkaneid}/holders`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesHolders)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Alkanes/getAlkanesHolders)  
 
 #### Description
-Retrieve holders for a specific Alkane asset by Alkane ID.
+Returns paginated holder addresses and their indexed amount for the selected Alkane. Use it to inspect token distribution or collection ownership concentration.
 
 #### Parameters
-- `alkaneid` (path, string) **(required)**: Alkane ID
+- `alkaneid` (path, string) **(required)**: Alkane id in block:tx format, for example 2:1.
 - `start` (query, integer): Start offset
 - `limit` (query, integer): min=1,max=500,default=10
 
@@ -268,18 +268,18 @@ successful operation
 
 ---
 
-### Get collection items
-<a id="get-collection-items"></a>
+### List NFT or child assets that belong to an Alkane collection
+<a id="list-nft-or-child-assets-that-belong-to-an-alkane-collection"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/{alkaneid}/collection-items`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesCollectionItems)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Alkanes/getAlkanesCollectionItems)  
 
 #### Description
-Retrieve collection items for a specific Alkanes collection by Alkane ID.
+Returns paginated Alkane item metadata for a collection, including each item's asset type and NFT or token details when available.
 
 #### Parameters
-- `alkaneid` (path, string) **(required)**: Alkane ID
+- `alkaneid` (path, string) **(required)**: 
 - `start` (query, integer): default=0; example: `0`
 - `limit` (query, integer): min=1,max=500,default=10; example: `10`
 
@@ -326,18 +326,18 @@ successful operation
 
 ---
 
-### Get contract events
-<a id="get-contract-events"></a>
+### List contract execution events for an Alkane over a block range
+<a id="list-contract-execution-events-for-an-alkane-over-a-block-range"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/{alkaneid}/contract-events`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesContractEvents)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Alkanes/getAlkanesContractEvents)  
 
 #### Description
-Retrieve contract events for a specific Alkane asset within a block height range.
+Returns indexed contract events with caller, opcode, fuel, inputs, execution status, block height, txid, and vout. Use it to audit contract activity within a bounded height range.
 
 #### Parameters
-- `alkaneid` (path, string) **(required)**: Alkane ID
+- `alkaneid` (path, string) **(required)**: 
 - `fromHeight` (query, integer) **(required)**: search by from height
 - `toHeight` (query, integer) **(required)**: search by to height
 - `start` (query, integer): default=0; example: `0`
@@ -366,19 +366,19 @@ successful operation
 
 ---
 
-### Get alkanes utxo balance
-<a id="get-alkanes-utxo-balance"></a>
+### Get all Alkane balances attached to a specific UTXO
+<a id="get-all-alkane-balances-attached-to-a-specific-utxo"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/alkanes/utxo/{txid}/{index}/balance`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAlkanesUtxoBalance)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Alkanes/getAlkanesUtxoBalance)  
 
 #### Description
-Retrieve Alkanes balances held by a specific transaction output.
+Returns the Alkane assets and amounts indexed on one transaction output, with token, NFT, or collection metadata attached when available.
 
 #### Parameters
-- `txid` (path, string) **(required)**: Transaction ID
-- `index` (path, string) **(required)**: Output index (vout) of the transaction
+- `txid` (path, string) **(required)**: 
+- `index` (path, string) **(required)**: 
 
 #### Response (200)
 successful operation
@@ -418,19 +418,19 @@ successful operation
 
 ---
 
-### Get utxo alkanes balance by address and alkaneid
-<a id="get-utxo-alkanes-balance-by-address-and-alkaneid"></a>
+### List an address's UTXOs that carry a specific Alkane
+<a id="list-an-addresss-utxos-that-carry-a-specific-alkane"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/alkanes/{alkaneid}/utxo`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAddressAlkanesUtxo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Alkanes/getAddressAlkanesUtxo)  
 
 #### Description
-Retrieve UTXOs containing a specific Alkane asset for an address.
+Returns spendable transaction outputs for an address that contain the selected Alkane, including satoshi value, scriptPubKey, confirmations, and indexed Alkane balances on each UTXO.
 
 #### Parameters
-- `address` (path, string) **(required)**: Bitcoin address
-- `alkaneid` (path, string) **(required)**: Alkane ID
+- `address` (path, string) **(required)**: 
+- `alkaneid` (path, string) **(required)**: 
 - `start` (query, integer): default=0; example: `0`
 - `limit` (query, integer): min=1,max=500,default=10; example: `10`
 
@@ -482,18 +482,18 @@ successful operation
 
 ---
 
-### Get address alkanes token list
-<a id="get-address-alkanes-token-list"></a>
+### List fungible Alkanes tokens held by an address
+<a id="list-fungible-alkanes-tokens-held-by-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/alkanes/token-list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAddressAlkanesTokenList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Alkanes/getAddressAlkanesTokenList)  
 
 #### Description
-Retrieve Alkanes token balances owned by an address.
+Returns token assets associated with an address, including each token's metadata and paginated list context. Use it for wallet asset discovery before querying per-token UTXOs or transfer history.
 
 #### Parameters
-- `address` (path, string) **(required)**: Bitcoin address
+- `address` (path, string) **(required)**: 
 - `start` (query, integer): default=0; example: `0`
 - `limit` (query, integer): min=1,max=500,default=10; example: `10`
 
@@ -540,18 +540,18 @@ successful operation
 
 ---
 
-### Get address alkanes collection list
-<a id="get-address-alkanes-collection-list"></a>
+### List Alkane collections associated with an address
+<a id="list-alkane-collections-associated-with-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/alkanes/collection-list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAddressAlkanesCollectionList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Alkanes/getAddressAlkanesCollectionList)  
 
 #### Description
-Retrieve Alkanes collections owned by an address.
+Returns collection-type Alkane metadata indexed for an address, including collection name, supply, mint progress, and holder count when available.
 
 #### Parameters
-- `address` (path, string) **(required)**: Bitcoin address
+- `address` (path, string) **(required)**: 
 - `start` (query, integer): default=0; example: `0`
 - `limit` (query, integer): min=1,max=500,default=10; example: `10`
 
@@ -598,19 +598,19 @@ successful operation
 
 ---
 
-### Get address collection items by alkaneid
-<a id="get-address-collection-items-by-alkaneid"></a>
+### List an address's items from a specific Alkane collection
+<a id="list-an-addresss-items-from-a-specific-alkane-collection"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/alkanes/{alkaneid}/collection-items`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAddressAlkanesCollectionItems)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Alkanes/getAddressAlkanesCollectionItems)  
 
 #### Description
-Retrieve items from a specific Alkanes collection owned by an address.
+Returns collection item metadata scoped to one address, useful for showing which NFTs or child assets from a collection are held by that wallet.
 
 #### Parameters
-- `address` (path, string) **(required)**: Bitcoin address
-- `alkaneid` (path, string) **(required)**: Alkane ID
+- `address` (path, string) **(required)**: 
+- `alkaneid` (path, string) **(required)**: 
 - `start` (query, integer): default=0; example: `0`
 - `limit` (query, integer): min=1,max=500,default=10; example: `10`
 
@@ -657,19 +657,19 @@ successful operation
 
 ---
 
-### Get transfer history
-<a id="get-transfer-history"></a>
+### List an address's transfer history for a specific Alkane
+<a id="list-an-addresss-transfer-history-for-a-specific-alkane"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/alkanes/{alkaneid}/transfer-history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Alkanes/getAddressAlkanesTransferHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Alkanes/getAddressAlkanesTransferHistory)  
 
 #### Description
-Retrieve transfer history for a specific Alkane asset and address within a block height range.
+Returns indexed transfer records with block height, txid, transfer type, subtype, address, and amount. Use it to build an address-level activity view over a bounded height range.
 
 #### Parameters
-- `address` (path, string) **(required)**: Bitcoin address
-- `alkaneid` (path, string) **(required)**: Alkane ID
+- `address` (path, string) **(required)**: 
+- `alkaneid` (path, string) **(required)**: 
 - `fromHeight` (query, integer) **(required)**: search by from height
 - `toHeight` (query, integer) **(required)**: search by to height
 - `start` (query, integer): default=0; example: `0`

@@ -1,6 +1,6 @@
 # Runes Indexer API
 
-This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free to send us an email, and we will provide you with an API KEY.
+Runes Indexer API is a RESTful API for indexing and querying Bitcoin Runes data. It provides endpoints for Runes status, Rune list/search, Rune metadata, holders, address balances, and transferable Rune UTXOs.
 
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
@@ -9,29 +9,29 @@ This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel free
 
 | Route | Summary |
 | ----- | ------- |
-| [GET `/v1/indexer/runes/status`](#get-runes-status) | Get runes status |
-| [GET `/v1/indexer/runes/info-list`](#get-runes-list) | Get runes list |
-| [GET `/v1/indexer/runes/(runeid)/info`](#get-rune-info-by-runeid) | Get rune info by runeid |
-| [GET `/v1/indexer/runes/(runeid)/holders`](#get-runes-holders-by-runeid) | Get runes holders by runeid |
-| [GET `/v1/indexer/address/(address)/runes/balance-list`](#get-runes-balance-list-by-address) | Get runes balance list by address |
-| [GET `/v1/indexer/address/(address)/runes/(runeid)/balance`](#get-runes-balance-by-address-and-runeid) | Get runes balance by address and runeid |
-| [GET `/v1/indexer/runes/utxo/(txid)/(index)/balance`](#get-runes-balance-by-utxo) | Get runes balance by utxo |
-| [GET `/v1/indexer/address/(address)/runes/(runeid)/utxo`](#get-utxo-runes-balance-by-address-and-runeid) | Get utxo runes balance by address and runeid |
-| [GET `/v1/indexer/runes/event`](#get-runes-events) | Get Runes Events |
+| [GET `/v1/indexer/runes/status`](#get-runes-indexer-status-and-minimum-rune-state) | Get Runes indexer status and minimum rune state |
+| [GET `/v1/indexer/runes/info-list`](#search-and-list-rune-metadata-entries) | Search and list Rune metadata entries |
+| [GET `/v1/indexer/runes/(runeid)/info`](#get-detailed-metadata-for-a-rune) | Get detailed metadata for a Rune |
+| [GET `/v1/indexer/runes/(runeid)/holders`](#list-holders-for-a-rune) | List holders for a Rune |
+| [GET `/v1/indexer/address/(address)/runes/balance-list`](#list-all-rune-balances-for-an-address) | List all Rune balances for an address |
+| [GET `/v1/indexer/address/(address)/runes/(runeid)/balance`](#get-an-addresss-balance-for-one-rune) | Get an address's balance for one Rune |
+| [GET `/v1/indexer/runes/utxo/(txid)/(index)/balance`](#get-rune-balances-carried-by-a-specific-utxo) | Get Rune balances carried by a specific UTXO |
+| [GET `/v1/indexer/address/(address)/runes/(runeid)/utxo`](#list-an-addresss-transferable-utxos-for-one-rune) | List an address's transferable UTXOs for one Rune |
+| [GET `/v1/indexer/runes/event`](#search-rune-etch-mint-burn-send-and-receive-events) | Search Rune etch, mint, burn, send, and receive events |
 
 ---
 
-## Runes
+## Runes Indexer
 
-### Get runes status
-<a id="get-runes-status"></a>
+### Get Runes indexer status and minimum rune state
+<a id="get-runes-indexer-status-and-minimum-rune-state"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/runes/status`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes/getRunesStatus)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes Indexer/getRunesStatus)  
 
 #### Description
-Get runes global status
+Returns the latest indexed height, total rune count, current minimum rune, and halving block count. Use it to check Runes indexer freshness before reading rune metadata, holder lists, balances, UTXOs, or event history; data may lag new confirmations.
 
 #### Response (200)
 successful operation
@@ -56,18 +56,18 @@ successful operation
 
 ---
 
-### Get runes list
-<a id="get-runes-list"></a>
+### Search and list Rune metadata entries
+<a id="search-and-list-rune-metadata-entries"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/runes/info-list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes/getRunesList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes Indexer/getRunesList)  
 
 #### Description
-Retrieve a paginated list of Runes with optional search, completion, sorting, and pagination filters.
+Returns paginated Rune entries with rune id, raw and spaced names, divisibility, symbol, etching transaction, premine, terms, mints, burned amount, holders, transactions, supply, mintability, and remaining amount. Use it for Rune discovery, filtering, and ranking; spaced names may contain bullet separators.
 
 #### Parameters
-- `rune` (query, string): search by rune spacedRune; example: `0`
+- `rune` (query, string): Search by spaced Rune name, for example DOG•GO•TO•THE•MOON.; example: `"DOG•GO•TO•THE•MOON"`
 - `sort` (query, string): by (holders/transactions/timestamp); example: `"timestamp"`
 - `complete` (query, string): complete type(yes/no); example: `"no"`
 - `start` (query, integer): default=0; example: `0`
@@ -113,18 +113,18 @@ successful operation
 
 ---
 
-### Get rune info by runeid
-<a id="get-rune-info-by-runeid"></a>
+### Get detailed metadata for a Rune
+<a id="get-detailed-metadata-for-a-rune"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/runes/{runeid}/info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes/getRuneInfo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes Indexer/getRuneInfo)  
 
 #### Description
-Retrieve detailed information for a specific Rune by Rune ID.
+Returns one Rune entry by block:tx rune id, including names, symbol, divisibility, etching transaction, premine, mint terms, supply, burned amount, holder and transaction counts, mintability, and remaining supply. Use it for Rune detail pages and validation before balance or holder queries.
 
 #### Parameters
-- `runeid` (path, string) **(required)**: Rune ID
+- `runeid` (path, string) **(required)**: Rune id in block:tx format, for example 840000:3.
 
 #### Response (200)
 successful operation
@@ -163,18 +163,18 @@ successful operation
 
 ---
 
-### Get runes holders by runeid
-<a id="get-runes-holders-by-runeid"></a>
+### List holders for a Rune
+<a id="list-holders-for-a-rune"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/runes/{runeid}/holders`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes/getRuneHolders)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes Indexer/getRuneHolders)  
 
 #### Description
-Retrieve holders for a specific Rune by Rune ID.
+Returns holder addresses and Rune amounts for a specific block:tx rune id with pagination totals. Use it for holder distribution and ownership analysis; amounts are indexed token balances and do not authorize transfers or UTXO spends.
 
 #### Parameters
-- `runeid` (path, string) **(required)**: Rune ID
+- `runeid` (path, string) **(required)**: Rune id in block:tx format, for example 840000:3.
 - `start` (query, integer): Start offset
 - `limit` (query, integer): Number of inscriptions returned
 
@@ -193,18 +193,18 @@ successful operation
 
 ---
 
-### Get runes balance list by address
-<a id="get-runes-balance-list-by-address"></a>
+### List all Rune balances for an address
+<a id="list-all-rune-balances-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/runes/balance-list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes/getRunesBalanceList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes Indexer/getRunesBalanceList)  
 
 #### Description
-Retrieve Rune balances held by an address.
+Returns paginated Rune balances held by an address, including rune id, raw and spaced names, symbol, divisibility, and amount. Use it for wallet portfolio displays or account audits; balances are indexer-derived and should be reconciled with UTXOs before spending.
 
 #### Parameters
-- `address` (path, string) **(required)**: Bitcoin address
+- `address` (path, string) **(required)**: Bitcoin address.
 - `start` (query, integer): Start offset
 - `limit` (query, integer): Number of items returned
 
@@ -227,19 +227,19 @@ successful operation
 
 ---
 
-### Get runes balance by address and runeid
-<a id="get-runes-balance-by-address-and-runeid"></a>
+### Get an address's balance for one Rune
+<a id="get-an-addresss-balance-for-one-rune"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/runes/{runeid}/balance`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes/getRunesBalance)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes Indexer/getRunesBalance)  
 
 #### Description
-Retrieve the balance of a specific Rune held by an address.
+Returns the indexed amount and Rune identity fields for one address and block:tx rune id. Use it for single-token wallet views or pre-transfer checks; spend construction must still inspect Rune UTXOs and current mempool state.
 
 #### Parameters
-- `address` (path, string) **(required)**: Bitcoin address
-- `runeid` (path, string) **(required)**: Rune ID
+- `address` (path, string) **(required)**: Bitcoin address.
+- `runeid` (path, string) **(required)**: Rune id in block:tx format, for example 840000:3.
 
 #### Response (200)
 successful operation
@@ -257,19 +257,19 @@ successful operation
 
 ---
 
-### Get runes balance by utxo
-<a id="get-runes-balance-by-utxo"></a>
+### Get Rune balances carried by a specific UTXO
+<a id="get-rune-balances-carried-by-a-specific-utxo"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/runes/utxo/{txid}/{index}/balance`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes/getRunesUtxoBalance)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes Indexer/getRunesUtxoBalance)  
 
 #### Description
-Retrieve Rune balances held by a specific transaction output.
+Returns all Rune balances associated with one transaction output, including rune id, names, symbol, divisibility, and amount. Use it for coin selection diagnostics or validating a Rune-bearing UTXO; callers must confirm the UTXO is still unspent before spending.
 
 #### Parameters
-- `txid` (path, string) **(required)**: Transaction ID
-- `index` (path, string) **(required)**: Output index (vout) of the transaction
+- `txid` (path, string) **(required)**: 
+- `index` (path, string) **(required)**: 
 
 #### Response (200)
 successful operation
@@ -287,19 +287,19 @@ successful operation
 
 ---
 
-### Get utxo runes balance by address and runeid
-<a id="get-utxo-runes-balance-by-address-and-runeid"></a>
+### List an address's transferable UTXOs for one Rune
+<a id="list-an-addresss-transferable-utxos-for-one-rune"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/runes/{runeid}/utxo`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes/getRunesUtxoByAddressAndRuneid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes Indexer/getRunesUtxoByAddressAndRuneid)  
 
 #### Description
-Retrieve UTXOs containing a specific Rune for an address.
+Returns UTXOs for an address that carry the selected Rune, including address, satoshi value, script, outpoint, and embedded Rune balances. Use it to prepare transfer candidates; revalidate ownership, dust policy, and mempool state before signing or broadcasting.
 
 #### Parameters
-- `address` (path, string) **(required)**: Bitcoin address
-- `runeid` (path, string) **(required)**: Rune ID
+- `address` (path, string) **(required)**: 
+- `runeid` (path, string) **(required)**: Rune id in block:tx format, for example 840000:3.
 - `start` (query, integer): default=0; example: `0`
 - `limit` (query, integer): required,min=1,max=500,default=10; example: `10`
 
@@ -328,15 +328,15 @@ successful operation
 
 ---
 
-### Get Runes Events
-<a id="get-runes-events"></a>
+### Search Rune etch, mint, burn, send, and receive events
+<a id="search-rune-etch-mint-burn-send-and-receive-events"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/runes/event`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes/getRunesEvents)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Runes Indexer/getRunesEvents)  
 
 #### Description
-Get the full history events of Runes.
+Returns paginated Rune events with type, address, amount, height, transaction index, txid, timestamp, raw rune name, and rune id. Use it for activity feeds, compliance exports, or block and transaction investigations; results are read-only indexer events and may lag recent confirmations.
 
 #### Parameters
 - `rune` (query, string): Filter by rune

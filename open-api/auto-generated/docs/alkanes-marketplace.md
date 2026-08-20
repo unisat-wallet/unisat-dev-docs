@@ -1,6 +1,6 @@
-# Alkanes MarketPlace API
+# Alkanes Marketplace API
 
-This API provides endpoints for alkanes marketplace services
+This API provides endpoints for Alkanes marketplace services, including market statistics, listing search, activity history, and order preparation/submission for Alkanes assets.
 
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
@@ -9,38 +9,38 @@ This API provides endpoints for alkanes marketplace services
 
 | Route | Summary |
 | ----- | ------- |
-| [POST `/v3/market/alkanes/auction/alkanes_types`](#get-statistical-data) | Get statistical data |
-| [POST `/v3/market/alkanes/auction/alkanes_types_specified`](#get-statistical-data-for-specified-alkanes) | Get statistical data for specified alkanes. |
-| [POST `/v3/market/alkanes/auction/list`](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
-| [POST `/v3/market/alkanes/auction/actions`](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
-| [POST `/v3/market/alkanes/auction/create_put_on`](#create-listing-order) | Create listing order. |
-| [POST `/v3/market/alkanes/auction/confirm_put_on`](#confirm-listing-order) | Confirm listing order. |
-| [POST `/v3/market/alkanes/auction/create_bid_prepare`](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
-| [POST `/v3/market/alkanes/auction/create_bid`](#create-purchase-order) | Create purchase order. |
-| [POST `/v3/market/alkanes/auction/confirm_bid`](#confirm-purchase-order) | Confirm purchase order. |
-| [POST `/v3/market/alkanes/auction/create_put_off`](#create-delisting-order) | Create delisting order. |
-| [POST `/v3/market/alkanes/auction/confirm_put_off`](#confirm-delisting-order) | Confirm delisting order. |
-| [POST `/v3/market/alkanes/auction/create_modify_price`](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
-| [POST `/v3/market/alkanes/auction/confirm_modify_price`](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
-| [POST `/v3/market/alkanes/auction/create_batch_put_on`](#create-batch-listing-order) | Create batch listing order. |
-| [POST `/v3/market/alkanes/auction/confirm_batch_put_on`](#confirm-batch-listing-order) | Confirm batch listing order. |
-| [POST `/v3/market/alkanes/auction/create_batch_bid_prepare`](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
-| [POST `/v3/market/alkanes/auction/create_batch_bid`](#create-purchase-order) | Create purchase order. |
-| [POST `/v3/market/alkanes/auction/confirm_batch_bid`](#confirm-purchase-order) | Confirm purchase order. |
+| [POST `/v3/market/alkanes/auction/alkanes_types`](#list-alkanes-market-statistics-by-time-window) | List Alkanes market statistics by time window |
+| [POST `/v3/market/alkanes/auction/alkanes_types_specified`](#get-market-statistics-for-one-alkanes-ticker) | Get market statistics for one Alkanes ticker |
+| [POST `/v3/market/alkanes/auction/list`](#search-active-and-ended-alkanes-marketplace-listings) | Search active and ended Alkanes marketplace listings |
+| [POST `/v3/market/alkanes/auction/actions`](#list-alkanes-marketplace-listing-sale-and-update-events) | List Alkanes marketplace listing, sale, and update events |
+| [POST `/v3/market/alkanes/auction/create_put_on`](#create-an-alkanes-listing-psbt) | Create an Alkanes listing PSBT |
+| [POST `/v3/market/alkanes/auction/confirm_put_on`](#publish-a-signed-alkanes-listing) | Publish a signed Alkanes listing |
+| [POST `/v3/market/alkanes/auction/create_bid_prepare`](#estimate-fees-and-balance-for-an-alkanes-purchase) | Estimate fees and balance for an Alkanes purchase |
+| [POST `/v3/market/alkanes/auction/create_bid`](#create-an-alkanes-purchase-psbt) | Create an Alkanes purchase PSBT |
+| [POST `/v3/market/alkanes/auction/confirm_bid`](#submit-a-signed-alkanes-purchase) | Submit a signed Alkanes purchase |
+| [POST `/v3/market/alkanes/auction/create_put_off`](#create-an-alkanes-delisting-psbt) | Create an Alkanes delisting PSBT |
+| [POST `/v3/market/alkanes/auction/confirm_put_off`](#remove-a-listed-alkanes-order) | Remove a listed Alkanes order |
+| [POST `/v3/market/alkanes/auction/create_modify_price`](#create-an-alkanes-listing-price-update-psbt) | Create an Alkanes listing price-update PSBT |
+| [POST `/v3/market/alkanes/auction/confirm_modify_price`](#apply-a-signed-alkanes-listing-price-update) | Apply a signed Alkanes listing price update |
+| [POST `/v3/market/alkanes/auction/create_batch_put_on`](#create-batch-alkanes-listing-psbts) | Create batch Alkanes listing PSBTs |
+| [POST `/v3/market/alkanes/auction/confirm_batch_put_on`](#publish-signed-batch-alkanes-listings) | Publish signed batch Alkanes listings |
+| [POST `/v3/market/alkanes/auction/create_batch_bid_prepare`](#estimate-fees-and-validate-listings-for-batch-alkanes-purchases) | Estimate fees and validate listings for batch Alkanes purchases |
+| [POST `/v3/market/alkanes/auction/create_batch_bid`](#create-batch-alkanes-purchase-psbts) | Create batch Alkanes purchase PSBTs |
+| [POST `/v3/market/alkanes/auction/confirm_batch_bid`](#submit-signed-batch-alkanes-purchases) | Submit signed batch Alkanes purchases |
 
 ---
 
-## MarketPlace-Alkanes
+## Marketplace-Alkanes
 
-### Get statistical data
-<a id="get-statistical-data"></a>
+### List Alkanes market statistics by time window
+<a id="list-alkanes-market-statistics-by-time-window"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/alkanes_types`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/getAlkanesTypes)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/getAlkanesTypes)  
 
 #### Description
-Get statistical data, price, market capitalization, etc. for alkanes.
+Returns paginated market metrics for Alkanes tickers, including current price, price change, BTC and asset volume, market cap, holder count, transaction count, warning flag, and the BTC price used for valuation.
 
 #### Request Body
 Content-Type: `application/json`
@@ -70,15 +70,15 @@ Default Response
 
 ---
 
-### Get statistical data for specified alkanes.
-<a id="get-statistical-data-for-specified-alkanes"></a>
+### Get market statistics for one Alkanes ticker
+<a id="get-market-statistics-for-one-alkanes-ticker"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/alkanes_types_specified`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/getAlkanesTypesSpecified)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/getAlkanesTypesSpecified)  
 
 #### Description
-Get statistical data, price, market capitalization, etc. for Alkanes.
+Returns ticker-level marketplace metrics such as symbol, current price, price change, BTC and asset volume, cap in BTC and USD, deploy time, holder count, inscription number, transaction count, and warning flag.
 
 #### Request Body
 Content-Type: `application/json`
@@ -109,18 +109,21 @@ Default Response
 
 ---
 
-### Retrieve the list information of the market.
-<a id="retrieve-the-list-information-of-the-market"></a>
+### Search active and ended Alkanes marketplace listings
+<a id="search-active-and-ended-alkanes-marketplace-listings"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/getAlkanesAuctionList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/getAlkanesAuctionList)  
+
+#### Description
+Returns paginated listing records with auction id, inscription id and number, seller address, price, ticker, amount, unit price, market type, and latest listing timestamp context.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
 
 - `filter` (object):
-  - `nftType` (string): required; enum: `brc20`
+  - `nftType` (string): required; enum: `alkanes`
   - `address` (string):
   - `tick` (string):
   - `minPrice` (number):
@@ -160,18 +163,21 @@ Default Response
 
 ---
 
-### Get information on listings, delistings, and sales.
-<a id="get-information-on-listings-delistings-and-sales"></a>
+### List Alkanes marketplace listing, sale, and update events
+<a id="list-alkanes-marketplace-listing-sale-and-update-events"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/actions`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/getAlkanesAuctionActions)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/getAlkanesAuctionActions)  
+
+#### Description
+Returns paginated marketplace activity records, including auction id, inscription id and number, event type, price, from/to addresses, timestamp, confirmation count, newest-event marker, and asset-specific metadata.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
 
 - `filter` (object):
-  - `nftType` (string): enum: `brc20`
+  - `nftType` (string): enum: `alkanes`
   - `address` (string):
   - `inscriptionId` (string):
   - `event` (string): Event type: Cancel, Listed, Sold, Updated; enum: `Cancel`, `Claim`, `Listed`, `Sold`, `Updated`
@@ -216,12 +222,15 @@ Default Response
 
 ---
 
-### Create listing order.
-<a id="create-listing-order"></a>
+### Create an Alkanes listing PSBT
+<a id="create-an-alkanes-listing-psbt"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/create_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/createAlkanesPutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/createAlkanesPutOn)  
+
+#### Description
+Builds a fixed-price listing draft for an Alkanes UTXO and returns an auction id, PSBT, and wallet sign indexes. Review the asset UTXO, total price, unit price, public key, and receiving address before use.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -248,12 +257,15 @@ Default Response
 
 ---
 
-### Confirm listing order.
-<a id="confirm-listing-order"></a>
+### Publish a signed Alkanes listing
+<a id="publish-a-signed-alkanes-listing"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/confirm_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/confirmAlkanesPutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/confirmAlkanesPutOn)  
+
+#### Description
+Confirms the signed listing PSBT for an auction id and activates the marketplace listing. The response is empty on success, so callers should verify state through listing or activity queries after confirmation.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -272,12 +284,15 @@ Default Response
 
 ---
 
-### Return params before creating purchase order.
-<a id="return-params-before-creating-purchase-order"></a>
+### Estimate fees and balance for an Alkanes purchase
+<a id="estimate-fees-and-balance-for-an-alkanes-purchase"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/create_bid_prepare`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/createAlkanesBidPrepare)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/createAlkanesBidPrepare)  
+
+#### Description
+Calculates purchase preparation data for an auction id and bid price, including service fee, real fee, fee rate, estimated transaction size, inscription satoshi value, network fee rate, available balance, and total balance.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -305,12 +320,15 @@ Default Response
 
 ---
 
-### Create purchase order.
-<a id="create-purchase-order"></a>
+### Create an Alkanes purchase PSBT
+<a id="create-an-alkanes-purchase-psbt"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/create_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/createAlkanesBid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/createAlkanesBid)  
+
+#### Description
+Builds a purchase order for a listing and returns bid id, bid PSBT, optional auction-mode PSBT fields, platform fee, network fee, fee rate, inscription value, and wallet sign indexes.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -344,12 +362,15 @@ Default Response
 
 ---
 
-### Confirm purchase order.
-<a id="confirm-purchase-order"></a>
+### Submit a signed Alkanes purchase
+<a id="submit-a-signed-alkanes-purchase"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/confirm_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/confirmAlkanesBid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/confirmAlkanesBid)  
+
+#### Description
+Confirms the signed bid PSBT for an auction and bid id, then returns the settlement transaction id when the purchase is accepted.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -372,12 +393,15 @@ Default Response
 
 ---
 
-### Create delisting order.
-<a id="create-delisting-order"></a>
+### Create an Alkanes delisting PSBT
+<a id="create-an-alkanes-delisting-psbt"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/create_put_off`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/createAlkanesPutOff)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/createAlkanesPutOff)  
+
+#### Description
+Builds a delisting transaction for an auction id and returns PSBT, estimated transaction size, BTC sign indexes, and asset sign indexes. Optional inputs support custom UTXOs, RBF, off-chain cancellation, and multi-address wallets.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -405,12 +429,15 @@ Default Response
 
 ---
 
-### Confirm delisting order.
-<a id="confirm-delisting-order"></a>
+### Remove a listed Alkanes order
+<a id="remove-a-listed-alkanes-order"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/confirm_put_off`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/confirmAlkanesPutOff)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/confirmAlkanesPutOff)  
+
+#### Description
+Confirms the signed delisting PSBT for an auction id and returns the cancellation transaction id when removal is completed or accepted.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -431,12 +458,15 @@ Default Response
 
 ---
 
-### Create the order for price adjustment.
-<a id="create-the-order-for-price-adjustment"></a>
+### Create an Alkanes listing price-update PSBT
+<a id="create-an-alkanes-listing-price-update-psbt"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/create_modify_price`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/createAlkanesModifyPrice)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/createAlkanesModifyPrice)  
+
+#### Description
+Builds a PSBT to change an existing listing's total and unit price, returning the signing payload and sign indexes for the specified auction id.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -457,12 +487,15 @@ Default Response
 
 ---
 
-### Confirm the order for price adjustment.
-<a id="confirm-the-order-for-price-adjustment"></a>
+### Apply a signed Alkanes listing price update
+<a id="apply-a-signed-alkanes-listing-price-update"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/confirm_modify_price`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/confirmAlkanesModifyPrice)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/confirmAlkanesModifyPrice)  
+
+#### Description
+Confirms the signed price-update PSBT for an auction id and updates the active listing price. The response is empty on success, so use listing or activity queries to verify the new price.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -481,12 +514,15 @@ Default Response
 
 ---
 
-### Create batch listing order.
-<a id="create-batch-listing-order"></a>
+### Create batch Alkanes listing PSBTs
+<a id="create-batch-alkanes-listing-psbts"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/create_batch_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/createAlkanesBatchPutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/createAlkanesBatchPutOn)  
+
+#### Description
+Builds a batch listing draft for multiple Alkanes UTXOs and returns batch auction id, PSBT, and sign indexes. Verify every UTXO, shared unit price, public key, and receiving address before signing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -512,12 +548,15 @@ Default Response
 
 ---
 
-### Confirm batch listing order.
-<a id="confirm-batch-listing-order"></a>
+### Publish signed batch Alkanes listings
+<a id="publish-signed-batch-alkanes-listings"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/confirm_batch_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/confirmAlkanesBatchPutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/confirmAlkanesBatchPutOn)  
+
+#### Description
+Confirms a signed batch listing PSBT and activates all listings in the batch. The response is empty on success, so verify the published listings through list or activity endpoints.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -536,12 +575,15 @@ Default Response
 
 ---
 
-### Return params before creating purchase order.
-<a id="return-params-before-creating-purchase-order"></a>
+### Estimate fees and validate listings for batch Alkanes purchases
+<a id="estimate-fees-and-validate-listings-for-batch-alkanes-purchases"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/create_batch_bid_prepare`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/createAlkanesBatchBidPrepare)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/createAlkanesBatchBidPrepare)  
+
+#### Description
+Calculates batch purchase preparation data for auction ids, including service fee, real fee, fee rate, estimated transaction size, network fee rate, available balance, valid auction ids, and invalid auction ids.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -568,12 +610,15 @@ Default Response
 
 ---
 
-### Create purchase order.
-<a id="create-purchase-order"></a>
+### Create batch Alkanes purchase PSBTs
+<a id="create-batch-alkanes-purchase-psbts"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/create_batch_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/createAlkanesBatchBid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/createAlkanesBatchBid)  
+
+#### Description
+Builds batch purchase orders for multiple auction ids and bid prices, returning bid id, bid PSBT, platform fee, network fee, fee rate, and wallet sign indexes.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -601,12 +646,15 @@ Default Response
 
 ---
 
-### Confirm purchase order.
-<a id="confirm-purchase-order"></a>
+### Submit signed batch Alkanes purchases
+<a id="submit-signed-batch-alkanes-purchases"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/alkanes/auction/confirm_batch_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Alkanes/confirmAlkanesBatchBid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Alkanes/confirmAlkanesBatchBid)  
+
+#### Description
+Confirms the signed batch bid PSBT and returns the settlement transaction id when the batch purchase is accepted.
 
 #### Request Body
 Content-Type: `application/json` **(required)**

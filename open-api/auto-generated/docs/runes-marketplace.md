@@ -1,6 +1,6 @@
-# Runes MarketPlace API
+# Runes Marketplace API
 
-This API provides endpoints for runes marketplace services
+This API provides endpoints for Runes marketplace services, including Rune market statistics, listing search, price information, activity history, and marketplace order workflows.
 
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
@@ -9,38 +9,38 @@ This API provides endpoints for runes marketplace services
 
 | Route | Summary |
 | ----- | ------- |
-| [POST `/v3/market/runes/auction/runes_types`](#get-statistical-data) | Get statistical data. |
-| [POST `/v3/market/runes/auction/runes_types_specified`](#get-statistical-data-for-specified-runes) | Get statistical data for specified runes. |
-| [POST `/v3/market/runes/auction/list`](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
-| [POST `/v3/market/runes/auction/actions`](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
-| [POST `/v3/market/runes/auction/create_put_on`](#create-listing-order) | Create listing order. |
-| [POST `/v3/market/runes/auction/confirm_put_on`](#confirm-listing-order) | Confirm listing order. |
-| [POST `/v3/market/runes/auction/create_bid_prepare`](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
-| [POST `/v3/market/runes/auction/create_bid`](#create-purchase-order) | Create purchase order. |
-| [POST `/v3/market/runes/auction/confirm_bid`](#confirm-purchase-order) | Confirm purchase order. |
-| [POST `/v3/market/runes/auction/create_put_off`](#create-delisting-order) | Create delisting order. |
-| [POST `/v3/market/runes/auction/confirm_put_off`](#confirm-delisting-order) | Confirm delisting order. |
-| [POST `/v3/market/runes/auction/create_modify_price`](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
-| [POST `/v3/market/runes/auction/confirm_modify_price`](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
-| [POST `/v3/market/runes/auction/create_batch_put_on`](#create-batch-listing-order) | Create batch listing order. |
-| [POST `/v3/market/runes/auction/confirm_batch_put_on`](#confirm-batch-listing-order) | Confirm batch listing order. |
-| [POST `/v3/market/runes/auction/create_batch_bid_prepare`](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
-| [POST `/v3/market/runes/auction/create_batch_bid`](#create-purchase-order) | Create purchase order. |
-| [POST `/v3/market/runes/auction/confirm_batch_bid`](#confirm-purchase-order) | Confirm purchase order. |
+| [POST `/v3/market/runes/auction/runes_types`](#list-runes-market-statistics) | List Runes market statistics |
+| [POST `/v3/market/runes/auction/runes_types_specified`](#get-specified-runes-market-statistics) | Get specified Runes market statistics |
+| [POST `/v3/market/runes/auction/list`](#search-runes-marketplace-listings) | Search Runes marketplace listings |
+| [POST `/v3/market/runes/auction/actions`](#list-runes-marketplace-activity-history) | List Runes marketplace activity history |
+| [POST `/v3/market/runes/auction/create_put_on`](#create-runes-listing-psbt-draft) | Create Runes listing PSBT draft |
+| [POST `/v3/market/runes/auction/confirm_put_on`](#publish-signed-runes-listing) | Publish signed Runes listing |
+| [POST `/v3/market/runes/auction/create_bid_prepare`](#estimate-runes-purchase-fees-and-balance) | Estimate Runes purchase fees and balance |
+| [POST `/v3/market/runes/auction/create_bid`](#create-runes-purchase-psbt-order) | Create Runes purchase PSBT order |
+| [POST `/v3/market/runes/auction/confirm_bid`](#submit-signed-runes-purchase-order) | Submit signed Runes purchase order |
+| [POST `/v3/market/runes/auction/create_put_off`](#create-runes-delisting-psbt-draft) | Create Runes delisting PSBT draft |
+| [POST `/v3/market/runes/auction/confirm_put_off`](#remove-signed-runes-listing) | Remove signed Runes listing |
+| [POST `/v3/market/runes/auction/create_modify_price`](#create-runes-price-update-psbt-draft) | Create Runes price-update PSBT draft |
+| [POST `/v3/market/runes/auction/confirm_modify_price`](#apply-signed-runes-listing-price-update) | Apply signed Runes listing price update |
+| [POST `/v3/market/runes/auction/create_batch_put_on`](#create-batch-runes-listing-psbt-drafts) | Create batch Runes listing PSBT drafts |
+| [POST `/v3/market/runes/auction/confirm_batch_put_on`](#publish-signed-batch-runes-listings) | Publish signed batch Runes listings |
+| [POST `/v3/market/runes/auction/create_batch_bid_prepare`](#estimate-batch-runes-purchase-fees) | Estimate batch Runes purchase fees |
+| [POST `/v3/market/runes/auction/create_batch_bid`](#create-batch-runes-purchase-psbt-orders) | Create batch Runes purchase PSBT orders |
+| [POST `/v3/market/runes/auction/confirm_batch_bid`](#submit-signed-batch-runes-purchases) | Submit signed batch Runes purchases |
 
 ---
 
-## MarketPlace-Runes
+## Marketplace-Runes
 
-### Get statistical data.
-<a id="get-statistical-data"></a>
+### List Runes market statistics
+<a id="list-runes-market-statistics"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/runes_types`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/getRunesTypes)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/getRunesTypes)  
 
 #### Description
-Get statistical data, price, market capitalization, etc. for runes.
+Query read-only Runes marketplace statistics such as price, volume, market capitalization, holders, and transaction counts. This query-style POST only reads market data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json`
@@ -70,15 +70,15 @@ Default Response
 
 ---
 
-### Get statistical data for specified runes.
-<a id="get-statistical-data-for-specified-runes"></a>
+### Get specified Runes market statistics
+<a id="get-specified-runes-market-statistics"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/runes_types_specified`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/getRunesTypesSpecified)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/getRunesTypesSpecified)  
 
 #### Description
-Get statistical data, price, market capitalization, etc. for Runes.
+Query read-only marketplace statistics for a specified Runes ticker. This query-style POST only reads market data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json`
@@ -109,12 +109,15 @@ Default Response
 
 ---
 
-### Retrieve the list information of the market.
-<a id="retrieve-the-list-information-of-the-market"></a>
+### Search Runes marketplace listings
+<a id="search-runes-marketplace-listings"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/getRunesAuctionList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/getRunesAuctionList)  
+
+#### Description
+Query read-only Runes marketplace listings with filters, sorting, and pagination. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -160,12 +163,15 @@ Default Response
 
 ---
 
-### Get information on listings, delistings, and sales.
-<a id="get-information-on-listings-delistings-and-sales"></a>
+### List Runes marketplace activity history
+<a id="list-runes-marketplace-activity-history"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/actions`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/getRunesAuctionActions)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/getRunesAuctionActions)  
+
+#### Description
+Query read-only Runes marketplace activity history such as listings, delistings, sales, claims, and updates. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -216,12 +222,15 @@ Default Response
 
 ---
 
-### Create listing order.
-<a id="create-listing-order"></a>
+### Create Runes listing PSBT draft
+<a id="create-runes-listing-psbt-draft"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/create_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/createRunesPutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/createRunesPutOn)  
+
+#### Description
+Creates a Runes listing draft and returns auctionId, PSBT, and signing indexes for the seller. Review rune UTXO, rune amount, initPrice, unitPrice, marketType, and receiving address before signing or confirming the listing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -248,12 +257,15 @@ Default Response
 
 ---
 
-### Confirm listing order.
-<a id="confirm-listing-order"></a>
+### Publish signed Runes listing
+<a id="publish-signed-runes-listing"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/confirm_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/confirmRunesPutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/confirmRunesPutOn)  
+
+#### Description
+Confirms the seller-signed listing PSBT and activates the Runes marketplace listing. Verify auctionId, PSBT encoding, rune amount, listing price, seller address, and market type before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -272,12 +284,15 @@ Default Response
 
 ---
 
-### Return params before creating purchase order.
-<a id="return-params-before-creating-purchase-order"></a>
+### Estimate Runes purchase fees and balance
+<a id="estimate-runes-purchase-fees-and-balance"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/create_bid_prepare`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/createRunesBidPrepare)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/createRunesBidPrepare)  
+
+#### Description
+Returns pre-purchase fee estimates, available balances, network fee rate, transaction size, and inscription value for a Runes auction. This is a quote/material preparation step only; before any later purchase submission, verify auctionId, bidPrice, buyer address, feeRate, and rune amount.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -305,12 +320,15 @@ Default Response
 
 ---
 
-### Create purchase order.
-<a id="create-purchase-order"></a>
+### Create Runes purchase PSBT order
+<a id="create-runes-purchase-psbt-order"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/create_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/createRunesBid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/createRunesBid)  
+
+#### Description
+Creates a Runes marketplace purchase order and returns bidId, PSBT data, signing indexes, server/network fees, feeRate, and inscription value. Confirm auctionId, bidPrice, buyer address, rune name/amount, and fee totals before requesting signatures.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -344,12 +362,15 @@ Default Response
 
 ---
 
-### Confirm purchase order.
-<a id="confirm-purchase-order"></a>
+### Submit signed Runes purchase order
+<a id="submit-signed-runes-purchase-order"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/confirm_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/confirmRunesBid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/confirmRunesBid)  
+
+#### Description
+Submits the signed Runes purchase PSBT and returns the settlement transaction id when accepted. Before calling, verify auctionId, bidId, PSBT content, final price, rune amount, buyer/seller addresses, and fee values because this can settle the purchase.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -372,12 +393,15 @@ Default Response
 
 ---
 
-### Create delisting order.
-<a id="create-delisting-order"></a>
+### Create Runes delisting PSBT draft
+<a id="create-runes-delisting-psbt-draft"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/create_put_off`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/createRunesPutOff)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/createRunesPutOff)  
+
+#### Description
+Creates delisting signing material for an active Runes marketplace order, including PSBT/signing data when needed. Confirm auctionId, owner addresses, and rune amount before signing because the next confirmation removes the listing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -405,12 +429,15 @@ Default Response
 
 ---
 
-### Confirm delisting order.
-<a id="confirm-delisting-order"></a>
+### Remove signed Runes listing
+<a id="remove-signed-runes-listing"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/confirm_put_off`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/confirmRunesPutOff)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/confirmRunesPutOff)  
+
+#### Description
+Confirms signed delisting data and removes the Runes listing from the marketplace. Verify auctionId, PSBT/signature payload, owner address, and target rune amount before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -431,12 +458,15 @@ Default Response
 
 ---
 
-### Create the order for price adjustment.
-<a id="create-the-order-for-price-adjustment"></a>
+### Create Runes price-update PSBT draft
+<a id="create-runes-price-update-psbt-draft"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/create_modify_price`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/createRunesModifyPrice)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/createRunesModifyPrice)  
+
+#### Description
+Creates signing material to update an existing Runes listing price. Verify auctionId, current rune amount, old and new prices, seller address, and returned PSBT/sign indexes before signing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -457,12 +487,15 @@ Default Response
 
 ---
 
-### Confirm the order for price adjustment.
-<a id="confirm-the-order-for-price-adjustment"></a>
+### Apply signed Runes listing price update
+<a id="apply-signed-runes-listing-price-update"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/confirm_modify_price`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/confirmRunesModifyPrice)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/confirmRunesModifyPrice)  
+
+#### Description
+Confirms signed price-update data and changes the active Runes listing price. Verify auctionId, signed PSBT, rune amount, seller address, and final price before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -481,12 +514,15 @@ Default Response
 
 ---
 
-### Create batch listing order.
-<a id="create-batch-listing-order"></a>
+### Create batch Runes listing PSBT drafts
+<a id="create-batch-runes-listing-psbt-drafts"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/create_batch_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/createRunesBatchPutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/createRunesBatchPutOn)  
+
+#### Description
+Creates multiple Runes listing drafts and returns signing material for each listing. Verify every rune UTXO, asset amount, listing price, seller address, auctionId, and PSBT/sign index before signing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -512,12 +548,15 @@ Default Response
 
 ---
 
-### Confirm batch listing order.
-<a id="confirm-batch-listing-order"></a>
+### Publish signed batch Runes listings
+<a id="publish-signed-batch-runes-listings"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/confirm_batch_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/confirmRunesBatchPutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/confirmRunesBatchPutOn)  
+
+#### Description
+Confirms signed PSBTs and activates multiple Runes marketplace listings. Verify every auctionId, signed PSBT, rune amount, listing price, seller address, and market type before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -536,12 +575,15 @@ Default Response
 
 ---
 
-### Return params before creating purchase order.
-<a id="return-params-before-creating-purchase-order"></a>
+### Estimate batch Runes purchase fees
+<a id="estimate-batch-runes-purchase-fees"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/create_batch_bid_prepare`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/createRunesBatchBidPrepare)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/createRunesBatchBidPrepare)  
+
+#### Description
+Returns quote-only fee, balance, transaction-size, and valid-listing data for multiple Runes purchases. This does not submit orders; before any later batch purchase, verify every auctionId, bid price, buyer address, rune amount, and fee estimate.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -568,12 +610,15 @@ Default Response
 
 ---
 
-### Create purchase order.
-<a id="create-purchase-order"></a>
+### Create batch Runes purchase PSBT orders
+<a id="create-batch-runes-purchase-psbt-orders"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/create_batch_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/createRunesBatchBid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/createRunesBatchBid)  
+
+#### Description
+Creates multiple Runes purchase orders and returns per-order signing material. Confirm every auctionId, bid price, buyer address, rune amount, feeRate, and returned PSBT/sign indexes before signing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -601,12 +646,15 @@ Default Response
 
 ---
 
-### Confirm purchase order.
-<a id="confirm-purchase-order"></a>
+### Submit signed batch Runes purchases
+<a id="submit-signed-batch-runes-purchases"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/runes/auction/confirm_batch_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Runes/confirmRunesBatchBid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Runes/confirmRunesBatchBid)  
+
+#### Description
+Confirms signed batch purchase PSBTs and can settle multiple Runes orders. Verify each auctionId, bidId, PSBT, final price, buyer/seller address, rune amount, and fee value before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**

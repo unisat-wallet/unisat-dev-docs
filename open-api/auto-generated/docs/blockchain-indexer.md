@@ -9,39 +9,38 @@ Blockchain API is a RESTful API for accessing Bitcoin blockchain data. It provid
 
 | Route | Summary |
 | ----- | ------- |
-| [GET `/v1/indexer/blockchain/info`](#get-blockchain-info) | Get Blockchain Info |
-| [GET `/v1/indexer/fees/recommended`](#get-recommended-fees) | Get Recommended Fees |
-| [GET `/v1/indexer/height/(height)/block`](#get-block-info-by-height) | Get block info by height |
-| [GET `/v1/indexer/block/id/(blockid)`](#get-block-info-by-blockid) | Get block info by blockid |
-| [GET `/v1/indexer/block/(height)/txs`](#get-txs-by-block-height) | Get txs by block height. |
-| [GET `/v1/indexer/tx/(txid)`](#get-tx-info-by-txid) | Get tx info by txid |
-| [GET `/v1/indexer/tx/(txid)/ins`](#get-the-inputs-of-a-tx) | Get the inputs of a tx |
-| [GET `/v1/indexer/tx/(txid)/outs`](#get-the-outputs-of-a-tx) | Get the outputs of a tx |
-| [GET `/v1/indexer/rawtx/(txid)`](#get-the-raw-tx-by-txid) | Get the raw tx by txid |
-| [GET `/v1/indexer/utxo/(txid)/(index)`](#get-the-utxo-by-txid-and-index) | Get the UTXO by txid and index |
-| [POST `/v1/indexer/local_pushtx`](#push-rawtx-to-bitcoin-node) | Push rawtx to bitcoin node. |
-| [POST `/v1/indexer/local_pushtxs`](#push-rawtxs-to-bitcoin-node) | Push rawtxs to bitcoin node. |
-| [GET `/v1/indexer/address/(address)/balance`](#get-the-balance-by-address) | Get the balance by address |
-| [GET `/v1/indexer/address/(address)/history`](#get-transaction-history-by-address) | Get transaction history by address |
-| [GET `/v1/indexer/address/(address)/utxo-data`](#get-btcutxo-list-by-address) | Get BTCUTXO list by address |
-| [GET `/v1/indexer/address/(address)/all-utxo-data`](#get-all-utxo-list-by-address) | Get all UTXO list by address |
-| [GET `/v1/indexer/address/(address)/available-balance`](#get-available-balance-by-address) | Get available balance by address |
-| [GET `/v1/indexer/address/(address)/available-utxo-data`](#get-available-utxo-list-by-address) | Get available UTXO list by address |
+| [GET `/v1/indexer/blockchain/info`](#get-chain-tip-header-height-and-best-block-metadata) | Get chain tip, header height, and best block metadata |
+| [GET `/v1/indexer/fees/recommended`](#get-recommended-bitcoin-fee-rates-by-confirmation-target) | Get recommended Bitcoin fee rates by confirmation target |
+| [GET `/v1/indexer/height/(height)/block`](#get-block-metadata-by-height) | Get block metadata by height |
+| [GET `/v1/indexer/block/id/(blockid)`](#get-block-metadata-by-block-hash) | Get block metadata by block hash |
+| [GET `/v1/indexer/block/(height)/txs`](#list-indexed-transactions-in-a-block-by-height) | List indexed transactions in a block by height |
+| [GET `/v1/indexer/tx/(txid)`](#get-indexed-transaction-summary-by-txid) | Get indexed transaction summary by txid |
+| [GET `/v1/indexer/tx/(txid)/ins`](#list-inputs-spent-by-a-transaction) | List inputs spent by a transaction |
+| [GET `/v1/indexer/tx/(txid)/outs`](#list-outputs-created-by-a-transaction) | List outputs created by a transaction |
+| [GET `/v1/indexer/rawtx/(txid)`](#get-raw-transaction-hex-by-txid) | Get raw transaction hex by txid |
+| [GET `/v1/indexer/utxo/(txid)/(index)`](#get-one-transaction-output-by-txid-and-vout) | Get one transaction output by txid and vout |
+| [POST `/v1/indexer/local_pushtx`](#broadcast-one-raw-transaction-to-the-selected-network) | Broadcast one raw transaction to the selected network |
+| [POST `/v1/indexer/local_pushtxs`](#broadcast-multiple-raw-transactions-to-the-selected-network) | Broadcast multiple raw transactions to the selected network |
+| [GET `/v1/indexer/address/(address)/balance`](#get-address-balance-split-by-btc-and-inscription-utxos) | Get address balance split by BTC and inscription UTXOs |
+| [GET `/v1/indexer/address/(address)/history`](#list-indexed-transaction-history-for-an-address) | List indexed transaction history for an address |
+| [GET `/v1/indexer/address/(address)/utxo-data`](#list-utxos-for-an-address) | List UTXOs for an address |
+| [GET `/v1/indexer/address/(address)/all-utxo-data`](#list-all-indexed-utxos-for-an-address) | List all indexed UTXOs for an address |
+| [GET `/v1/indexer/address/(address)/available-balance`](#get-address-balance-grouped-by-available-and-unavailable-utxos) | Get address balance grouped by available and unavailable UTXOs |
+| [GET `/v1/indexer/address/(address)/available-utxo-data`](#list-available-utxos-for-an-address) | List available UTXOs for an address |
 
 ---
 
-## Blocks
+## Indexer-Blockchain
 
-### Get Blockchain Info
-<a id="get-blockchain-info"></a>
+### Get chain tip, header height, and best block metadata
+<a id="get-chain-tip-header-height-and-best-block-metadata"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/blockchain/info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Blocks/getBlockchainInfo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getBlockchainInfo)  
 
 #### Description
-Get the current blockchain information, including chain type, block count, and best block hash.
-
+Returns the indexed blockchain state, including chain name, block and header heights, best and previous block hashes, median time, and accumulated chainwork.
 
 #### Response (200)
 Successful operation
@@ -63,15 +62,15 @@ Invalid API Key
 
 ---
 
-### Get Recommended Fees
-<a id="get-recommended-fees"></a>
+### Get recommended Bitcoin fee rates by confirmation target
+<a id="get-recommended-bitcoin-fee-rates-by-confirmation-target"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/fees/recommended`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Blocks/getRecommendedFees)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getRecommendedFees)  
 
 #### Description
-Get the recommended fees for different confirmation times. (like mempool.space)
+Returns fee-rate estimates for fastest, half-hour, hour, economy, and minimum confirmation targets, together with the update timestamp for freshness checks.
 
 #### Response (200)
 Successful operation
@@ -92,15 +91,15 @@ Invalid API Key
 
 ---
 
-### Get block info by height
-<a id="get-block-info-by-height"></a>
+### Get block metadata by height
+<a id="get-block-metadata-by-height"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/height/{height}/block`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Blocks/getBlockByHeight)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getBlockByHeight)  
 
 #### Description
-Get block info by height.
+Returns indexed block details such as hash links, transaction count, satoshi totals, coinbase output, timestamp, bits, and serialized size for the requested height.
 
 #### Parameters
 - `height` (path, integer) **(required)**: Block height
@@ -132,15 +131,15 @@ Invalid API Key
 
 ---
 
-### Get block info by blockid
-<a id="get-block-info-by-blockid"></a>
+### Get block metadata by block hash
+<a id="get-block-metadata-by-block-hash"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/block/id/{blockid}`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Blocks/getBlockById)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getBlockById)  
 
 #### Description
-Get block info by blockid.
+Returns the same indexed block model as height lookup, including chain links, transaction count, value totals, timestamp, difficulty bits, and block size.
 
 #### Parameters
 - `blockid` (path, string) **(required)**: Block id
@@ -172,15 +171,15 @@ Invalid API Key
 
 ---
 
-### Get txs by block height.
-<a id="get-txs-by-block-height"></a>
+### List indexed transactions in a block by height
+<a id="list-indexed-transactions-in-a-block-by-height"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/block/{height}/txs`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Blocks/getTxsByBlockHeight)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getTxsByBlockHeight)  
 
 #### Description
-Get txs by block height.
+Returns paginated transaction summaries for a block, including each transaction's input/output counts, satoshi totals, locktime, size, block position, confirmations, and timestamp.
 
 #### Parameters
 - `height` (path, integer) **(required)**: Block height
@@ -216,20 +215,18 @@ Invalid API Key
 
 ---
 
-## Transactions
-
-### Get tx info by txid
-<a id="get-tx-info-by-txid"></a>
+### Get indexed transaction summary by txid
+<a id="get-indexed-transaction-summary-by-txid"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/tx/{txid}`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Transactions/getTxById)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getTxById)  
 
 #### Description
-Get tx info by txid.
+Returns transaction-level metadata such as input/output counts, satoshi totals, locktime, size, witness offset, block hash, confirmations, and timestamp.
 
 #### Parameters
-- `txid` (path, string) **(required)**: Transaction ID
+- `txid` (path, string) **(required)**: Tx id
 
 #### Response (200)
 Successful operation
@@ -257,18 +254,18 @@ Invalid API Key
 
 ---
 
-### Get the inputs of a tx
-<a id="get-the-inputs-of-a-tx"></a>
+### List inputs spent by a transaction
+<a id="list-inputs-spent-by-a-transaction"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/tx/{txid}/ins`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Transactions/getInputsByTxId)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getInputsByTxId)  
 
 #### Description
-Get the inputs of a tx.
+Returns paginated previous-output records consumed by a transaction, including address, script data, satoshi value, inscription metadata, source txid, vout, and indexed height fields.
 
 #### Parameters
-- `txid` (path, string) **(required)**: Transaction ID
+- `txid` (path, string) **(required)**: Tx id
 - `cursor` (query, integer) **(required)**: Start offset
 - `size` (query, integer) **(required)**: Number of items returned
 
@@ -305,18 +302,18 @@ Invalid API Key
 
 ---
 
-### Get the outputs of a tx
-<a id="get-the-outputs-of-a-tx"></a>
+### List outputs created by a transaction
+<a id="list-outputs-created-by-a-transaction"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/tx/{txid}/outs`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Transactions/getOutputsByTxId)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getOutputsByTxId)  
 
 #### Description
-Get the outputs of a tx.
+Returns paginated transaction outputs with address, script type and scriptPubKey, satoshi value, inscription metadata, output index, and spend status fields when indexed.
 
 #### Parameters
-- `txid` (path, string) **(required)**: Transaction ID
+- `txid` (path, string) **(required)**: Tx id
 - `cursor` (query, integer) **(required)**: Start offset
 - `size` (query, integer) **(required)**: Number of items returned
 
@@ -350,18 +347,18 @@ Invalid API Key
 
 ---
 
-### Get the raw tx by txid
-<a id="get-the-raw-tx-by-txid"></a>
+### Get raw transaction hex by txid
+<a id="get-raw-transaction-hex-by-txid"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/rawtx/{txid}`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Transactions/getRawTxById)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getRawTxById)  
 
 #### Description
-Get the raw tx by txid.
+Returns the serialized raw transaction hex for decoding, verification, rebroadcast analysis, or offline transaction inspection.
 
 #### Parameters
-- `txid` (path, string) **(required)**: Transaction ID
+- `txid` (path, string) **(required)**: Tx id
 
 #### Response (200)
 Successful operation
@@ -376,19 +373,19 @@ Invalid API Key
 
 ---
 
-### Get the UTXO by txid and index
-<a id="get-the-utxo-by-txid-and-index"></a>
+### Get one transaction output by txid and vout
+<a id="get-one-transaction-output-by-txid-and-vout"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/utxo/{txid}/{index}`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Transactions/getUtxoByTxIdAndIndex)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getUtxoByTxIdAndIndex)  
 
 #### Description
-Get the UTXO by txid and index.
+Returns indexed output details including satoshi value, script type, scriptPubKey, address, inscription metadata, RBF marker, and whether the output is spent.
 
 #### Parameters
-- `txid` (path, string) **(required)**: Transaction ID
-- `index` (path, string) **(required)**: Output index (vout) of the transaction
+- `txid` (path, string) **(required)**: Tx id
+- `index` (path, string) **(required)**: Transaction output index (vout) of the UTXO.
 
 #### Response (200)
 Successful operation
@@ -526,21 +523,21 @@ Migration Guidance:
 
 ---
 
-### Push rawtx to bitcoin node.
-<a id="push-rawtx-to-bitcoin-node"></a>
+### Broadcast one raw transaction to the selected network
+<a id="broadcast-one-raw-transaction-to-the-selected-network"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/indexer/local_pushtx`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Transactions/localPushTx)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/localPushTx)  
 
 #### Description
-Push rawtx to bitcoin node.
+Submits a signed transaction hex and optional maximum fee rate for local validation and propagation. This can move funds or assets and requires explicit confirmation before execution.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
 
 - `txHex` (string): rawtx; example: `""`
-- `maxFeeRate` (number): Maximum fee rate in BTC/kvB. Optional; must be less than 1 BTC/kvB.
+- `maxFeeRate` (number): maxfeerate btc/kvB(optional and must less than 1 btc/kvB)
 
 #### Response (200)
 Successful operation
@@ -555,21 +552,21 @@ Invalid API Key
 
 ---
 
-### Push rawtxs to bitcoin node.
-<a id="push-rawtxs-to-bitcoin-node"></a>
+### Broadcast multiple raw transactions to the selected network
+<a id="broadcast-multiple-raw-transactions-to-the-selected-network"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/indexer/local_pushtxs`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Transactions/localPushTxs)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/localPushTxs)  
 
 #### Description
-Push rawtxs to bitcoin node.
+Submits a batch of signed transaction hex strings with optional maximum fee rate. Use only after validating order, dependencies, fees, and target network because each transaction may move funds or assets.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
 
 - `txsHex` (array):
-- `maxFeeRate` (number): Maximum fee rate in BTC/kvB. Optional; must be less than 1 BTC/kvB.
+- `maxFeeRate` (number): maxfeerate btc/kvB(optional and must less than 1 btc/kvB)
 
 #### Response (200)
 Successful operation
@@ -584,17 +581,15 @@ Invalid API Key
 
 ---
 
-## Addresses
-
-### Get the balance by address
-<a id="get-the-balance-by-address"></a>
+### Get address balance split by BTC and inscription UTXOs
+<a id="get-address-balance-split-by-btc-and-inscription-utxos"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/balance`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Addresses/getBalanceByAddress)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getBalanceByAddress)  
 
 #### Description
-Get the balance by address.
+Returns confirmed and pending satoshi totals plus UTXO counts for the address, separated into overall, plain BTC, and inscription-related balances.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address
@@ -622,15 +617,15 @@ Invalid API Key
 
 ---
 
-### Get transaction history by address
-<a id="get-transaction-history-by-address"></a>
+### List indexed transaction history for an address
+<a id="list-indexed-transaction-history-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Addresses/getTxHistoryByAddress)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getTxHistoryByAddress)  
 
 #### Description
-Get transaction history by address.
+Returns paginated transaction summaries involving the address, including transaction size, satoshi totals, block position, confirmations, and timestamp for wallet activity views.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address
@@ -666,15 +661,15 @@ Invalid API Key
 
 ---
 
-### Get BTCUTXO list by address
-<a id="get-btcutxo-list-by-address"></a>
+### List UTXOs for an address
+<a id="list-utxos-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/utxo-data`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Addresses/getUtxoDataByAddress)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getUtxoDataByAddress)  
 
 #### Description
-Retrieve the UTXOs of an address that do not contain inscriptions. Note that this excludes, but does not completely cover, assets from protocols such as Alkanes, Runes, and others. To obtain the UTXOs of an address that are available for spending as BTC, please use the available-utxo endpoint.
+Returns paginated UTXO records with confirmed, unconfirmed, and unconfirmed-spend totals. Each UTXO includes address, satoshi value, script data, inscriptions, RBF marker, and output coordinates.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address
@@ -717,15 +712,15 @@ Invalid API Key
 
 ---
 
-### Get all UTXO list by address
-<a id="get-all-utxo-list-by-address"></a>
+### List all indexed UTXOs for an address
+<a id="list-all-indexed-utxos-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/all-utxo-data`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Addresses/getAllUtxoDataByAddress)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getAllUtxoDataByAddress)  
 
 #### Description
-Retrieve all UTXOs of an address.
+Returns paginated UTXO records and aggregate totals across confirmed, unconfirmed, and unconfirmed-spend states, including inscription and low-fee metadata when indexed.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address
@@ -768,15 +763,15 @@ Invalid API Key
 
 ---
 
-### Get available balance by address
-<a id="get-available-balance-by-address"></a>
+### Get address balance grouped by available and unavailable UTXOs
+<a id="get-address-balance-grouped-by-available-and-unavailable-utxos"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/available-balance`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Addresses/getAvailableBalanceByAddress)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getAvailableBalanceByAddress)  
 
 #### Description
-This interface will return the current address's available balance that can be used for BTC spending. Balances of assets such as inscriptions, runes, and alkanes will not be included.
+Returns total, available, and unavailable satoshi balances with matching UTXO counts. The optional low-fee flag controls whether UTXOs below 1 sat/vB are included in availability calculations.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address
@@ -801,15 +796,15 @@ Invalid API Key
 
 ---
 
-### Get available UTXO list by address
-<a id="get-available-utxo-list-by-address"></a>
+### List available UTXOs for an address
+<a id="list-available-utxos-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/available-utxo-data`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Addresses/getAvailableUtxoDataByAddress)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/getAvailableUtxoDataByAddress)  
 
 #### Description
-This interface will return the current address's available UTXO list that can be used for BTC spending. UTXOs of assets such as inscriptions, runes, and alkanes will not be included. The UTXO management tool (https://unisat.io/utxo) can unlock these UTXOs, making them available again. Additionally, UTXOs with less than 600 satoshis will not be returned to avoid potential unspendable outputs from unrecognized asset protocols or burns.
+Returns paginated UTXOs considered available for spending, along with aggregate confirmed, unconfirmed, and unconfirmed-spend totals. The low-fee option controls inclusion of UTXOs below 1 sat/vB.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address

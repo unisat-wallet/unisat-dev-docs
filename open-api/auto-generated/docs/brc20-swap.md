@@ -1,6 +1,6 @@
 # BRC20 Swap API
 
-BRC20 Swap API provides a set of interfaces for BRC20 Swap and InSwap services. It allows users to interact with the BRC20 Swap ecosystem, including balance checks, pool information, liquidity management, and token transfers.
+BRC20 Swap API provides a set of Fractal-only interfaces for BRC20 Swap and InSwap services. BRC20 Swap and InSwap are equivalent product names; user requests that mention InSwap should be routed to these /v1/brc20-swap/* endpoints. It allows users to interact with the BRC20 Swap ecosystem, including balance checks, pool information, liquidity management, quote/preparation steps, liquidity operations, swap operations, and token transfers.
 
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
@@ -9,101 +9,101 @@ BRC20 Swap API provides a set of interfaces for BRC20 Swap and InSwap services. 
 
 | Route | Summary |
 | ----- | ------- |
-| [GET `/v1/brc20-swap/config`](#swaps-global-configuration-information) | Swap's global configuration information. |
-| [GET `/v1/brc20-swap/balance`](#gets-the-balance-for-the-specified-address-and-tick) | Gets the balance for the specified address and tick. |
-| [GET `/v1/brc20-swap/all_balance`](#gets-all-brc20-token-balances-for-a-specified-address) | Gets all BRC20 token balances for a specified address. |
-| [GET `/v1/brc20-swap/pool_info`](#get-pool-information-based-on-trade-pair) | Get Pool information based on trade pair. |
-| [GET `/v1/brc20-swap/select`](#select-the-tick-information-that-you-can-use-based-on-the-address) | Select the tick information that you can use based on the address. |
-| [GET `/v1/brc20-swap/pre_deploy_pool`](#prepare-deploy-pool-operation) | Prepare deploy pool operation |
-| [POST `/v1/brc20-swap/deploy_pool`](#deploy-the-pool-operation) | Deploy the pool operation. |
-| [GET `/v1/brc20-swap/pre_add_liq`](#prepare-add-liquidity-operation) | Prepare add liquidity operation |
-| [POST `/v1/brc20-swap/add_liq`](#add-the-liquidity-operation) | Add the liquidity operation |
-| [GET `/v1/brc20-swap/pre_remove_liq`](#prepare-remove-liquidity-operation) | Prepare remove liquidity operation |
-| [POST `/v1/brc20-swap/remove_liq`](#remove-the-liquidity-operation) | Remove the liquidity operation |
-| [GET `/v1/brc20-swap/pre_send`](#prepare-send-operation) | Prepare send operation |
-| [POST `/v1/brc20-swap/pre_batch_send`](#prepare-batch-send-operation) | Prepare batch send operation |
-| [GET `/v1/brc20-swap/pre_swap`](#prepare-swap-operation) | Prepare swap operation |
-| [POST `/v1/brc20-swap/send`](#the-send-operation) | The send operation. |
-| [POST `/v1/brc20-swap/batch_send`](#the-batch-send-operation) | The batch send operation. |
-| [POST `/v1/brc20-swap/swap`](#the-swap-operation) | The swap operation. |
-| [GET `/v1/brc20-swap/pool_list`](#gets-the-pool-list-information) | Gets the pool list information. |
-| [GET `/v1/brc20-swap/my_pool_list`](#gets-the-users-pool-list-information) | Gets the user's pool list information. |
-| [GET `/v1/brc20-swap/my_pool`](#gets-the-user-pool-information-for-the-specified-pair) | Gets the user pool information for the specified pair. |
-| [GET `/v1/brc20-swap/overview`](#an-overview-of-swap-information) | An overview of swap information |
-| [GET `/v1/brc20-swap/gas_history`](#gets-the-gas-consumption-records-for-a-user-aggregation-operation) | Gets the gas consumption records for a user aggregation operation. |
-| [GET `/v1/brc20-swap/send_history`](#gets-the-history-of-send-transaction) | Gets the history of send transaction. |
-| [GET `/v1/brc20-swap/liq_history`](#gets-the-history-of-a-pair-addition-pool) | Gets the history of a pair addition pool. |
-| [GET `/v1/brc20-swap/swap_history`](#gets-the-history-of-swap) | Gets the history of swap. |
-| [GET `/v1/brc20-swap/rollup_history`](#get-chain-history-of-rollup-inscription) | Get chain history of rollup inscription. |
-| [GET `/v1/brc20-swap/deposit_list`](#gets-the-deposit-list-for-a-user) | Gets the deposit list for a user. |
-| [GET `/v1/brc20-swap/create_deposit`](#create-a-deposit-psbt-to-be-signed-by-the-user) | Create a deposit psbt to be signed by the user. |
-| [POST `/v1/brc20-swap/confirm_deposit`](#user-signature-deposit-psbt-submit-confirmation) | User signature deposit psbt, submit confirmation. |
-| [GET `/v1/brc20-swap/system_status`](#gets-the-current-system-state) | Gets the current system state. |
-| [GET `/v1/brc20-swap/withdraw_history`](#gets-the-user-withdrawal-history) | Gets the user withdrawal history. |
-| [GET `/v1/brc20-swap/create_retry_withdraw`](#retry-create-a-withdraw-psbt-to-be-signed-by-the-user) | Retry create a withdraw psbt to be signed by the user. |
-| [POST `/v1/brc20-swap/confirm_retry_withdraw`](#user-signature-withdraw-psbt-submit-confirmation) | User signature withdraw psbt, submit confirmation. |
-| [GET `/v1/brc20-swap/create_withdraw`](#create-a-withdraw-psbt-to-be-signed-by-the-user) | Create a withdraw psbt to be signed by the user. |
-| [POST `/v1/brc20-swap/confirm_withdraw`](#user-signature-withdraw-psbt-submit-confirmation) | User signature withdraw psbt, submit confirmation. |
-| [GET `/v1/brc20-swap/withdraw_process`](#gets-the-withdrawal-progress-for-the-specified-id) | Gets the withdrawal progress for the specified ID. |
-| [GET `/v1/brc20-swap/quote_swap`](#returns-the-estimated-number-of-swaps-based-on-the-input-and-exact-type) | Returns the estimated number of swaps based on the input and exact type. |
-| [GET `/v1/brc20-swap/quote_add_liq`](#based-on-the-pair-to-get-the-actual-addition-ratio-lp-number-and-other-information) | Based on the pair to get the actual addition ratio, LP number and other information. |
-| [GET `/v1/brc20-swap/quote_remove_liq`](#estimate-the-number-of-ticks-you-can-get-by-typing-lp) | Estimate the number of ticks you can get by typing LP. |
-| [GET `/v1/brc20-swap/pre_stake`](#prepare-stake-operation) | Prepare stake operation |
-| [GET `/v1/brc20-swap/pre_unstake`](#prepare-unstake-operation) | Prepare unstake operation |
-| [GET `/v1/brc20-swap/pre_claim`](#prepare-claim-operation) | Prepare claim operation |
-| [GET `/v1/brc20-swap/pre_send_lp`](#prepare-send-lp-operation) | Prepare send LP operation |
-| [POST `/v1/brc20-swap/send_lp`](#the-send-lp-operation) | The send LP operation. |
-| [POST `/v1/brc20-swap/stake`](#the-stake-operation) | The stake operation. |
-| [POST `/v1/brc20-swap/unstake`](#the-unstake-operation) | The unstake operation. |
-| [POST `/v1/brc20-swap/claim`](#the-claim-operation) | The claim operation. |
-| [GET `/v1/brc20-swap/lp_reward_history`](#gets-the-user-pool-information-for-the-specified-pair) | Gets the user pool information for the specified pair. |
-| [GET `/v1/brc20-swap/stake_history`](#gets-the-stake-history) | Gets the stake history. |
-| [GET `/v1/brc20-swap/stake_list`](#gets-the-stake-list) | Gets the stake list. |
-| [GET `/v1/brc20-swap/stake_item`](#gets-the-stake-item) | Gets the stake item. |
-| [GET `/v1/brc20-swap/stake_user_info`](#gets-the-user-info) | Gets the user info. |
-| [GET `/v1/brc20-swap/user_info`](#gets-the-user-info) | Gets the user info. |
-| [GET `/v1/brc20-swap/select_deposit`](#select-deposit-information) | Select deposit information |
-| [GET `/v1/brc20-swap/func_info`](#gets-the-func-info) | Gets the func info. |
-| [GET `/v1/brc20-swap/deposit_balance`](#gets-the-deposit-balance) | Gets the deposit balance |
-| [GET `/v1/brc20-swap/deposit_process`](#gets-the-deposit-process) | Gets the deposit process. |
-| [GET `/v1/brc20-swap/tick_price`](#gets-the-tick-price) | Gets the tick price |
-| [GET `/v1/brc20-swap/address_gas`](#gets-the-addresss-total-tick-fee) | Gets the address's total tick fee |
-| [GET `/v1/brc20-swap/price_line`](#gets-the-price-line) | Gets the price line. |
-| [GET `/v1/brc20-swap/tick_holders`](#gets-the-tick-holders) | Gets the tick holders. |
-| [GET `/v1/brc20-swap/pool_holders`](#gets-the-pool-holders) | Gets the pool holders. |
-| [GET `/v1/brc20-swap/reward_curve`](#get-reward-curve-data) | Get reward curve data. |
-| [GET `/v1/brc20-swap/send_lp_history`](#gets-the-history-of-send-lp-transaction) | Gets the history of send lp transaction. |
-| [GET `/v1/brc20-swap/burn_history`](#gets-the-history-of-burn-transaction) | Gets the history of burn transaction. |
-| [GET `/v1/brc20-swap/task_list`](#get-task-list-for-address) | Get task list for address. |
-| [GET `/v1/brc20-swap/address_usd`](#get-address-usd) | Get address usd. |
-| [GET `/v1/brc20-swap/pre_lock_lp`](#prepare-lock-lp-operation) | Prepare lock LP operation |
-| [POST `/v1/brc20-swap/lock_lp`](#the-lock-lp-operation) | The lock lp operation. |
-| [GET `/v1/brc20-swap/pre_unlock_lp`](#prepare-unlock-lp-operation) | Prepare unlock LP operation |
-| [POST `/v1/brc20-swap/unlock_lp`](#the-unlock-lp-operation) | The unlock lp operation. |
-| [GET `/v1/brc20-swap/lock_lp_history`](#gets-the-history-of-lock-lp-transaction) | Gets the history of lock lp transaction. |
-| [GET `/v1/brc20-swap/unlock_lp_history`](#gets-the-history-of-unlock-lp-transaction) | Gets the history of unlock lp transaction. |
-| [GET `/v1/brc20-swap/export_lock_lp_history`](#export-lock-lp-history-to-csv-file) | Export lock lp history to CSV file. |
-| [GET `/v1/brc20-swap/my_lock_lp`](#gets-the-user-lock-lp) | Gets the user lock lp. |
-| [GET `/v1/brc20-swap/select_pool`](#select-the-tick-information-that-you-can-swap) | Select the tick information that you can swap. |
-| [GET `/v1/brc20-swap/pre_multi_swap`](#prepare-multi-swap-operation) | Prepare multi swap operation |
-| [POST `/v1/brc20-swap/multi_swap`](#the-multi-swap-operation) | The multi swap operation. |
-| [GET `/v1/brc20-swap/quote_multi_swap`](#returns-the-estimated-number-of-multi-swaps-based-on-the-input-and-exact-type) | Returns the estimated number of multi swaps based on the input and exact type. |
-| [GET `/v1/brc20-swap/multi_swap_history`](#gets-the-history-of-multi-swap) | Gets the history of multi swap. |
-| [POST `/v1/brc20-swap/batch_history`](#batch-query-multiple-history-types-in-a-single-request) | Batch query multiple history types in a single request. |
+| [GET `/v1/brc20-swap/config`](#get-inswap-module-fee-tick-and-deposit-confirmation-config) | Get InSwap module, fee tick, and deposit confirmation config |
+| [GET `/v1/brc20-swap/balance`](#get-an-addresss-inswap-balance-for-one-tick) | Get an address's InSwap balance for one tick |
+| [GET `/v1/brc20-swap/all_balance`](#list-all-inswap-balances-for-an-address) | List all InSwap balances for an address |
+| [GET `/v1/brc20-swap/pool_info`](#get-pool-liquidity-volume-and-reward-details-for-a-pair) | Get pool liquidity, volume, and reward details for a pair |
+| [GET `/v1/brc20-swap/select`](#list-address-ticks-available-for-inswap-trading) | List address ticks available for InSwap trading |
+| [GET `/v1/brc20-swap/pre_deploy_pool`](#prepare-signatures-and-fees-for-deploying-an-inswap-pool) | Prepare signatures and fees for deploying an InSwap pool |
+| [POST `/v1/brc20-swap/deploy_pool`](#submit-a-signed-inswap-pool-deployment) | Submit a signed InSwap pool deployment |
+| [GET `/v1/brc20-swap/pre_add_liq`](#prepare-signatures-and-fee-data-for-adding-liquidity) | Prepare signatures and fee data for adding liquidity |
+| [POST `/v1/brc20-swap/add_liq`](#submit-a-signed-inswap-add-liquidity-operation) | Submit a signed InSwap add-liquidity operation |
+| [GET `/v1/brc20-swap/pre_remove_liq`](#prepare-signatures-and-fee-data-for-removing-liquidity) | Prepare signatures and fee data for removing liquidity |
+| [POST `/v1/brc20-swap/remove_liq`](#submit-a-signed-inswap-remove-liquidity-operation) | Submit a signed InSwap remove-liquidity operation |
+| [GET `/v1/brc20-swap/pre_send`](#prepare-signatures-and-fees-for-an-inswap-token-transfer) | Prepare signatures and fees for an InSwap token transfer |
+| [POST `/v1/brc20-swap/pre_batch_send`](#prepare-signatures-and-fees-for-batch-inswap-transfers) | Prepare signatures and fees for batch InSwap transfers |
+| [GET `/v1/brc20-swap/pre_swap`](#prepare-signatures-and-fees-for-an-inswap-token-swap) | Prepare signatures and fees for an InSwap token swap |
+| [POST `/v1/brc20-swap/send`](#submit-a-signed-inswap-token-transfer) | Submit a signed InSwap token transfer |
+| [POST `/v1/brc20-swap/batch_send`](#submit-signed-batch-inswap-token-transfers) | Submit signed batch InSwap token transfers |
+| [POST `/v1/brc20-swap/swap`](#submit-a-signed-inswap-token-swap) | Submit a signed InSwap token swap |
+| [GET `/v1/brc20-swap/pool_list`](#list-inswap-pools-with-tvl-volume-and-reserves) | List InSwap pools with TVL, volume, and reserves |
+| [GET `/v1/brc20-swap/my_pool_list`](#list-an-addresss-inswap-liquidity-positions) | List an address's InSwap liquidity positions |
+| [GET `/v1/brc20-swap/my_pool`](#get-an-addresss-inswap-position-in-one-pool) | Get an address's InSwap position in one pool |
+| [GET `/v1/brc20-swap/overview`](#get-inswap-liquidity-volume-transaction-and-pair-totals) | Get InSwap liquidity, volume, transaction, and pair totals |
+| [GET `/v1/brc20-swap/gas_history`](#list-inswap-gas-fee-history) | List InSwap gas fee history |
+| [GET `/v1/brc20-swap/send_history`](#list-inswap-token-transfer-history) | List InSwap token transfer history |
+| [GET `/v1/brc20-swap/liq_history`](#list-inswap-addremove-liquidity-history) | List InSwap add/remove liquidity history |
+| [GET `/v1/brc20-swap/swap_history`](#list-inswap-token-swap-history) | List InSwap token swap history |
+| [GET `/v1/brc20-swap/rollup_history`](#list-inswap-rollup-inscription-history) | List InSwap rollup inscription history |
+| [GET `/v1/brc20-swap/deposit_list`](#list-inswap-deposit-records-for-an-address) | List InSwap deposit records for an address |
+| [GET `/v1/brc20-swap/create_deposit`](#build-an-inswap-deposit-psbt-or-bridge-deposit-draft) | Build an InSwap deposit PSBT or bridge deposit draft |
+| [POST `/v1/brc20-swap/confirm_deposit`](#submit-a-signed-inswap-deposit-confirmation) | Submit a signed InSwap deposit confirmation |
+| [GET `/v1/brc20-swap/system_status`](#check-whether-inswap-rollup-committing-is-active) | Check whether InSwap rollup committing is active |
+| [GET `/v1/brc20-swap/withdraw_history`](#list-inswap-withdrawal-records-for-an-address) | List InSwap withdrawal records for an address |
+| [GET `/v1/brc20-swap/create_retry_withdraw`](#build-payment-and-approve-psbts-for-retrying-a-withdrawal) | Build payment and approve PSBTs for retrying a withdrawal |
+| [POST `/v1/brc20-swap/confirm_retry_withdraw`](#submit-signed-psbts-to-retry-an-inswap-withdrawal) | Submit signed PSBTs to retry an InSwap withdrawal |
+| [GET `/v1/brc20-swap/create_withdraw`](#build-inswap-withdrawal-signing-data) | Build InSwap withdrawal signing data |
+| [POST `/v1/brc20-swap/confirm_withdraw`](#submit-a-signed-inswap-withdrawal-confirmation) | Submit a signed InSwap withdrawal confirmation |
+| [GET `/v1/brc20-swap/withdraw_process`](#get-confirmation-progress-for-an-inswap-withdrawal) | Get confirmation progress for an InSwap withdrawal |
+| [GET `/v1/brc20-swap/quote_swap`](#quote-expected-output-for-an-inswap-token-swap) | Quote expected output for an InSwap token swap |
+| [GET `/v1/brc20-swap/quote_add_liq`](#quote-required-amounts-and-lp-for-adding-liquidity) | Quote required amounts and LP for adding liquidity |
+| [GET `/v1/brc20-swap/quote_remove_liq`](#quote-token-outputs-for-removing-inswap-liquidity) | Quote token outputs for removing InSwap liquidity |
+| [GET `/v1/brc20-swap/pre_stake`](#prepare-signatures-and-fees-for-staking-inswap-lp) | Prepare signatures and fees for staking InSwap LP |
+| [GET `/v1/brc20-swap/pre_unstake`](#prepare-signatures-and-fees-for-unstaking-inswap-lp) | Prepare signatures and fees for unstaking InSwap LP |
+| [GET `/v1/brc20-swap/pre_claim`](#prepare-signatures-and-fees-for-claiming-inswap-rewards) | Prepare signatures and fees for claiming InSwap rewards |
+| [GET `/v1/brc20-swap/pre_send_lp`](#prepare-signatures-and-fees-for-transferring-lp-tokens) | Prepare signatures and fees for transferring LP tokens |
+| [POST `/v1/brc20-swap/send_lp`](#submit-a-signed-inswap-lp-token-transfer) | Submit a signed InSwap LP token transfer |
+| [POST `/v1/brc20-swap/stake`](#submit-a-signed-inswap-lp-stake-operation) | Submit a signed InSwap LP stake operation |
+| [POST `/v1/brc20-swap/unstake`](#submit-a-signed-inswap-lp-unstake-operation) | Submit a signed InSwap LP unstake operation |
+| [POST `/v1/brc20-swap/claim`](#submit-a-signed-inswap-reward-claim) | Submit a signed InSwap reward claim |
+| [GET `/v1/brc20-swap/lp_reward_history`](#list-lp-reward-history-for-an-inswap-pool-position) | List LP reward history for an InSwap pool position |
+| [GET `/v1/brc20-swap/stake_history`](#list-inswap-stake-unstake-and-claim-history) | List InSwap stake, unstake, and claim history |
+| [GET `/v1/brc20-swap/stake_list`](#list-active-inswap-staking-campaigns-and-reward-pools) | List active InSwap staking campaigns and reward pools |
+| [GET `/v1/brc20-swap/stake_item`](#get-one-inswap-staking-campaign-by-event-id) | Get one InSwap staking campaign by event id |
+| [GET `/v1/brc20-swap/stake_user_info`](#get-staking-related-inswap-user-information) | Get staking-related InSwap user information |
+| [GET `/v1/brc20-swap/user_info`](#get-an-addresss-default-inswap-fee-payment-settings) | Get an address's default InSwap fee payment settings |
+| [GET `/v1/brc20-swap/select_deposit`](#get-deposit-selection-data-for-an-inswap-address) | Get deposit selection data for an InSwap address |
+| [GET `/v1/brc20-swap/func_info`](#get-execution-details-for-one-inswap-function-id) | Get execution details for one InSwap function id |
+| [GET `/v1/brc20-swap/deposit_balance`](#get-depositable-balance-data-for-one-tick) | Get depositable balance data for one tick |
+| [GET `/v1/brc20-swap/deposit_process`](#get-confirmation-progress-for-an-inswap-deposit) | Get confirmation progress for an InSwap deposit |
+| [GET `/v1/brc20-swap/tick_price`](#get-the-current-inswap-price-for-one-tick) | Get the current InSwap price for one tick |
+| [GET `/v1/brc20-swap/address_gas`](#get-an-addresss-available-fee-tick-gas-amount) | Get an address's available fee-tick gas amount |
+| [GET `/v1/brc20-swap/price_line`](#get-historical-inswap-price-points-for-a-pair) | Get historical InSwap price points for a pair |
+| [GET `/v1/brc20-swap/tick_holders`](#list-top-holders-for-an-inswap-tick) | List top holders for an InSwap tick |
+| [GET `/v1/brc20-swap/pool_holders`](#list-lp-holders-for-an-inswap-pool) | List LP holders for an InSwap pool |
+| [GET `/v1/brc20-swap/reward_curve`](#get-inswap-reward-curve-data-for-a-pool-position) | Get InSwap reward curve data for a pool position |
+| [GET `/v1/brc20-swap/send_lp_history`](#list-inswap-lp-token-transfer-history) | List InSwap LP token transfer history |
+| [GET `/v1/brc20-swap/burn_history`](#list-inswap-lp-burn-history-and-burn-totals) | List InSwap LP burn history and burn totals |
+| [GET `/v1/brc20-swap/task_list`](#list-inswap-task-completion-items-for-an-address) | List InSwap task completion items for an address |
+| [GET `/v1/brc20-swap/address_usd`](#get-an-addresss-inswap-asset-and-lp-usd-values) | Get an address's InSwap asset and LP USD values |
+| [GET `/v1/brc20-swap/pre_lock_lp`](#prepare-signatures-and-fees-for-locking-inswap-lp) | Prepare signatures and fees for locking InSwap LP |
+| [POST `/v1/brc20-swap/lock_lp`](#submit-a-signed-inswap-lp-lock-operation) | Submit a signed InSwap LP lock operation |
+| [GET `/v1/brc20-swap/pre_unlock_lp`](#prepare-signatures-and-fees-for-unlocking-inswap-lp) | Prepare signatures and fees for unlocking InSwap LP |
+| [POST `/v1/brc20-swap/unlock_lp`](#submit-a-signed-inswap-lp-unlock-operation) | Submit a signed InSwap LP unlock operation |
+| [GET `/v1/brc20-swap/lock_lp_history`](#list-inswap-lp-lock-history) | List InSwap LP lock history |
+| [GET `/v1/brc20-swap/unlock_lp_history`](#list-inswap-lp-unlock-history) | List InSwap LP unlock history |
+| [GET `/v1/brc20-swap/export_lock_lp_history`](#export-inswap-lp-lock-history-as-csv) | Export InSwap LP lock history as CSV |
+| [GET `/v1/brc20-swap/my_lock_lp`](#get-an-addresss-locked-and-available-lp-for-a-pool) | Get an address's locked and available LP for a pool |
+| [GET `/v1/brc20-swap/select_pool`](#list-routed-pool-candidates-for-an-inswap-trade) | List routed pool candidates for an InSwap trade |
+| [GET `/v1/brc20-swap/pre_multi_swap`](#prepare-signatures-and-fees-for-a-multi-hop-inswap-swap) | Prepare signatures and fees for a multi-hop InSwap swap |
+| [POST `/v1/brc20-swap/multi_swap`](#submit-signed-multi-hop-inswap-swaps) | Submit signed multi-hop InSwap swaps |
+| [GET `/v1/brc20-swap/quote_multi_swap`](#quote-expected-output-and-route-amounts-for-a-multi-hop-swap) | Quote expected output and route amounts for a multi-hop swap |
+| [GET `/v1/brc20-swap/multi_swap_history`](#list-inswap-multi-hop-swap-history) | List InSwap multi-hop swap history |
+| [POST `/v1/brc20-swap/batch_history`](#fetch-multiple-inswap-history-categories-in-one-request) | Fetch multiple InSwap history categories in one request |
 
 ---
 
-## brc20-swap
+## Swap-BRC20
 
-### Swap's global configuration information.
-<a id="swaps-global-configuration-information"></a>
+### Get InSwap module, fee tick, and deposit confirmation config
+<a id="get-inswap-module-fee-tick-and-deposit-confirmation-config"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/config`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapConfig)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapConfig)  
 
 #### Description
-This interface provides the global configuration information for the BRC20 Swap service. It includes details such as the module ID, service gas tick, and pending deposit confirmation numbers.
+Returns Fractal BRC20 Swap service settings, including module id, service gas tick, and confirmation thresholds for direct and matching deposits.
 
 #### Response (200)
 Default Response
@@ -119,15 +119,15 @@ Default Response
 
 ---
 
-### Gets the balance for the specified address and tick.
-<a id="gets-the-balance-for-the-specified-address-and-tick"></a>
+### Get an address's InSwap balance for one tick
+<a id="get-an-addresss-inswap-balance-for-one-tick"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/balance`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapBalance)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapBalance)  
 
 #### Description
-This interface retrieves the balance for a specific address and tick in the BRC20 Swap service. It returns the confirmed module balance, swap balance, pending swap balance, and pending available balance.
+Returns module, swap, pending-swap, and pending-available balances plus decimal precision for a specific address and token tick.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -149,15 +149,15 @@ Default Response
 
 ---
 
-### Gets all BRC20 token balances for a specified address.
-<a id="gets-all-brc20-token-balances-for-a-specified-address"></a>
+### List all InSwap balances for an address
+<a id="list-all-inswap-balances-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/all_balance`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapAllBalances)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapAllBalances)  
 
 #### Description
-This interface retrieves the complete list of all BRC20 token balances for a specific wallet address in the BRC20 Swap service. For each tick, it returns detailed balance information including the confirmed module balance, swap balance, pending swap balance, and pending available balance.
+Returns a ticker-keyed balance map with module, swap, pending balances, decimals, asset type, network type, and optional price metadata.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -173,15 +173,15 @@ Successful response returning all token balances for the address.
 
 ---
 
-### Get Pool information based on trade pair.
-<a id="get-pool-information-based-on-trade-pair"></a>
+### Get pool liquidity, volume, and reward details for a pair
+<a id="get-pool-liquidity-volume-and-reward-details-for-a-pair"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pool_info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPoolInfo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPoolInfo)  
 
 #### Description
-This interface retrieves the pool information for a specific trade pair in the BRC20 Swap service. It includes details such as whether the pool exists, if liquidity has been added, tick prices, LP quantity, TVL, volume, and rewards.
+Returns pair-level pool metadata, including whether the pool exists, token reserves, LP supply, TVL, recent volume, reward fields, and per-token asset metadata.
 
 #### Parameters
 - `tick0` (query, string): 
@@ -193,7 +193,7 @@ Default Response
 - `code` (number): required
 - `msg` (string): required
 - `data` (object):
-  - `existed` (boolean): Whether the pool exists
+  - `existed` (boolean): Is the pool existed
   - `addLiq` (boolean): Has LP been added to the pool
   - `tick0` (string):
   - `tick1` (string):
@@ -219,15 +219,15 @@ Default Response
 
 ---
 
-### Select the tick information that you can use based on the address.
-<a id="select-the-tick-information-that-you-can-use-based-on-the-address"></a>
+### List address ticks available for InSwap trading
+<a id="list-address-ticks-available-for-inswap-trading"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/select`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapSelect)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapSelect)  
 
 #### Description
-This interface retrieves the tick information that can be used for swapping based on the provided address. It returns the tick, decimal, BRC20 balance, and swap balance for each available tick.
+Returns BRC-20 ticks available to an address for swap operations, including decimal precision, module balance, and swap balance.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -247,15 +247,15 @@ Default Response
 
 ---
 
-### Prepare deploy pool operation
-<a id="prepare-deploy-pool-operation"></a>
+### Prepare signatures and fees for deploying an InSwap pool
+<a id="prepare-signatures-and-fees-for-deploying-an-inswap-pool"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pre_deploy_pool`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPreDeployPool)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPreDeployPool)  
 
 #### Description
-This interface pre-loads the /deploy_pool operation, providing the signature content, gas, and byte information required for deploying a pool in the BRC20 Swap service.
+Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value needed before submitting a pool deployment.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -291,15 +291,15 @@ Default Response
 
 ---
 
-### Deploy the pool operation.
-<a id="deploy-the-pool-operation"></a>
+### Submit a signed InSwap pool deployment
+<a id="submit-a-signed-inswap-pool-deployment"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/deploy_pool`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapDeployPool)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapDeployPool)  
 
 #### Description
-This interface deploys a pool in the BRC20 Swap service. It requires the address, tick0, tick1, timestamp, fee tick, and user signatures to complete the operation.
+Creates a new swap pool using prepared signature data, token pair, timestamp, fee tick, and fee payment fields. Review the pair, fee amount, and signatures before submission.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -325,15 +325,15 @@ Default Response
 
 ---
 
-### Prepare add liquidity operation
-<a id="prepare-add-liquidity-operation"></a>
+### Prepare signatures and fee data for adding liquidity
+<a id="prepare-signatures-and-fee-data-for-adding-liquidity"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pre_add_liq`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPreAddLiq)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPreAddLiq)  
 
 #### Description
-This interface pre-loads the /add_liq operation, providing the signature content, gas, and byte information required for adding liquidity in the BRC20 Swap service.
+Returns signature ids, sign messages, fee fields, and pool-share preparation data for adding two token amounts into an InSwap liquidity pool.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -373,15 +373,15 @@ Default Response
 
 ---
 
-### Add the liquidity operation
-<a id="add-the-liquidity-operation"></a>
+### Submit a signed InSwap add-liquidity operation
+<a id="submit-a-signed-inswap-add-liquidity-operation"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/add_liq`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/undefined)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapAddLiq)  
 
 #### Description
-This interface adds liquidity to a pool in the BRC20 Swap service. It requires the address, tick0, tick1, amounts, LP, slippage, timestamp, fee tick, and user signatures to complete the operation.
+Adds token amounts to a liquidity pool using prepared signatures, fee fields, and slippage controls. Review both token amounts, expected LP, fee payment, and signatures before submission.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -425,15 +425,15 @@ Default Response
 
 ---
 
-### Prepare remove liquidity operation
-<a id="prepare-remove-liquidity-operation"></a>
+### Prepare signatures and fee data for removing liquidity
+<a id="prepare-signatures-and-fee-data-for-removing-liquidity"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pre_remove_liq`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPreRemoveLiq)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPreRemoveLiq)  
 
 #### Description
-This interface pre-loads the /remove_liq operation, providing the signature content, gas, and byte information required for removing liquidity in the BRC20 Swap service.
+Returns signature ids, sign messages, fee fields, and expected token amounts for removing LP from an InSwap liquidity pool.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -475,15 +475,15 @@ Default Response
 
 ---
 
-### Remove the liquidity operation
-<a id="remove-the-liquidity-operation"></a>
+### Submit a signed InSwap remove-liquidity operation
+<a id="submit-a-signed-inswap-remove-liquidity-operation"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/remove_liq`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/undefined)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapRemoveLiq)  
 
 #### Description
-This interface removes liquidity from a pool in the BRC20 Swap service. It requires the address, tick0, tick1, amounts, LP, slippage, timestamp, fee tick, and user signatures to complete the operation.
+Removes LP from a liquidity pool using prepared signatures and fee fields, returning execution metadata. Review LP amount, expected token outputs, fee payment, and signatures before submission.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -527,15 +527,15 @@ Default Response
 
 ---
 
-### Prepare send operation
-<a id="prepare-send-operation"></a>
+### Prepare signatures and fees for an InSwap token transfer
+<a id="prepare-signatures-and-fees-for-an-inswap-token-transfer"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pre_send`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPreSend)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPreSend)  
 
 #### Description
-This interface pre-loads the /send operation, providing the signature content, gas, and byte information required for sending a tick in the BRC20 Swap service.
+Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value for transferring a tick amount to a recipient.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -562,15 +562,15 @@ Default Response
 
 ---
 
-### Prepare batch send operation
-<a id="prepare-batch-send-operation"></a>
+### Prepare signatures and fees for batch InSwap transfers
+<a id="prepare-signatures-and-fees-for-batch-inswap-transfers"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/pre_batch_send`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/undefined)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapPreBatchSend)  
 
 #### Description
-This interface pre-loads the /batch_send operation, providing the signature content, gas, and byte information required for sending multiple ticks in the BRC20 Swap service. The request can provide either a shared amount or an amountList aligned with the recipients.
+Returns per-item signature ids, sign messages, and fee metadata for transferring multiple tick amounts to recipients in one batch workflow.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -600,15 +600,15 @@ Default Response
 
 ---
 
-### Prepare swap operation
-<a id="prepare-swap-operation"></a>
+### Prepare signatures and fees for an InSwap token swap
+<a id="prepare-signatures-and-fees-for-an-inswap-token-swap"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pre_swap`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPreSwap)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPreSwap)  
 
 #### Description
-This interface pre-loads the /swap operation, providing the signature content, gas, and byte information required for swapping ticks in the BRC20 Swap service.
+Returns signature ids, sign messages, fee fields, and fee-balance metadata for a quoted swap between input and output ticks.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -638,15 +638,15 @@ Default Response
 
 ---
 
-### The send operation.
-<a id="the-send-operation"></a>
+### Submit a signed InSwap token transfer
+<a id="submit-a-signed-inswap-token-transfer"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/send`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapSend)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapSend)  
 
 #### Description
-This interface sends a tick in the BRC20 Swap service. It requires the address, tick, amount, receiver, timestamp, fee tick, and user signatures to complete the operation.
+Transfers a tick amount from an address to one or more recipients using prepared signatures and fee fields. Review recipients, amounts, fee payment, and signatures before submission.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -674,15 +674,15 @@ Default Response
 
 ---
 
-### The batch send operation.
-<a id="the-batch-send-operation"></a>
+### Submit signed batch InSwap token transfers
+<a id="submit-signed-batch-inswap-token-transfers"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/batch_send`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapBatchSend)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapBatchSend)  
 
 #### Description
-This interface sends multiple ticks in the BRC20 Swap service. It requires the address, tick, amount or amountList, receivers, timestamp, fee tick, and user signatures to complete the operation.
+Executes multiple prepared tick transfers in one request using per-item signatures and fee fields. Review every recipient, amount, fee payment, and signature before submission.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -709,15 +709,15 @@ Default Response
 
 ---
 
-### The swap operation.
-<a id="the-swap-operation"></a>
+### Submit a signed InSwap token swap
+<a id="submit-a-signed-inswap-token-swap"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/swap`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapSwap)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapSwap)  
 
 #### Description
-This interface swaps ticks in the BRC20 Swap service. It requires the address, input tick, output tick, input amount, output amount, slippage, exact type, timestamp, fee tick, and user signatures to complete the operation.
+Executes a prepared swap between input and output ticks with exact-in or exact-out semantics. Review quoted amounts, slippage, fee payment, and signatures before submission.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -763,15 +763,15 @@ Default Response
 
 ---
 
-### Gets the pool list information.
-<a id="gets-the-pool-list-information"></a>
+### List InSwap pools with TVL, volume, and reserves
+<a id="list-inswap-pools-with-tvl-volume-and-reserves"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pool_list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPoolList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPoolList)  
 
 #### Description
-This interface retrieves the pool list information in the BRC20 Swap service. It supports filtering by address, tick, and fuzzy matching, and allows pagination through start and limit parameters.
+Returns paginated pool pairs with LP token, TVL, 24h/7d/30d volume, and reserve amounts for each token.
 
 #### Parameters
 - `search` (query, string): Fuzzy matching
@@ -799,15 +799,15 @@ Default Response
 
 ---
 
-### Gets the user's pool list information.
-<a id="gets-the-users-pool-list-information"></a>
+### List an address's InSwap liquidity positions
+<a id="list-an-addresss-inswap-liquidity-positions"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/my_pool_list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapMyPoolList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapMyPoolList)  
 
 #### Description
-This interface retrieves the user's pool list information in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
+Returns paginated pool positions for an address, including LP amount, pool share, token amounts, and claimed or unclaimed rewards.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -837,15 +837,15 @@ Default Response
 
 ---
 
-### Gets the user pool information for the specified pair.
-<a id="gets-the-user-pool-information-for-the-specified-pair"></a>
+### Get an address's InSwap position in one pool
+<a id="get-an-addresss-inswap-position-in-one-pool"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/my_pool`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapMyPool)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapMyPool)  
 
 #### Description
-This interface retrieves the user pool information for a specific pair in the BRC20 Swap service. It requires the address, tick0, and tick1 parameters to identify the pool.
+Returns LP amount, pool share, token amounts, locked LP, and claimed or unclaimed rewards for a specific address and token pair.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -873,15 +873,15 @@ Default Response
 
 ---
 
-### An overview of swap information
-<a id="an-overview-of-swap-information"></a>
+### Get InSwap liquidity, volume, transaction, and pair totals
+<a id="get-inswap-liquidity-volume-transaction-and-pair-totals"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/overview`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapOverview)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapOverview)  
 
 #### Description
-This interface provides an overview of the swap information in the BRC20 Swap service, including total liquidity, 7-day volume, 24-hour volume, number of transactions, and number of pairs.
+Returns protocol overview metrics including total liquidity, 24h and 7d volume, 24h transaction count, and number of active pairs.
 
 #### Response (200)
 Default Response
@@ -898,15 +898,15 @@ Default Response
 
 ---
 
-### Gets the gas consumption records for a user aggregation operation.
-<a id="gets-the-gas-consumption-records-for-a-user-aggregation-operation"></a>
+### List InSwap gas fee history
+<a id="list-inswap-gas-fee-history"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/gas_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapGasHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapGasHistory)  
 
 #### Description
-This interface retrieves the gas consumption records for a user aggregation operation in the BRC20 Swap service. It supports filtering by address and pagination through start and limit parameters.
+Returns paginated gas-fee records with function type, token pair, gas amount, fee tick, recipient address, and timestamp.
 
 #### Parameters
 - `address` (query, string): 
@@ -932,15 +932,15 @@ Default Response
 
 ---
 
-### Gets the history of send transaction.
-<a id="gets-the-history-of-send-transaction"></a>
+### List InSwap token transfer history
+<a id="list-inswap-token-transfer-history"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/send_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapSendHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapSendHistory)  
 
 #### Description
-This interface retrieves the history of send transactions in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
+Returns paginated transfer records filtered by address or tick, including token tick, amount, recipient, and timestamp.
 
 #### Parameters
 - `address` (query, string): 
@@ -964,15 +964,15 @@ Default Response
 
 ---
 
-### Gets the history of a pair addition pool.
-<a id="gets-the-history-of-a-pair-addition-pool"></a>
+### List InSwap add/remove liquidity history
+<a id="list-inswap-addremove-liquidity-history"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/liq_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapLiqHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapLiqHistory)  
 
 #### Description
-This interface retrieves the history of pair addition pools in the BRC20 Swap service. It supports filtering by address, tick, type (add or remove), and pagination through start and limit parameters.
+Returns paginated liquidity records with action type, token pair, token amounts, rewards, LP amount, and timestamp.
 
 #### Parameters
 - `address` (query, string): 
@@ -1002,15 +1002,15 @@ Default Response
 
 ---
 
-### Gets the history of swap.
-<a id="gets-the-history-of-swap"></a>
+### List InSwap token swap history
+<a id="list-inswap-token-swap-history"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/swap_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapSwapHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapSwapHistory)  
 
 #### Description
-This interface retrieves the history of swap transactions in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
+Returns paginated swap records filtered by address or tick, including input/output ticks, amounts, exact type, and timestamp.
 
 #### Parameters
 - `address` (query, string): 
@@ -1036,15 +1036,15 @@ Default Response
 
 ---
 
-### Get chain history of rollup inscription.
-<a id="get-chain-history-of-rollup-inscription"></a>
+### List InSwap rollup inscription history
+<a id="list-inswap-rollup-inscription-history"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/rollup_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapRollupHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapRollupHistory)  
 
 #### Description
-This interface retrieves the chain history of rollup inscriptions in the BRC20 Swap service. It supports filtering by inscription ID and pagination through start and limit parameters.
+Returns paginated rollup records with transaction id, block height, transaction count, inscription id, inscription number, and timestamp.
 
 #### Parameters
 - `start` (query, number) **(required)**: 
@@ -1068,15 +1068,15 @@ Default Response
 
 ---
 
-### Gets the deposit list for a user.
-<a id="gets-the-deposit-list-for-a-user"></a>
+### List InSwap deposit records for an address
+<a id="list-inswap-deposit-records-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/deposit_list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapDepositList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapDepositList)  
 
 #### Description
-This interface retrieves the deposit list for a user in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
+Returns paginated deposit records with tick, amount, current and required confirmations, timestamp, txid, and deposit type.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -1103,15 +1103,15 @@ Default Response
 
 ---
 
-### Create a deposit psbt to be signed by the user.
-<a id="create-a-deposit-psbt-to-be-signed-by-the-user"></a>
+### Build an InSwap deposit PSBT or bridge deposit draft
+<a id="build-an-inswap-deposit-psbt-or-bridge-deposit-draft"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/create_deposit`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapCreateDeposit)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapCreateDeposit)  
 
 #### Description
-This interface creates a deposit PSBT to be signed by the user in the BRC20 Swap service. Fractal BRC20 deposits only require the public key and address, while bridge deposits also require amount, tick, assetType, and networkType.
+Returns deposit signing material such as PSBT, deposit type, expiration timestamp, and recommended deposit amount for direct, matching, or bridge deposit flows.
 
 #### Parameters
 - `inscriptionId` (query, string): 
@@ -1137,15 +1137,15 @@ Default Response
 
 ---
 
-### User signature deposit psbt, submit confirmation.
-<a id="user-signature-deposit-psbt-submit-confirmation"></a>
+### Submit a signed InSwap deposit confirmation
+<a id="submit-a-signed-inswap-deposit-confirmation"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/confirm_deposit`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapConfirmDeposit)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapConfirmDeposit)  
 
 #### Description
-This interface allows the user to sign the deposit PSBT and submit the confirmation in the BRC20 Swap service. It always requires the PSBT. Bridge deposits also require the deposit context fields such as pubkey, address, amount, tick, assetType, and networkType.
+Confirms a prepared deposit using the signed PSBT and optional bridge metadata, returning the transaction id and remaining pending-confirmation count.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -1172,15 +1172,15 @@ Default Response
 
 ---
 
-### Gets the current system state.
-<a id="gets-the-current-system-state"></a>
+### Check whether InSwap rollup committing is active
+<a id="check-whether-inswap-rollup-committing-is-active"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/system_status`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapSystemStatus)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapSystemStatus)  
 
 #### Description
-This interface retrieves the current system state of the BRC20 Swap service, including whether rollup inscription committing is enabled.
+Returns the current system committing flag so clients can decide whether rollup-related operations are temporarily in progress.
 
 #### Response (200)
 Default Response
@@ -1193,15 +1193,15 @@ Default Response
 
 ---
 
-### Gets the user withdrawal history.
-<a id="gets-the-user-withdrawal-history"></a>
+### List InSwap withdrawal records for an address
+<a id="list-inswap-withdrawal-records-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/withdraw_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapWithdrawHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapWithdrawHistory)  
 
 #### Description
-This interface retrieves the user withdrawal history in the BRC20 Swap service. It supports filtering by address, pagination through start and limit parameters, and an optional tick parameter.
+Returns paginated withdrawal records with id, tick, total and completed amounts, confirmation progress, status, type, and timestamp.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -1230,15 +1230,15 @@ Default Response
 
 ---
 
-### Retry create a withdraw psbt to be signed by the user.
-<a id="retry-create-a-withdraw-psbt-to-be-signed-by-the-user"></a>
+### Build payment and approve PSBTs for retrying a withdrawal
+<a id="build-payment-and-approve-psbts-for-retrying-a-withdrawal"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/create_retry_withdraw`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapCreateRetryWithdraw)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapCreateRetryWithdraw)  
 
 #### Description
-This interface retries to create a withdrawal PSBT to be signed by the user in the BRC20 Swap service. It requires the withdrawal order ID, public key, and address parameters to generate the PSBT.
+Returns payment PSBT, approve-inscription PSBT, and network fee required to retry a previously created withdrawal order.
 
 #### Parameters
 - `id` (query, string) **(required)**: 
@@ -1258,15 +1258,15 @@ Default Response
 
 ---
 
-### User signature withdraw psbt, submit confirmation.
-<a id="user-signature-withdraw-psbt-submit-confirmation"></a>
+### Submit signed PSBTs to retry an InSwap withdrawal
+<a id="submit-signed-psbts-to-retry-an-inswap-withdrawal"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/confirm_retry_withdraw`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapConfirmRetryWithdraw)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapConfirmRetryWithdraw)  
 
 #### Description
-This interface allows the user to sign the retry withdrawal PSBT and submit the confirmation in the BRC20 Swap service. It requires the withdrawal order ID, payment PSBT, and approve PSBT to complete the operation.
+Confirms a retry withdrawal order by submitting its id with signed payment and approve PSBTs. Verify the order id and both signed PSBTs before submission.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -1285,15 +1285,15 @@ Default Response
 
 ---
 
-### Create a withdraw psbt to be signed by the user.
-<a id="create-a-withdraw-psbt-to-be-signed-by-the-user"></a>
+### Build InSwap withdrawal signing data
+<a id="build-inswap-withdrawal-signing-data"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/create_withdraw`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapCreateWithdraw)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapCreateWithdraw)  
 
 #### Description
-This interface creates a withdrawal PSBT to be signed by the user in the BRC20 Swap service. It requires the public key, address, tick, amount, timestamp, fee tick, and payType parameters to generate the PSBT.
+Prepares withdrawal data for a tick amount, fee tick, payment type, and optional bridge asset metadata before the signed confirmation step.
 
 #### Parameters
 - `pubkey` (query, string) **(required)**: 
@@ -1317,15 +1317,15 @@ Default Response
 
 ---
 
-### User signature withdraw psbt, submit confirmation.
-<a id="user-signature-withdraw-psbt-submit-confirmation"></a>
+### Submit a signed InSwap withdrawal confirmation
+<a id="submit-a-signed-inswap-withdrawal-confirmation"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/confirm_withdraw`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapConfirmWithdraw)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapConfirmWithdraw)  
 
 #### Description
-This interface allows the user to sign the withdrawal PSBT and submit the confirmation in the BRC20 Swap service. It requires the withdrawal order ID, payment PSBT, approve PSBT, fee tick, and payType. Bridge withdrawals also carry assetType and networkType.
+Confirms a withdrawal order using payment and approve PSBTs plus fee and signature fields. Review order id, amount, tick, fee payment, and signed PSBTs before submission.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -1357,15 +1357,15 @@ Default Response
 
 ---
 
-### Gets the withdrawal progress for the specified ID.
-<a id="gets-the-withdrawal-progress-for-the-specified-id"></a>
+### Get confirmation progress for an InSwap withdrawal
+<a id="get-confirmation-progress-for-an-inswap-withdrawal"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/withdraw_process`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapWithdrawProcess)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapWithdrawProcess)  
 
 #### Description
-This interface retrieves the withdrawal progress for a specific ID in the BRC20 Swap service. It requires the ID parameter to identify the withdrawal order.
+Returns withdrawal status details including confirmation counts, rollup/payment/inscribe/approve txids, completed amount, and match history.
 
 #### Parameters
 - `id` (query, string) **(required)**: 
@@ -1389,7 +1389,7 @@ Default Response
   - `approveTotalNum` (number): Total number of approve confirmations
   - `cancelConfirmedNum` (number):
   - `cancelTotalNum` (number):
-  - `rollUpTxid` (string): Transaction ID of the rollup inscription required for a withdrawal decrease operation.
+  - `rollUpTxid` (string): Decrease operation is required to withdraw, which in rollup inscription
   - `paymentTxid` (string):
   - `inscribeTxid` (string):
   - `approveTxid` (string):
@@ -1408,12 +1408,15 @@ Default Response
 
 ---
 
-### Returns the estimated number of swaps based on the input and exact type.
-<a id="returns-the-estimated-number-of-swaps-based-on-the-input-and-exact-type"></a>
+### Quote expected output for an InSwap token swap
+<a id="quote-expected-output-for-an-inswap-token-swap"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/quote_swap`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapQuoteSwap)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapQuoteSwap)  
+
+#### Description
+Estimates swap result values for exact-in or exact-out requests, including input USD value, expected USD value, and expected token amount.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -1435,12 +1438,15 @@ Default Response
 
 ---
 
-### Based on the pair to get the actual addition ratio, LP number and other information.
-<a id="based-on-the-pair-to-get-the-actual-addition-ratio-lp-number-and-other-information"></a>
+### Quote required amounts and LP for adding liquidity
+<a id="quote-required-amounts-and-lp-for-adding-liquidity"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/quote_add_liq`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapQuoteAddLiq)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapQuoteAddLiq)  
+
+#### Description
+Estimates real token amounts, USD values, LP minted, pair exchange ratios, and resulting pool share for an add-liquidity request.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -1467,12 +1473,15 @@ Default Response
 
 ---
 
-### Estimate the number of ticks you can get by typing LP.
-<a id="estimate-the-number-of-ticks-you-can-get-by-typing-lp"></a>
+### Quote token outputs for removing InSwap liquidity
+<a id="quote-token-outputs-for-removing-inswap-liquidity"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/quote_remove_liq`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapQuoteRemoveLiq)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapQuoteRemoveLiq)  
+
+#### Description
+Estimates the token pair amounts and USD values returned when removing a specified LP amount from a pool.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -1496,15 +1505,15 @@ Default Response
 
 ---
 
-### Prepare stake operation
-<a id="prepare-stake-operation"></a>
+### Prepare signatures and fees for staking InSwap LP
+<a id="prepare-signatures-and-fees-for-staking-inswap-lp"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pre_stake`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPreStake)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPreStake)  
 
 #### Description
-This interface pre-loads the /stake operation, providing the signature content, gas, and byte information required for staking in the BRC20 Swap service.
+Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value for staking an LP amount in a reward pool.
 
 #### Parameters
 - `pid` (query, string) **(required)**: 
@@ -1530,15 +1539,15 @@ Default Response
 
 ---
 
-### Prepare unstake operation
-<a id="prepare-unstake-operation"></a>
+### Prepare signatures and fees for unstaking InSwap LP
+<a id="prepare-signatures-and-fees-for-unstaking-inswap-lp"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pre_unstake`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPreUnstake)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPreUnstake)  
 
 #### Description
-This interface pre-loads the /unstake operation, providing the signature content, gas, and byte information required for unstaking in the BRC20 Swap service.
+Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value for unstaking an LP amount from a reward pool.
 
 #### Parameters
 - `pid` (query, string) **(required)**: 
@@ -1564,15 +1573,15 @@ Default Response
 
 ---
 
-### Prepare claim operation
-<a id="prepare-claim-operation"></a>
+### Prepare signatures and fees for claiming InSwap rewards
+<a id="prepare-signatures-and-fees-for-claiming-inswap-rewards"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pre_claim`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPreClaim)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPreClaim)  
 
 #### Description
-This interface pre-loads the /claim operation, providing the signature content, gas, and byte information required for claiming rewards in the BRC20 Swap service.
+Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value for claiming rewards from a staking pool.
 
 #### Parameters
 - `pid` (query, string) **(required)**: 
@@ -1597,15 +1606,15 @@ Default Response
 
 ---
 
-### Prepare send LP operation
-<a id="prepare-send-lp-operation"></a>
+### Prepare signatures and fees for transferring LP tokens
+<a id="prepare-signatures-and-fees-for-transferring-lp-tokens"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pre_send_lp`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPreSendLp)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPreSendLp)  
 
 #### Description
-This interface pre-loads the /send_lp operation, providing the signature content, gas, and byte information required for sending LP in the BRC20 Swap service.
+Returns signature ids, sign messages, fee fields, LP token conversion data, and fee-balance metadata for sending LP tokens to another address.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -1635,15 +1644,15 @@ Default Response
 
 ---
 
-### The send LP operation.
-<a id="the-send-lp-operation"></a>
+### Submit a signed InSwap LP token transfer
+<a id="submit-a-signed-inswap-lp-token-transfer"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/send_lp`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapSendLp)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapSendLp)  
 
 #### Description
-This interface sends LP in the BRC20 Swap service. It requires the address, tick0, tick1, amount, receiver, timestamp, fee tick, and user signatures to complete the operation.
+Transfers LP tokens for a token pair to another address using prepared signatures and fee fields. Review recipient, LP amount, fee payment, and signatures before submission.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -1671,15 +1680,15 @@ Default Response
 
 ---
 
-### The stake operation.
-<a id="the-stake-operation"></a>
+### Submit a signed InSwap LP stake operation
+<a id="submit-a-signed-inswap-lp-stake-operation"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/stake`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapStake)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapStake)  
 
 #### Description
-This interface stakes LP in the BRC20 Swap service. It requires the pid, address, amount, timestamp, fee tick, and user signatures to complete the operation.
+Stakes an LP amount in a reward pool using prepared signatures and fee fields. Review pool id, amount, fee payment, and signatures before submission.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -1705,15 +1714,15 @@ Default Response
 
 ---
 
-### The unstake operation.
-<a id="the-unstake-operation"></a>
+### Submit a signed InSwap LP unstake operation
+<a id="submit-a-signed-inswap-lp-unstake-operation"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/unstake`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapUnstake)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapUnstake)  
 
 #### Description
-This interface unstakes LP in the BRC20 Swap service. It requires the pid, address, amount, timestamp, fee tick, and user signatures to complete the operation.
+Unstakes an LP amount from a reward pool using prepared signatures and fee fields. Review pool id, amount, fee payment, and signatures before submission.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -1739,15 +1748,15 @@ Default Response
 
 ---
 
-### The claim operation.
-<a id="the-claim-operation"></a>
+### Submit a signed InSwap reward claim
+<a id="submit-a-signed-inswap-reward-claim"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/claim`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapClaim)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapClaim)  
 
 #### Description
-This interface claims rewards in the BRC20 Swap service. It requires the pid, address, timestamp, fee tick, and user signatures to complete the operation.
+Claims rewards from a staking pool using prepared signatures and fee fields, returning the claimed reward amount when available.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -1773,15 +1782,15 @@ Default Response
 
 ---
 
-### Gets the user pool information for the specified pair.
-<a id="gets-the-user-pool-information-for-the-specified-pair"></a>
+### List LP reward history for an InSwap pool position
+<a id="list-lp-reward-history-for-an-inswap-pool-position"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/lp_reward_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapLpRewardHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapLpRewardHistory)  
 
 #### Description
-This interface retrieves the LP reward history for a specific pair in the BRC20 Swap service. It requires the address, tick0, tick1, and pagination parameters.
+Returns paginated LP reward records for an address and token pair, including reward amounts, event type, and timestamp.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -1810,15 +1819,15 @@ Default Response
 
 ---
 
-### Gets the stake history.
-<a id="gets-the-stake-history"></a>
+### List InSwap stake, unstake, and claim history
+<a id="list-inswap-stake-unstake-and-claim-history"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/stake_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapStakeHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapStakeHistory)  
 
 #### Description
-This interface retrieves the stake history in the BRC20 Swap service. It supports filtering by pid, address, type, and pagination through start and limit parameters.
+Returns paginated staking records for an address, filtered by pool, search text, and action type, with pool pair, amount, reward tick, and timestamp.
 
 #### Parameters
 - `pid` (query, string): 
@@ -1848,15 +1857,15 @@ Default Response
 
 ---
 
-### Gets the stake list.
-<a id="gets-the-stake-list"></a>
+### List active InSwap staking campaigns and reward pools
+<a id="list-active-inswap-staking-campaigns-and-reward-pools"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/stake_list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapStakeList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapStakeList)  
 
 #### Description
-This interface retrieves the stake list in the BRC20 Swap service.
+Returns staking campaign windows with reward pool summaries, including pool id, pool pair, reward tick, current total LP, base reward, and staged reward thresholds.
 
 #### Response (200)
 Default Response
@@ -1881,12 +1890,15 @@ Default Response
 
 ---
 
-### Gets the stake item.
-<a id="gets-the-stake-item"></a>
+### Get one InSwap staking campaign by event id
+<a id="get-one-inswap-staking-campaign-by-event-id"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/stake_item`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapStakeItem)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapStakeItem)  
+
+#### Description
+Returns a staking campaign item plus newest indexed height, including reward pool summaries, staged LP requirements, and staged added rewards.
 
 #### Parameters
 - `eid` (query, string) **(required)**: 
@@ -1915,15 +1927,15 @@ Default Response
 
 ---
 
-### Gets the user info.
-<a id="gets-the-user-info"></a>
+### Get staking-related InSwap user information
+<a id="get-staking-related-inswap-user-information"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/stake_user_info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapStakeUserInfo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapStakeUserInfo)  
 
 #### Description
-This interface retrieves the stake user information in the BRC20 Swap service.
+Returns staking user data for an address. The response is extensible because the server may include campaign-specific or user-specific fields.
 
 #### Parameters
 - `address` (query, string): 
@@ -1938,15 +1950,15 @@ Default Response
 
 ---
 
-### Gets the user info.
-<a id="gets-the-user-info"></a>
+### Get an address's default InSwap fee payment settings
+<a id="get-an-addresss-default-inswap-fee-payment-settings"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/user_info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapUserInfo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapUserInfo)  
 
 #### Description
-This interface retrieves the user information in the BRC20 Swap service.
+Returns the user's remembered fee payment preference, including default pay type and whether the preference should be remembered.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -1963,12 +1975,15 @@ Default Response
 
 ---
 
-### Select deposit information
-<a id="select-deposit-information"></a>
+### Get deposit selection data for an InSwap address
+<a id="get-deposit-selection-data-for-an-inswap-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/select_deposit`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapSelectDeposit)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapSelectDeposit)  
+
+#### Description
+Returns server-provided deposit selection data for a pubkey and address. The schema is intentionally open to support direct, matching, or bridge deposit choices.
 
 #### Parameters
 - `pubkey` (query, string) **(required)**: 
@@ -1985,12 +2000,15 @@ Default Response
 
 ---
 
-### Gets the func info.
-<a id="gets-the-func-info"></a>
+### Get execution details for one InSwap function id
+<a id="get-execution-details-for-one-inswap-function-id"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/func_info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapFuncInfo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapFuncInfo)  
+
+#### Description
+Returns server-side function execution data for a submitted operation id. The response is open because details vary by operation type.
 
 #### Parameters
 - `id` (query, string) **(required)**: 
@@ -2005,12 +2023,15 @@ Default Response
 
 ---
 
-### Gets the deposit balance
-<a id="gets-the-deposit-balance"></a>
+### Get depositable balance data for one tick
+<a id="get-depositable-balance-data-for-one-tick"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/deposit_balance`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapDepositBalance)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapDepositBalance)  
+
+#### Description
+Returns server-provided deposit balance data for a pubkey, address, and tick. The response shape is open to support multiple deposit modes.
 
 #### Parameters
 - `pubkey` (query, string) **(required)**: 
@@ -2027,15 +2048,15 @@ Default Response
 
 ---
 
-### Gets the deposit process.
-<a id="gets-the-deposit-process"></a>
+### Get confirmation progress for an InSwap deposit
+<a id="get-confirmation-progress-for-an-inswap-deposit"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/deposit_process`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapDepositProcess)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapDepositProcess)  
 
 #### Description
-This interface retrieves the deposit process for a specific transaction ID in the BRC20 Swap service.
+Returns deposit progress by txid, including tick, amount, current and required confirmations, timestamp, type, and status.
 
 #### Parameters
 - `txid` (query, string) **(required)**: 
@@ -2058,15 +2079,15 @@ Default Response
 
 ---
 
-### Gets the tick price
-<a id="gets-the-tick-price"></a>
+### Get the current InSwap price for one tick
+<a id="get-the-current-inswap-price-for-one-tick"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/tick_price`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapTickPrice)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapTickPrice)  
 
 #### Description
-This interface retrieves the price for a specific tick in the BRC20 Swap service.
+Returns the latest price value for a tick as used by InSwap quote, valuation, or portfolio views.
 
 #### Parameters
 - `tick` (query, string) **(required)**: 
@@ -2082,15 +2103,15 @@ Default Response
 
 ---
 
-### Gets the address's total tick fee
-<a id="gets-the-addresss-total-tick-fee"></a>
+### Get an address's available fee-tick gas amount
+<a id="get-an-addresss-available-fee-tick-gas-amount"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/address_gas`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapAddressGas)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapAddressGas)  
 
 #### Description
-This interface retrieves the total gas consumption for a specific address and fee tick in the BRC20 Swap service.
+Returns the total available fee-token amount for an address and fee tick, useful before preparing fee-paying swap operations.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -2107,15 +2128,15 @@ Default Response
 
 ---
 
-### Gets the price line.
-<a id="gets-the-price-line"></a>
+### Get historical InSwap price points for a pair
+<a id="get-historical-inswap-price-points-for-a-pair"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/price_line`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPriceLine)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPriceLine)  
 
 #### Description
-This interface retrieves the price line data for a specific pair in the BRC20 Swap service.
+Returns time-series price and USD price points for a token pair over a selected range such as 24h, 7d, 30d, 90d, or all.
 
 #### Parameters
 - `tick0` (query, string) **(required)**: 
@@ -2136,15 +2157,15 @@ Default Response
 
 ---
 
-### Gets the tick holders.
-<a id="gets-the-tick-holders"></a>
+### List top holders for an InSwap tick
+<a id="list-top-holders-for-an-inswap-tick"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/tick_holders`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapTickHolders)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapTickHolders)  
 
 #### Description
-This interface retrieves the list of tick holders for a specific tick in the BRC20 Swap service.
+Returns paginated holder records for a tick, including address, amount, overall percentage, and relative percentage.
 
 #### Parameters
 - `tick` (query, string) **(required)**: 
@@ -2167,15 +2188,15 @@ Default Response
 
 ---
 
-### Gets the pool holders.
-<a id="gets-the-pool-holders"></a>
+### List LP holders for an InSwap pool
+<a id="list-lp-holders-for-an-inswap-pool"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pool_holders`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPoolHolders)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPoolHolders)  
 
 #### Description
-This interface retrieves the list of pool holders for a specific pair in the BRC20 Swap service.
+Returns paginated LP holder records for a token pair, including token amounts, LP amount, pool share, and locked LP breakdown.
 
 #### Parameters
 - `tick0` (query, string) **(required)**: 
@@ -2204,15 +2225,15 @@ Default Response
 
 ---
 
-### Get reward curve data.
-<a id="get-reward-curve-data"></a>
+### Get InSwap reward curve data for a pool position
+<a id="get-inswap-reward-curve-data-for-a-pool-position"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/reward_curve`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapRewardCurve)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapRewardCurve)  
 
 #### Description
-This interface retrieves the reward curve data for a specific pair and time range in the BRC20 Swap service.
+Returns reward-curve data for an address and token pair over a time range. The response is open because curve series fields may vary by campaign.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -2231,15 +2252,15 @@ Default Response
 
 ---
 
-### Gets the history of send lp transaction.
-<a id="gets-the-history-of-send-lp-transaction"></a>
+### List InSwap LP token transfer history
+<a id="list-inswap-lp-token-transfer-history"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/send_lp_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapSendLpHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapSendLpHistory)  
 
 #### Description
-This interface retrieves the history of send LP transactions in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
+Returns paginated LP transfer records filtered by address or tick, including tick, amount, recipient, and timestamp.
 
 #### Parameters
 - `address` (query, string): 
@@ -2264,15 +2285,15 @@ Default Response
 
 ---
 
-### Gets the history of burn transaction.
-<a id="gets-the-history-of-burn-transaction"></a>
+### List InSwap LP burn history and burn totals
+<a id="list-inswap-lp-burn-history-and-burn-totals"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/burn_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapBurnHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapBurnHistory)  
 
 #### Description
-This interface retrieves the history of burn transactions in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
+Returns paginated burn records plus total LP and burned LP amounts, with optional address, tick, fuzzy-search, and timestamp filters.
 
 #### Parameters
 - `address` (query, string): 
@@ -2300,18 +2321,18 @@ Default Response
 
 ---
 
-### Get task list for address.
-<a id="get-task-list-for-address"></a>
+### List InSwap task completion items for an address
+<a id="list-inswap-task-completion-items-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/task_list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapTaskList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapTaskList)  
 
 #### Description
-This interface retrieves the task list for a specific address in the BRC20 Swap service.
+Returns task metadata for an address, including task id, item ids, completion flags, and task start/end times when available.
 
 #### Parameters
-- `tid` (query, string): 
+- `tid` (query, string): default: `1`
 - `address` (query, string) **(required)**: 
 
 #### Response (200)
@@ -2330,15 +2351,15 @@ Default Response
 
 ---
 
-### Get address usd.
-<a id="get-address-usd"></a>
+### Get an address's InSwap asset and LP USD values
+<a id="get-an-addresss-inswap-asset-and-lp-usd-values"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/address_usd`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapAddressUsd)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapAddressUsd)  
 
 #### Description
-This interface retrieves the USD value of assets for a specific address in the BRC20 Swap service.
+Returns USD valuation entries for an address, separating token asset value and LP position value.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -2355,15 +2376,15 @@ Default Response
 
 ---
 
-### Prepare lock LP operation
-<a id="prepare-lock-lp-operation"></a>
+### Prepare signatures and fees for locking InSwap LP
+<a id="prepare-signatures-and-fees-for-locking-inswap-lp"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pre_lock_lp`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPreLockLp)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPreLockLp)  
 
 #### Description
-This interface pre-loads the /lock_lp operation, providing the signature content, gas, and byte information required for locking LP in the BRC20 Swap service.
+Returns signature ids, sign messages, fee fields, LP token conversion data, and fee-balance metadata for locking LP tokens for a selected duration.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -2393,15 +2414,15 @@ Default Response
 
 ---
 
-### The lock lp operation.
-<a id="the-lock-lp-operation"></a>
+### Submit a signed InSwap LP lock operation
+<a id="submit-a-signed-inswap-lp-lock-operation"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/lock_lp`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapLockLp)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapLockLp)  
 
 #### Description
-This interface locks LP in the BRC20 Swap service. It requires the address, lockDay, tick0, tick1, amount, timestamp, fee tick, and user signatures to complete the operation.
+Locks LP tokens for a token pair and lock duration using prepared signatures and fee fields. Review lock duration, LP amount, fee payment, and signatures before submission.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -2429,15 +2450,15 @@ Default Response
 
 ---
 
-### Prepare unlock LP operation
-<a id="prepare-unlock-lp-operation"></a>
+### Prepare signatures and fees for unlocking InSwap LP
+<a id="prepare-signatures-and-fees-for-unlocking-inswap-lp"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pre_unlock_lp`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPreUnlockLp)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPreUnlockLp)  
 
 #### Description
-This interface pre-loads the /unlock_lp operation, providing the signature content, gas, and byte information required for unlocking LP in the BRC20 Swap service.
+Returns signature ids, sign messages, fee fields, LP token conversion data, and fee-balance metadata for unlocking previously locked LP tokens.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -2466,15 +2487,15 @@ Default Response
 
 ---
 
-### The unlock lp operation.
-<a id="the-unlock-lp-operation"></a>
+### Submit a signed InSwap LP unlock operation
+<a id="submit-a-signed-inswap-lp-unlock-operation"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/unlock_lp`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapUnlockLp)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapUnlockLp)  
 
 #### Description
-This interface unlocks LP in the BRC20 Swap service. It requires the address, tick0, tick1, amount, timestamp, fee tick, and user signatures to complete the operation.
+Unlocks LP tokens for a token pair using prepared signatures and fee fields. Review LP amount, fee payment, and signatures before submission.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -2501,15 +2522,15 @@ Default Response
 
 ---
 
-### Gets the history of lock lp transaction.
-<a id="gets-the-history-of-lock-lp-transaction"></a>
+### List InSwap LP lock history
+<a id="list-inswap-lp-lock-history"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/lock_lp_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapLockLpHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapLockLpHistory)  
 
 #### Description
-This interface retrieves the history of lock LP transactions in the BRC20 Swap service. It supports filtering by address, tick, lockDay, and pagination through start and limit parameters.
+Returns paginated LP lock records with address, pair, LP amount, token amounts, USD values, lock duration, unlock time, pool share, and timestamp.
 
 #### Parameters
 - `tick` (query, string): 
@@ -2545,15 +2566,15 @@ Default Response
 
 ---
 
-### Gets the history of unlock lp transaction.
-<a id="gets-the-history-of-unlock-lp-transaction"></a>
+### List InSwap LP unlock history
+<a id="list-inswap-lp-unlock-history"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/unlock_lp_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapUnlockLpHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapUnlockLpHistory)  
 
 #### Description
-This interface retrieves the history of unlock LP transactions in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
+Returns paginated LP unlock records with address, pair, LP amount, token amounts, USD values, and timestamp.
 
 #### Parameters
 - `tick` (query, string): 
@@ -2585,15 +2606,15 @@ Default Response
 
 ---
 
-### Export lock lp history to CSV file.
-<a id="export-lock-lp-history-to-csv-file"></a>
+### Export InSwap LP lock history as CSV
+<a id="export-inswap-lp-lock-history-as-csv"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/export_lock_lp_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapExportLockLpHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapExportLockLpHistory)  
 
 #### Description
-This interface exports the lock LP history to a CSV file in the BRC20 Swap service.
+Downloads CSV-formatted LP lock records for a token pair, optionally filtered by lock duration or lock time.
 
 #### Parameters
 - `tick0` (query, string) **(required)**: 
@@ -2607,15 +2628,15 @@ CSV file download
 
 ---
 
-### Gets the user lock lp.
-<a id="gets-the-user-lock-lp"></a>
+### Get an address's locked and available LP for a pool
+<a id="get-an-addresss-locked-and-available-lp-for-a-pool"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/my_lock_lp`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapMyLockLp)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapMyLockLp)  
 
 #### Description
-This interface retrieves the user's lock LP information for a specific pair in the BRC20 Swap service.
+Returns total LP, locked LP, available LP, available underlying token amounts, and pool share for one address and token pair.
 
 #### Parameters
 - `tick0` (query, string) **(required)**: 
@@ -2638,15 +2659,15 @@ Default Response
 
 ---
 
-### Select the tick information that you can swap.
-<a id="select-the-tick-information-that-you-can-swap"></a>
+### List routed pool candidates for an InSwap trade
+<a id="list-routed-pool-candidates-for-an-inswap-trade"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/select_pool`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapSelectPool)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapSelectPool)  
 
 #### Description
-This interface retrieves the tick information that can be used for swapping based on the provided address and optional filters.
+Returns swappable tick candidates for an address with decimals, module balance, swap balance, and available route ticks.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -2669,15 +2690,15 @@ Default Response
 
 ---
 
-### Prepare multi swap operation
-<a id="prepare-multi-swap-operation"></a>
+### Prepare signatures and fees for a multi-hop InSwap swap
+<a id="prepare-signatures-and-fees-for-a-multi-hop-inswap-swap"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/pre_multi_swap`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapPreMultiSwap)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapPreMultiSwap)  
 
 #### Description
-This interface pre-loads the /multi_swap operation, providing the signature content and gas information required for multi swapping in the BRC20 Swap service.
+Returns per-route signature ids, sign messages, fee fields, and fee-balance metadata for a multi-hop swap between input and output ticks.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -2707,15 +2728,15 @@ Default Response
 
 ---
 
-### The multi swap operation.
-<a id="the-multi-swap-operation"></a>
+### Submit signed multi-hop InSwap swaps
+<a id="submit-signed-multi-hop-inswap-swaps"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/multi_swap`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapMultiSwap)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapMultiSwap)  
 
 #### Description
-This interface performs multi swaps in the BRC20 Swap service. It requires an array of swap items, each with address, input tick, output tick, amounts, slippage, exact type, timestamp, fee tick, and user signatures to complete the operation.
+Executes one or more prepared multi-hop swap items and returns per-item success, amounts, exact type, value, timestamp, and failure reason when applicable.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -2759,12 +2780,15 @@ Default Response
 
 ---
 
-### Returns the estimated number of multi swaps based on the input and exact type.
-<a id="returns-the-estimated-number-of-multi-swaps-based-on-the-input-and-exact-type"></a>
+### Quote expected output and route amounts for a multi-hop swap
+<a id="quote-expected-output-and-route-amounts-for-a-multi-hop-swap"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/quote_multi_swap`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapQuoteMultiSwap)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapQuoteMultiSwap)  
+
+#### Description
+Estimates a multi-hop swap with input USD value, expected USD value, expected output amount, and per-route expected amounts.
 
 #### Parameters
 - `address` (query, string) **(required)**: 
@@ -2787,15 +2811,15 @@ Default Response
 
 ---
 
-### Gets the history of multi swap.
-<a id="gets-the-history-of-multi-swap"></a>
+### List InSwap multi-hop swap history
+<a id="list-inswap-multi-hop-swap-history"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/multi_swap_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/getBrc20SwapMultiSwapHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapMultiSwapHistory)  
 
 #### Description
-This interface retrieves the history of multi swap transactions in the BRC20 Swap service. It supports filtering by address, tick, and pagination through start and limit parameters.
+Returns paginated multi-hop swap records with aggregate input/output amounts, value, route details, route success flags, and failure reasons.
 
 #### Parameters
 - `address` (query, string): 
@@ -2844,15 +2868,15 @@ Default Response
 
 ---
 
-### Batch query multiple history types in a single request.
-<a id="batch-query-multiple-history-types-in-a-single-request"></a>
+### Fetch multiple InSwap history categories in one request
+<a id="fetch-multiple-inswap-history-categories-in-one-request"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/batch_history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/brc20-swap/postBrc20SwapBatchHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapBatchHistory)  
 
 #### Description
-This interface retrieves multiple history types in a single request in the BRC20 Swap service. It supports querying multiple history types (gas, send, liq, swap, withdraw, stake, send_lp, burn, lock_lp, unlock_lp, multi_swap) with shared pagination parameters (start, limit, address).
+Returns selected history groups for an address, such as gas, send, liquidity, swap, withdrawal, stake, LP transfer, burn, LP lock, LP unlock, and multi-hop swap records.
 
 #### Request Body
 Content-Type: `application/json` **(required)**

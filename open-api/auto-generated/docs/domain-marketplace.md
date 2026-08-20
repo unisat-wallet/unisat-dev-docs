@@ -1,6 +1,6 @@
-# Ordinals Domain MarketPlace API
+# Ordinals Domain Marketplace API
 
-This API provides endpoints for ordinals domain marketplace services.
+This API provides endpoints for Ordinals domain marketplace services, including domain type statistics, domain listing search, inscription details, activity history, and marketplace order workflows.
 
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
@@ -9,35 +9,35 @@ This API provides endpoints for ordinals domain marketplace services.
 
 | Route | Summary |
 | ----- | ------- |
-| [POST `/v3/market/domain/auction/domain_types`](#get-statistical-data) | Get statistical data. |
-| [POST `/v3/market/domain/auction/domain_statistic`](#return-a-summary-of-domain) | Return a summary of domain. |
-| [POST `/v3/market/domain/auction/inscription_info`](#retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services) | Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services. |
-| [POST `/v3/market/domain/auction/inscription_info_list`](#get-the-basic-listing-information-of-the-specified-inscription-list) | Get the basic listing information of the specified inscription list |
-| [POST `/v3/market/domain/auction/list`](#retrieve-the-list-information-of-the-market) | Retrieve the list information of the market. |
-| [POST `/v3/market/domain/auction/actions`](#get-information-on-listings-delistings-and-sales) | Get information on listings, delistings, and sales. |
-| [POST `/v3/market/domain/auction/create_put_on`](#create-listing-order) | Create listing order. |
-| [POST `/v3/market/domain/auction/confirm_put_on`](#confirm-listing-order) | Confirm listing order. |
-| [POST `/v3/market/domain/auction/create_bid_prepare`](#return-params-before-creating-purchase-order) | Return params before creating purchase order. |
-| [POST `/v3/market/domain/auction/create_bid`](#create-purchase-order) | Create purchase order. |
-| [POST `/v3/market/domain/auction/confirm_bid`](#confirm-purchase-order) | Confirm purchase order. |
-| [POST `/v3/market/domain/auction/create_put_off`](#create-delisting-order) | Create delisting order. |
-| [POST `/v3/market/domain/auction/confirm_put_off`](#confirm-delisting-order) | Confirm delisting order. |
-| [POST `/v3/market/domain/auction/create_modify_price`](#create-the-order-for-price-adjustment) | Create the order for price adjustment. |
-| [POST `/v3/market/domain/auction/confirm_modify_price`](#confirm-the-order-for-price-adjustment) | Confirm the order for price adjustment. |
+| [POST `/v3/market/domain/auction/domain_types`](#list-domain-type-market-statistics) | List domain type market statistics |
+| [POST `/v3/market/domain/auction/domain_statistic`](#get-domain-type-category-statistics) | Get domain type category statistics |
+| [POST `/v3/market/domain/auction/inscription_info`](#get-marketplace-inscription-detail) | Get marketplace inscription detail |
+| [POST `/v3/market/domain/auction/inscription_info_list`](#get-marketplace-inscription-details-in-batch) | Get marketplace inscription details in batch |
+| [POST `/v3/market/domain/auction/list`](#search-ordinals-domain-marketplace-listings) | Search Ordinals domain marketplace listings |
+| [POST `/v3/market/domain/auction/actions`](#list-ordinals-domain-marketplace-activity-history) | List Ordinals domain marketplace activity history |
+| [POST `/v3/market/domain/auction/create_put_on`](#create-domain-listing-psbt-draft) | Create domain listing PSBT draft |
+| [POST `/v3/market/domain/auction/confirm_put_on`](#publish-signed-domain-listing) | Publish signed domain listing |
+| [POST `/v3/market/domain/auction/create_bid_prepare`](#estimate-domain-purchase-fees-and-balance) | Estimate domain purchase fees and balance |
+| [POST `/v3/market/domain/auction/create_bid`](#create-domain-purchase-psbt-order) | Create domain purchase PSBT order |
+| [POST `/v3/market/domain/auction/confirm_bid`](#submit-signed-domain-purchase-order) | Submit signed domain purchase order |
+| [POST `/v3/market/domain/auction/create_put_off`](#create-domain-delisting-psbt-draft) | Create domain delisting PSBT draft |
+| [POST `/v3/market/domain/auction/confirm_put_off`](#remove-signed-domain-listing) | Remove signed domain listing |
+| [POST `/v3/market/domain/auction/create_modify_price`](#create-domain-price-update-psbt-draft) | Create domain price-update PSBT draft |
+| [POST `/v3/market/domain/auction/confirm_modify_price`](#apply-signed-domain-listing-price-update) | Apply signed domain listing price update |
 
 ---
 
-## MarketPlace-Domain
+## Marketplace-Domains
 
-### Get statistical data.
-<a id="get-statistical-data"></a>
+### List domain type market statistics
+<a id="list-domain-type-market-statistics"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/domain_types`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/getDomainTypes)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/getDomainTypes)  
 
 #### Description
-Get statistical data, price, market capitalization, etc. for domain.
+Query read-only Ordinals domain marketplace statistics grouped by domain type. This query-style POST only reads market data; readonly true and requires confirmation false.
 
 #### Response (200)
 Default Response
@@ -55,12 +55,15 @@ Default Response
 
 ---
 
-### Return a summary of domain.
-<a id="return-a-summary-of-domain"></a>
+### Get domain type category statistics
+<a id="get-domain-type-category-statistics"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/domain_statistic`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/getDomainStatistic)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/getDomainStatistic)  
+
+#### Description
+Query read-only marketplace statistics for categories under a specified Ordinals domain type. This query-style POST only reads market data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -81,12 +84,15 @@ Default Response
 
 ---
 
-### Retrieve inscription information, including brc20, names, collection. It is necessary to first determine the inscription type before calling the relevant services.
-<a id="retrieve-inscription-information-including-brc20-names-collection-it-is-necessary-to-first-determine-the-inscription-type-before-calling-the-relevant-services"></a>
+### Get marketplace inscription detail
+<a id="get-marketplace-inscription-detail"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/inscription_info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/getDomainInscriptionInfo)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/getDomainInscriptionInfo)  
+
+#### Description
+Query read-only marketplace inscription detail for one inscription, including listing and asset metadata. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -127,12 +133,15 @@ Default Response
 
 ---
 
-### Get the basic listing information of the specified inscription list
-<a id="get-the-basic-listing-information-of-the-specified-inscription-list"></a>
+### Get marketplace inscription details in batch
+<a id="get-marketplace-inscription-details-in-batch"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/inscription_info_list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/getDomainInscriptionInfoList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/getDomainInscriptionInfoList)  
+
+#### Description
+Query read-only marketplace listing details for multiple inscriptions. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -159,12 +168,15 @@ Default Response
 
 ---
 
-### Retrieve the list information of the market.
-<a id="retrieve-the-list-information-of-the-market"></a>
+### Search Ordinals domain marketplace listings
+<a id="search-ordinals-domain-marketplace-listings"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/getDomainMarketList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/getDomainMarketList)  
+
+#### Description
+Query read-only Ordinals domain marketplace listings with filters, sorting, and pagination. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -229,12 +241,15 @@ Default Response
 
 ---
 
-### Get information on listings, delistings, and sales.
-<a id="get-information-on-listings-delistings-and-sales"></a>
+### List Ordinals domain marketplace activity history
+<a id="list-ordinals-domain-marketplace-activity-history"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/actions`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/getDomainMarketActions)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/getDomainMarketActions)  
+
+#### Description
+Query read-only Ordinals domain marketplace activity history such as listings, delistings, sales, claims, and updates. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -287,12 +302,15 @@ Default Response
 
 ---
 
-### Create listing order.
-<a id="create-listing-order"></a>
+### Create domain listing PSBT draft
+<a id="create-domain-listing-psbt-draft"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/create_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/createDomainMarketPutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/createDomainMarketPutOn)  
+
+#### Description
+Creates an Ordinals domain listing draft and returns auctionId, PSBT, and signing indexes for the seller. Review inscriptionId, domain name/type/category, initPrice, unitPrice, marketType, and receiving address before signing or confirming the listing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -318,12 +336,15 @@ Default Response
 
 ---
 
-### Confirm listing order.
-<a id="confirm-listing-order"></a>
+### Publish signed domain listing
+<a id="publish-signed-domain-listing"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/confirm_put_on`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/confirmDomainMarketPutOn)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/confirmDomainMarketPutOn)  
+
+#### Description
+Confirms the seller-signed listing PSBT and activates the Ordinals domain marketplace listing. Verify auctionId, PSBT encoding, domain name, listing price, seller address, and market type before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -342,12 +363,15 @@ Default Response
 
 ---
 
-### Return params before creating purchase order.
-<a id="return-params-before-creating-purchase-order"></a>
+### Estimate domain purchase fees and balance
+<a id="estimate-domain-purchase-fees-and-balance"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/create_bid_prepare`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/createDomainMarketBidPrepare)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/createDomainMarketBidPrepare)  
+
+#### Description
+Returns pre-purchase fee estimates, available balances, network fee rate, transaction size, and inscription value for an Ordinals domain listing. This is a quote/material preparation step only; before any later purchase submission, verify auctionId, bidPrice, buyer address, feeRate, and domain name.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -375,12 +399,15 @@ Default Response
 
 ---
 
-### Create purchase order.
-<a id="create-purchase-order"></a>
+### Create domain purchase PSBT order
+<a id="create-domain-purchase-psbt-order"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/create_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/createDomainMarketBid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/createDomainMarketBid)  
+
+#### Description
+Creates an Ordinals domain purchase order and returns bidId, PSBT data, signing indexes, server/network fees, feeRate, and inscription value. Confirm auctionId, bidPrice, buyer address, domain name/type, and fee totals before requesting signatures.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -414,12 +441,15 @@ Default Response
 
 ---
 
-### Confirm purchase order.
-<a id="confirm-purchase-order"></a>
+### Submit signed domain purchase order
+<a id="submit-signed-domain-purchase-order"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/confirm_bid`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/confirmDomainMarketBid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/confirmDomainMarketBid)  
+
+#### Description
+Submits the signed domain purchase PSBT and returns the settlement transaction id when accepted. Before calling, verify auctionId, bidId, PSBT content, final price, domain name, buyer/seller addresses, and fee values because this can settle the purchase.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -442,12 +472,15 @@ Default Response
 
 ---
 
-### Create delisting order.
-<a id="create-delisting-order"></a>
+### Create domain delisting PSBT draft
+<a id="create-domain-delisting-psbt-draft"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/create_put_off`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/createDomainMarketPutOff)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/createDomainMarketPutOff)  
+
+#### Description
+Creates delisting signing material for an active Ordinals domain marketplace order, including PSBT/signing data when needed. Confirm auctionId, owner addresses, and domain name before signing because the next confirmation removes the listing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -475,12 +508,15 @@ Default Response
 
 ---
 
-### Confirm delisting order.
-<a id="confirm-delisting-order"></a>
+### Remove signed domain listing
+<a id="remove-signed-domain-listing"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/confirm_put_off`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/confirmDomainMarketPutOff)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/confirmDomainMarketPutOff)  
+
+#### Description
+Confirms signed delisting data and removes the Ordinals domain listing from the marketplace. Verify auctionId, PSBT/signature payload, owner address, and target domain name before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -501,12 +537,15 @@ Default Response
 
 ---
 
-### Create the order for price adjustment.
-<a id="create-the-order-for-price-adjustment"></a>
+### Create domain price-update PSBT draft
+<a id="create-domain-price-update-psbt-draft"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/create_modify_price`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/createDomainMarketModifyPrice)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/createDomainMarketModifyPrice)  
+
+#### Description
+Creates signing material to update an existing Ordinals domain listing price. Verify auctionId, domain name, old and new prices, seller address, and returned PSBT/sign indexes before signing.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
@@ -527,12 +566,15 @@ Default Response
 
 ---
 
-### Confirm the order for price adjustment.
-<a id="confirm-the-order-for-price-adjustment"></a>
+### Apply signed domain listing price update
+<a id="apply-signed-domain-listing-price-update"></a>
 
 **Method**: `POST`  
 **Path**: `/v3/market/domain/auction/confirm_modify_price`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/MarketPlace-Domain/confirmDomainMarketModifyPrice)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Marketplace-Domains/confirmDomainMarketModifyPrice)  
+
+#### Description
+Confirms signed price-update data and changes the active Ordinals domain listing price. Verify auctionId, signed PSBT, domain name, seller address, and final price before submitting.
 
 #### Request Body
 Content-Type: `application/json` **(required)**

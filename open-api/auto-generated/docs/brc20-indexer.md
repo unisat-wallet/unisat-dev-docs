@@ -1,6 +1,6 @@
 # BRC-20 API
 
-BRC-20 API is a RESTful API for BRC-20 token data indexing and querying. It provides endpoints to retrieve information about BRC-20 tokens, including their status, holders, history, and more.
+BRC-20 API is a RESTful API for classic BRC-20 token data indexing and querying. It provides endpoints to retrieve information about classic BRC-20 tokens, including their status, holders, history, and more. Use these endpoints for classic BRC-20 tickers such as ordi. Do not use these endpoints for BRC20-Prog 6-character tickers; use /v1/indexer/brc20-prog/* endpoints for BRC20-Prog data.
 
 👉 [View Swagger UI](https://open-api.unisat.io/#/)
 
@@ -9,36 +9,36 @@ BRC-20 API is a RESTful API for BRC-20 token data indexing and querying. It prov
 
 | Route | Summary |
 | ----- | ------- |
-| [GET `/v1/indexer/brc20/bestheight`](#get-the-best-block-height-of-brc20-data) | Get the best block height of BRC20 data |
-| [GET `/v1/indexer/brc20/list`](#get-the-ticker-list-of-brc-20-tokens) | Get the ticker list of BRC-20 tokens. |
-| [GET `/v1/indexer/brc20/status`](#get-the-status-of-brc20-list) | Get the status of BRC20 list. |
-| [GET `/v1/indexer/brc20/(ticker)/info`](#get-the-information-of-brc-20-by-ticker) | Get the information of BRC-20 by ticker |
-| [GET `/v1/indexer/brc20/(ticker)/holders`](#get-the-holders-of-brc20-by-ticker) | Get the holders of BRC20 by ticker. |
-| [GET `/v1/indexer/brc20/(ticker)/history`](#get-the-full-history-of-brc20-by-ticker) | Get the full history of BRC20 by ticker. |
-| [GET `/v1/indexer/brc20/(ticker)/tx/(txid)/history`](#get-the-full-history-of-brc-20-by-ticker-and-transaction-id) | Get the full history of BRC-20 by ticker and transaction ID. |
-| [GET `/v1/indexer/brc20/history-by-height/(height)`](#get-brc-20-history-by-block-height) | Get BRC-20 history by block height. |
-| [GET `/v1/indexer/address/(address)/brc20/summary`](#get-the-brc20-token-summary-by-address) | Get the BRC20 token summary by address. |
-| [GET `/v1/indexer/address/(address)/brc20/summary-by-height/(height)`](#get-the-brc20-token-summary-by-address-and-height) | Get the BRC20 token summary by address and height. |
-| [GET `/v1/indexer/address/(address)/brc20/(ticker)/info`](#get-the-brc20-token-info-by-address-and-ticker) | Get the BRC20 token info by address and ticker. |
-| [GET `/v1/indexer/address/(address)/brc20/history`](#get-the-full-history-of-brc-20-by-address) | Get the full history of BRC-20 by address. |
-| [GET `/v1/indexer/address/(address)/brc20/(ticker)/history`](#get-the-full-history-of-brc-20-by-address-and-ticker) | Get the full history of BRC-20 by address and ticker. |
-| [GET `/v1/indexer/address/(address)/brc20/(ticker)/transferable-inscriptions`](#get-the-transferable-inscriptions-list-of-brc20-by-address) | Get the transferable inscriptions list of BRC20 by address. |
-| [GET `/v1/indexer/brc20-module/(module)/history`](#get-the-history-of-brc20-module-by-address) | Get the history of BRC20 Module by address. |
-| [GET `/v1/indexer/brc20-module/withdraw-history`](#get-the-withdraw-history-of-brc20) | Get the withdraw history of BRC20. |
+| [GET `/v1/indexer/brc20/bestheight`](#get-classic-brc-20-indexer-height-and-ticker-total) | Get Classic BRC-20 indexer height and ticker total |
+| [GET `/v1/indexer/brc20/list`](#list-indexed-classic-brc-20-tickers) | List indexed Classic BRC-20 tickers |
+| [GET `/v1/indexer/brc20/status`](#search-classic-brc-20-ticker-status-and-mint-progress) | Search Classic BRC-20 ticker status and mint progress |
+| [GET `/v1/indexer/brc20/(ticker)/info`](#get-classic-brc-20-ticker-deployment-and-supply-info) | Get Classic BRC-20 ticker deployment and supply info |
+| [GET `/v1/indexer/brc20/(ticker)/holders`](#list-classic-brc-20-holders-and-balances-for-a-ticker) | List Classic BRC-20 holders and balances for a ticker |
+| [GET `/v1/indexer/brc20/(ticker)/history`](#list-classic-brc-20-history-events-for-a-ticker) | List Classic BRC-20 history events for a ticker |
+| [GET `/v1/indexer/brc20/(ticker)/tx/(txid)/history`](#get-classic-brc-20-ticker-events-in-a-transaction) | Get Classic BRC-20 ticker events in a transaction |
+| [GET `/v1/indexer/brc20/history-by-height/(height)`](#list-classic-brc-20-events-indexed-at-a-block-height) | List Classic BRC-20 events indexed at a block height |
+| [GET `/v1/indexer/address/(address)/brc20/summary`](#list-an-addresss-classic-brc-20-token-balances) | List an address's Classic BRC-20 token balances |
+| [GET `/v1/indexer/address/(address)/brc20/summary-by-height/(height)`](#list-an-addresss-classic-brc-20-balances-at-a-height) | List an address's Classic BRC-20 balances at a height |
+| [GET `/v1/indexer/address/(address)/brc20/(ticker)/info`](#get-an-addresss-classic-brc-20-balance-details-for-a-ticker) | Get an address's Classic BRC-20 balance details for a ticker |
+| [GET `/v1/indexer/address/(address)/brc20/history`](#list-all-classic-brc-20-history-events-for-an-address) | List all Classic BRC-20 history events for an address |
+| [GET `/v1/indexer/address/(address)/brc20/(ticker)/history`](#list-an-addresss-classic-brc-20-history-for-a-ticker) | List an address's Classic BRC-20 history for a ticker |
+| [GET `/v1/indexer/address/(address)/brc20/(ticker)/transferable-inscriptions`](#list-transferable-classic-brc-20-inscriptions-for-an-address) | List transferable Classic BRC-20 inscriptions for an address |
+| [GET `/v1/indexer/brc20-module/(module)/history`](#list-classic-brc-20-module-history-for-a-module-inscription) | List Classic BRC-20 module history for a module inscription |
+| [GET `/v1/indexer/brc20-module/withdraw-history`](#list-classic-brc-20-module-withdrawal-history) | List Classic BRC-20 module withdrawal history |
 
 ---
 
-## BRC-20
+## BRC20 Indexer
 
-### Get the best block height of BRC20 data
-<a id="get-the-best-block-height-of-brc20-data"></a>
+### Get Classic BRC-20 indexer height and ticker total
+<a id="get-classic-brc-20-indexer-height-and-ticker-total"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20/bestheight`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20BestHeight)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20BestHeight)  
 
 #### Description
-Get the best block height of BRC20 data. This value will be consistent with the latest block height a short time after the block has been confirmed.
+Returns the latest indexed block height, block hash, block timestamp, and total Classic BRC-20 ticker count. Use it to check indexer freshness before reading token status, holders, history, or address balances; data may lag the chain tip and should not be used for BRC20-Prog 6-character tickers.
 
 #### Response (200)
 Successful operation
@@ -57,15 +57,15 @@ Invalid API Key
 
 ---
 
-### Get the ticker list of BRC-20 tokens.
-<a id="get-the-ticker-list-of-brc-20-tokens"></a>
+### List indexed Classic BRC-20 tickers
+<a id="list-indexed-classic-brc-20-tickers"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20/list`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20TickerList)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20TickerList)  
 
 #### Description
-Get the ticker list of BRC-20 tokens.
+Returns a paginated ticker list with total count and start offset for Classic BRC-20 discovery. Use these tickers with the Classic BRC-20 info, holder, history, and address-balance endpoints; route BRC20-Prog 6-character tickers to the brc20-prog API instead.
 
 #### Parameters
 - `start` (query, integer) **(required)**: Start offset
@@ -87,15 +87,15 @@ Invalid API Key
 
 ---
 
-### Get the status of BRC20 list.
-<a id="get-the-status-of-brc20-list"></a>
+### Search Classic BRC-20 ticker status and mint progress
+<a id="search-classic-brc-20-ticker-status-and-mint-progress"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20/status`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20Status)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20Status)  
 
 #### Description
-Obtain BRC20 list status
+Returns indexed Classic BRC-20 ticker status records including deployment metadata, minted supply, holder and history counts, and completion state. Use sort and completion filters for token discovery or ranking; balances are indexer-derived and may change as new blocks are processed.
 
 #### Parameters
 - `start` (query, integer) **(required)**: Start offset
@@ -142,18 +142,18 @@ Invalid API Key
 
 ---
 
-### Get the information of BRC-20 by ticker
-<a id="get-the-information-of-brc-20-by-ticker"></a>
+### Get Classic BRC-20 ticker deployment and supply info
+<a id="get-classic-brc-20-ticker-deployment-and-supply-info"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20/{ticker}/info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20InfoByTicker)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20InfoByTicker)  
 
 #### Description
-Get the information of BRC-20 by ticker.
+Returns deployment inscription, creator, max supply, mint limit, decimals, minted amounts, holder count, and related history counts for one Classic BRC-20 ticker. Use this before showing token detail pages or validating ticker-level context; 6-character BRC20-Prog tickers are intentionally out of scope.
 
 #### Parameters
-- `ticker` (path, string) **(required)**: Token ticker
+- `ticker` (path, string) **(required)**: Classic BRC-20 ticker, such as ordi. Use brc20-prog endpoints for 6-character BRC20-Prog tickers.
 
 #### Response (200)
 Successful operation
@@ -204,20 +204,20 @@ export function stringToHex(stringToEncode: string) {
 
 ---
 
-### Get the holders of BRC20 by ticker.
-<a id="get-the-holders-of-brc20-by-ticker"></a>
+### List Classic BRC-20 holders and balances for a ticker
+<a id="list-classic-brc-20-holders-and-balances-for-a-ticker"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20/{ticker}/holders`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20HoldersByTicker)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20HoldersByTicker)  
 
 #### Description
-Get the holders of BRC20 by ticker.
+Returns holder addresses with overall, transferable, and available balances for the selected Classic BRC-20 ticker. Use it for holder distribution views or balance audits; values are indexed token balances and do not authorize transfers or create inscriptions.
 
 #### Parameters
-- `ticker` (path, string) **(required)**: Token ticker
+- `ticker` (path, string) **(required)**: Classic BRC-20 ticker, such as ordi. Use brc20-prog endpoints for 6-character BRC20-Prog tickers.
 - `start` (query, integer) **(required)**: Start offset
-- `limit` (query, integer) **(required)**: Number of holders returned
+- `limit` (query, integer) **(required)**: Number of returned
 
 #### Response (200)
 Successful operation
@@ -239,18 +239,18 @@ Invalid API Key
 
 ---
 
-### Get the full history of BRC20 by ticker.
-<a id="get-the-full-history-of-brc20-by-ticker"></a>
+### List Classic BRC-20 history events for a ticker
+<a id="list-classic-brc-20-history-events-for-a-ticker"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20/{ticker}/history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20HistoryByTicker)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20HistoryByTicker)  
 
 #### Description
-Get the full history of BRC20.
+Returns deploy, mint, transfer-inscription, send, and receive events with inscription, transaction, balance, height, and validity fields. Use it for token activity feeds or reconciliation at a height; invalid or unconfirmed protocol actions should be interpreted according to the returned validity and indexer state.
 
 #### Parameters
-- `ticker` (path, string) **(required)**: Token ticker
+- `ticker` (path, string) **(required)**: Classic BRC-20 ticker, such as ordi. Use brc20-prog endpoints for 6-character BRC20-Prog tickers.
 - `type` (query, string) **(required)**: Filter by history type; enum: `inscribe-deploy`, `inscribe-mint`, `inscribe-transfer`, `transfer`, `send`, `receive`
 - `height` (query, integer) **(required)**: Block height
 - `start` (query, integer) **(required)**: Start offset
@@ -289,19 +289,19 @@ Invalid API Key
 
 ---
 
-### Get the full history of BRC-20 by ticker and transaction ID.
-<a id="get-the-full-history-of-brc-20-by-ticker-and-transaction-id"></a>
+### Get Classic BRC-20 ticker events in a transaction
+<a id="get-classic-brc-20-ticker-events-in-a-transaction"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20/{ticker}/tx/{txid}/history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20HistoryByTickerAndTxid)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20HistoryByTickerAndTxid)  
 
 #### Description
-Get the full history of BRC-20 by ticker and transaction ID.
+Returns ticker-specific history events found in a transaction, including event type, inscription id, amount, counterparties, balances, and validity. Use it to explain how a transaction affected a Classic BRC-20 ticker; always treat returned balances as indexed results rather than spend authorization.
 
 #### Parameters
-- `ticker` (path, string) **(required)**: Token ticker
-- `txid` (path, string) **(required)**: Transaction ID
+- `ticker` (path, string) **(required)**: Classic BRC-20 ticker, such as ordi. Use brc20-prog endpoints for 6-character BRC20-Prog tickers.
+- `txid` (path, string) **(required)**: txid
 - `type` (query, string) **(required)**: Filter by history type; enum: `inscribe-deploy`, `inscribe-mint`, `inscribe-transfer`, `transfer`, `send`, `receive`
 - `start` (query, integer) **(required)**: Start offset
 - `limit` (query, integer) **(required)**: Number of inscriptions returned
@@ -339,15 +339,15 @@ Invalid API Key
 
 ---
 
-### Get BRC-20 history by block height.
-<a id="get-brc-20-history-by-block-height"></a>
+### List Classic BRC-20 events indexed at a block height
+<a id="list-classic-brc-20-events-indexed-at-a-block-height"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20/history-by-height/{height}`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20HistoryByHeight)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20HistoryByHeight)  
 
 #### Description
-Get BRC-20 history by block height.
+Returns paginated Classic BRC-20 history events for a specific block height with ticker, transaction, inscription, amount, and validity details. Use it for block-level indexing audits or backfills; results represent the indexer's view of confirmed protocol events at that height.
 
 #### Parameters
 - `height` (path, integer) **(required)**: Block Height
@@ -388,15 +388,15 @@ Invalid API Key
 
 ---
 
-### Get the BRC20 token summary by address.
-<a id="get-the-brc20-token-summary-by-address"></a>
+### List an address's Classic BRC-20 token balances
+<a id="list-an-addresss-classic-brc-20-token-balances"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/brc20/summary`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20SummaryByAddress)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20SummaryByAddress)  
 
 #### Description
-Obtain BRC20 token summary by address, including available balance, transferable balance
+Returns paginated Classic BRC-20 balance summaries for an address, including ticker, indexed height, total count, overall balance, transferable balance, and available balance. Use tick_filter to separate 4-, 5-, or 6-character Classic BRC-20 namespaces when needed; use brc20-prog endpoints for BRC20-Prog semantics.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address
@@ -434,15 +434,15 @@ Each ticker includes two types of balances:
 
 ---
 
-### Get the BRC20 token summary by address and height.
-<a id="get-the-brc20-token-summary-by-address-and-height"></a>
+### List an address's Classic BRC-20 balances at a height
+<a id="list-an-addresss-classic-brc-20-balances-at-a-height"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/brc20/summary-by-height/{height}`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20SummaryByAddressAndHeight)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20SummaryByAddressAndHeight)  
 
 #### Description
-Obtain BRC20 token summary by address, including available balance, transferable balance
+Returns the address's indexed Classic BRC-20 balance summaries as of a specific block height, including ticker, overall, transferable, and available balances. Use it for historical portfolio snapshots or reconciliation; balances are read-only indexer state and may differ from current spendability.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address
@@ -471,19 +471,19 @@ Invalid API Key
 
 ---
 
-### Get the BRC20 token info by address and ticker.
-<a id="get-the-brc20-token-info-by-address-and-ticker"></a>
+### Get an address's Classic BRC-20 balance details for a ticker
+<a id="get-an-addresss-classic-brc-20-balance-details-for-a-ticker"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/brc20/{ticker}/info`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20InfoByAddressAndTicker)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20InfoByAddressAndTicker)  
 
 #### Description
-Obtain BRC-20 token information by address, including available balance, transferable balance, number of transferable inscriptions, the first few Inscriptions, etc.
+Returns one address's overall, available, safe, unsafe, and transferable balances for a Classic BRC-20 ticker, plus related transfer inscriptions and history counts. Use it before building transfer flows or balance displays; this endpoint only reports indexed state and does not guarantee UTXO spend safety.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address
-- `ticker` (path, string) **(required)**: Token ticker
+- `ticker` (path, string) **(required)**: Classic BRC-20 ticker, such as ordi. Use brc20-prog endpoints for 6-character BRC20-Prog tickers.
 
 #### Response (200)
 Successful operation
@@ -532,15 +532,15 @@ Invalid API Key
 
 ---
 
-### Get the full history of BRC-20 by address.
-<a id="get-the-full-history-of-brc-20-by-address"></a>
+### List all Classic BRC-20 history events for an address
+<a id="list-all-classic-brc-20-history-events-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/brc20/history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20HistoryByAddress)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20HistoryByAddress)  
 
 #### Description
-Get the full history of BRC-20 by address.
+Returns paginated Classic BRC-20 events involving an address across tickers, including event type, amount, counterparties, transaction, inscription, and balance fields. Use it for wallet activity timelines and audits; events are indexer-derived and should be checked for validity before user-facing accounting.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address
@@ -580,19 +580,19 @@ Invalid API Key
 
 ---
 
-### Get the full history of BRC-20 by address and ticker.
-<a id="get-the-full-history-of-brc-20-by-address-and-ticker"></a>
+### List an address's Classic BRC-20 history for a ticker
+<a id="list-an-addresss-classic-brc-20-history-for-a-ticker"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/brc20/{ticker}/history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20HistoryByAddressAndTicker)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20HistoryByAddressAndTicker)  
 
 #### Description
-Get the full history of BRC-20 by address and ticker.
+Returns ticker-specific Classic BRC-20 events for an address with event type, transaction, inscription, amount, balance, height, and validity fields. Use it to explain wallet balance changes for one ticker; read the validity flag and confirmation context before treating events as final.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address
-- `ticker` (path, string) **(required)**: Token ticker
+- `ticker` (path, string) **(required)**: Classic BRC-20 ticker, such as ordi. Use brc20-prog endpoints for 6-character BRC20-Prog tickers.
 - `type` (query, string) **(required)**: Filter by history type; enum: `inscribe-deploy`, `inscribe-mint`, `inscribe-transfer`, `transfer`, `send`, `receive`
 - `start` (query, integer) **(required)**: Start offset
 - `limit` (query, integer) **(required)**: Number of inscriptions returned
@@ -630,19 +630,19 @@ Invalid API Key
 
 ---
 
-### Get the transferable inscriptions list of BRC20 by address.
-<a id="get-the-transferable-inscriptions-list-of-brc20-by-address"></a>
+### List transferable Classic BRC-20 inscriptions for an address
+<a id="list-transferable-classic-brc-20-inscriptions-for-an-address"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/address/{address}/brc20/{ticker}/transferable-inscriptions`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20TransferableInscriptionsByAddressAndTicker)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20TransferableInscriptionsByAddressAndTicker)  
 
 #### Description
-Get the transferable inscriptions list of BRC20 by address.
+Returns unused transferable inscriptions for a Classic BRC-20 ticker with inscription id, inscription number, satoshi value, confirmations, and transfer amount payload. Use it to select candidate transfer inscriptions; callers must still validate UTXO ownership, confirmation policy, and signing context before spending.
 
 #### Parameters
 - `address` (path, string) **(required)**: Address
-- `ticker` (path, string) **(required)**: Token ticker
+- `ticker` (path, string) **(required)**: Classic BRC-20 ticker, such as ordi. Use brc20-prog endpoints for 6-character BRC20-Prog tickers.
 - `start` (query, integer) **(required)**: Start offset
 - `limit` (query, integer) **(required)**: Number of inscriptions returned
 
@@ -672,15 +672,15 @@ Invalid API Key
 
 ---
 
-### Get the history of BRC20 Module by address.
-<a id="get-the-history-of-brc20-module-by-address"></a>
+### List Classic BRC-20 module history for a module inscription
+<a id="list-classic-brc-20-module-history-for-a-module-inscription"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20-module/{module}/history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20ModuleHistoryByAddress)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20ModuleHistoryByAddress)  
 
 #### Description
-Get the history of BRC20 Module.
+Returns module-related Classic BRC-20 events across a height range, including inscription, satpoint, address, amount, validity, and block metadata. Use it to inspect module deposit or movement workflows; this is an indexer audit view and does not submit withdrawals or transfers.
 
 #### Parameters
 - `module` (path, string) **(required)**: Address
@@ -727,15 +727,15 @@ Invalid API Key
 
 ---
 
-### Get the withdraw history of BRC20.
-<a id="get-the-withdraw-history-of-brc20"></a>
+### List Classic BRC-20 module withdrawal history
+<a id="list-classic-brc-20-module-withdrawal-history"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/indexer/brc20-module/withdraw-history`  
-**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC-20/getBrc20WithdrawHistory)  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/BRC20 Indexer/getBrc20WithdrawHistory)  
 
 #### Description
-Get the withdraw history of BRC20.
+Returns withdrawal-related module events within a height range, including inscription, satpoint, address, token amount, transaction, validity, and block metadata. Use it for module withdrawal monitoring and reconciliation; this endpoint is read-only and never creates, signs, or broadcasts withdrawals.
 
 #### Parameters
 - `start` (query, integer) **(required)**: Start height
