@@ -1,6 +1,6 @@
 # BRC-20 (6-byte) Protocol Guide
 
-> **V2 is deprecated.** For new integrations, use `POST /inscribe-v5/order/create` and the [Inscribe API V5 migration guide](./inscribe-v5-migration.md). This guide's V2 requests are for existing integrations only.
+> **V2 is deprecated.** For new integrations, use `POST /v5/inscribe/order/create` and the [Inscribe API V5 migration guide](./inscribe-v5-migration.md). This guide's V2 requests are for existing integrations only.
 
 ## 📖 Overview
 

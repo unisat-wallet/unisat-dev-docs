@@ -13,11 +13,11 @@ Alkanes or Runes alone, BRC-20 alone, and any other combination are rejected.
 
 | Action | Endpoint |
 | --- | --- |
-| Quote a new order | `POST /inscribe-v5/order/quote/multi-protocol-mint` |
-| Create a new order | `POST /inscribe-v5/order/create/multi-protocol-mint` |
-| Quote from an existing Multi-Mint order | `POST /inscribe-v5/order/quote/repeat/multi-protocol-mint` |
-| Create from an existing Multi-Mint order | `POST /inscribe-v5/order/repeat/multi-protocol-mint` |
-| Get order status | `GET /inscribe-v5/order/{orderId}` |
+| Quote a new order | `POST /v5/inscribe/order/quote/multi-protocol-mint` |
+| Create a new order | `POST /v5/inscribe/order/create/multi-protocol-mint` |
+| Quote from an existing Multi-Mint order | `POST /v5/inscribe/order/quote/repeat/multi-protocol-mint` |
+| Create from an existing Multi-Mint order | `POST /v5/inscribe/order/repeat/multi-protocol-mint` |
+| Get order status | `GET /v5/inscribe/order/{orderId}` |
 
 ## Payload
 
@@ -65,7 +65,7 @@ Alkanes or Runes alone, BRC-20 alone, and any other combination are rejected.
 Quote before creating an order. A quote validates the current mintability and returns the amount that must be paid without creating order state.
 
 ```bash
-curl -X POST "https://open-api.unisat.io/inscribe-v5/order/quote/multi-protocol-mint" \
+curl -X POST "https://open-api.unisat.io/v5/inscribe/order/quote/multi-protocol-mint" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -95,7 +95,7 @@ The quote response contains `baseServiceFee`, `serviceFee`, `minerFee`, `outputV
 Use the same protocol payload and fee inputs from the quote, adding a unique `clientId`.
 
 ```bash
-curl -X POST "https://open-api.unisat.io/inscribe-v5/order/create/multi-protocol-mint" \
+curl -X POST "https://open-api.unisat.io/v5/inscribe/order/create/multi-protocol-mint" \
   -H "Authorization: Bearer YOUR_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
@@ -117,7 +117,7 @@ The response contains `orderId`, `payAddress`, `amount`, and `availablePaymentMe
 
 1. Read `availablePaymentMethods` from the created order.
 2. For direct payment, send exactly `amount` sats to `payAddress`.
-3. Poll `GET /inscribe-v5/order/{orderId}` until the order reaches `minted` or a terminal state.
+3. Poll `GET /v5/inscribe/order/{orderId}` until the order reaches `minted` or a terminal state.
 
 Multi-Mint is a linear transaction chain. The service continues broadcasting child transactions after the preceding transaction is accepted; completion can therefore take longer than a single inscription order.
 
@@ -131,8 +131,8 @@ For Alkanes + Runes, the protocol assets accumulate through the chain and are de
 
 Use Repeat to mint the same protocol payload again without resending the protocol objects.
 
-1. Quote with `POST /inscribe-v5/order/quote/repeat/multi-protocol-mint` and provide `sourceOrderId` plus the new receiver, fee, output, refund, count, and optional developer-fee fields.
-2. Create with `POST /inscribe-v5/order/repeat/multi-protocol-mint`, adding `clientId` and optional `userAddress`.
+1. Quote with `POST /v5/inscribe/order/quote/repeat/multi-protocol-mint` and provide `sourceOrderId` plus the new receiver, fee, output, refund, count, and optional developer-fee fields.
+2. Create with `POST /v5/inscribe/order/repeat/multi-protocol-mint`, adding `clientId` and optional `userAddress`.
 
 The source order must be a Multi-Mint order. The service copies its Alkanes, Runes, and optional BRC-20 payload, then validates current mintability, remaining supply, and current fees again. A repeat order is not guaranteed to succeed merely because the source order succeeded.
 

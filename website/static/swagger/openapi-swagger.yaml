@@ -5170,7 +5170,7 @@ paths:
                         format: int32
         '401':
           description: Invalid API Key
-  /inscribe-v5/order/list:
+  /v5/inscribe/order/list:
     get:
       summary: get address status
       description: get address status
@@ -5290,7 +5290,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5GetOrderList
-  /inscribe-v5/order/{orderId}:
+  /v5/inscribe/order/{orderId}:
     get:
       summary: get order info
       description: get order info
@@ -5423,7 +5423,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5GetOrder
-  /inscribe-v5/cancel/estimate:
+  /v5/inscribe/cancel/estimate:
     post:
       summary: get address assets
       description: get address assets
@@ -5473,7 +5473,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostCancelEstimate
-  /inscribe-v5/cancel:
+  /v5/inscribe/cancel:
     post:
       summary: accelerate
       description: accelerate
@@ -5520,7 +5520,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostCancel
-  /inscribe-v5/refund/estimate:
+  /v5/inscribe/refund/estimate:
     post:
       summary: get address assets
       description: get address assets
@@ -5571,7 +5571,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostRefundEstimate
-  /inscribe-v5/refund:
+  /v5/inscribe/refund:
     post:
       summary: refund
       description: refund
@@ -5624,7 +5624,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostRefund
-  /inscribe-v5/order/create:
+  /v5/inscribe/order/create:
     post:
       summary: create order
       description: create order
@@ -5839,7 +5839,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderCreate
-  /inscribe-v5/order/create/brc20-5byte-mint:
+  /v5/inscribe/order/create/brc20-5byte-mint:
     post:
       summary: create order
       description: create order
@@ -5935,7 +5935,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderCreateBrc205byteMint
-  /inscribe-v5/order/create/runes-etch:
+  /v5/inscribe/order/create/runes-etch:
     post:
       summary: create order
       description: create order
@@ -6018,7 +6018,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderCreateRunesEtch
-  /inscribe-v5/order/create/runes-mint:
+  /v5/inscribe/order/create/runes-mint:
     post:
       summary: create order
       description: create order
@@ -6151,7 +6151,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderCreateRunesMint
-  /inscribe-v5/order/request-commit:
+  /v5/inscribe/order/request-commit:
     post:
       summary: create order
       description: create order
@@ -6197,7 +6197,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderRequestCommit
-  /inscribe-v5/order/sign-commit:
+  /v5/inscribe/order/sign-commit:
     post:
       summary: create order
       description: create order
@@ -6239,7 +6239,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderSignCommit
-  /inscribe-v5/order/sign-reveal:
+  /v5/inscribe/order/sign-reveal:
     post:
       summary: create order
       description: create order
@@ -6281,7 +6281,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderSignReveal
-  /inscribe-v5/fees-config:
+  /v5/inscribe/fees-config:
     get:
       summary: get order info
       description: get order info
@@ -6315,7 +6315,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5GetFeesConfig
-  /inscribe-v5/order/estimate-fee:
+  /v5/inscribe/order/estimate-fee:
     post:
       summary: quote normal inscription order fee
       description: >-
@@ -6450,7 +6450,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderEstimateFee
-  /inscribe-v5/order/continue:
+  /v5/inscribe/order/continue:
     post:
       summary: continue order
       description: continue order
@@ -6488,7 +6488,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderContinue
-  /inscribe-v5/cancel/prepare:
+  /v5/inscribe/cancel/prepare:
     post:
       summary: prepare wallet RBF cancellation
       description: >-
@@ -6533,7 +6533,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostCancelPrepare
-  /inscribe-v5/cancel/submit:
+  /v5/inscribe/cancel/submit:
     post:
       summary: submit wallet RBF cancellation
       description: >-
@@ -6583,7 +6583,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostCancelSubmit
-  /inscribe-v5/pause/estimate:
+  /v5/inscribe/pause/estimate:
     post:
       summary: estimate multi-protocol mint pause
       description: >-
@@ -6623,7 +6623,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostPauseEstimate
-  /inscribe-v5/pause:
+  /v5/inscribe/pause:
     post:
       summary: pause multi-protocol mint
       description: >-
@@ -6663,7 +6663,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostPause
-  /inscribe-v5/cancel2:
+  /v5/inscribe/cancel2:
     post:
       summary: cancel2
       description: cancel2
@@ -6705,7 +6705,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostCancel2
-  /inscribe-v5/status:
+  /v5/inscribe/status:
     get:
       summary: get system status
       description: get system status
@@ -6732,7 +6732,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5GetStatus
-  /inscribe-v5/order/quote/alkanes-deploy:
+  /v5/inscribe/order/quote/alkanes-deploy:
     post:
       summary: quote alkanes deploy order
       description: >-
@@ -6808,7 +6808,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderQuoteAlkanesDeploy
-  /inscribe-v5/order/quote/alkanes-mint:
+  /v5/inscribe/order/quote/alkanes-mint:
     post:
       summary: quote alkanes mint order
       description: >-
@@ -6889,7 +6889,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderQuoteAlkanesMint
-  /inscribe-v5/order/create/alkanes-deploy:
+  /v5/inscribe/order/create/alkanes-deploy:
     post:
       summary: create order
       description: create order
@@ -7022,7 +7022,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderCreateAlkanesDeploy
-  /inscribe-v5/order/create/alkanes-mint:
+  /v5/inscribe/order/create/alkanes-mint:
     post:
       summary: create order
       description: create order
@@ -7155,7 +7155,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderCreateAlkanesMint
-  /inscribe-v5/order/quote/multi-protocol-mint:
+  /v5/inscribe/order/quote/multi-protocol-mint:
     post:
       summary: quote multi protocol mint order
       description: >-
@@ -7240,7 +7240,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderQuoteMultiProtocolMint
-  /inscribe-v5/order/quote/repeat/multi-protocol-mint:
+  /v5/inscribe/order/quote/repeat/multi-protocol-mint:
     post:
       summary: quote repeated multi protocol mint order
       description: >-
@@ -7321,7 +7321,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderQuoteRepeatMultiProtocolMint
-  /inscribe-v5/order/create/multi-protocol-mint:
+  /v5/inscribe/order/create/multi-protocol-mint:
     post:
       summary: create multi protocol mint order
       description: Create a linear mint order for Alkanes+Runes or Alkanes+BRC20+Runes.
@@ -7413,7 +7413,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderCreateMultiProtocolMint
-  /inscribe-v5/order/repeat/multi-protocol-mint:
+  /v5/inscribe/order/repeat/multi-protocol-mint:
     post:
       summary: repeat multi protocol mint order
       description: >-
@@ -7503,7 +7503,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderRepeatMultiProtocolMint
-  /inscribe-v5/order/quote/repeat:
+  /v5/inscribe/order/quote/repeat:
     post:
       summary: quote repeated mint order
       description: >-
@@ -7584,7 +7584,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderQuoteRepeat
-  /inscribe-v5/order/repeat:
+  /v5/inscribe/order/repeat:
     post:
       summary: repeat mint order
       description: >-
@@ -7674,7 +7674,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderRepeat
-  /inscribe-v5/order/quote/runes-etch:
+  /v5/inscribe/order/quote/runes-etch:
     post:
       summary: quote runes etch order
       description: >-
@@ -7750,7 +7750,7 @@ paths:
       tags:
         - Inscribe V5
       operationId: v5PostOrderQuoteRunesEtch
-  /inscribe-v5/order/quote/runes-mint:
+  /v5/inscribe/order/quote/runes-mint:
     post:
       summary: quote runes mint order
       description: >-

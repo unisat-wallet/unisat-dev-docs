@@ -9,40 +9,40 @@ Current inscription API. V5 replaces the deprecated /v2/inscribe endpoints and u
 
 | Route | Summary |
 | ----- | ------- |
-| [GET `/inscribe-v5/order/list`](#get-address-status) | get address status |
-| [GET `/inscribe-v5/order/(orderId)`](#get-order-info) | get order info |
-| [POST `/inscribe-v5/cancel/estimate`](#get-address-assets) | get address assets |
-| [POST `/inscribe-v5/cancel`](#accelerate) | accelerate |
-| [POST `/inscribe-v5/refund/estimate`](#get-address-assets) | get address assets |
-| [POST `/inscribe-v5/refund`](#refund) | refund |
-| [POST `/inscribe-v5/order/create`](#create-order) | create order |
-| [POST `/inscribe-v5/order/create/brc20-5byte-mint`](#create-order) | create order |
-| [POST `/inscribe-v5/order/create/runes-etch`](#create-order) | create order |
-| [POST `/inscribe-v5/order/create/runes-mint`](#create-order) | create order |
-| [POST `/inscribe-v5/order/request-commit`](#create-order) | create order |
-| [POST `/inscribe-v5/order/sign-commit`](#create-order) | create order |
-| [POST `/inscribe-v5/order/sign-reveal`](#create-order) | create order |
-| [GET `/inscribe-v5/fees-config`](#get-order-info) | get order info |
-| [POST `/inscribe-v5/order/estimate-fee`](#quote-normal-inscription-order-fee) | quote normal inscription order fee |
-| [POST `/inscribe-v5/order/continue`](#continue-order) | continue order |
-| [POST `/inscribe-v5/cancel/prepare`](#prepare-wallet-rbf-cancellation) | prepare wallet RBF cancellation |
-| [POST `/inscribe-v5/cancel/submit`](#submit-wallet-rbf-cancellation) | submit wallet RBF cancellation |
-| [POST `/inscribe-v5/pause/estimate`](#estimate-multi-protocol-mint-pause) | estimate multi-protocol mint pause |
-| [POST `/inscribe-v5/pause`](#pause-multi-protocol-mint) | pause multi-protocol mint |
-| [POST `/inscribe-v5/cancel2`](#cancel2) | cancel2 |
-| [GET `/inscribe-v5/status`](#get-system-status) | get system status |
-| [POST `/inscribe-v5/order/quote/alkanes-deploy`](#quote-alkanes-deploy-order) | quote alkanes deploy order |
-| [POST `/inscribe-v5/order/quote/alkanes-mint`](#quote-alkanes-mint-order) | quote alkanes mint order |
-| [POST `/inscribe-v5/order/create/alkanes-deploy`](#create-order) | create order |
-| [POST `/inscribe-v5/order/create/alkanes-mint`](#create-order) | create order |
-| [POST `/inscribe-v5/order/quote/multi-protocol-mint`](#quote-multi-protocol-mint-order) | quote multi protocol mint order |
-| [POST `/inscribe-v5/order/quote/repeat/multi-protocol-mint`](#quote-repeated-multi-protocol-mint-order) | quote repeated multi protocol mint order |
-| [POST `/inscribe-v5/order/create/multi-protocol-mint`](#create-multi-protocol-mint-order) | create multi protocol mint order |
-| [POST `/inscribe-v5/order/repeat/multi-protocol-mint`](#repeat-multi-protocol-mint-order) | repeat multi protocol mint order |
-| [POST `/inscribe-v5/order/quote/repeat`](#quote-repeated-mint-order) | quote repeated mint order |
-| [POST `/inscribe-v5/order/repeat`](#repeat-mint-order) | repeat mint order |
-| [POST `/inscribe-v5/order/quote/runes-etch`](#quote-runes-etch-order) | quote runes etch order |
-| [POST `/inscribe-v5/order/quote/runes-mint`](#quote-runes-mint-order) | quote runes mint order |
+| [GET `/v5/inscribe/order/list`](#get-address-status) | get address status |
+| [GET `/v5/inscribe/order/(orderId)`](#get-order-info) | get order info |
+| [POST `/v5/inscribe/cancel/estimate`](#get-address-assets) | get address assets |
+| [POST `/v5/inscribe/cancel`](#accelerate) | accelerate |
+| [POST `/v5/inscribe/refund/estimate`](#get-address-assets) | get address assets |
+| [POST `/v5/inscribe/refund`](#refund) | refund |
+| [POST `/v5/inscribe/order/create`](#create-order) | create order |
+| [POST `/v5/inscribe/order/create/brc20-5byte-mint`](#create-order) | create order |
+| [POST `/v5/inscribe/order/create/runes-etch`](#create-order) | create order |
+| [POST `/v5/inscribe/order/create/runes-mint`](#create-order) | create order |
+| [POST `/v5/inscribe/order/request-commit`](#create-order) | create order |
+| [POST `/v5/inscribe/order/sign-commit`](#create-order) | create order |
+| [POST `/v5/inscribe/order/sign-reveal`](#create-order) | create order |
+| [GET `/v5/inscribe/fees-config`](#get-order-info) | get order info |
+| [POST `/v5/inscribe/order/estimate-fee`](#quote-normal-inscription-order-fee) | quote normal inscription order fee |
+| [POST `/v5/inscribe/order/continue`](#continue-order) | continue order |
+| [POST `/v5/inscribe/cancel/prepare`](#prepare-wallet-rbf-cancellation) | prepare wallet RBF cancellation |
+| [POST `/v5/inscribe/cancel/submit`](#submit-wallet-rbf-cancellation) | submit wallet RBF cancellation |
+| [POST `/v5/inscribe/pause/estimate`](#estimate-multi-protocol-mint-pause) | estimate multi-protocol mint pause |
+| [POST `/v5/inscribe/pause`](#pause-multi-protocol-mint) | pause multi-protocol mint |
+| [POST `/v5/inscribe/cancel2`](#cancel2) | cancel2 |
+| [GET `/v5/inscribe/status`](#get-system-status) | get system status |
+| [POST `/v5/inscribe/order/quote/alkanes-deploy`](#quote-alkanes-deploy-order) | quote alkanes deploy order |
+| [POST `/v5/inscribe/order/quote/alkanes-mint`](#quote-alkanes-mint-order) | quote alkanes mint order |
+| [POST `/v5/inscribe/order/create/alkanes-deploy`](#create-order) | create order |
+| [POST `/v5/inscribe/order/create/alkanes-mint`](#create-order) | create order |
+| [POST `/v5/inscribe/order/quote/multi-protocol-mint`](#quote-multi-protocol-mint-order) | quote multi protocol mint order |
+| [POST `/v5/inscribe/order/quote/repeat/multi-protocol-mint`](#quote-repeated-multi-protocol-mint-order) | quote repeated multi protocol mint order |
+| [POST `/v5/inscribe/order/create/multi-protocol-mint`](#create-multi-protocol-mint-order) | create multi protocol mint order |
+| [POST `/v5/inscribe/order/repeat/multi-protocol-mint`](#repeat-multi-protocol-mint-order) | repeat multi protocol mint order |
+| [POST `/v5/inscribe/order/quote/repeat`](#quote-repeated-mint-order) | quote repeated mint order |
+| [POST `/v5/inscribe/order/repeat`](#repeat-mint-order) | repeat mint order |
+| [POST `/v5/inscribe/order/quote/runes-etch`](#quote-runes-etch-order) | quote runes etch order |
+| [POST `/v5/inscribe/order/quote/runes-mint`](#quote-runes-mint-order) | quote runes mint order |
 
 ---
 
@@ -52,7 +52,7 @@ Current inscription API. V5 replaces the deprecated /v2/inscribe endpoints and u
 <a id="get-address-status"></a>
 
 **Method**: `GET`  
-**Path**: `/inscribe-v5/order/list`  
+**Path**: `/v5/inscribe/order/list`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5GetOrderList)  
 
 #### Description
@@ -101,7 +101,7 @@ success
 <a id="get-order-info"></a>
 
 **Method**: `GET`  
-**Path**: `/inscribe-v5/order/{orderId}`  
+**Path**: `/v5/inscribe/order/{orderId}`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5GetOrder)  
 
 #### Description
@@ -162,7 +162,7 @@ success
 <a id="get-address-assets"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/cancel/estimate`  
+**Path**: `/v5/inscribe/cancel/estimate`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostCancelEstimate)  
 
 #### Description
@@ -191,7 +191,7 @@ success
 <a id="accelerate"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/cancel`  
+**Path**: `/v5/inscribe/cancel`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostCancel)  
 
 #### Description
@@ -218,7 +218,7 @@ success
 <a id="get-address-assets"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/refund/estimate`  
+**Path**: `/v5/inscribe/refund/estimate`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostRefundEstimate)  
 
 #### Description
@@ -249,7 +249,7 @@ success
 <a id="refund"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/refund`  
+**Path**: `/v5/inscribe/refund`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostRefund)  
 
 #### Description
@@ -279,7 +279,7 @@ success
 <a id="create-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/create`  
+**Path**: `/v5/inscribe/order/create`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderCreate)  
 
 #### Description
@@ -367,7 +367,7 @@ success
 <a id="create-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/create/brc20-5byte-mint`  
+**Path**: `/v5/inscribe/order/create/brc20-5byte-mint`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderCreateBrc205byteMint)  
 
 #### Description
@@ -406,7 +406,7 @@ success
 <a id="create-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/create/runes-etch`  
+**Path**: `/v5/inscribe/order/create/runes-etch`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderCreateRunesEtch)  
 
 #### Description
@@ -441,7 +441,7 @@ success
 <a id="create-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/create/runes-mint`  
+**Path**: `/v5/inscribe/order/create/runes-mint`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderCreateRunesMint)  
 
 #### Description
@@ -498,7 +498,7 @@ success
 <a id="create-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/request-commit`  
+**Path**: `/v5/inscribe/order/request-commit`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderRequestCommit)  
 
 #### Description
@@ -525,7 +525,7 @@ success
 <a id="create-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/sign-commit`  
+**Path**: `/v5/inscribe/order/sign-commit`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderSignCommit)  
 
 #### Description
@@ -551,7 +551,7 @@ success
 <a id="create-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/sign-reveal`  
+**Path**: `/v5/inscribe/order/sign-reveal`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderSignReveal)  
 
 #### Description
@@ -577,7 +577,7 @@ success
 <a id="get-order-info"></a>
 
 **Method**: `GET`  
-**Path**: `/inscribe-v5/fees-config`  
+**Path**: `/v5/inscribe/fees-config`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5GetFeesConfig)  
 
 #### Description
@@ -600,7 +600,7 @@ success
 <a id="quote-normal-inscription-order-fee"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/estimate-fee`  
+**Path**: `/v5/inscribe/order/estimate-fee`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderEstimateFee)  
 
 #### Description
@@ -655,7 +655,7 @@ success
 <a id="continue-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/continue`  
+**Path**: `/v5/inscribe/order/continue`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderContinue)  
 
 #### Description
@@ -680,7 +680,7 @@ success
 <a id="prepare-wallet-rbf-cancellation"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/cancel/prepare`  
+**Path**: `/v5/inscribe/cancel/prepare`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostCancelPrepare)  
 
 #### Description
@@ -706,7 +706,7 @@ success
 <a id="submit-wallet-rbf-cancellation"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/cancel/submit`  
+**Path**: `/v5/inscribe/cancel/submit`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostCancelSubmit)  
 
 #### Description
@@ -733,7 +733,7 @@ success
 <a id="estimate-multi-protocol-mint-pause"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/pause/estimate`  
+**Path**: `/v5/inscribe/pause/estimate`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostPauseEstimate)  
 
 #### Description
@@ -758,7 +758,7 @@ success
 <a id="pause-multi-protocol-mint"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/pause`  
+**Path**: `/v5/inscribe/pause`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostPause)  
 
 #### Description
@@ -783,7 +783,7 @@ success
 <a id="cancel2"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/cancel2`  
+**Path**: `/v5/inscribe/cancel2`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostCancel2)  
 
 #### Description
@@ -809,7 +809,7 @@ success
 <a id="get-system-status"></a>
 
 **Method**: `GET`  
-**Path**: `/inscribe-v5/status`  
+**Path**: `/v5/inscribe/status`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5GetStatus)  
 
 #### Description
@@ -829,7 +829,7 @@ success
 <a id="quote-alkanes-deploy-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/quote/alkanes-deploy`  
+**Path**: `/v5/inscribe/order/quote/alkanes-deploy`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderQuoteAlkanesDeploy)  
 
 #### Description
@@ -862,7 +862,7 @@ success
 <a id="quote-alkanes-mint-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/quote/alkanes-mint`  
+**Path**: `/v5/inscribe/order/quote/alkanes-mint`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderQuoteAlkanesMint)  
 
 #### Description
@@ -896,7 +896,7 @@ success
 <a id="create-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/create/alkanes-deploy`  
+**Path**: `/v5/inscribe/order/create/alkanes-deploy`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderCreateAlkanesDeploy)  
 
 #### Description
@@ -953,7 +953,7 @@ success
 <a id="create-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/create/alkanes-mint`  
+**Path**: `/v5/inscribe/order/create/alkanes-mint`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderCreateAlkanesMint)  
 
 #### Description
@@ -1010,7 +1010,7 @@ success
 <a id="quote-multi-protocol-mint-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/quote/multi-protocol-mint`  
+**Path**: `/v5/inscribe/order/quote/multi-protocol-mint`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderQuoteMultiProtocolMint)  
 
 #### Description
@@ -1046,7 +1046,7 @@ success
 <a id="quote-repeated-multi-protocol-mint-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/quote/repeat/multi-protocol-mint`  
+**Path**: `/v5/inscribe/order/quote/repeat/multi-protocol-mint`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderQuoteRepeatMultiProtocolMint)  
 
 #### Description
@@ -1080,7 +1080,7 @@ success
 <a id="create-multi-protocol-mint-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/create/multi-protocol-mint`  
+**Path**: `/v5/inscribe/order/create/multi-protocol-mint`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderCreateMultiProtocolMint)  
 
 #### Description
@@ -1118,7 +1118,7 @@ success
 <a id="repeat-multi-protocol-mint-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/repeat/multi-protocol-mint`  
+**Path**: `/v5/inscribe/order/repeat/multi-protocol-mint`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderRepeatMultiProtocolMint)  
 
 #### Description
@@ -1154,7 +1154,7 @@ success
 <a id="quote-repeated-mint-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/quote/repeat`  
+**Path**: `/v5/inscribe/order/quote/repeat`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderQuoteRepeat)  
 
 #### Description
@@ -1188,7 +1188,7 @@ success
 <a id="repeat-mint-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/repeat`  
+**Path**: `/v5/inscribe/order/repeat`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderRepeat)  
 
 #### Description
@@ -1224,7 +1224,7 @@ success
 <a id="quote-runes-etch-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/quote/runes-etch`  
+**Path**: `/v5/inscribe/order/quote/runes-etch`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderQuoteRunesEtch)  
 
 #### Description
@@ -1257,7 +1257,7 @@ success
 <a id="quote-runes-mint-order"></a>
 
 **Method**: `POST`  
-**Path**: `/inscribe-v5/order/quote/runes-mint`  
+**Path**: `/v5/inscribe/order/quote/runes-mint`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscribe V5/v5PostOrderQuoteRunesMint)  
 
 #### Description

@@ -1,6 +1,6 @@
 # BRC-20 (5-byte) Protocol Guide
 
-> **V2 is deprecated.** Use the [Inscribe API V5 migration guide](./inscribe-v5-migration.md). V5 provides `POST /inscribe-v5/order/create/brc20-5byte-mint`; its Request-Commit and signature submission steps are not publicly available.
+> **V2 is deprecated.** Use the [Inscribe API V5 migration guide](./inscribe-v5-migration.md). V5 provides `POST /v5/inscribe/order/create/brc20-5byte-mint`; its Request-Commit and signature submission steps are not publicly available.
 
 ## 📖 Overview
 

@@ -115,11 +115,11 @@ The `outputValue` parameter is not a platform fee. It is Bitcoin value assigned 
 
 Use the quote endpoint corresponding to the intended order type before creating an order:
 
-- Ordinary inscription: `POST /inscribe-v5/order/estimate-fee`
-- Runes: `POST /inscribe-v5/order/quote/runes-etch` or `POST /inscribe-v5/order/quote/runes-mint`
-- Alkanes: `POST /inscribe-v5/order/quote/alkanes-deploy` or `POST /inscribe-v5/order/quote/alkanes-mint`
-- Multi-protocol mint: `POST /inscribe-v5/order/quote/multi-protocol-mint`
-- Repeat mint: `POST /inscribe-v5/order/quote/repeat` or `POST /inscribe-v5/order/quote/repeat/multi-protocol-mint`
+- Ordinary inscription: `POST /v5/inscribe/order/estimate-fee`
+- Runes: `POST /v5/inscribe/order/quote/runes-etch` or `POST /v5/inscribe/order/quote/runes-mint`
+- Alkanes: `POST /v5/inscribe/order/quote/alkanes-deploy` or `POST /v5/inscribe/order/quote/alkanes-mint`
+- Multi-protocol mint: `POST /v5/inscribe/order/quote/multi-protocol-mint`
+- Repeat mint: `POST /v5/inscribe/order/quote/repeat` or `POST /v5/inscribe/order/quote/repeat/multi-protocol-mint`
 
 Send the same `receiver`, `feeRate`, `outputValue`, `count`, `devAddress`, and `devFee` values that will be used for order creation. Quote endpoints do not create an order or consume order state.
 
