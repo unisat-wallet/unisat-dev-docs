@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
-  title: Ordinals Domain MarketPlace API
+  title: Ordinals Domain Marketplace API
   version: 1.0.4
   description: >-
-    This API provides endpoints for ordinals domain marketplace services.
+    This API provides endpoints for Ordinals domain marketplace services, including domain type statistics, domain listing search, inscription details, activity history, and marketplace order workflows.
   contact:
     email: contact@unisat.io
   license:
@@ -14,16 +14,23 @@ servers:
   - url: https://open-api-staging.unisat.io
   - url: https://open-api-fractal.unisat.io
 tags:
-  - name: MarketPlace-Domain
-    description: Ordinals Domain MarketPlace Service
+  - name: Marketplace-Domains
+    description: Ordinals Domain Marketplace Service
 paths:
   /v3/market/domain/auction/domain_types:
     post:
       operationId: getDomainTypes
-      summary: Get statistical data.
-      description: Get statistical data, price, market capitalization, etc. for domain.
+      summary: List domain type market statistics
+      description: Query read-only Ordinals domain marketplace statistics grouped by domain type. This query-style POST only reads market data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       responses:
         "200":
           description: Default Response
@@ -63,9 +70,17 @@ paths:
   /v3/market/domain/auction/domain_statistic:
     post:
       operationId: getDomainStatistic
-      summary: Return a summary of domain.
+      summary: Get domain type category statistics
+      description: Query read-only marketplace statistics for categories under a specified Ordinals domain type. This query-style POST only reads market data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -113,12 +128,17 @@ paths:
   /v3/market/domain/auction/inscription_info:
     post:
       operationId: getDomainInscriptionInfo
-      summary:
-        Retrieve inscription information, including brc20, names, collection.
-        It is necessary to first determine the inscription type before calling
-        the relevant services.
+      summary: Get marketplace inscription detail
+      description: Query read-only marketplace inscription detail for one inscription, including listing and asset metadata. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -135,9 +155,17 @@ paths:
   /v3/market/domain/auction/inscription_info_list:
     post:
       operationId: getDomainInscriptionInfoList
-      summary: Get the basic listing information of the specified inscription list
+      summary: Get marketplace inscription details in batch
+      description: Query read-only marketplace listing details for multiple inscriptions. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -154,9 +182,17 @@ paths:
   /v3/market/domain/auction/list:
     post:
       operationId: getDomainMarketList
-      summary: Retrieve the list information of the market.
+      summary: Search Ordinals domain marketplace listings
+      description: Query read-only Ordinals domain marketplace listings with filters, sorting, and pagination. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -385,9 +421,17 @@ paths:
   /v3/market/domain/auction/actions:
     post:
       operationId: getDomainMarketActions
-      summary: Get information on listings, delistings, and sales.
+      summary: List Ordinals domain marketplace activity history
+      description: Query read-only Ordinals domain marketplace activity history such as listings, delistings, sales, claims, and updates. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -591,9 +635,17 @@ paths:
   /v3/market/domain/auction/create_put_on:
     post:
       operationId: createDomainMarketPutOn
-      summary: Create listing order.
+      summary: Create domain listing PSBT draft
+      description: Creates an Ordinals domain listing draft and returns auctionId, PSBT, and signing indexes for the seller. Review inscriptionId, domain name/type/category, initPrice, unitPrice, marketType, and receiving address before signing or confirming the listing.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -610,9 +662,18 @@ paths:
   /v3/market/domain/auction/confirm_put_on:
     post:
       operationId: confirmDomainMarketPutOn
-      summary: Confirm listing order.
+      summary: Publish signed domain listing
+      description: Confirms the seller-signed listing PSBT and activates the Ordinals domain marketplace listing. Verify auctionId, PSBT encoding, domain name, listing price, seller address, and market type before submitting.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -629,9 +690,17 @@ paths:
   /v3/market/domain/auction/create_bid_prepare:
     post:
       operationId: createDomainMarketBidPrepare
-      summary: Return params before creating purchase order.
+      summary: Estimate domain purchase fees and balance
+      description: Returns pre-purchase fee estimates, available balances, network fee rate, transaction size, and inscription value for an Ordinals domain listing. This is a quote/material preparation step only; before any later purchase submission, verify auctionId, bidPrice, buyer address, feeRate, and domain name.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Quote-only marketplace step: safe to call without confirmation, but do not treat the returned estimate as a purchase.
       requestBody:
         content:
           application/json:
@@ -648,9 +717,17 @@ paths:
   /v3/market/domain/auction/create_bid:
     post:
       operationId: createDomainMarketBid
-      summary: Create purchase order.
+      summary: Create domain purchase PSBT order
+      description: Creates an Ordinals domain purchase order and returns bidId, PSBT data, signing indexes, server/network fees, feeRate, and inscription value. Confirm auctionId, bidPrice, buyer address, domain name/type, and fee totals before requesting signatures.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -667,9 +744,18 @@ paths:
   /v3/market/domain/auction/confirm_bid:
     post:
       operationId: confirmDomainMarketBid
-      summary: Confirm purchase order.
+      summary: Submit signed domain purchase order
+      description: Submits the signed domain purchase PSBT and returns the settlement transaction id when accepted. Before calling, verify auctionId, bidId, PSBT content, final price, domain name, buyer/seller addresses, and fee values because this can settle the purchase.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -686,9 +772,17 @@ paths:
   /v3/market/domain/auction/create_put_off:
     post:
       operationId: createDomainMarketPutOff
-      summary: Create delisting order.
+      summary: Create domain delisting PSBT draft
+      description: Creates delisting signing material for an active Ordinals domain marketplace order, including PSBT/signing data when needed. Confirm auctionId, owner addresses, and domain name before signing because the next confirmation removes the listing.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -705,9 +799,18 @@ paths:
   /v3/market/domain/auction/confirm_put_off:
     post:
       operationId: confirmDomainMarketPutOff
-      summary: Confirm delisting order.
+      summary: Remove signed domain listing
+      description: Confirms signed delisting data and removes the Ordinals domain listing from the marketplace. Verify auctionId, PSBT/signature payload, owner address, and target domain name before submitting.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -724,9 +827,17 @@ paths:
   /v3/market/domain/auction/create_modify_price:
     post:
       operationId: createDomainMarketModifyPrice
-      summary: Create the order for price adjustment.
+      summary: Create domain price-update PSBT draft
+      description: Creates signing material to update an existing Ordinals domain listing price. Verify auctionId, domain name, old and new prices, seller address, and returned PSBT/sign indexes before signing.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -743,9 +854,18 @@ paths:
   /v3/market/domain/auction/confirm_modify_price:
     post:
       operationId: confirmDomainMarketModifyPrice
-      summary: Confirm the order for price adjustment.
+      summary: Apply signed domain listing price update
+      description: Confirms signed price-update data and changes the active Ordinals domain listing price. Verify auctionId, signed PSBT, domain name, seller address, and final price before submitting.
       tags:
-        - MarketPlace-Domain
+        - Marketplace-Domains
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:

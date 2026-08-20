@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
-  title: Runes MarketPlace API
+  title: Runes Marketplace API
   version: 1.0.4
   description: >-
-    This API provides endpoints for runes marketplace services
+    This API provides endpoints for Runes marketplace services, including Rune market statistics, listing search, price information, activity history, and marketplace order workflows.
   contact:
     email: contact@unisat.io
   license:
@@ -16,16 +16,23 @@ servers:
   - url: https://open-api-fractal.unisat.io
   - url: https://open-api-fractal-testnet.unisat.io
 tags:
-  - name: MarketPlace-Runes
-    description: Runes MarketPlace Service
+  - name: Marketplace-Runes
+    description: Runes Marketplace Service
 paths:
   /v3/market/runes/auction/runes_types:
     post:
       operationId: getRunesTypes
-      summary: Get statistical data.
-      description: Get statistical data, price, market capitalization, etc. for runes.
+      summary: List Runes market statistics
+      description: Query read-only Runes marketplace statistics such as price, volume, market capitalization, holders, and transaction counts. This query-style POST only reads market data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -101,10 +108,17 @@ paths:
   /v3/market/runes/auction/runes_types_specified:
     post:
       operationId: getRunesTypesSpecified
-      summary: Get statistical data for specified runes.
-      description: Get statistical data, price, market capitalization, etc. for Runes.
+      summary: Get specified Runes market statistics
+      description: Query read-only marketplace statistics for a specified Runes ticker. This query-style POST only reads market data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -169,9 +183,17 @@ paths:
   /v3/market/runes/auction/list:
     post:
       operationId: getRunesAuctionList
-      summary: Retrieve the list information of the market.
+      summary: Search Runes marketplace listings
+      description: Query read-only Runes marketplace listings with filters, sorting, and pagination. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -317,9 +339,17 @@ paths:
   /v3/market/runes/auction/actions:
     post:
       operationId: getRunesAuctionActions
-      summary: Get information on listings, delistings, and sales.
+      summary: List Runes marketplace activity history
+      description: Query read-only Runes marketplace activity history such as listings, delistings, sales, claims, and updates. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -519,9 +549,17 @@ paths:
   /v3/market/runes/auction/create_put_on:
     post:
       operationId: createRunesPutOn
-      summary: Create listing order.
+      summary: Create Runes listing PSBT draft
+      description: Creates a Runes listing draft and returns auctionId, PSBT, and signing indexes for the seller. Review rune UTXO, rune amount, initPrice, unitPrice, marketType, and receiving address before signing or confirming the listing.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -538,9 +576,18 @@ paths:
   /v3/market/runes/auction/confirm_put_on:
     post:
       operationId: confirmRunesPutOn
-      summary: Confirm listing order.
+      summary: Publish signed Runes listing
+      description: Confirms the seller-signed listing PSBT and activates the Runes marketplace listing. Verify auctionId, PSBT encoding, rune amount, listing price, seller address, and market type before submitting.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -557,9 +604,17 @@ paths:
   /v3/market/runes/auction/create_bid_prepare:
     post:
       operationId: createRunesBidPrepare
-      summary: Return params before creating purchase order.
+      summary: Estimate Runes purchase fees and balance
+      description: Returns pre-purchase fee estimates, available balances, network fee rate, transaction size, and inscription value for a Runes auction. This is a quote/material preparation step only; before any later purchase submission, verify auctionId, bidPrice, buyer address, feeRate, and rune amount.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Quote-only marketplace step: safe to call without confirmation, but do not treat the returned estimate as a purchase.
       requestBody:
         content:
           application/json:
@@ -576,9 +631,17 @@ paths:
   /v3/market/runes/auction/create_bid:
     post:
       operationId: createRunesBid
-      summary: Create purchase order.
+      summary: Create Runes purchase PSBT order
+      description: Creates a Runes marketplace purchase order and returns bidId, PSBT data, signing indexes, server/network fees, feeRate, and inscription value. Confirm auctionId, bidPrice, buyer address, rune name/amount, and fee totals before requesting signatures.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -595,9 +658,18 @@ paths:
   /v3/market/runes/auction/confirm_bid:
     post:
       operationId: confirmRunesBid
-      summary: Confirm purchase order.
+      summary: Submit signed Runes purchase order
+      description: Submits the signed Runes purchase PSBT and returns the settlement transaction id when accepted. Before calling, verify auctionId, bidId, PSBT content, final price, rune amount, buyer/seller addresses, and fee values because this can settle the purchase.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -614,9 +686,17 @@ paths:
   /v3/market/runes/auction/create_put_off:
     post:
       operationId: createRunesPutOff
-      summary: Create delisting order.
+      summary: Create Runes delisting PSBT draft
+      description: Creates delisting signing material for an active Runes marketplace order, including PSBT/signing data when needed. Confirm auctionId, owner addresses, and rune amount before signing because the next confirmation removes the listing.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -633,9 +713,18 @@ paths:
   /v3/market/runes/auction/confirm_put_off:
     post:
       operationId: confirmRunesPutOff
-      summary: Confirm delisting order.
+      summary: Remove signed Runes listing
+      description: Confirms signed delisting data and removes the Runes listing from the marketplace. Verify auctionId, PSBT/signature payload, owner address, and target rune amount before submitting.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -652,9 +741,17 @@ paths:
   /v3/market/runes/auction/create_modify_price:
     post:
       operationId: createRunesModifyPrice
-      summary: Create the order for price adjustment.
+      summary: Create Runes price-update PSBT draft
+      description: Creates signing material to update an existing Runes listing price. Verify auctionId, current rune amount, old and new prices, seller address, and returned PSBT/sign indexes before signing.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -671,9 +768,18 @@ paths:
   /v3/market/runes/auction/confirm_modify_price:
     post:
       operationId: confirmRunesModifyPrice
-      summary: Confirm the order for price adjustment.
+      summary: Apply signed Runes listing price update
+      description: Confirms signed price-update data and changes the active Runes listing price. Verify auctionId, signed PSBT, rune amount, seller address, and final price before submitting.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -690,9 +796,18 @@ paths:
   /v3/market/runes/auction/create_batch_put_on:
     post:
       operationId: createRunesBatchPutOn
-      summary: Create batch listing order.
+      summary: Create batch Runes listing PSBT drafts
+      description: Creates multiple Runes listing drafts and returns signing material for each listing. Verify every rune UTXO, asset amount, listing price, seller address, auctionId, and PSBT/sign index before signing.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Batch operation: verify every auctionId, bid price, and signing payload with the user.
       requestBody:
         content:
           application/json:
@@ -709,9 +824,19 @@ paths:
   /v3/market/runes/auction/confirm_batch_put_on:
     post:
       operationId: confirmRunesBatchPutOn
-      summary: Confirm batch listing order.
+      summary: Publish signed batch Runes listings
+      description: Confirms signed PSBTs and activates multiple Runes marketplace listings. Verify every auctionId, signed PSBT, rune amount, listing price, seller address, and market type before submitting.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Batch operation: verify every auctionId, bid price, and signing payload with the user.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -728,9 +853,18 @@ paths:
   /v3/market/runes/auction/create_batch_bid_prepare:
     post:
       operationId: createRunesBatchBidPrepare
-      summary: Return params before creating purchase order.
+      summary: Estimate batch Runes purchase fees
+      description: Returns quote-only fee, balance, transaction-size, and valid-listing data for multiple Runes purchases. This does not submit orders; before any later batch purchase, verify every auctionId, bid price, buyer address, rune amount, and fee estimate.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Quote-only marketplace step: safe to call without confirmation, but do not treat returned estimates as purchases.
+        - Batch operation: verify every auctionId, bid price, and asset amount before a later submission.
       requestBody:
         content:
           application/json:
@@ -747,9 +881,18 @@ paths:
   /v3/market/runes/auction/create_batch_bid:
     post:
       operationId: createRunesBatchBid
-      summary: Create purchase order.
+      summary: Create batch Runes purchase PSBT orders
+      description: Creates multiple Runes purchase orders and returns per-order signing material. Confirm every auctionId, bid price, buyer address, rune amount, feeRate, and returned PSBT/sign indexes before signing.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Batch operation: verify every auctionId, bid price, and signing payload with the user.
       requestBody:
         content:
           application/json:
@@ -766,9 +909,19 @@ paths:
   /v3/market/runes/auction/confirm_batch_bid:
     post:
       operationId: confirmRunesBatchBid
-      summary: Confirm purchase order.
+      summary: Submit signed batch Runes purchases
+      description: Confirms signed batch purchase PSBTs and can settle multiple Runes orders. Verify each auctionId, bidId, PSBT, final price, buyer/seller address, rune amount, and fee value before submitting.
       tags:
-        - MarketPlace-Runes
+        - Marketplace-Runes
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Batch operation: verify every auctionId, bid price, and signing payload with the user.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:

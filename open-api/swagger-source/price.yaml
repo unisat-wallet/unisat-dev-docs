@@ -13,16 +13,21 @@ servers:
   - url: https://open-api.unisat.io
 tags:
   - name: Price
-    description: Price information
+    description: Price APIs
 paths:
   /v1/price/btc:
     get:
       tags:
         - Price
       operationId: getBtcPrice
-      summary: Get BTC price
+      summary: "Get latest BTC price in USD"
       description: >-
-        Retrieves the current price of Bitcoin (BTC) in USD.
+        Returns the latest BTC price quote with the USD price and Unix updateTime timestamp. Use this read-only endpoint for wallets, marketplaces, fee estimators, and portfolio views that need a public BTC reference price without creating orders, signatures, or transactions.
+      x-unisat-domain: price
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       responses:
         "200":
           description: Successful operation
@@ -45,9 +50,14 @@ paths:
       tags:
         - Price
       operationId: getFbPrice
-      summary: Get FB price
+      summary: "Get latest Fractal Bitcoin price in USD"
       description: >-
-        Retrieves the current price of Fractal Bitcoin (FB) in USD.
+        Returns the latest FB (Fractal Bitcoin) price quote with the USD price and Unix updateTime timestamp. Use this read-only endpoint for Fractal wallets, marketplaces, analytics, and portfolio screens that need a public FB reference price without side effects or user confirmation.
+      x-unisat-domain: price
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       responses:
         "200":
           description: Successful operation

@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
-  title: BRC20 MarketPlace API
+  title: BRC20 Marketplace API
   version: 1.0.4
   description: >-
-    This API provides endpoints for BRC20 marketplace services
+    BRC-20 marketplace APIs for address binding, market discovery, listing inspection, activity history, and PSBT-based listing, purchase, delisting, and price update workflows.
   contact:
     email: contact@unisat.io
   license:
@@ -16,15 +16,23 @@ servers:
   - url: https://open-api-fractal.unisat.io
   - url: https://open-api-fractal-testnet.unisat.io
 tags:
-  - name: MarketPlace-BRC20
-    description: BRC20 MarketPlace Service
+  - name: Marketplace-BRC20
+    description: BRC20 Marketplace Service
 paths:
   /v3/market/brc20/auction/bind_info:
     post:
       operationId: bindInfo
-      summary: Get the address bind info.
+      summary: Get marketplace payment and inscription addresses for an account
+      description: Returns the BTC payment address and NFT/inscription receiving address currently bound for BRC-20 marketplace trading. Use it before listing or buying to confirm which wallet addresses the marketplace will use.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -42,9 +50,17 @@ paths:
   /v3/market/brc20/auction/brc20_kline:
     post:
       operationId: getBrc20Kline
-      summary: Get tick k line.
+      summary: Get BRC-20 marketplace price candles
+      description: Returns time-series price points for a ticker over the requested time range and granularity. Use it to draw marketplace price charts or analyze short-term trading trends.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -99,9 +115,17 @@ paths:
   /v3/market/brc20/auction/brc20_types:
     post:
       operationId: getBrc20Types
-      summary: Get statistical data, price, market capitalization, etc. for BRC20.
+      summary: Rank BRC-20 tickers by marketplace metrics
+      description: Returns paginated market statistics for BRC-20 tickers, including current price, price change, BTC volume, token volume, market cap, and featured deploy entries. Supports ticker length, time window, explicit ticker list, and pagination filters.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -235,9 +259,17 @@ paths:
   /v3/market/brc20/auction/brc20_types_specified:
     post:
       operationId: getBrc20TypesSpecified
-      summary: Get statistical data, price, market capitalization, etc. for BRC20.
+      summary: Get marketplace metrics for selected BRC-20 tickers
+      description: Returns market statistics for specific BRC-20 tickers, such as price, price change, volume, market cap, and related ticker metadata. Use it when the client already knows which tickers to compare or display.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -286,9 +318,17 @@ paths:
   /v3/market/brc20/auction/bind:
     post:
       operationId: bindBrc20NftAddress
-      summary: Bind btcAddress and nftAddress.
+      summary: Bind marketplace payment and inscription addresses
+      description: Records the BTC payment address and NFT/inscription receiving address pair used by BRC-20 marketplace workflows. Confirm both addresses carefully because later listing and purchase flows may rely on this binding.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -330,9 +370,17 @@ paths:
   /v3/market/brc20/auction/list:
     post:
       operationId: getBrc20AuctionList
-      summary: Retrieve the list information of the market.
+      summary: Search BRC-20 token listings for sale
+      description: Returns paginated marketplace listings with auction id, inscription id, seller address, ticker, token amount, total price, unit price, market type, and latest listing context. Use it to power order books, ticker detail pages, and buy-flow listing selection.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -478,12 +526,17 @@ paths:
   /v3/market/brc20/auction/inscription_info:
     post:
       operationId: getBrc20InscriptionInfo
-      summary:
-        Retrieve inscription information, including brc20, names, collection.
-        It is necessary to first determine the inscription type before calling
-        the relevant services.
+      summary: Get BRC-20 listing detail by inscription
+      description: Returns marketplace and asset metadata for one inscription, including whether it is listed, its auction context when available, ticker amount, price fields, owner or seller information, and inscription identifiers.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -500,9 +553,17 @@ paths:
   /v3/market/brc20/auction/inscription_info_list:
     post:
       operationId: getBrc20InscriptionInfoList
-      summary: Get the basic listing information of the specified inscription list
+      summary: Get BRC-20 listing details for multiple inscriptions
+      description: Returns listing and asset metadata for a batch of inscription ids. Use it to hydrate search results, wallet views, or candidate listings without calling the single-inscription endpoint repeatedly.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -519,9 +580,17 @@ paths:
   /v3/market/brc20/auction/actions:
     post:
       operationId: getBrc20AuctionActions
-      summary: Get information on listings, delistings, and sales.
+      summary: List BRC-20 marketplace listing and sale events
+      description: Returns paginated activity records for BRC-20 marketplace events such as listing, delisting, sale, claim, and price update. Records include auction id, inscription id, event type, price, addresses, timestamp, confirmation count, and ticker-specific metadata.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -721,9 +790,17 @@ paths:
   /v3/market/brc20/auction/create_put_on:
     post:
       operationId: createBrc20PutOn
-      summary: Create listing order.
+      summary: Create a BRC-20 fixed-price listing PSBT
+      description: Builds the seller-side listing draft for a transferable BRC-20 inscription and returns the auction id, PSBT, and signing indexes. Review the inscription id, ticker amount, total price, unit price, market type, public key, and payout address before signing.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -740,9 +817,18 @@ paths:
   /v3/market/brc20/auction/confirm_put_on:
     post:
       operationId: confirmBrc20PutOn
-      summary: Confirm listing order.
+      summary: Publish a signed BRC-20 listing
+      description: Submits the seller-signed listing PSBT for an auction id and activates the marketplace order. Success means the token amount can become visible for purchase, so verify the signed PSBT, price, ticker amount, seller address, and market type before calling.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -759,9 +845,17 @@ paths:
   /v3/market/brc20/auction/create_bid_prepare:
     post:
       operationId: createBrc20BidPrepare
-      summary: Return params before creating purchase order.
+      summary: Estimate fees and balance for a BRC-20 purchase
+      description: Calculates purchase preparation data for an auction id and bid price, including service fee, network fee, fee rate, estimated transaction size, inscription satoshi value, available balance, and total balance. Use it to decide whether a buy order can be created safely.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Quote-only marketplace step: safe to call without confirmation, but do not treat the returned estimate as a purchase.
       requestBody:
         content:
           application/json:
@@ -778,9 +872,17 @@ paths:
   /v3/market/brc20/auction/create_bid:
     post:
       operationId: createBrc20Bid
-      summary: Create purchase order.
+      summary: Create a BRC-20 purchase PSBT
+      description: Builds the buyer-side order for a listed BRC-20 inscription and returns bid id, purchase PSBT, signing indexes, platform fee, network fee, fee rate, and inscription value. Confirm the auction id, bid price, buyer address, ticker amount, and total fees before signing.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -797,9 +899,18 @@ paths:
   /v3/market/brc20/auction/confirm_bid:
     post:
       operationId: confirmBrc20Bid
-      summary: Confirm purchase order.
+      summary: Submit a signed BRC-20 purchase
+      description: Confirms the signed purchase PSBT for an auction id and bid id, then returns the settlement transaction id when accepted. This can complete the transfer, so verify the PSBT, final price, ticker amount, buyer and seller addresses, and fee values before submitting.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -816,9 +927,17 @@ paths:
   /v3/market/brc20/auction/create_put_off:
     post:
       operationId: createBrc20PutOff
-      summary: Create delisting order.
+      summary: Create a BRC-20 delisting PSBT
+      description: Builds the seller-side cancellation transaction for an active BRC-20 listing and returns the signing material needed to remove it. Review the auction id, owner addresses, listed ticker amount, fee settings, and returned signing payload before signing.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -835,9 +954,18 @@ paths:
   /v3/market/brc20/auction/confirm_put_off:
     post:
       operationId: confirmBrc20PutOff
-      summary: Confirm delisting order.
+      summary: Remove a signed BRC-20 listing
+      description: Submits the signed delisting payload for an auction id and removes the listing when accepted. Verify the PSBT or signature payload, owner address, ticker amount, and target listing before submitting.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -854,9 +982,17 @@ paths:
   /v3/market/brc20/auction/create_modify_price:
     post:
       operationId: createBrc20ModifyPrice
-      summary: Create the order for price adjustment.
+      summary: Create a BRC-20 listing price-update PSBT
+      description: Builds signing material to change the total and unit price of an existing BRC-20 listing. Review the auction id, current ticker amount, current price, new price, seller address, and returned PSBT or sign indexes before signing.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -873,9 +1009,18 @@ paths:
   /v3/market/brc20/auction/confirm_modify_price:
     post:
       operationId: confirmBrc20ModifyPrice
-      summary: Confirm the order for price adjustment.
+      summary: Apply a signed BRC-20 listing price update
+      description: Submits the signed price-update payload for an auction id and updates the active listing price when accepted. Verify the signed PSBT, ticker amount, seller address, and final total and unit prices before submitting.
       tags:
-        - MarketPlace-BRC20
+        - Marketplace-BRC20
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:

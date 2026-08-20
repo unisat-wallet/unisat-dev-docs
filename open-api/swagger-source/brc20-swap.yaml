@@ -3,9 +3,10 @@ info:
   title: BRC20 Swap API
   version: 1.0.4
   description: >-
-    BRC20 Swap API provides a set of interfaces for BRC20 Swap and InSwap services.
+    BRC20 Swap API provides a set of Fractal-only interfaces for BRC20 Swap and InSwap services.
+    BRC20 Swap and InSwap are equivalent product names; user requests that mention InSwap should be routed to these /v1/brc20-swap/* endpoints.
     It allows users to interact with the BRC20 Swap ecosystem, including balance checks,
-    pool information, liquidity management, and token transfers.
+    pool information, liquidity management, quote/preparation steps, liquidity operations, swap operations, and token transfers.
   contact:
     email: contact@unisat.io
   license:
@@ -14,18 +15,23 @@ info:
 servers:
   - url: https://open-api-fractal.unisat.io
 tags:
-  - name: brc20-swap
-    description: BRC20 Swap and InSwap Service
+  - name: Swap-BRC20
+    description: Fractal-only BRC20 Swap / InSwap service. InSwap is an alias of BRC20 Swap.
 paths:
   /v1/brc20-swap/config:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapConfig
-      summary: Swap's global configuration information.
+      summary: Get InSwap module, fee tick, and deposit confirmation config
       description: >-
-        This interface provides the global configuration information for the BRC20 Swap service.
-        It includes details such as the module ID, service gas tick, and pending deposit confirmation numbers.
+        Returns Fractal BRC20 Swap service settings, including module id, service gas tick, and confirmation thresholds for direct and matching deposits.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       responses:
         "200":
           description: Default Response
@@ -60,12 +66,17 @@ paths:
   /v1/brc20-swap/balance:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapBalance
-      summary: Gets the balance for the specified address and tick.
+      summary: Get an address's InSwap balance for one tick
       description: >-
-        This interface retrieves the balance for a specific address and tick in the BRC20 Swap service.
-        It returns the confirmed module balance, swap balance, pending swap balance, and pending available balance.
+        Returns module, swap, pending-swap, and pending-available balances plus decimal precision for a specific address and token tick.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -118,12 +129,17 @@ paths:
   /v1/brc20-swap/all_balance:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapAllBalances
-      summary: Gets all BRC20 token balances for a specified address.
+      summary: List all InSwap balances for an address
       description: >-
-        This interface retrieves the complete list of all BRC20 token balances for a specific wallet address in the BRC20 Swap service.
-        For each tick, it returns detailed balance information including the confirmed module balance, swap balance, pending swap balance, and pending available balance.
+        Returns a ticker-keyed balance map with module, swap, pending balances, decimals, asset type, network type, and optional price metadata.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -193,12 +209,17 @@ paths:
   /v1/brc20-swap/pool_info:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPoolInfo
-      summary: Get Pool information based on trade pair.
+      summary: Get pool liquidity, volume, and reward details for a pair
       description: >-
-        This interface retrieves the pool information for a specific trade pair in the BRC20 Swap service.
-        It includes details such as whether the pool exists, if liquidity has been added, tick prices, LP quantity, TVL, volume, and rewards.
+        Returns pair-level pool metadata, including whether the pool exists, token reserves, LP supply, TVL, recent volume, reward fields, and per-token asset metadata.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -226,7 +247,7 @@ paths:
                     type: object
                     properties:
                       existed:
-                        description: Whether the pool exists
+                        description: Is the pool existed
                         type: boolean
                       addLiq:
                         description: Has LP been added to the pool
@@ -292,12 +313,17 @@ paths:
   /v1/brc20-swap/select:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapSelect
-      summary: Select the tick information that you can use based on the address.
+      summary: List address ticks available for InSwap trading
       description: >-
-        This interface retrieves the tick information that can be used for swapping based on the provided address.
-        It returns the tick, decimal, BRC20 balance, and swap balance for each available tick.
+        Returns BRC-20 ticks available to an address for swap operations, including decimal precision, module balance, and swap balance.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -345,12 +371,17 @@ paths:
   /v1/brc20-swap/pre_deploy_pool:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPreDeployPool
-      summary: Prepare deploy pool operation
+      summary: Prepare signatures and fees for deploying an InSwap pool
       description: >-
-        This interface pre-loads the /deploy_pool operation, providing the signature content,
-        gas, and byte information required for deploying a pool in the BRC20 Swap service.
+        Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value needed before submitting a pool deployment.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -466,12 +497,17 @@ paths:
   /v1/brc20-swap/deploy_pool:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapDeployPool
-      summary: Deploy the pool operation.
+      summary: Submit a signed InSwap pool deployment
       description: >-
-        This interface deploys a pool in the BRC20 Swap service. It requires the address, tick0, tick1,
-        timestamp, fee tick, and user signatures to complete the operation.
+        Creates a new swap pool using prepared signature data, token pair, timestamp, fee tick, and fee payment fields. Review the pair, fee amount, and signatures before submission.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -542,12 +578,17 @@ paths:
   /v1/brc20-swap/pre_add_liq:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPreAddLiq
-      summary: Prepare add liquidity operation
+      summary: Prepare signatures and fee data for adding liquidity
       description: >-
-        This interface pre-loads the /add_liq operation, providing the signature content,
-        gas, and byte information required for adding liquidity in the BRC20 Swap service.
+        Returns signature ids, sign messages, fee fields, and pool-share preparation data for adding two token amounts into an InSwap liquidity pool.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
 
       parameters:
         - schema:
@@ -687,11 +728,17 @@ paths:
   /v1/brc20-swap/add_liq:
     post:
       tags:
-        - brc20-swap
-      summary: Add the liquidity operation
+        - Swap-BRC20
+      operationId: postBrc20SwapAddLiq
+      summary: Submit a signed InSwap add-liquidity operation
       description: >-
-        This interface adds liquidity to a pool in the BRC20 Swap service. It requires the address,
-        tick0, tick1, amounts, LP, slippage, timestamp, fee tick, and user signatures to complete the operation.
+        Adds token amounts to a liquidity pool using prepared signatures, fee fields, and slippage controls. Review both token amounts, expected LP, fee payment, and signatures before submission.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -730,7 +777,7 @@ paths:
                   description: Timestamp (seconds)
                   type: number
                 feeTick:
-                  description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
+                description: Tick used as fee. Use /v1/brc20-swap/config to fetch available feeTicks.
                   type: string
                 feeAmount:
                   description: The fee that the user needs to pay
@@ -815,12 +862,17 @@ paths:
   /v1/brc20-swap/pre_remove_liq:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPreRemoveLiq
-      summary: Prepare remove liquidity operation
+      summary: Prepare signatures and fee data for removing liquidity
       description: >-
-        This interface pre-loads the /remove_liq operation, providing the signature content,
-        gas, and byte information required for removing liquidity in the BRC20 Swap service.
+        Returns signature ids, sign messages, fee fields, and expected token amounts for removing LP from an InSwap liquidity pool.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
 
       parameters:
         - schema:
@@ -964,11 +1016,17 @@ paths:
   /v1/brc20-swap/remove_liq:
     post:
       tags:
-        - brc20-swap
-      summary: Remove the liquidity operation
+        - Swap-BRC20
+      operationId: postBrc20SwapRemoveLiq
+      summary: Submit a signed InSwap remove-liquidity operation
       description: >-
-        This interface removes liquidity from a pool in the BRC20 Swap service. It requires the address,
-        tick0, tick1, amounts, LP, slippage, timestamp, fee tick, and user signatures to complete the operation.
+        Removes LP from a liquidity pool using prepared signatures and fee fields, returning execution metadata. Review LP amount, expected token outputs, fee payment, and signatures before submission.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -1092,12 +1150,17 @@ paths:
   /v1/brc20-swap/pre_send:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPreSend
-      summary: Prepare send operation
+      summary: Prepare signatures and fees for an InSwap token transfer
       description: >-
-        This interface pre-loads the /send operation, providing the signature content,
-        gas, and byte information required for sending a tick in the BRC20 Swap service.
+        Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value for transferring a tick amount to a recipient.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -1191,12 +1254,17 @@ paths:
   /v1/brc20-swap/pre_batch_send:
     post:
       tags:
-        - brc20-swap
-      summary: Prepare batch send operation
+        - Swap-BRC20
+      operationId: postBrc20SwapPreBatchSend
+      summary: Prepare signatures and fees for batch InSwap transfers
       description: >-
-        This interface pre-loads the /batch_send operation, providing the signature content,
-        gas, and byte information required for sending multiple ticks in the BRC20 Swap service.
-        The request can provide either a shared amount or an amountList aligned with the recipients.
+        Returns per-item signature ids, sign messages, and fee metadata for transferring multiple tick amounts to recipients in one batch workflow.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         required: true
         content:
@@ -1294,12 +1362,17 @@ paths:
   /v1/brc20-swap/pre_swap:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPreSwap
-      summary: Prepare swap operation
+      summary: Prepare signatures and fees for an InSwap token swap
       description: >-
-        This interface pre-loads the /swap operation, providing the signature content,
-        gas, and byte information required for swapping ticks in the BRC20 Swap service.
+        Returns signature ids, sign messages, fee fields, and fee-balance metadata for a quoted swap between input and output ticks.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -1414,12 +1487,17 @@ paths:
   /v1/brc20-swap/send:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapSend
-      summary: The send operation.
+      summary: Submit a signed InSwap token transfer
       description: >-
-        This interface sends a tick in the BRC20 Swap service. It requires the address, tick, amount,
-        receiver, timestamp, fee tick, and user signatures to complete the operation.
+        Transfers a tick amount from an address to one or more recipients using prepared signatures and fee fields. Review recipients, amounts, fee payment, and signatures before submission.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -1500,12 +1578,17 @@ paths:
   /v1/brc20-swap/batch_send:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapBatchSend
-      summary: The batch send operation.
+      summary: Submit signed batch InSwap token transfers
       description: >-
-        This interface sends multiple ticks in the BRC20 Swap service. It requires the address, tick,
-        amount or amountList, receivers, timestamp, fee tick, and user signatures to complete the operation.
+        Executes multiple prepared tick transfers in one request using per-item signatures and fee fields. Review every recipient, amount, fee payment, and signature before submission.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -1585,13 +1668,17 @@ paths:
   /v1/brc20-swap/swap:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapSwap
-      summary: The swap operation.
+      summary: Submit a signed InSwap token swap
       description: >-
-        This interface swaps ticks in the BRC20 Swap service. It requires the address, input tick,
-        output tick, input amount, output amount, slippage, exact type, timestamp, fee tick,
-        and user signatures to complete the operation.
+        Executes a prepared swap between input and output ticks with exact-in or exact-out semantics. Review quoted amounts, slippage, fee payment, and signatures before submission.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -1723,12 +1810,17 @@ paths:
   /v1/brc20-swap/pool_list:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPoolList
-      summary: Gets the pool list information.
+      summary: List InSwap pools with TVL, volume, and reserves
       description: >-
-        This interface retrieves the pool list information in the BRC20 Swap service. It supports
-        filtering by address, tick, and fuzzy matching, and allows pagination through start and limit parameters.
+        Returns paginated pool pairs with LP token, TVL, 24h/7d/30d volume, and reserve amounts for each token.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -1799,12 +1891,17 @@ paths:
   /v1/brc20-swap/my_pool_list:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapMyPoolList
-      summary: Gets the user's pool list information.
+      summary: List an address's InSwap liquidity positions
       description: >-
-        This interface retrieves the user's pool list information in the BRC20 Swap service. It supports
-        filtering by address, tick, and pagination through start and limit parameters.
+        Returns paginated pool positions for an address, including LP amount, pool share, token amounts, and claimed or unclaimed rewards.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -1882,12 +1979,17 @@ paths:
   /v1/brc20-swap/my_pool:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapMyPool
-      summary: Gets the user pool information for the specified pair.
+      summary: Get an address's InSwap position in one pool
       description: >-
-        This interface retrieves the user pool information for a specific pair in the BRC20 Swap service.
-        It requires the address, tick0, and tick1 parameters to identify the pool.
+        Returns LP amount, pool share, token amounts, locked LP, and claimed or unclaimed rewards for a specific address and token pair.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -1959,12 +2061,17 @@ paths:
   /v1/brc20-swap/overview:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapOverview
-      summary: An overview of swap information
+      summary: Get InSwap liquidity, volume, transaction, and pair totals
       description: >-
-        This interface provides an overview of the swap information in the BRC20 Swap service,
-        including total liquidity, 7-day volume, 24-hour volume, number of transactions, and number of pairs.
+        Returns protocol overview metrics including total liquidity, 24h and 7d volume, 24h transaction count, and number of active pairs.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       responses:
         "200":
           description: Default Response
@@ -2002,12 +2109,17 @@ paths:
   /v1/brc20-swap/gas_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapGasHistory
-      summary: Gets the gas consumption records for a user aggregation operation.
+      summary: List InSwap gas fee history
       description: >-
-        This interface retrieves the gas consumption records for a user aggregation operation in the BRC20 Swap service.
-        It supports filtering by address and pagination through start and limit parameters.
+        Returns paginated gas-fee records with function type, token pair, gas amount, fee tick, recipient address, and timestamp.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -2075,12 +2187,17 @@ paths:
   /v1/brc20-swap/send_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapSendHistory
-      summary: Gets the history of send transaction.
+      summary: List InSwap token transfer history
       description: >-
-        This interface retrieves the history of send transactions in the BRC20 Swap service.
-        It supports filtering by address, tick, and pagination through start and limit parameters.
+        Returns paginated transfer records filtered by address or tick, including token tick, amount, recipient, and timestamp.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -2143,12 +2260,17 @@ paths:
   /v1/brc20-swap/liq_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapLiqHistory
-      summary: Gets the history of a pair addition pool.
+      summary: List InSwap add/remove liquidity history
       description: >-
-        This interface retrieves the history of pair addition pools in the BRC20 Swap service.
-        It supports filtering by address, tick, type (add or remove), and pagination through start and limit parameters.
+        Returns paginated liquidity records with action type, token pair, token amounts, rewards, LP amount, and timestamp.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -2232,12 +2354,17 @@ paths:
   /v1/brc20-swap/swap_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapSwapHistory
-      summary: Gets the history of swap.
+      summary: List InSwap token swap history
       description: >-
-        This interface retrieves the history of swap transactions in the BRC20 Swap service.
-        It supports filtering by address, tick, and pagination through start and limit parameters.
+        Returns paginated swap records filtered by address or tick, including input/output ticks, amounts, exact type, and timestamp.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -2313,12 +2440,17 @@ paths:
   /v1/brc20-swap/rollup_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapRollupHistory
-      summary: Get chain history of rollup inscription.
+      summary: List InSwap rollup inscription history
       description: >-
-        This interface retrieves the chain history of rollup inscriptions in the BRC20 Swap service.
-        It supports filtering by inscription ID and pagination through start and limit parameters.
+        Returns paginated rollup records with transaction id, block height, transaction count, inscription id, inscription number, and timestamp.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             exclusiveMaximum: true
@@ -2379,12 +2511,17 @@ paths:
   /v1/brc20-swap/deposit_list:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapDepositList
-      summary: Gets the deposit list for a user.
+      summary: List InSwap deposit records for an address
       description: >-
-        This interface retrieves the deposit list for a user in the BRC20 Swap service.
-        It supports filtering by address, tick, and pagination through start and limit parameters.
+        Returns paginated deposit records with tick, amount, current and required confirmations, timestamp, txid, and deposit type.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -2453,13 +2590,17 @@ paths:
   /v1/brc20-swap/create_deposit:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapCreateDeposit
-      summary: Create a deposit psbt to be signed by the user.
+      summary: Build an InSwap deposit PSBT or bridge deposit draft
       description: >-
-        This interface creates a deposit PSBT to be signed by the user in the BRC20 Swap service.
-        Fractal BRC20 deposits only require the public key and address, while bridge deposits also require
-        amount, tick, assetType, and networkType.
+        Returns deposit signing material such as PSBT, deposit type, expiration timestamp, and recommended deposit amount for direct, matching, or bridge deposit flows.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
 
       parameters:
         - schema:
@@ -2554,13 +2695,17 @@ paths:
   /v1/brc20-swap/confirm_deposit:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapConfirmDeposit
-      summary: User signature deposit psbt, submit confirmation.
+      summary: Submit a signed InSwap deposit confirmation
       description: >-
-        This interface allows the user to sign the deposit PSBT and submit the confirmation in the BRC20 Swap service.
-        It always requires the PSBT. Bridge deposits also require the deposit context fields such as
-        pubkey, address, amount, tick, assetType, and networkType.
+        Confirms a prepared deposit using the signed PSBT and optional bridge metadata, returning the transaction id and remaining pending-confirmation count.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -2630,11 +2775,17 @@ paths:
   /v1/brc20-swap/system_status:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapSystemStatus
-      summary: Gets the current system state.
+      summary: Check whether InSwap rollup committing is active
       description: >-
-        This interface retrieves the current system state of the BRC20 Swap service, including whether rollup inscription committing is enabled.
+        Returns the current system committing flag so clients can decide whether rollup-related operations are temporarily in progress.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       responses:
         "200":
           description: Default Response
@@ -2661,12 +2812,17 @@ paths:
   /v1/brc20-swap/withdraw_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapWithdrawHistory
-      summary: Gets the user withdrawal history.
+      summary: List InSwap withdrawal records for an address
       description: >-
-        This interface retrieves the user withdrawal history in the BRC20 Swap service.
-        It supports filtering by address, pagination through start and limit parameters, and an optional tick parameter.
+        Returns paginated withdrawal records with id, tick, total and completed amounts, confirmation progress, status, type, and timestamp.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -2741,12 +2897,17 @@ paths:
   /v1/brc20-swap/create_retry_withdraw:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapCreateRetryWithdraw
-      summary: Retry create a withdraw psbt to be signed by the user.
+      summary: Build payment and approve PSBTs for retrying a withdrawal
       description: >-
-        This interface retries to create a withdrawal PSBT to be signed by the user in the BRC20 Swap service.
-        It requires the withdrawal order ID, public key, and address parameters to generate the PSBT.
+        Returns payment PSBT, approve-inscription PSBT, and network fee required to retry a previously created withdrawal order.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -2794,12 +2955,17 @@ paths:
   /v1/brc20-swap/confirm_retry_withdraw:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapConfirmRetryWithdraw
-      summary: User signature withdraw psbt, submit confirmation.
+      summary: Submit signed PSBTs to retry an InSwap withdrawal
       description: >-
-        This interface allows the user to sign the retry withdrawal PSBT and submit the confirmation in the BRC20 Swap service.
-        It requires the withdrawal order ID, payment PSBT, and approve PSBT to complete the operation.
+        Confirms a retry withdrawal order by submitting its id with signed payment and approve PSBTs. Verify the order id and both signed PSBTs before submission.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -2842,12 +3008,17 @@ paths:
   /v1/brc20-swap/create_withdraw:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapCreateWithdraw
-      summary: Create a withdraw psbt to be signed by the user.
+      summary: Build InSwap withdrawal signing data
       description: >-
-        This interface creates a withdrawal PSBT to be signed by the user in the BRC20 Swap service.
-        It requires the public key, address, tick, amount, timestamp, fee tick, and payType parameters to generate the PSBT.
+        Prepares withdrawal data for a tick amount, fee tick, payment type, and optional bridge asset metadata before the signed confirmation step.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
 
       parameters:
         - schema:
@@ -2941,13 +3112,17 @@ paths:
   /v1/brc20-swap/confirm_withdraw:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapConfirmWithdraw
-      summary: User signature withdraw psbt, submit confirmation.
+      summary: Submit a signed InSwap withdrawal confirmation
       description: >-
-        This interface allows the user to sign the withdrawal PSBT and submit the confirmation in the BRC20 Swap service.
-        It requires the withdrawal order ID, payment PSBT, approve PSBT, fee tick, and payType.
-        Bridge withdrawals also carry assetType and networkType.
+        Confirms a withdrawal order using payment and approve PSBTs plus fee and signature fields. Review order id, amount, tick, fee payment, and signed PSBTs before submission.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
 
       requestBody:
         content:
@@ -3040,12 +3215,17 @@ paths:
   /v1/brc20-swap/withdraw_process:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapWithdrawProcess
-      summary: Gets the withdrawal progress for the specified ID.
+      summary: Get confirmation progress for an InSwap withdrawal
       description: >-
-        This interface retrieves the withdrawal progress for a specific ID in the BRC20 Swap service.
-        It requires the ID parameter to identify the withdrawal order.
+        Returns withdrawal status details including confirmation counts, rollup/payment/inscribe/approve txids, completed amount, and match history.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
 
       parameters:
         - schema:
@@ -3098,7 +3278,9 @@ paths:
                       cancelTotalNum:
                         type: number
                       rollUpTxid:
-                        description: Transaction ID of the rollup inscription required for a withdrawal decrease operation.
+                        description:
+                          Decrease operation is required to withdraw, which in rollup
+                          inscription
                         type: string
                       paymentTxid:
                         type: string
@@ -3146,9 +3328,17 @@ paths:
   /v1/brc20-swap/quote_swap:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapQuoteSwap
-      summary: Returns the estimated number of swaps based on the input and exact type.
+      summary: Quote expected output for an InSwap token swap
+      description: >-
+        Estimates swap result values for exact-in or exact-out requests, including input USD value, expected USD value, and expected token amount.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -3215,9 +3405,17 @@ paths:
   /v1/brc20-swap/quote_add_liq:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapQuoteAddLiq
-      summary: Based on the pair to get the actual addition ratio, LP number and other information.
+      summary: Quote required amounts and LP for adding liquidity
+      description: >-
+        Estimates real token amounts, USD values, LP minted, pair exchange ratios, and resulting pool share for an add-liquidity request.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -3293,9 +3491,17 @@ paths:
   /v1/brc20-swap/quote_remove_liq:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapQuoteRemoveLiq
-      summary: Estimate the number of ticks you can get by typing LP.
+      summary: Quote token outputs for removing InSwap liquidity
+      description: >-
+        Estimates the token pair amounts and USD values returned when removing a specified LP amount from a pool.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -3357,12 +3563,17 @@ paths:
   /v1/brc20-swap/pre_stake:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPreStake
-      summary: Prepare stake operation
+      summary: Prepare signatures and fees for staking InSwap LP
       description: >-
-        This interface pre-loads the /stake operation, providing the signature content,
-        gas, and byte information required for staking in the BRC20 Swap service.
+        Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value for staking an LP amount in a reward pool.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -3449,12 +3660,17 @@ paths:
   /v1/brc20-swap/pre_unstake:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPreUnstake
-      summary: Prepare unstake operation
+      summary: Prepare signatures and fees for unstaking InSwap LP
       description: >-
-        This interface pre-loads the /unstake operation, providing the signature content,
-        gas, and byte information required for unstaking in the BRC20 Swap service.
+        Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value for unstaking an LP amount from a reward pool.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -3541,12 +3757,17 @@ paths:
   /v1/brc20-swap/pre_claim:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPreClaim
-      summary: Prepare claim operation
+      summary: Prepare signatures and fees for claiming InSwap rewards
       description: >-
-        This interface pre-loads the /claim operation, providing the signature content,
-        gas, and byte information required for claiming rewards in the BRC20 Swap service.
+        Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value for claiming rewards from a staking pool.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -3627,12 +3848,17 @@ paths:
   /v1/brc20-swap/pre_send_lp:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPreSendLp
-      summary: Prepare send LP operation
+      summary: Prepare signatures and fees for transferring LP tokens
       description: >-
-        This interface pre-loads the /send_lp operation, providing the signature content,
-        gas, and byte information required for sending LP in the BRC20 Swap service.
+        Returns signature ids, sign messages, fee fields, LP token conversion data, and fee-balance metadata for sending LP tokens to another address.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -3736,12 +3962,17 @@ paths:
   /v1/brc20-swap/send_lp:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapSendLp
-      summary: The send LP operation.
+      summary: Submit a signed InSwap LP token transfer
       description: >-
-        This interface sends LP in the BRC20 Swap service. It requires the address, tick0, tick1, amount,
-        receiver, timestamp, fee tick, and user signatures to complete the operation.
+        Transfers LP tokens for a token pair to another address using prepared signatures and fee fields. Review recipient, LP amount, fee payment, and signatures before submission.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -3822,12 +4053,17 @@ paths:
   /v1/brc20-swap/stake:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapStake
-      summary: The stake operation.
+      summary: Submit a signed InSwap LP stake operation
       description: >-
-        This interface stakes LP in the BRC20 Swap service. It requires the pid, address, amount,
-        timestamp, fee tick, and user signatures to complete the operation.
+        Stakes an LP amount in a reward pool using prepared signatures and fee fields. Review pool id, amount, fee payment, and signatures before submission.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -3899,12 +4135,17 @@ paths:
   /v1/brc20-swap/unstake:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapUnstake
-      summary: The unstake operation.
+      summary: Submit a signed InSwap LP unstake operation
       description: >-
-        This interface unstakes LP in the BRC20 Swap service. It requires the pid, address, amount,
-        timestamp, fee tick, and user signatures to complete the operation.
+        Unstakes an LP amount from a reward pool using prepared signatures and fee fields. Review pool id, amount, fee payment, and signatures before submission.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -3976,12 +4217,17 @@ paths:
   /v1/brc20-swap/claim:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapClaim
-      summary: The claim operation.
+      summary: Submit a signed InSwap reward claim
       description: >-
-        This interface claims rewards in the BRC20 Swap service. It requires the pid, address,
-        timestamp, fee tick, and user signatures to complete the operation.
+        Claims rewards from a staking pool using prepared signatures and fee fields, returning the claimed reward amount when available.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -4052,12 +4298,17 @@ paths:
   /v1/brc20-swap/lp_reward_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapLpRewardHistory
-      summary: Gets the user pool information for the specified pair.
+      summary: List LP reward history for an InSwap pool position
       description: >-
-        This interface retrieves the LP reward history for a specific pair in the BRC20 Swap service.
-        It requires the address, tick0, tick1, and pagination parameters.
+        Returns paginated LP reward records for an address and token pair, including reward amounts, event type, and timestamp.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4131,12 +4382,17 @@ paths:
   /v1/brc20-swap/stake_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapStakeHistory
-      summary: Gets the stake history.
+      summary: List InSwap stake, unstake, and claim history
       description: >-
-        This interface retrieves the stake history in the BRC20 Swap service.
-        It supports filtering by pid, address, type, and pagination through start and limit parameters.
+        Returns paginated staking records for an address, filtered by pool, search text, and action type, with pool pair, amount, reward tick, and timestamp.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4221,11 +4477,17 @@ paths:
   /v1/brc20-swap/stake_list:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapStakeList
-      summary: Gets the stake list.
+      summary: List active InSwap staking campaigns and reward pools
       description: >-
-        This interface retrieves the stake list in the BRC20 Swap service.
+        Returns staking campaign windows with reward pool summaries, including pool id, pool pair, reward tick, current total LP, base reward, and staged reward thresholds.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       responses:
         "200":
           description: Default Response
@@ -4289,9 +4551,17 @@ paths:
   /v1/brc20-swap/stake_item:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapStakeItem
-      summary: Gets the stake item.
+      summary: Get one InSwap staking campaign by event id
+      description: >-
+        Returns a staking campaign item plus newest indexed height, including reward pool summaries, staged LP requirements, and staged added rewards.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4361,11 +4631,17 @@ paths:
   /v1/brc20-swap/stake_user_info:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapStakeUserInfo
-      summary: Gets the user info.
+      summary: Get staking-related InSwap user information
       description: >-
-        This interface retrieves the stake user information in the BRC20 Swap service.
+        Returns staking user data for an address. The response is extensible because the server may include campaign-specific or user-specific fields.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4394,11 +4670,17 @@ paths:
   /v1/brc20-swap/user_info:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapUserInfo
-      summary: Gets the user info.
+      summary: Get an address's default InSwap fee payment settings
       description: >-
-        This interface retrieves the user information in the BRC20 Swap service.
+        Returns the user's remembered fee payment preference, including default pay type and whether the preference should be remembered.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4438,9 +4720,17 @@ paths:
   /v1/brc20-swap/select_deposit:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapSelectDeposit
-      summary: Select deposit information
+      summary: Get deposit selection data for an InSwap address
+      description: >-
+        Returns server-provided deposit selection data for a pubkey and address. The schema is intentionally open to support direct, matching, or bridge deposit choices.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4479,9 +4769,17 @@ paths:
   /v1/brc20-swap/func_info:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapFuncInfo
-      summary: Gets the func info.
+      summary: Get execution details for one InSwap function id
+      description: >-
+        Returns server-side function execution data for a submitted operation id. The response is open because details vary by operation type.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4510,9 +4808,17 @@ paths:
   /v1/brc20-swap/deposit_balance:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapDepositBalance
-      summary: Gets the deposit balance
+      summary: Get depositable balance data for one tick
+      description: >-
+        Returns server-provided deposit balance data for a pubkey, address, and tick. The response shape is open to support multiple deposit modes.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4551,11 +4857,17 @@ paths:
   /v1/brc20-swap/deposit_process:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapDepositProcess
-      summary: Gets the deposit process.
+      summary: Get confirmation progress for an InSwap deposit
       description: >-
-        This interface retrieves the deposit process for a specific transaction ID in the BRC20 Swap service.
+        Returns deposit progress by txid, including tick, amount, current and required confirmations, timestamp, type, and status.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4603,11 +4915,17 @@ paths:
   /v1/brc20-swap/tick_price:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapTickPrice
-      summary: Gets the tick price
+      summary: Get the current InSwap price for one tick
       description: >-
-        This interface retrieves the price for a specific tick in the BRC20 Swap service.
+        Returns the latest price value for a tick as used by InSwap quote, valuation, or portfolio views.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4639,11 +4957,17 @@ paths:
   /v1/brc20-swap/address_gas:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapAddressGas
-      summary: Gets the address's total tick fee
+      summary: Get an address's available fee-tick gas amount
       description: >-
-        This interface retrieves the total gas consumption for a specific address and fee tick in the BRC20 Swap service.
+        Returns the total available fee-token amount for an address and fee tick, useful before preparing fee-paying swap operations.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4680,11 +5004,17 @@ paths:
   /v1/brc20-swap/price_line:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPriceLine
-      summary: Gets the price line.
+      summary: Get historical InSwap price points for a pair
       description: >-
-        This interface retrieves the price line data for a specific pair in the BRC20 Swap service.
+        Returns time-series price and USD price points for a token pair over a selected range such as 24h, 7d, 30d, 90d, or all.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4743,11 +5073,17 @@ paths:
   /v1/brc20-swap/tick_holders:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapTickHolders
-      summary: Gets the tick holders.
+      summary: List top holders for an InSwap tick
       description: >-
-        This interface retrieves the list of tick holders for a specific tick in the BRC20 Swap service.
+        Returns paginated holder records for a tick, including address, amount, overall percentage, and relative percentage.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4804,11 +5140,17 @@ paths:
   /v1/brc20-swap/pool_holders:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPoolHolders
-      summary: Gets the pool holders.
+      summary: List LP holders for an InSwap pool
       description: >-
-        This interface retrieves the list of pool holders for a specific pair in the BRC20 Swap service.
+        Returns paginated LP holder records for a token pair, including token amounts, LP amount, pool share, and locked LP breakdown.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4881,11 +5223,17 @@ paths:
   /v1/brc20-swap/reward_curve:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapRewardCurve
-      summary: Get reward curve data.
+      summary: Get InSwap reward curve data for a pool position
       description: >-
-        This interface retrieves the reward curve data for a specific pair and time range in the BRC20 Swap service.
+        Returns reward-curve data for an address and token pair over a time range. The response is open because curve series fields may vary by campaign.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -4934,12 +5282,17 @@ paths:
   /v1/brc20-swap/send_lp_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapSendLpHistory
-      summary: Gets the history of send lp transaction.
+      summary: List InSwap LP token transfer history
       description: >-
-        This interface retrieves the history of send LP transactions in the BRC20 Swap service.
-        It supports filtering by address, tick, and pagination through start and limit parameters.
+        Returns paginated LP transfer records filtered by address or tick, including tick, amount, recipient, and timestamp.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -5007,12 +5360,17 @@ paths:
   /v1/brc20-swap/burn_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapBurnHistory
-      summary: Gets the history of burn transaction.
+      summary: List InSwap LP burn history and burn totals
       description: >-
-        This interface retrieves the history of burn transactions in the BRC20 Swap service.
-        It supports filtering by address, tick, and pagination through start and limit parameters.
+        Returns paginated burn records plus total LP and burned LP amounts, with optional address, tick, fuzzy-search, and timestamp filters.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -5091,18 +5449,24 @@ paths:
   /v1/brc20-swap/task_list:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapTaskList
-      summary: Get task list for address.
+      summary: List InSwap task completion items for an address
       description: >-
-        This interface retrieves the task list for a specific address in the BRC20 Swap service.
+        Returns task metadata for an address, including task id, item ids, completion flags, and task start/end times when available.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
+            default: "1"
           in: query
           name: tid
           required: false
-          default: "1"
         - schema:
             type: string
           in: query
@@ -5153,11 +5517,17 @@ paths:
   /v1/brc20-swap/address_usd:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapAddressUsd
-      summary: Get address usd.
+      summary: Get an address's InSwap asset and LP USD values
       description: >-
-        This interface retrieves the USD value of assets for a specific address in the BRC20 Swap service.
+        Returns USD valuation entries for an address, separating token asset value and LP position value.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -5193,12 +5563,17 @@ paths:
   /v1/brc20-swap/pre_lock_lp:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPreLockLp
-      summary: Prepare lock LP operation
+      summary: Prepare signatures and fees for locking InSwap LP
       description: >-
-        This interface pre-loads the /lock_lp operation, providing the signature content,
-        gas, and byte information required for locking LP in the BRC20 Swap service.
+        Returns signature ids, sign messages, fee fields, LP token conversion data, and fee-balance metadata for locking LP tokens for a selected duration.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -5301,12 +5676,17 @@ paths:
   /v1/brc20-swap/lock_lp:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapLockLp
-      summary: The lock lp operation.
+      summary: Submit a signed InSwap LP lock operation
       description: >-
-        This interface locks LP in the BRC20 Swap service. It requires the address, lockDay, tick0, tick1, amount,
-        timestamp, fee tick, and user signatures to complete the operation.
+        Locks LP tokens for a token pair and lock duration using prepared signatures and fee fields. Review lock duration, LP amount, fee payment, and signatures before submission.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -5384,12 +5764,17 @@ paths:
   /v1/brc20-swap/pre_unlock_lp:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPreUnlockLp
-      summary: Prepare unlock LP operation
+      summary: Prepare signatures and fees for unlocking InSwap LP
       description: >-
-        This interface pre-loads the /unlock_lp operation, providing the signature content,
-        gas, and byte information required for unlocking LP in the BRC20 Swap service.
+        Returns signature ids, sign messages, fee fields, LP token conversion data, and fee-balance metadata for unlocking previously locked LP tokens.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -5487,12 +5872,17 @@ paths:
   /v1/brc20-swap/unlock_lp:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapUnlockLp
-      summary: The unlock lp operation.
+      summary: Submit a signed InSwap LP unlock operation
       description: >-
-        This interface unlocks LP in the BRC20 Swap service. It requires the address, tick0, tick1, amount,
-        timestamp, fee tick, and user signatures to complete the operation.
+        Unlocks LP tokens for a token pair using prepared signatures and fee fields. Review LP amount, fee payment, and signatures before submission.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -5567,12 +5957,17 @@ paths:
   /v1/brc20-swap/lock_lp_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapLockLpHistory
-      summary: Gets the history of lock lp transaction.
+      summary: List InSwap LP lock history
       description: >-
-        This interface retrieves the history of lock LP transactions in the BRC20 Swap service.
-        It supports filtering by address, tick, lockDay, and pagination through start and limit parameters.
+        Returns paginated LP lock records with address, pair, LP amount, token amounts, USD values, lock duration, unlock time, pool share, and timestamp.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -5666,12 +6061,17 @@ paths:
   /v1/brc20-swap/unlock_lp_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapUnlockLpHistory
-      summary: Gets the history of unlock lp transaction.
+      summary: List InSwap LP unlock history
       description: >-
-        This interface retrieves the history of unlock LP transactions in the BRC20 Swap service.
-        It supports filtering by address, tick, and pagination through start and limit parameters.
+        Returns paginated LP unlock records with address, pair, LP amount, token amounts, USD values, and timestamp.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -5754,11 +6154,17 @@ paths:
   /v1/brc20-swap/export_lock_lp_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapExportLockLpHistory
-      summary: Export lock lp history to CSV file.
+      summary: Export InSwap LP lock history as CSV
       description: >-
-        This interface exports the lock LP history to a CSV file in the BRC20 Swap service.
+        Downloads CSV-formatted LP lock records for a token pair, optionally filtered by lock duration or lock time.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -5790,11 +6196,17 @@ paths:
   /v1/brc20-swap/my_lock_lp:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapMyLockLp
-      summary: Gets the user lock lp.
+      summary: Get an address's locked and available LP for a pool
       description: >-
-        This interface retrieves the user's lock LP information for a specific pair in the BRC20 Swap service.
+        Returns total LP, locked LP, available LP, available underlying token amounts, and pool share for one address and token pair.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -5846,11 +6258,17 @@ paths:
   /v1/brc20-swap/select_pool:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapSelectPool
-      summary: Select the tick information that you can swap.
+      summary: List routed pool candidates for an InSwap trade
       description: >-
-        This interface retrieves the tick information that can be used for swapping based on the provided address and optional filters.
+        Returns swappable tick candidates for an address with decimals, module balance, swap balance, and available route ticks.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -5912,12 +6330,17 @@ paths:
   /v1/brc20-swap/pre_multi_swap:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapPreMultiSwap
-      summary: Prepare multi swap operation
+      summary: Prepare signatures and fees for a multi-hop InSwap swap
       description: >-
-        This interface pre-loads the /multi_swap operation, providing the signature content
-        and gas information required for multi swapping in the BRC20 Swap service.
+        Returns per-route signature ids, sign messages, fee fields, and fee-balance metadata for a multi-hop swap between input and output ticks.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -6034,13 +6457,17 @@ paths:
   /v1/brc20-swap/multi_swap:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapMultiSwap
-      summary: The multi swap operation.
+      summary: Submit signed multi-hop InSwap swaps
       description: >-
-        This interface performs multi swaps in the BRC20 Swap service. It requires an array of swap items,
-        each with address, input tick, output tick, amounts, slippage, exact type, timestamp, fee tick,
-        and user signatures to complete the operation.
+        Executes one or more prepared multi-hop swap items and returns per-item success, amounts, exact type, value, timestamp, and failure reason when applicable.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -6170,9 +6597,17 @@ paths:
   /v1/brc20-swap/quote_multi_swap:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapQuoteMultiSwap
-      summary: Returns the estimated number of multi swaps based on the input and exact type.
+      summary: Quote expected output and route amounts for a multi-hop swap
+      description: >-
+        Estimates a multi-hop swap with input USD value, expected USD value, expected output amount, and per-route expected amounts.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -6244,12 +6679,17 @@ paths:
   /v1/brc20-swap/multi_swap_history:
     get:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: getBrc20SwapMultiSwapHistory
-      summary: Gets the history of multi swap.
+      summary: List InSwap multi-hop swap history
       description: >-
-        This interface retrieves the history of multi swap transactions in the BRC20 Swap service.
-        It supports filtering by address, tick, and pagination through start and limit parameters.
+        Returns paginated multi-hop swap records with aggregate input/output amounts, value, route details, route success flags, and failure reasons.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       parameters:
         - schema:
             type: string
@@ -6381,13 +6821,17 @@ paths:
   /v1/brc20-swap/batch_history:
     post:
       tags:
-        - brc20-swap
+        - Swap-BRC20
       operationId: postBrc20SwapBatchHistory
-      summary: Batch query multiple history types in a single request.
+      summary: Fetch multiple InSwap history categories in one request
       description: >-
-        This interface retrieves multiple history types in a single request in the BRC20 Swap service.
-        It supports querying multiple history types (gas, send, liq, swap, withdraw, stake, send_lp, burn, lock_lp, unlock_lp, multi_swap)
-        with shared pagination parameters (start, limit, address).
+        Returns selected history groups for an address, such as gas, send, liquidity, swap, withdrawal, stake, LP transfer, burn, LP lock, LP unlock, and multi-hop swap records.
+      x-unisat-domain: swap
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-aliases: [InSwap, BRC20 Swap]
       requestBody:
         content:
           application/json:
@@ -6840,49 +7284,6 @@ paths:
                   - data
 components:
   schemas:
-    CAT20TokenStats:
-      type: object
-      properties:
-        tokenId:
-          type: string
-        volume:
-          type: string
-        volume30d:
-          type: string
-        volume24h:
-          type: string
-        volume7d:
-          type: string
-        volume6h:
-          type: string
-        price:
-          type: number
-        price6h:
-          type: number
-        price24h:
-          type: number
-        price7d:
-          type: number
-        price30d:
-          type: number
-        name:
-          type: string
-        symbol:
-          type: string
-        decimals:
-          type: integer
-        max:
-          type: integer
-        volumeToken:
-          type: string
-        volumeToken30d:
-          type: string
-        volumeToken24h:
-          type: string
-        volumeToken7d:
-          type: string
-        volumeToken6h:
-          type: string
   securitySchemes:
     bearerAuth:
       type: http

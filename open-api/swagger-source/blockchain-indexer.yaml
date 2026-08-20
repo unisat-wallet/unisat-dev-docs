@@ -20,22 +20,22 @@ servers:
   - url: https://open-api-fractal.unisat.io
   - url: https://open-api-fractal-testnet.unisat.io
 tags:
-  - name: Blocks
-    description: Blocks
-  - name: Transactions
-    description: Transactions
-  - name: Addresses
-    description: Please read the [Address Balance & UTXO Guide](https://github.com/unisat-wallet/unisat-dev-docs/blob/master/open-api/btc-balance-utxo.md) before using Address related APIs.
-
+  - name: Indexer-Blockchain
+    description: Indexer-Blockchain APIs
 paths:
   /v1/indexer/blockchain/info:
     get:
       tags:
-        - Blocks
+        - Indexer-Blockchain
       operationId: getBlockchainInfo
-      summary: Get Blockchain Info
-      description: >
-        Get the current blockchain information, including chain type, block count, and best block hash.
+      summary: Get chain tip, header height, and best block metadata
+      description: >-
+        Returns the indexed blockchain state, including chain name, block and header heights, best and previous block hashes, median time, and accumulated chainwork.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       responses:
         "200":
           description: Successful operation
@@ -73,10 +73,16 @@ paths:
   /v1/indexer/fees/recommended:
     get:
       tags:
-        - Blocks
+        - Indexer-Blockchain
       operationId: getRecommendedFees
-      summary: Get Recommended Fees
-      description: Get the recommended fees for different confirmation times. (like mempool.space)
+      summary: Get recommended Bitcoin fee rates by confirmation target
+      description: >-
+        Returns fee-rate estimates for fastest, half-hour, hour, economy, and minimum confirmation targets, together with the update timestamp for freshness checks.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       responses:
         "200":
           description: Successful operation
@@ -112,10 +118,16 @@ paths:
   /v1/indexer/height/{height}/block:
     get:
       tags:
-        - Blocks
+        - Indexer-Blockchain
       operationId: getBlockByHeight
-      summary: Get block info by height
-      description: Get block info by height.
+      summary: Get block metadata by height
+      description: >-
+        Returns indexed block details such as hash links, transaction count, satoshi totals, coinbase output, timestamp, bits, and serialized size for the requested height.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: height
           description: Block height
@@ -147,10 +159,16 @@ paths:
   /v1/indexer/block/id/{blockid}:
     get:
       tags:
-        - Blocks
+        - Indexer-Blockchain
       operationId: getBlockById
-      summary: Get block info by blockid
-      description: Get block info by blockid.
+      summary: Get block metadata by block hash
+      description: >-
+        Returns the same indexed block model as height lookup, including chain links, transaction count, value totals, timestamp, difficulty bits, and block size.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: blockid
           description: Block id
@@ -181,10 +199,16 @@ paths:
   /v1/indexer/block/{height}/txs:
     get:
       tags:
-        - Blocks
+        - Indexer-Blockchain
       operationId: getTxsByBlockHeight
-      summary: Get txs by block height.
-      description: Get txs by block height.
+      summary: List indexed transactions in a block by height
+      description: >-
+        Returns paginated transaction summaries for a block, including each transaction's input/output counts, satoshi totals, locktime, size, block position, confirmations, and timestamp.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: height
           description: Block height
@@ -238,13 +262,19 @@ paths:
   /v1/indexer/tx/{txid}:
     get:
       tags:
-        - Transactions
+        - Indexer-Blockchain
       operationId: getTxById
-      summary: Get tx info by txid
-      description: Get tx info by txid.
+      summary: Get indexed transaction summary by txid
+      description: >-
+        Returns transaction-level metadata such as input/output counts, satoshi totals, locktime, size, witness offset, block hash, confirmations, and timestamp.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: txid
-          description: Transaction ID
+          description: Tx id
           in: path
           required: true
           schema:
@@ -272,13 +302,19 @@ paths:
   /v1/indexer/tx/{txid}/ins:
     get:
       tags:
-        - Transactions
+        - Indexer-Blockchain
       operationId: getInputsByTxId
-      summary: Get the inputs of a tx
-      description: Get the inputs of a tx.
+      summary: List inputs spent by a transaction
+      description: >-
+        Returns paginated previous-output records consumed by a transaction, including address, script data, satoshi value, inscription metadata, source txid, vout, and indexed height fields.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: txid
-          description: Transaction ID
+          description: Tx id
           in: path
           required: true
           schema:
@@ -367,13 +403,19 @@ paths:
   /v1/indexer/tx/{txid}/outs:
     get:
       tags:
-        - Transactions
+        - Indexer-Blockchain
       operationId: getOutputsByTxId
-      summary: Get the outputs of a tx
-      description: Get the outputs of a tx.
+      summary: List outputs created by a transaction
+      description: >-
+        Returns paginated transaction outputs with address, script type and scriptPubKey, satoshi value, inscription metadata, output index, and spend status fields when indexed.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: txid
-          description: Transaction ID
+          description: Tx id
           in: path
           required: true
           schema:
@@ -441,13 +483,19 @@ paths:
   /v1/indexer/rawtx/{txid}:
     get:
       tags:
-        - Transactions
+        - Indexer-Blockchain
       operationId: getRawTxById
-      summary: Get the raw tx by txid
-      description: Get the raw tx by txid.
+      summary: Get raw transaction hex by txid
+      description: >-
+        Returns the serialized raw transaction hex for decoding, verification, rebroadcast analysis, or offline transaction inspection.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: txid
-          description: Transaction ID
+          description: Tx id
           in: path
           required: true
           schema:
@@ -476,19 +524,25 @@ paths:
   /v1/indexer/utxo/{txid}/{index}:
     get:
       tags:
-        - Transactions
+        - Indexer-Blockchain
       operationId: getUtxoByTxIdAndIndex
-      summary: Get the UTXO by txid and index
-      description: Get the UTXO by txid and index.
+      summary: Get one transaction output by txid and vout
+      description: >-
+        Returns indexed output details including satoshi value, script type, scriptPubKey, address, inscription metadata, RBF marker, and whether the output is spent.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: txid
-          description: Transaction ID
+          description: Tx id
           in: path
           required: true
           schema:
             type: string
         - name: index
-          description: Output index (vout) of the transaction
+          description: Transaction output index (vout) of the UTXO.
           in: path
           required: true
           schema:
@@ -549,10 +603,16 @@ paths:
   /v1/indexer/local_pushtx:
     post:
       tags:
-        - Transactions
+        - Indexer-Blockchain
       operationId: localPushTx
-      summary: Push rawtx to bitcoin node.
-      description: Push rawtx to bitcoin node.
+      summary: Broadcast one raw transaction to the selected network
+      description: >-
+        Submits a signed transaction hex and optional maximum fee rate for local validation and propagation. This can move funds or assets and requires explicit confirmation before execution.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
       requestBody:
         content:
           application/json:
@@ -583,10 +643,16 @@ paths:
   /v1/indexer/local_pushtxs:
     post:
       tags:
-        - Transactions
+        - Indexer-Blockchain
       operationId: localPushTxs
-      summary: Push rawtxs to bitcoin node.
-      description: Push rawtxs to bitcoin node.
+      summary: Broadcast multiple raw transactions to the selected network
+      description: >-
+        Submits a batch of signed transaction hex strings with optional maximum fee rate. Use only after validating order, dependencies, fees, and target network because each transaction may move funds or assets.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
       requestBody:
         content:
           application/json:
@@ -619,10 +685,16 @@ paths:
   /v1/indexer/address/{address}/balance:
     get:
       tags:
-        - Addresses
+        - Indexer-Blockchain
       operationId: getBalanceByAddress
-      summary: Get the balance by address
-      description: Get the balance by address.
+      summary: Get address balance split by BTC and inscription UTXOs
+      description: >-
+        Returns confirmed and pending satoshi totals plus UTXO counts for the address, separated into overall, plain BTC, and inscription-related balances.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: address
           description: Address
@@ -673,10 +745,16 @@ paths:
   /v1/indexer/address/{address}/history:
     get:
       tags:
-        - Addresses
+        - Indexer-Blockchain
       operationId: getTxHistoryByAddress
-      summary: Get transaction history by address
-      description: Get transaction history by address.
+      summary: List indexed transaction history for an address
+      description: >-
+        Returns paginated transaction summaries involving the address, including transaction size, satoshi totals, block position, confirmations, and timestamp for wallet activity views.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: address
           description: Address
@@ -729,12 +807,16 @@ paths:
   /v1/indexer/address/{address}/utxo-data:
     get:
       tags:
-        - Addresses
+        - Indexer-Blockchain
       operationId: getUtxoDataByAddress
-      summary: Get BTCUTXO list by address
+      summary: List UTXOs for an address
       description: >-
-        Retrieve the UTXOs of an address that do not contain inscriptions. Note that this excludes, but does not completely cover, assets from protocols such as Alkanes, Runes, and others.
-        To obtain the UTXOs of an address that are available for spending as BTC, please use the available-utxo endpoint.
+        Returns paginated UTXO records with confirmed, unconfirmed, and unconfirmed-spend totals. Each UTXO includes address, satoshi value, script data, inscriptions, RBF marker, and output coordinates.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: address
           description: Address
@@ -794,10 +876,16 @@ paths:
   /v1/indexer/address/{address}/all-utxo-data:
     get:
       tags:
-        - Addresses
+        - Indexer-Blockchain
       operationId: getAllUtxoDataByAddress
-      summary: Get all UTXO list by address
-      description: Retrieve all UTXOs of an address.
+      summary: List all indexed UTXOs for an address
+      description: >-
+        Returns paginated UTXO records and aggregate totals across confirmed, unconfirmed, and unconfirmed-spend states, including inscription and low-fee metadata when indexed.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: address
           description: Address
@@ -857,10 +945,16 @@ paths:
   /v1/indexer/address/{address}/available-balance:
     get:
       tags:
-        - Addresses
+        - Indexer-Blockchain
       operationId: getAvailableBalanceByAddress
-      summary: Get available balance by address
-      description: This interface will return the current address's available balance that can be used for BTC spending. Balances of assets such as inscriptions, runes, and alkanes will not be included.
+      summary: Get address balance grouped by available and unavailable UTXOs
+      description: >-
+        Returns total, available, and unavailable satoshi balances with matching UTXO counts. The optional low-fee flag controls whether UTXOs below 1 sat/vB are included in availability calculations.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: address
           description: Address
@@ -911,12 +1005,16 @@ paths:
   /v1/indexer/address/{address}/available-utxo-data:
     get:
       tags:
-        - Addresses
+        - Indexer-Blockchain
       operationId: getAvailableUtxoDataByAddress
-      summary: Get available UTXO list by address
+      summary: List available UTXOs for an address
       description: >-
-        This interface will return the current address's available UTXO list that can be used for BTC spending. UTXOs of assets such as inscriptions, runes, and alkanes will not be included. The UTXO management tool (https://unisat.io/utxo) can unlock these UTXOs, making them available again.
-        Additionally, UTXOs with less than 600 satoshis will not be returned to avoid potential unspendable outputs from unrecognized asset protocols or burns.
+        Returns paginated UTXOs considered available for spending, along with aggregate confirmed, unconfirmed, and unconfirmed-spend totals. The low-fee option controls inclusion of UTXOs below 1 sat/vB.
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: address
           description: Address
@@ -1022,7 +1120,7 @@ components:
           example: ""
         maxFeeRate:
           type: number
-          description: Maximum fee rate in BTC/kvB. Optional; must be less than 1 BTC/kvB.
+          description: maxfeerate btc/kvB(optional and must less than 1 btc/kvB)
     LocalPushtxsParams:
       type: object
       properties:
@@ -1034,7 +1132,7 @@ components:
             example: ""
         maxFeeRate:
           type: number
-          description: Maximum fee rate in BTC/kvB. Optional; must be less than 1 BTC/kvB.
+          description: maxfeerate btc/kvB(optional and must less than 1 btc/kvB)
     TxHistoryItem:
       type: object
       properties:

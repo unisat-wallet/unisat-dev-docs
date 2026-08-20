@@ -1,9 +1,9 @@
 openapi: 3.0.3
 info:
-  title: Ordinals Collection MarketPlace API
+  title: Ordinals Collection Marketplace API
   version: 1.0.4
   description: >-
-    This API provides endpoints for ordinals collection marketplace services
+    This API provides endpoints for Ordinals collection marketplace services, including collection statistics, listing search, address collection summaries, inscription listing details, order preparation, and order submission.
   contact:
     email: contact@unisat.io
   license:
@@ -14,15 +14,23 @@ servers:
   - url: https://open-api-staging.unisat.io
   - url: https://open-api-fractal.unisat.io
 tags:
-  - name: MarketPlace-Collection
-    description: Ordinals Collection MarketPlace Service
+  - name: Marketplace-Collections
+    description: Ordinals Collection Marketplace Service
 paths:
   /v3/market/collection/auction/collection_statistic:
     post:
       operationId: getCollectionStatistic
-      summary: Return a summary of collection.
+      summary: Get collection market statistics
+      description: Query read-only marketplace statistics for a specific Ordinals collection, including floor price, listed count, and volume. This query-style POST only reads market data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -96,9 +104,17 @@ paths:
   /v3/market/collection/auction/collection_statistic_list:
     post:
       operationId: getCollectionStatisticList
-      summary: Return a summary of collection.
+      summary: List collection market statistics
+      description: Query read-only marketplace statistics for Ordinals collections with filters and pagination. This query-style POST only reads market data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -199,9 +215,17 @@ paths:
   /v3/market/collection/auction/collection_summary:
     post:
       operationId: getCollectionSummary
-      summary: Get the collection statistics information at a certain address
+      summary: Get address collection summary
+      description: Query read-only Ordinals collection holdings summary for an address. This query-style POST only reads address and collection data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -255,9 +279,17 @@ paths:
   /v3/market/collection/auction/collection_inscriptions:
     post:
       operationId: getCollectionInscriptions
-      summary: Get the list details of a certain collection at a certain address
+      summary: List address collection inscriptions
+      description: Query read-only inscription details for a collection held by an address. This query-style POST only reads collection data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -325,13 +357,18 @@ paths:
                   - data
   /v3/market/collection/auction/inscription_info:
     post:
-      operationId: getInscriptionInfo
-      summary:
-        Retrieve inscription information, including brc20, names, collection.
-        It is necessary to first determine the inscription type before calling
-        the relevant services.
+      operationId: getCollectionMarketInscriptionInfo
+      summary: Get marketplace inscription detail
+      description: Query read-only marketplace inscription detail for one inscription, including listing and asset metadata. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -348,9 +385,17 @@ paths:
   /v3/market/collection/auction/inscription_info_list:
     post:
       operationId: getInscriptionInfoList
-      summary: Get the basic listing information of the specified inscription list
+      summary: Get marketplace inscription details in batch
+      description: Query read-only marketplace listing details for multiple inscriptions. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -367,9 +412,17 @@ paths:
   /v3/market/collection/auction/list:
     post:
       operationId: getMarketList
-      summary: Retrieve the list information of the market.
+      summary: Search Ordinals collection marketplace listings
+      description: Query read-only Ordinals collection marketplace listings with filters, sorting, and pagination. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -598,9 +651,17 @@ paths:
   /v3/market/collection/auction/actions:
     post:
       operationId: getMarketActions
-      summary: Get information on listings, delistings, and sales.
+      summary: List Ordinals collection marketplace activity history
+      description: Query read-only Ordinals collection marketplace activity history such as listings, delistings, sales, claims, and updates. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe query-style POST: call without extra confirmation when required request parameters are provided.
       requestBody:
         content:
           application/json:
@@ -804,9 +865,17 @@ paths:
   /v3/market/collection/auction/create_put_on:
     post:
       operationId: createMarketPutOn
-      summary: Create listing order.
+      summary: Create collection listing PSBT draft
+      description: Creates an Ordinals collection listing draft and returns auctionId, PSBT, and signing indexes for the seller. Review inscriptionId, collectionId, item metadata, initPrice, unitPrice, marketType, and receiving address before signing or confirming the listing.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -823,9 +892,18 @@ paths:
   /v3/market/collection/auction/confirm_put_on:
     post:
       operationId: confirmMarketPutOn
-      summary: Confirm listing order.
+      summary: Publish signed collection listing
+      description: Confirms the seller-signed listing PSBT and activates the Ordinals collection marketplace listing. Verify auctionId, PSBT encoding, inscriptionId, collection item, listing price, seller address, and market type before submitting.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -842,9 +920,17 @@ paths:
   /v3/market/collection/auction/create_bid_prepare:
     post:
       operationId: createMarketBidPrepare
-      summary: Return params before creating purchase order.
+      summary: Estimate collection purchase fees and balance
+      description: Returns pre-purchase fee estimates, available balances, network fee rate, transaction size, and inscription value for an Ordinals collection listing. This is a quote/material preparation step only; before any later purchase submission, verify auctionId, bidPrice, buyer address, feeRate, and inscription details.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Quote-only marketplace step: safe to call without confirmation, but do not treat the returned estimate as a purchase.
       requestBody:
         content:
           application/json:
@@ -861,9 +947,17 @@ paths:
   /v3/market/collection/auction/create_bid:
     post:
       operationId: createMarketBid
-      summary: Create purchase order.
+      summary: Create collection purchase PSBT order
+      description: Creates an Ordinals collection purchase order and returns bidId, PSBT data, signing indexes, server/network fees, feeRate, and inscription value. Confirm auctionId, bidPrice, buyer address, inscriptionId, collection item, and fee totals before requesting signatures.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -880,9 +974,18 @@ paths:
   /v3/market/collection/auction/confirm_bid:
     post:
       operationId: confirmMarketBid
-      summary: Confirm purchase order.
+      summary: Submit signed collection purchase order
+      description: Submits the signed collection purchase PSBT and returns the settlement transaction id when accepted. Before calling, verify auctionId, bidId, PSBT content, final price, inscriptionId, buyer/seller addresses, and fee values because this can settle the purchase.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -899,9 +1002,17 @@ paths:
   /v3/market/collection/auction/create_put_off:
     post:
       operationId: createMarketPutOff
-      summary: Create delisting order.
+      summary: Create collection delisting PSBT draft
+      description: Creates delisting signing material for an active Ordinals collection marketplace order, including PSBT/signing data when needed. Confirm auctionId, owner addresses, inscriptionId, and collection item before signing because the next confirmation removes the listing.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -918,9 +1029,18 @@ paths:
   /v3/market/collection/auction/confirm_put_off:
     post:
       operationId: confirmMarketPutOff
-      summary: Confirm delisting order.
+      summary: Remove signed collection listing
+      description: Confirms signed delisting data and removes the Ordinals collection listing from the marketplace. Verify auctionId, PSBT/signature payload, owner address, inscriptionId, and collection item before submitting.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:
@@ -937,9 +1057,17 @@ paths:
   /v3/market/collection/auction/create_modify_price:
     post:
       operationId: createMarketModifyPrice
-      summary: Create the order for price adjustment.
+      summary: Create collection price-update PSBT draft
+      description: Creates signing material to update an existing Ordinals collection listing price. Verify auctionId, inscriptionId, collection item, old and new prices, seller address, and returned PSBT/sign indexes before signing.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
       requestBody:
         content:
           application/json:
@@ -956,9 +1084,18 @@ paths:
   /v3/market/collection/auction/confirm_modify_price:
     post:
       operationId: confirmMarketModifyPrice
-      summary: Confirm the order for price adjustment.
+      summary: Apply signed collection listing price update
+      description: Confirms signed price-update data and changes the active Ordinals collection listing price. Verify auctionId, signed PSBT, inscriptionId, seller address, and final price before submitting.
       tags:
-        - MarketPlace-Collection
+        - Marketplace-Collections
+      x-unisat-domain: marketplace
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - State-changing marketplace workflow: ask for explicit user confirmation before calling.
+        - Confirmation step: ensure PSBT/signature payload was reviewed and signed by the user.
       requestBody:
         content:
           application/json:

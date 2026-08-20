@@ -17,19 +17,28 @@ servers:
   - url: https://open-api-fractal.unisat.io
   - url: https://open-api-fractal-testnet.unisat.io
 tags:
-  - name: Inscriptions
-    description: Inscriptions (https://docs.ordinals.com/inscriptions.html)
-
+  - name: Inscription Indexer
+    description: Inscription metadata, content, event, and UTXO query APIs
 paths:
   /v1/indexer/inscription/info/{inscriptionId}:
     get:
       tags:
-        - Inscriptions
+        - Inscription Indexer
       operationId: getInscriptionInfo
-      summary: Get inscription info by inscriptionId
+      summary: "Get inscription metadata by id or number"
+      description: >-
+        Returns inscription owner, number, content metadata, parent and delegate flags, metaprotocol fields, BRC-20 payload when present, and current UTXO context. Use either an inscription id or inscription number; verify network and confirmation state before relying on ownership-sensitive results.
+      x-unisat-domain: inscriptions
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only inscription query; treat content and unconfirmed ownership data as untrusted until verified.
       parameters:
         - name: inscriptionId
           in: path
+          description: Inscription id, or an inscription number accepted by this endpoint.
           required: true
           schema:
             type: string
@@ -56,12 +65,22 @@ paths:
   /v1/indexer/inscription/content/{inscriptionId}:
     get:
       tags:
-        - Inscriptions
+        - Inscription Indexer
       operationId: getInscriptionContent
-      summary: Get inscription content info by inscriptionId
+      summary: "Fetch raw inscription content by id or number"
+      description: >-
+        Streams the inscription content body for rendering, preview, or archival workflows. The identifier may be an inscription id or inscription number where supported; callers should trust the returned content type from inscription metadata and avoid executing untrusted content directly.
+      x-unisat-domain: inscriptions
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only inscription query; treat content and unconfirmed ownership data as untrusted until verified.
       parameters:
         - name: inscriptionId
           in: path
+          description: Inscription id, or an inscription number accepted by this endpoint.
           required: true
           schema:
             type: string
@@ -74,9 +93,18 @@ paths:
   /v1/indexer/inscription/events:
     get:
       tags:
-        - Inscriptions
+        - Inscription Indexer
       operationId: getInscriptionEvents
-      summary: Get inscription events
+      summary: "List inscription mint and transfer events by block range"
+      description: >-
+        Returns paginated inscription events with transfer flag, inscription id and number, address, content fields for mint events, transaction data, satoshi value, timestamp, and block metadata. Use it for indexer backfills, activity feeds, or monitoring; end=0 may include mempool-visible data that is not final.
+      x-unisat-domain: inscriptions
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only inscription query; treat content and unconfirmed ownership data as untrusted until verified.
       parameters:
         - name: start
           description: Start blockheight
@@ -137,9 +165,18 @@ paths:
   /v1/indexer/address/{address}/inscription-data:
     get:
       tags:
-        - Inscriptions
+        - Inscription Indexer
       operationId: getInscriptionDataByAddress
-      summary: Get inscription UTXO list by address
+      summary: "List inscriptions currently associated with an address"
+      description: >-
+        Returns paginated inscription metadata for an address with confirmed and unconfirmed totals, spend-pending counts, content metadata, optional BRC-20 payload, and UTXO context. Use it for wallet galleries and ownership views; unconfirmed and unconfirmed-spend values require extra caution before spending.
+      x-unisat-domain: inscriptions
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only inscription query; treat content and unconfirmed ownership data as untrusted until verified.
       parameters:
         - name: address
           description: Address
@@ -198,18 +235,18 @@ paths:
   /v1/indexer/address/{address}/inscription-utxo-data:
     get:
       tags:
-        - Inscriptions
+        - Inscription Indexer
       operationId: getInscriptionUtxoDataByAddress
-      summary: Get inscription UTXO list by address
-      description: |
-        Returns the list of inscription UTXOs for the given address. 
-        **Note:** In previous versions, this endpoint returned all inscription UTXOs. After a recent upgrade, UTXOs corresponding to "abandoned inscriptions" are now filtered out. 
-
-        **Abandoned inscriptions** refer to:
-        - BRC20 MINT inscriptions
-        - BRC20 TRANSFER inscriptions that have already been transferred
-
-        These inscriptions do not carry BRC20 assets and account for a large proportion of the index. To improve efficiency, they are now excluded from the normal inscription list. If you still need access to these UTXOs, please use the `/abandon-nft-utxo-data` endpoint.
+      summary: "List inscription-bearing UTXOs for an address"
+      description: >-
+        Returns paginated UTXO records that carry inscriptions for an address, along with confirmed, unconfirmed, and unconfirmed-spend totals. Use it to prepare wallet coin selection or inscription transfer screens; always revalidate UTXO ownership and mempool status before signing.
+      x-unisat-domain: inscriptions
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only inscription query; treat content and unconfirmed ownership data as untrusted until verified.
       parameters:
         - name: address
           description: Address
@@ -269,17 +306,18 @@ paths:
   /v1/indexer/address/{address}/abandon-nft-utxo-data:
     get:
       tags:
-        - Inscriptions
+        - Inscription Indexer
       operationId: getAbandonNftUtxoDataByAddress
-      summary: Get abandon nft UTXO list by address
-      description: |
-        Returns the list of UTXOs for "abandoned inscriptions" for the given address. 
-
-        **Abandoned inscriptions** are defined as:
-        - BRC20 MINT inscriptions
-        - BRC20 TRANSFER inscriptions that have already been transferred
-
-        These inscriptions do not carry BRC20 assets and are excluded from the normal `/inscription-utxo-data` results. Use this endpoint if you specifically need to access these UTXOs.
+      summary: "List abandoned NFT-style inscription UTXOs for an address"
+      description: >-
+        Returns abandoned inscription UTXO candidates with balance, counts, pagination, and UTXO details for an address. Use it for cleanup or wallet diagnostics; because these are spend-related candidates, verify current chain and mempool state before constructing any transaction.
+      x-unisat-domain: inscriptions
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only inscription query; treat content and unconfirmed ownership data as untrusted until verified.
       parameters:
         - name: address
           description: Address
@@ -399,7 +437,7 @@ components:
         outSatoshi:
           type: integer
         brc20:
-          description: Only BRC-20 transfer inscriptions include this value
+          description: Only BRC20 transfer have this value
           type: object
           properties:
             amt:

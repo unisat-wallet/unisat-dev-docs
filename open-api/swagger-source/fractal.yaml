@@ -13,17 +13,22 @@ servers:
   - url: https://open-api-fractal.unisat.io
   - url: https://open-api-fractal-testnet.unisat.io
 tags:
-  - name: Fractal
-    description: Fractal Only
+  - name: Public-Fractal
+    description: Public-Fractal APIs
 paths:
   /v1/public/fractal/supply:
     get:
       tags:
-        - Fractal
+        - Public-Fractal
       operationId: getFractalSupply
-      summary: Get circulating FB in fractal mainnet
+      summary: "Get current circulating Fractal supply and block height"
       description: >-
-        Retrieves the circulating supply of Fractal Bitcoin (FB) in the mainnet.
+        Returns the indexed Fractal supply snapshot, including the latest indexed block count and current supply value. Use this read-only endpoint for Fractal dashboards, wallet balance context, and supply monitoring where data may lag the chain tip because of indexer confirmation and synchronization rules.
+      x-unisat-domain: fractal
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       responses:
         "200":
           description: Successful operation
@@ -44,11 +49,16 @@ paths:
   /v1/public/fractal/total-supply:
     get:
       tags:
-        - Fractal
+        - Public-Fractal
       operationId: getFractalTotalSupply
-      summary: Get total supply FB in fractal mainnet
+      summary: "Get total Fractal supply and indexed block height"
       description: >-
-        Retrieves the total supply of Fractal Bitcoin (FB) in the mainnet.
+        Returns the indexed Fractal total supply snapshot with block count and supply amount. Use this read-only endpoint to display aggregate FB issuance, compare supply metrics across environments, or power public Fractal statistics pages without creating orders, signatures, or transactions.
+      x-unisat-domain: fractal
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       responses:
         "200":
           description: Successful operation
@@ -69,11 +79,16 @@ paths:
   /v1/public/address/total:
     get:
       tags:
-        - Fractal
+        - Public-Fractal
       operationId: getFractalTotalAddress
-      summary: Get total address
+      summary: "Get total indexed Fractal address count"
       description: >-
-        Retrieves the total number of addresses in the Fractal network.
+        Returns the total number of Fractal addresses tracked by the indexer as a numeric value. Use this read-only endpoint for network growth metrics, explorer overviews, and public statistics where the count reflects UniSat indexing progress rather than an immediate chain-tip scan.
+      x-unisat-domain: fractal
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       responses:
         "200":
           description: Successful operation
@@ -94,11 +109,16 @@ paths:
   /v1/public/address/rich-list:
     get:
       tags:
-        - Fractal
+        - Public-Fractal
       operationId: getFractalRichList
-      summary: Get address rich list
+      summary: "List richest Fractal addresses by indexed balance"
       description: >-
-        Retrieves a list of addresses sorted by their balance in descending order.
+        Returns a paginated rich list of Fractal address balances, with each item containing the address and indexed balance amount. Use cursor and size to page through holders for explorer leaderboards, distribution analysis, or wallet analytics; results are read-only and may lag final chain state while indexing catches up.
+      x-unisat-domain: fractal
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: cursor
           description: Start offset

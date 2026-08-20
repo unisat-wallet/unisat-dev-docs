@@ -3,8 +3,9 @@ info:
   title: Runes Indexer API
   version: 1.0.0
   description: >-
-    This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel
-    free to send us an email, and we will provide you with an API KEY.
+    Runes Indexer API is a RESTful API for indexing and querying Bitcoin Runes data.
+    It provides endpoints for Runes status, Rune list/search, Rune metadata, holders,
+    address balances, and transferable Rune UTXOs.
   contact:
     email: contact@unisat.io
   license:
@@ -19,16 +20,24 @@ servers:
   - url: https://open-api-fractal.unisat.io
   - url: https://open-api-fractal-testnet.unisat.io
 tags:
-  - name: Runes
-    description: Runes (https://docs.ordinals.com/runes.html)
+  - name: Runes Indexer
+    description: Rune metadata, holder, balance, UTXO, and event query APIs
 paths:
   /v1/indexer/runes/status:
     get:
       tags:
-        - Runes
+        - Runes Indexer
       operationId: getRunesStatus
-      summary: Get runes status
-      description: "Get runes global status"
+      summary: "Get Runes indexer status and minimum rune state"
+      description: >-
+        Returns the latest indexed height, total rune count, current minimum rune, and halving block count. Use it to check Runes indexer freshness before reading rune metadata, holder lists, balances, UTXOs, or event history; data may lag new confirmations.
+      x-unisat-domain: runes
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only Runes query; revalidate UTXO state before constructing spends.
       responses:
         "200":
           description: successful operation
@@ -49,18 +58,26 @@ paths:
   /v1/indexer/runes/info-list:
     get:
       tags:
-        - Runes
+        - Runes Indexer
       operationId: getRunesList
-      summary: Get runes list
-      description: Retrieve a paginated list of Runes with optional search, completion, sorting, and pagination filters.
+      summary: "Search and list Rune metadata entries"
+      description: >-
+        Returns paginated Rune entries with rune id, raw and spaced names, divisibility, symbol, etching transaction, premine, terms, mints, burned amount, holders, transactions, supply, mintability, and remaining amount. Use it for Rune discovery, filtering, and ranking; spaced names may contain bullet separators.
+      x-unisat-domain: runes
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only Runes query; revalidate UTXO state before constructing spends.
       parameters:
         - name: rune
           in: query
-          description: "search by rune spacedRune"
+          description: "Search by spaced Rune name, for example DOG•GO•TO•THE•MOON."
           required: false
           schema:
             type: string
-            example: 0
+            example: "DOG•GO•TO•THE•MOON"
         - name: sort
           in: query
           description: "by (holders/transactions/timestamp)"
@@ -119,14 +136,22 @@ paths:
   /v1/indexer/runes/{runeid}/info:
     get:
       tags:
-        - Runes
+        - Runes Indexer
       operationId: getRuneInfo
-      summary: Get rune info by runeid
-      description: Retrieve detailed information for a specific Rune by Rune ID.
+      summary: "Get detailed metadata for a Rune"
+      description: >-
+        Returns one Rune entry by block:tx rune id, including names, symbol, divisibility, etching transaction, premine, mint terms, supply, burned amount, holder and transaction counts, mintability, and remaining supply. Use it for Rune detail pages and validation before balance or holder queries.
+      x-unisat-domain: runes
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only Runes query; revalidate UTXO state before constructing spends.
       parameters:
         - name: runeid
           in: path
-          description: Rune ID
+          description: "Rune id in block:tx format, for example 840000:3."
           required: true
           schema:
             type: string
@@ -150,14 +175,22 @@ paths:
   /v1/indexer/runes/{runeid}/holders:
     get:
       tags:
-        - Runes
+        - Runes Indexer
       operationId: getRuneHolders
-      summary: Get runes holders by runeid
-      description: Retrieve holders for a specific Rune by Rune ID.
+      summary: "List holders for a Rune"
+      description: >-
+        Returns holder addresses and Rune amounts for a specific block:tx rune id with pagination totals. Use it for holder distribution and ownership analysis; amounts are indexed token balances and do not authorize transfers or UTXO spends.
+      x-unisat-domain: runes
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only Runes query; revalidate UTXO state before constructing spends.
       parameters:
         - name: runeid
           in: path
-          description: Rune ID
+          description: "Rune id in block:tx format, for example 840000:3."
           required: true
           schema:
             type: string
@@ -206,14 +239,22 @@ paths:
   /v1/indexer/address/{address}/runes/balance-list:
     get:
       tags:
-        - Runes
+        - Runes Indexer
       operationId: getRunesBalanceList
-      summary: Get runes balance list by address
-      description: Retrieve Rune balances held by an address.
+      summary: "List all Rune balances for an address"
+      description: >-
+        Returns paginated Rune balances held by an address, including rune id, raw and spaced names, symbol, divisibility, and amount. Use it for wallet portfolio displays or account audits; balances are indexer-derived and should be reconciled with UTXOs before spending.
+      x-unisat-domain: runes
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only Runes query; revalidate UTXO state before constructing spends.
       parameters:
         - name: address
           in: path
-          description: Bitcoin address
+          description: "Bitcoin address."
           required: true
           schema:
             type: string
@@ -259,20 +300,28 @@ paths:
   /v1/indexer/address/{address}/runes/{runeid}/balance:
     get:
       tags:
-        - Runes
+        - Runes Indexer
       operationId: getRunesBalance
-      summary: Get runes balance by address and runeid
-      description: Retrieve the balance of a specific Rune held by an address.
+      summary: "Get an address's balance for one Rune"
+      description: >-
+        Returns the indexed amount and Rune identity fields for one address and block:tx rune id. Use it for single-token wallet views or pre-transfer checks; spend construction must still inspect Rune UTXOs and current mempool state.
+      x-unisat-domain: runes
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only Runes query; revalidate UTXO state before constructing spends.
       parameters:
         - name: address
           in: path
-          description: Bitcoin address
+          description: "Bitcoin address."
           required: true
           schema:
             type: string
         - name: runeid
           in: path
-          description: Rune ID
+          description: "Rune id in block:tx format, for example 840000:3."
           required: true
           schema:
             type: string
@@ -296,20 +345,28 @@ paths:
   /v1/indexer/runes/utxo/{txid}/{index}/balance:
     get:
       tags:
-        - Runes
+        - Runes Indexer
       operationId: getRunesUtxoBalance
-      summary: Get runes balance by utxo
-      description: Retrieve Rune balances held by a specific transaction output.
+      summary: "Get Rune balances carried by a specific UTXO"
+      description: >-
+        Returns all Rune balances associated with one transaction output, including rune id, names, symbol, divisibility, and amount. Use it for coin selection diagnostics or validating a Rune-bearing UTXO; callers must confirm the UTXO is still unspent before spending.
+      x-unisat-domain: runes
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only Runes query; revalidate UTXO state before constructing spends.
       parameters:
         - name: txid
           in: path
-          description: Transaction ID
+          description: ""
           required: true
           schema:
             type: string
         - name: index
           in: path
-          description: Output index (vout) of the transaction
+          description: ""
           required: true
           schema:
             type: string
@@ -335,20 +392,28 @@ paths:
   /v1/indexer/address/{address}/runes/{runeid}/utxo:
     get:
       tags:
-        - Runes
+        - Runes Indexer
       operationId: getRunesUtxoByAddressAndRuneid
-      summary: Get utxo runes balance by address and runeid
-      description: Retrieve UTXOs containing a specific Rune for an address.
+      summary: "List an address's transferable UTXOs for one Rune"
+      description: >-
+        Returns UTXOs for an address that carry the selected Rune, including address, satoshi value, script, outpoint, and embedded Rune balances. Use it to prepare transfer candidates; revalidate ownership, dust policy, and mempool state before signing or broadcasting.
+      x-unisat-domain: runes
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only Runes query; revalidate UTXO state before constructing spends.
       parameters:
         - name: address
           in: path
-          description: Bitcoin address
+          description: ""
           required: true
           schema:
             type: string
         - name: runeid
           in: path
-          description: Rune ID
+          description: "Rune id in block:tx format, for example 840000:3."
           required: true
           schema:
             type: string
@@ -393,10 +458,18 @@ paths:
   /v1/indexer/runes/event:
     get:
       tags:
-        - Runes
+        - Runes Indexer
       operationId: getRunesEvents
-      summary: Get Runes Events
-      description: Get the full history events of Runes.
+      summary: "Search Rune etch, mint, burn, send, and receive events"
+      description: >-
+        Returns paginated Rune events with type, address, amount, height, transaction index, txid, timestamp, raw rune name, and rune id. Use it for activity feeds, compliance exports, or block and transaction investigations; results are read-only indexer events and may lag recent confirmations.
+      x-unisat-domain: runes
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only Runes query; revalidate UTXO state before constructing spends.
       parameters:
         - name: rune
           description: Filter by rune

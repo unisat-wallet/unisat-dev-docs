@@ -3,8 +3,7 @@ info:
   title: Inscribe API
   version: 1.0.0
   description: >-
-    This is UniSat Wallet Open API. If you wish to use the OpenAPI, please feel
-    free to send us an email, and we will provide you with an API KEY.
+    Inscribe API provides order-based inscription workflows, including reading order summaries and status, creating inscription orders, and checking fees. Order creation endpoints are POST operations that create payment/order state and require explicit user confirmation before execution.
   contact:
     email: contact@unisat.io
   license:
@@ -20,16 +19,23 @@ servers:
   - url: https://open-api-fractal-testnet.unisat.io
 tags:
   - name: Inscribe
-    description: Please read the [Inscribe Guide](https://github.com/unisat-wallet/unisat-dev-docs/blob/master/open-api/inscribe-guide.md) before using the API.
-  - name: Inscribe Deprecated
-    description: Deprecated APIs, will be removed in future versions.
+    description: Multi-network inscription order workflow for querying orders, creating payment-backed orders, requesting commit data, submitting signatures, broadcasting reveal/refund transactions, and checking refund estimates.
 paths:
   /v2/inscribe/order/summary:
     get:
       tags:
         - Inscribe
       operationId: getOrderSummary
-      summary: Get order summary of current apikey
+      summary: Summarize inscription order counts
+      description: >-
+        Returns orderCount totals by status for the current API key, including pending, inscribing, minted, closed, and refunded buckets. Use it for dashboard totals and reconcile the counts before drilling into order lists; it never creates payment state or broadcasts transactions.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe read-only inscription query: call without extra confirmation when required identifiers are provided.
       responses:
         "200":
           description: Successful operation
@@ -52,8 +58,16 @@ paths:
       tags:
         - Inscribe
       operationId: getOrderList
-      summary: Get order list of current apikey
-      description: Get order list of current apikey
+      summary: List inscription orders with status details
+      description: >-
+        Returns paginated inscription orders, including orderId, status, payment amounts, receiveAddress, fee fields, counts, and optional file details. Use it to monitor order progress or reconcile payments; check status, paidAmount, amount, and files before taking follow-up signing or refund actions.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe read-only inscription query: call without extra confirmation when required identifiers are provided.
       parameters:
         - name: cursor
           description: Start offset
@@ -143,11 +157,16 @@ paths:
       tags:
         - Inscribe
       operationId: getOrderById
-      summary: Search an order by orderId
-      description: |-
-        It's recommended to query the latest status every 10 seconds.
-
-        _amount = outputValue*count + minerFee + serviceFee + devFee_
+      summary: Get one inscription order state
+      description: >-
+        Returns a single order with status, payAddress, receiveAddress, paidAmount, required amount, fee breakdown, inscription counts, file statuses, and refund fields. Poll it before payment, commit signing, reveal signing, or refund decisions; verify status and amount fields because this endpoint is read-only.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe read-only inscription query: call without extra confirmation when required identifiers are provided.
       parameters:
         - name: orderId
           in: path
@@ -176,8 +195,17 @@ paths:
       tags:
         - Inscribe
       operationId: createOrder
-      summary: Create an order
-      description: Create an order to inscribe something
+      summary: Create generic inscription payment order
+      description: >-
+        Creates an inscription order for arbitrary files and returns orderId, payAddress, required amount, receiveAddress, fee breakdown, and order/file status. Confirm receiveAddress, file data, outputValue, feeRate, dev fee fields, and expected payment amount before calling because it starts payable order state.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
       requestBody:
         content:
           application/json:
@@ -203,11 +231,19 @@ paths:
   /v2/inscribe/order/create/brc20-deploy:
     post:
       tags:
-        - Inscribe Deprecated
+        - Inscribe
       operationId: createOrderBRC20Deploy
-      summary: Create an order to inscribe BRC-20 DEPLOY (Deprecated)
+      summary: Create deprecated BRC-20 deploy inscription order
       description: >-
-        Deprecated, please use /order/create instead
+        Creates a payable inscription order for legacy BRC-20 deploy content and returns orderId, payAddress, amount, receiveAddress, fee fields, and status. Confirm ticker, max, limit, receiveAddress, feeRate, outputValue, and payment amount before use; prefer newer workflows when available.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
       requestBody:
         content:
           application/json:
@@ -233,11 +269,19 @@ paths:
   /v2/inscribe/order/create/brc20-mint:
     post:
       tags:
-        - Inscribe Deprecated
+        - Inscribe
       operationId: createOrderBRC20Mint
-      summary: Create an order to inscribe BRC-20 MINT (Deprecated)
+      summary: Create deprecated BRC-20 mint inscription order
       description: >-
-        Deprecated, please use /order/create instead
+        Creates a payable inscription order for legacy BRC-20 mint content and returns orderId, payAddress, amount, receiveAddress, fee fields, and status. Confirm ticker, mint amount, count, receiveAddress, feeRate, outputValue, and total payment before use; prefer newer workflows when available.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
       requestBody:
         content:
           application/json:
@@ -263,11 +307,19 @@ paths:
   /v2/inscribe/order/create/brc20-transfer:
     post:
       tags:
-        - Inscribe Deprecated
+        - Inscribe
       operationId: createOrderBRC20Transfer
-      summary: Create an order to inscribe BRC-20 TRANSFER (Deprecated)
+      summary: Create deprecated BRC-20 transfer inscription order
       description: >-
-        Deprecated, please use /order/create instead
+        Creates a payable inscription order for legacy BRC-20 transfer content and returns orderId, payAddress, amount, receiveAddress, fee fields, and status. Confirm ticker, transfer amount, receiveAddress, feeRate, outputValue, and payment amount before use; prefer newer workflows when available.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
       requestBody:
         content:
           application/json:
@@ -295,7 +347,16 @@ paths:
       tags:
         - Inscribe
       operationId: requestCommit
-      summary: Request commit txs of some order
+      summary: Prepare inscription commit PSBT
+      description: >-
+        Returns commit transaction PSBT hex and inputsToSign for a paid inscription order. Confirm orderId, payerAddress, payerPubkey, payment status, and signing indexes before signing; this prepares spend material but later sign endpoints advance the on-chain workflow.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Prepares payment/signing material: ask for confirmation and verify orderId, payer address, pubkey, PSBT, and signing indexes.
       requestBody:
         content:
           application/json:
@@ -323,7 +384,16 @@ paths:
       tags:
         - Inscribe
       operationId: signCommit
-      summary: Sign commit txs of some order
+      summary: Submit signed inscription commit PSBT
+      description: >-
+        Submits the signed commit PSBT for an inscription order and returns next-step PSBT/signing material when accepted. Verify orderId, PSBT content, payer inputs, payment amount, and fee assumptions before calling because it advances the transaction workflow.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Submits signed transaction data: require explicit confirmation and verify orderId, PSBT, addresses, and fees before calling.
       requestBody:
         content:
           application/json:
@@ -351,7 +421,16 @@ paths:
       tags:
         - Inscribe
       operationId: signReveal
-      summary: Sign reveal txs of some order
+      summary: Submit signed inscription reveal PSBT
+      description: >-
+        Submits the signed reveal PSBT and returns the resulting inscriptionId when the reveal is accepted. Verify orderId, PSBT content, receiveAddress, file payload, and fees before calling because this can finalize inscription creation on-chain.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Submits signed transaction data: require explicit confirmation and verify orderId, PSBT, addresses, and fees before calling.
       requestBody:
         content:
           application/json:
@@ -377,11 +456,19 @@ paths:
   /v2/inscribe/order/create/brc20-5byte-mint:
     post:
       tags:
-        - Inscribe Deprecated
+        - Inscribe
       operationId: createOrderBRC205ByteMint
-      summary: Create an order to inscribe BRC-20 MINT (Deprecated)
+      summary: Create deprecated BRC-20 5-byte mint order
       description: >-
-        Deprecated, please use /order/create instead
+        Creates a payable inscription order for legacy BRC-20 5-byte mint content and returns orderId, payAddress, amount, receiveAddress, fee fields, and status. Confirm deployer address/pubkey, ticker, mint amount, receiveAddress, feeRate, outputValue, and payment amount before use; prefer newer workflows when available.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
       requestBody:
         content:
           application/json:
@@ -407,11 +494,18 @@ paths:
   /v2/inscribe/order/request-commit/brc20-5byte-mint:
     post:
       tags:
-        - Inscribe Deprecated
+        - Inscribe
       operationId: requestCommitBRC205ByteMint
-      summary: Request commit txs of brc20-5byte-mint. (Deprecated)
+      summary: Prepare deprecated 5-byte commit PSBT
       description: >-
-        Deprecated, please use /order/request-commit instead
+        Returns commit PSBT hex and inputsToSign for a paid legacy BRC-20 5-byte mint order. Confirm orderId, payerAddress, payerPubkey, payment status, and signing indexes before signing; deprecated endpoint kept for compatibility.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Prepares payment/signing material: ask for confirmation and verify orderId, payer address, pubkey, PSBT, and signing indexes.
       requestBody:
         content:
           application/json:
@@ -437,11 +531,18 @@ paths:
   /v2/inscribe/order/sign-commit/brc20-5byte-mint:
     post:
       tags:
-        - Inscribe Deprecated
+        - Inscribe
       operationId: signCommitBRC205ByteMint
-      summary: Sign commit txs of brc20-5byte-mint (Deprecated)
+      summary: Submit deprecated signed 5-byte commit
       description: >-
-        Deprecated, please use /order/sign-commit instead
+        Submits the signed commit PSBT for a legacy BRC-20 5-byte mint order and returns next-step PSBT/signing material when accepted. Verify orderId, PSBT content, payer inputs, payment amount, and fees before calling; deprecated endpoint kept for compatibility.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Submits signed transaction data: require explicit confirmation and verify orderId, PSBT, addresses, and fees before calling.
       requestBody:
         content:
           application/json:
@@ -467,11 +568,18 @@ paths:
   /v2/inscribe/order/sign-reveal/brc20-5byte-mint:
     post:
       tags:
-        - Inscribe Deprecated
+        - Inscribe
       operationId: signRevealBRC205ByteMint
-      summary: Sign reveal txs of brc20-5byte-mint (Deprecated)
+      summary: Submit deprecated signed 5-byte reveal
       description: >-
-        Deprecated, please use /order/sign-reveal instead
+        Submits the signed reveal PSBT for a legacy BRC-20 5-byte mint order and returns inscriptionId when accepted. Verify orderId, PSBT content, receiveAddress, inscription payload, and fees before calling; deprecated endpoint kept for compatibility.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Submits signed transaction data: require explicit confirmation and verify orderId, PSBT, addresses, and fees before calling.
       requestBody:
         content:
           application/json:
@@ -499,7 +607,17 @@ paths:
       tags:
         - Inscribe
       operationId: createOrderRunesEtch
-      summary: Create an order to etch Runes
+      summary: Create Runes etch inscription order
+      description: >-
+        Creates a payable inscription order for Runes etching and returns orderId, payAddress, amount, receiveAddress, fee fields, and status. Confirm rune name/symbol/divisibility, premine and terms, file payload, receiveAddress, feeRate, outputValue, and total payment before calling.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
       requestBody:
         content:
           application/json:
@@ -527,7 +645,17 @@ paths:
       tags:
         - Inscribe
       operationId: createOrderRunesMint
-      summary: Create an order to mint Runes
+      summary: Create Runes mint inscription order
+      description: >-
+        Creates a payable inscription order for Runes minting and returns orderId, payAddress, amount, receiveAddress, fee fields, and status. Confirm runeid, count, receiveAddress, feeRate, outputValue, dev fee fields, and total payment before calling.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
       requestBody:
         content:
           application/json:
@@ -556,10 +684,16 @@ paths:
       tags:
         - Inscribe
       operationId: refundOrder
-      summary: Process a refund for an order.
+      summary: Submit inscription order refund
       description: >-
-        When the amount paid by the user includes inscriptions, inscribing
-        cannot be performed. Refund can be requested through this method.
+        Requests a refund transaction for a paid inscription order and returns the refund txid when accepted. Verify orderId, order status, paidAmount, safe refund amount, refundFeeRate, and destination assumptions before calling because it can move funds.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Funds-moving refund workflow: require explicit confirmation and verify orderId, refundFeeRate, paid amount, and safe refund amount.
       parameters:
         - name: orderId
           in: path
@@ -605,11 +739,16 @@ paths:
       tags:
         - Inscribe
       operationId: estimateRefundOrder
-      summary: Estimate the size of the refund transaction
+      summary: Estimate inscription refund amount
       description: >-
-        RefundAmount = PaidAmount - RefundTxSize * RefundFeeRate. This value
-        must be greater than SafeRefundAmount, otherwise there's a risk of
-        losing inscriptions used for payment due to errors.
+        Returns paidAmount, refundTxSize, and safeRefundAmount for an inscription order refund check. Use it before refund submission to compare fee impact and recoverable value; it never creates, signs, or broadcasts the refund transaction.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe read-only inscription query: call without extra confirmation when required identifiers are provided.
       parameters:
         - name: orderId
           in: path

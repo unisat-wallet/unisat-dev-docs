@@ -16,16 +16,22 @@ servers:
   - url: https://open-api-staging.unisat.io
   - url: https://open-api-signet.unisat.io
 tags:
-  - name: Alkanes
-    description: Alkanes (https://alkanes.build/docs/learn/intro)
+  - name: Indexer-Alkanes
+    description: Indexer-Alkanes APIs
 paths:
   /v1/indexer/alkanes/status:
     get:
       tags:
-        - Alkanes
+        - Indexer-Alkanes
       operationId: getAlkanesStatus
-      summary: Get alkanes status
-      description: "Get alkanes global status"
+      summary: Get Alkanes indexer status, indexed height, and asset count
+      description: >-
+        Returns the current Alkanes indexer progress and runtime versions, including indexed block height, total tracked Alkane assets, metashrew version, and alkanes-rs version.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       responses:
         "200":
           description: successful operation
@@ -46,10 +52,16 @@ paths:
   /v1/indexer/alkanes/info-list:
     get:
       tags:
-        - Alkanes
+        - Indexer-Alkanes
       operationId: getAlkanesInfoList
-      summary: Get alkanes list
-      description: Retrieve a paginated list of Alkanes assets with optional type, sorting, and pagination filters.
+      summary: List indexed Alkanes assets across tokens, NFTs, and collections
+      description: >-
+        Returns a paginated catalog of Alkane asset metadata. Use it for global discovery across asset types, with optional type filtering and sorting by creation time or alkaneid.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: type
           in: query
@@ -57,14 +69,20 @@ paths:
           required: false
           schema:
             type: string
-            enum: [token, collection, nft, contract]
+            enum:
+              - token
+              - collection
+              - nft
+              - contract
         - name: sortBy
           in: query
           description: "sort by timestamp, alkaneid, default=timestamp"
           required: false
           schema:
             type: string
-            enum: [timestamp, alkaneid]
+            enum:
+              - timestamp
+              - alkaneid
             default: timestamp
         - name: order
           in: query
@@ -72,7 +90,9 @@ paths:
           required: false
           schema:
             type: string
-            enum: [asc, desc]
+            enum:
+              - asc
+              - desc
             default: asc
         - name: start
           in: query
@@ -119,14 +139,20 @@ paths:
   /v1/indexer/alkanes/{alkaneid}/info:
     get:
       tags:
-        - Alkanes
+        - Indexer-Alkanes
       operationId: getAlkanesInfo
-      summary: Get alkane info by alkaneid
-      description: Retrieve detailed information for a specific Alkane asset by Alkane ID.
+      summary: Get metadata for one Alkane asset by alkaneid
+      description: >-
+        Returns the asset type and type-specific metadata for a single Alkane, such as token supply fields, NFT content fields, or collection supply and holder counts.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: alkaneid
           in: path
-          description: Alkane ID
+          description: "Alkane id in block:tx format, for example 2:1."
           required: true
           schema:
             type: string
@@ -150,10 +176,16 @@ paths:
   /v1/indexer/alkanes/token-list:
     get:
       tags:
-        - Alkanes
+        - Indexer-Alkanes
       operationId: getAlkanesTokenList
-      summary: Get alkanes token list
-      description: Retrieve a paginated list of Alkanes token assets with optional filters.
+      summary: List fungible Alkanes tokens with supply and holder metadata
+      description: >-
+        Returns token-type Alkanes only, including token name, symbol, divisibility, supply, mint progress, and holder count. Supports lookup by alkaneid or name and sorted pagination.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: alkaneid
           in: query
@@ -174,7 +206,9 @@ paths:
           required: false
           schema:
             type: string
-            enum: [timestamp, alkaneid]
+            enum:
+              - timestamp
+              - alkaneid
             default: timestamp
         - name: order
           in: query
@@ -182,7 +216,9 @@ paths:
           required: false
           schema:
             type: string
-            enum: [asc, desc]
+            enum:
+              - asc
+              - desc
             default: asc
         - name: start
           in: query
@@ -229,14 +265,20 @@ paths:
   /v1/indexer/alkanes/{alkaneid}/holders:
     get:
       tags:
-        - Alkanes
+        - Indexer-Alkanes
       operationId: getAlkanesHolders
-      summary: Get alkanes holders by alkaneid
-      description: Retrieve holders for a specific Alkane asset by Alkane ID.
+      summary: List holders and balances for an Alkane asset
+      description: >-
+        Returns paginated holder addresses and their indexed amount for the selected Alkane. Use it to inspect token distribution or collection ownership concentration.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: alkaneid
           in: path
-          description: Alkane ID
+          description: "Alkane id in block:tx format, for example 2:1."
           required: true
           schema:
             type: string
@@ -285,14 +327,20 @@ paths:
   /v1/indexer/alkanes/{alkaneid}/collection-items:
     get:
       tags:
-        - Alkanes
+        - Indexer-Alkanes
       operationId: getAlkanesCollectionItems
-      summary: Get collection items
-      description: Retrieve collection items for a specific Alkanes collection by Alkane ID.
+      summary: List NFT or child assets that belong to an Alkane collection
+      description: >-
+        Returns paginated Alkane item metadata for a collection, including each item's asset type and NFT or token details when available.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: alkaneid
           in: path
-          description: Alkane ID
+          description: ""
           required: true
           schema:
             type: string
@@ -339,14 +387,20 @@ paths:
   /v1/indexer/alkanes/{alkaneid}/contract-events:
     get:
       tags:
-        - Alkanes
+        - Indexer-Alkanes
       operationId: getAlkanesContractEvents
-      summary: Get contract events
-      description: Retrieve contract events for a specific Alkane asset within a block height range.
+      summary: List contract execution events for an Alkane over a block range
+      description: >-
+        Returns indexed contract events with caller, opcode, fuel, inputs, execution status, block height, txid, and vout. Use it to audit contract activity within a bounded height range.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: alkaneid
           in: path
-          description: Alkane ID
+          description: ""
           required: true
           schema:
             type: string
@@ -405,20 +459,26 @@ paths:
   /v1/indexer/alkanes/utxo/{txid}/{index}/balance:
     get:
       tags:
-        - Alkanes
+        - Indexer-Alkanes
       operationId: getAlkanesUtxoBalance
-      summary: Get alkanes utxo balance
-      description: Retrieve Alkanes balances held by a specific transaction output.
+      summary: Get all Alkane balances attached to a specific UTXO
+      description: >-
+        Returns the Alkane assets and amounts indexed on one transaction output, with token, NFT, or collection metadata attached when available.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: txid
           in: path
-          description: Transaction ID
+          description: ""
           required: true
           schema:
             type: string
         - name: index
           in: path
-          description: Output index (vout) of the transaction
+          description: ""
           required: true
           schema:
             type: string
@@ -444,20 +504,26 @@ paths:
   /v1/indexer/address/{address}/alkanes/{alkaneid}/utxo:
     get:
       tags:
-        - Alkanes
+        - Indexer-Alkanes
       operationId: getAddressAlkanesUtxo
-      summary: Get utxo alkanes balance by address and alkaneid
-      description: Retrieve UTXOs containing a specific Alkane asset for an address.
+      summary: List an address's UTXOs that carry a specific Alkane
+      description: >-
+        Returns spendable transaction outputs for an address that contain the selected Alkane, including satoshi value, scriptPubKey, confirmations, and indexed Alkane balances on each UTXO.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: address
           in: path
-          description: Bitcoin address
+          description: ""
           required: true
           schema:
             type: string
         - name: alkaneid
           in: path
-          description: Alkane ID
+          description: ""
           required: true
           schema:
             type: string
@@ -503,14 +569,20 @@ paths:
   /v1/indexer/address/{address}/alkanes/token-list:
     get:
       tags:
-        - Alkanes
+        - Indexer-Alkanes
       operationId: getAddressAlkanesTokenList
-      summary: Get address alkanes token list
-      description: Retrieve Alkanes token balances owned by an address.
+      summary: List fungible Alkanes tokens held by an address
+      description: >-
+        Returns token assets associated with an address, including each token's metadata and paginated list context. Use it for wallet asset discovery before querying per-token UTXOs or transfer history.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: address
           in: path
-          description: Bitcoin address
+          description: ""
           required: true
           schema:
             type: string
@@ -559,14 +631,20 @@ paths:
   /v1/indexer/address/{address}/alkanes/collection-list:
     get:
       tags:
-        - Alkanes
+        - Indexer-Alkanes
       operationId: getAddressAlkanesCollectionList
-      summary: Get address alkanes collection list
-      description: Retrieve Alkanes collections owned by an address.
+      summary: List Alkane collections associated with an address
+      description: >-
+        Returns collection-type Alkane metadata indexed for an address, including collection name, supply, mint progress, and holder count when available.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: address
           in: path
-          description: Bitcoin address
+          description: ""
           required: true
           schema:
             type: string
@@ -615,20 +693,26 @@ paths:
   /v1/indexer/address/{address}/alkanes/{alkaneid}/collection-items:
     get:
       tags:
-        - Alkanes
+        - Indexer-Alkanes
       operationId: getAddressAlkanesCollectionItems
-      summary: Get address collection items by alkaneid
-      description: Retrieve items from a specific Alkanes collection owned by an address.
+      summary: List an address's items from a specific Alkane collection
+      description: >-
+        Returns collection item metadata scoped to one address, useful for showing which NFTs or child assets from a collection are held by that wallet.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: address
           in: path
-          description: Bitcoin address
+          description: ""
           required: true
           schema:
             type: string
         - name: alkaneid
           in: path
-          description: Alkane ID
+          description: ""
           required: true
           schema:
             type: string
@@ -677,20 +761,26 @@ paths:
   /v1/indexer/address/{address}/alkanes/{alkaneid}/transfer-history:
     get:
       tags:
-        - Alkanes
+        - Indexer-Alkanes
       operationId: getAddressAlkanesTransferHistory
-      summary: Get transfer history
-      description: Retrieve transfer history for a specific Alkane asset and address within a block height range.
+      summary: List an address's transfer history for a specific Alkane
+      description: >-
+        Returns indexed transfer records with block height, txid, transfer type, subtype, address, and amount. Use it to build an address-level activity view over a bounded height range.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
       parameters:
         - name: address
           in: path
-          description: Bitcoin address
+          description: ""
           required: true
           schema:
             type: string
         - name: alkaneid
           in: path
-          description: Alkane ID
+          description: ""
           required: true
           schema:
             type: string
@@ -773,7 +863,11 @@ components:
             $ref: "#/components/schemas/AlkanesUTXOBalance"
     AlkaneType:
       type: string
-      enum: [token, collection, nft, contract]
+      enum:
+        - token
+        - collection
+        - nft
+        - contract
       example: token
     AlkanesUTXOBalance:
       type: object

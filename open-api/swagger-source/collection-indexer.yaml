@@ -3,7 +3,7 @@ info:
   title: Collection Indexer API
   version: 1.0.4
   description: >-
-    This is the API for collections. Currently, it only indexes a single whitelisted collection.
+    Collection Indexer API provides read-only collection indexing endpoints for collection status, collection details, holders, address collection summaries, and collection item ownership. It is separate from marketplace listing and order APIs.
   contact:
     email: contact@unisat.io
   license:
@@ -13,19 +13,24 @@ servers:
   - url: https://open-api.unisat.io
     description: Mainnet endpoint for public.
 tags:
-  - name: Collection-Indexer
-    description: Collection Indexer Service (Experience Stage)
+  - name: Collection Indexer
+    description: Read-only collection metadata, ownership, and item query APIs
 paths:
   /v1/collection-indexer/collection/status:
     get:
       tags:
-        - Collection-Indexer
+        - Collection Indexer
       operationId: getCollectionStatus
-      summary: Return the overall information of the collection service
+      summary: "Get collection indexer height and collection count"
       description: >-
-        Returns the latest height of the collection indexer, the last handled
-        height, and the total number of collections.
-
+        Returns newest chain height, last handled indexer height, and total indexed collections. Use it to check freshness before reading collection metadata, holder lists, address collection summaries, or item ownership; this indexer is separate from marketplace listing and order state.
+      x-unisat-domain: collections
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only collection indexer query; marketplace listings and orders are out of scope.
       responses:
         "200":
           description: Default Response
@@ -55,13 +60,18 @@ paths:
   /v1/collection-indexer/collection/{collectionId}/info:
     get:
       tags:
-        - Collection-Indexer
+        - Collection Indexer
       operationId: getCollectionInfo
-      summary: Return the details of the specified collection
+      summary: "Get collection supply and holder summary"
       description: >-
-        Returns the details of a specific collection, including its name, icon,
-        supply, description, and social media links.
-
+        Returns a collection's indexed height, holder count, and total item count, optionally at a specified height. Use it for lightweight collection detail headers or historical snapshots; marketplace floor, listings, and order activity are not included.
+      x-unisat-domain: collections
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only collection indexer query; marketplace listings and orders are out of scope.
       parameters:
         - schema:
             type: number
@@ -102,13 +112,18 @@ paths:
   /v1/collection-indexer/collection/{collectionId}/holders:
     get:
       tags:
-        - Collection-Indexer
+        - Collection Indexer
       operationId: getCollectionHolders
-      summary: Return the owner information of a specific collection
+      summary: "List collection holders and item counts"
       description: >-
-        Returns the list of addresses that hold items from a specific collection,
-        along with the count of items each address holds.
-
+        Returns paginated holder addresses and item counts for a collection, optionally at a specified height. Use it for holder distribution views and ownership analytics; it reflects indexed ownership only and does not include marketplace listing state.
+      x-unisat-domain: collections
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only collection indexer query; marketplace listings and orders are out of scope.
       parameters:
         - schema:
             type: number
@@ -165,13 +180,18 @@ paths:
   /v1/collection-indexer/address/{address}/collection/list:
     get:
       tags:
-        - Collection-Indexer
+        - Collection Indexer
       operationId: getAddressCollectionList
-      summary: Return the collection summary for the specified address.
+      summary: "List collections owned by an address"
       description: >-
-        Returns the summary of all collections that the specified address holds,
-        including collection name, icon, supply, and social media links.
-
+        Returns paginated collection summaries for an address, including owned item count, collection name, icon inscription and URL, content type, supply, collection id, description, and social links. Use it for wallet collection portfolios; it does not report listing or order availability.
+      x-unisat-domain: collections
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only collection indexer query; marketplace listings and orders are out of scope.
       parameters:
         - schema:
             type: number
@@ -246,13 +266,18 @@ paths:
   /v1/collection-indexer/collection/{collectionId}/items:
     get:
       tags:
-        - Collection-Indexer
+        - Collection Indexer
       operationId: getCollectionItems
-      summary: Return the list of inscriptions for a specific collection.
+      summary: "List indexed items in a collection"
       description: >-
-        Returns the list of inscriptions that belong to a specific collection,
-        including details such as inscription ID, name, content type, and height.
-
+        Returns paginated collection item records with inscription id and number, item and inscription names, content metadata, indexed height, holder count, and collection totals. Use it for collection item grids or metadata backfills; content bodies may be untrusted and should be rendered safely.
+      x-unisat-domain: collections
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only collection indexer query; marketplace listings and orders are out of scope.
       parameters:
         - schema:
             type: number
@@ -329,13 +354,18 @@ paths:
   /v1/collection-indexer/address/{address}/collection/{collectionId}/summary:
     get:
       tags:
-        - Collection-Indexer
+        - Collection Indexer
       operationId: getAddressCollectionSummary
-      summary: Return the summary of a specific collection for the designated address.
+      summary: "Get an address's ownership summary for a collection"
       description: >-
-        Returns the summary of a specific collection for a designated address,
-        including collection name, icon, supply, description, and social media links.
-
+        Returns the address's item count plus collection name, icon, supply, collection id, description, and social links for one collection. Use it for wallet collection detail cards or ownership verification; marketplace order state and listing prices are not included.
+      x-unisat-domain: collections
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only collection indexer query; marketplace listings and orders are out of scope.
       parameters:
         - schema:
             type: number
@@ -397,13 +427,18 @@ paths:
   /v1/collection-indexer/address/{address}/collection/{collectionId}/items:
     get:
       tags:
-        - Collection-Indexer
+        - Collection Indexer
       operationId: getAddressCollectionItems
-      summary: Get the list of inscriptions for a specific collection at a designated address.
+      summary: "List collection items owned by an address"
       description: >-
-        Returns the list of inscriptions that belong to a specific collection at
-        a designated address, including details such as inscription ID, name,
-
+        Returns paginated item records that an address owns within a collection, including inscription id and number, item name, content metadata, indexed height, and collection totals. Use it for wallet item galleries; ownership can change with new transfers, so recheck before signing or listing transactions.
+      x-unisat-domain: collections
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only collection indexer query; marketplace listings and orders are out of scope.
       parameters:
         - schema:
             type: number
@@ -485,13 +520,18 @@ paths:
   /v1/collection-indexer/inscription/{inscriptionId}/collection/list:
     get:
       tags:
-        - Collection-Indexer
+        - Collection Indexer
       operationId: getInscriptionCollectionList
-      summary: Get inscription collection list
+      summary: "List collections containing an inscription"
       description: >-
-        Returns the list of collections that a specific inscription belongs to,
-        including collection name, icon, supply, and social media links.
-
+        Returns collection summaries associated with an inscription, including name, icon, supply, collection id, description, and social links. Use it to map an inscription to curated collection contexts; inscription ids or numbers may resolve differently across networks, so match the request to the intended chain.
+      x-unisat-domain: collections
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Read-only collection indexer query; marketplace listings and orders are out of scope.
       parameters:
         - schema:
             type: string
