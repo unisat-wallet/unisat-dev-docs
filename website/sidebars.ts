@@ -65,6 +65,7 @@ const sidebars: SidebarsConfig = {
           items: [
             "open-api/inscribe-v5-migration",
             "open-api/inscribe-v5-fee-guide",
+            "open-api/multi-protocol-mint-guide",
             "open-api/inscribe-guide",
             "open-api/inscribe-faq",
             "open-api/brc20-4byte-guide",
