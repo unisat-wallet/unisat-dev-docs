@@ -45,7 +45,7 @@ Yes. The API supports UTXO queries in sub-1 sat/vB mode and returns up to 500 UT
 
 ## Can I use the API for commercial projects?
 
-Yes, provided your use complies with the [API Terms of Use](/blog/api-terms-of-use). Contact UniSat to discuss the appropriate plan, commercial requirements, and any custom limits for your project.
+Yes, provided your use complies with the [API Terms of Use](/docs/developer-support/api-terms-of-use). Contact UniSat to discuss the appropriate plan, commercial requirements, and any custom limits for your project.
 
 ## What payment options are available?
 

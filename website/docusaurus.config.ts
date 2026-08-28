@@ -62,20 +62,7 @@ const config: Config = {
           showLastUpdateAuthor: true,
           showLastUpdateTime: true,
         },
-        // blog: {
-        //   showReadingTime: true,
-        //   feedOptions: {
-        //     type: ["rss", "atom"],
-        //     xslt: true,
-        //   },
-        //   // Please change this to your repo.
-        //   // Remove this to remove the "edit this page" links.
-        //   editUrl: "https://github.com/unisat-wallet/unisat-dev-docs",
-        //   // Useful options to enforce blogging best practices
-        //   onInlineTags: "warn",
-        //   onInlineAuthors: "warn",
-        //   onUntruncatedBlogPosts: "warn",
-        // },
+        blog: false,
         theme: {
           customCss: "./src/css/custom.css",
         },
@@ -103,7 +90,6 @@ const config: Config = {
           position: "left",
           label: "Docs",
         },
-        // { to: "/blog", label: "Blog", position: "left" },
         {
           href: "https://github.com/unisat-wallet/unisat-dev-docs",
           label: "GitHub",
@@ -130,19 +116,19 @@ const config: Config = {
             },
             {
               label: "FAQ",
-              to: "/blog/faq",
+              to: "/docs/developer-support/faq",
             },
             {
               label: "Get a UniSat API Key",
-              to: "/blog/how-to-acquire-a-unisat-api-key",
+              to: "/docs/developer-support/how-to-acquire-a-unisat-api-key",
             },
             {
               label: "Plans",
-              to: "/blog/plans",
+              to: "/docs/developer-support/plans",
             },
             {
               label: "Enable Two-Factor Authentication",
-              to: "/blog/enable-two-factor-authentication",
+              to: "/docs/developer-support/enable-two-factor-authentication",
             },
           ],
         },
@@ -173,11 +159,11 @@ const config: Config = {
           items: [
             {
               label: "API Terms of Use",
-              to: "/blog/api-terms-of-use",
+              to: "/docs/developer-support/api-terms-of-use",
             },
             {
               label: "Developer Service Legal Disclaimer",
-              to: "/blog/developer-service-legal-disclaimer",
+              to: "/docs/developer-support/developer-service-legal-disclaimer",
             },
           ],
         },

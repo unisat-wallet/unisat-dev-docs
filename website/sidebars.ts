@@ -109,6 +109,18 @@ const sidebars: SidebarsConfig = {
         },
       ],
     },
+    {
+      type: "category",
+      label: "Developer Support",
+      items: [
+        "developer-support/faq",
+        "developer-support/how-to-acquire-a-unisat-api-key",
+        "developer-support/plans",
+        "developer-support/enable-two-factor-authentication",
+        "developer-support/api-terms-of-use",
+        "developer-support/developer-service-legal-disclaimer",
+      ],
+    },
   ],
 };
 

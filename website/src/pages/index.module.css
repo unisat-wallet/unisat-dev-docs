@@ -15,10 +15,80 @@
   .heroBanner {
     padding: 2rem;
   }
+
 }
 
 .buttons {
   display: flex;
   align-items: center;
   justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+}
+
+.quickStart {
+  padding: 4rem 0 2rem;
+}
+
+.quickStartIntro {
+  max-width: 42rem;
+  margin: 0 auto 2rem;
+  text-align: center;
+}
+
+.quickStartIntro h2 {
+  margin-bottom: 0.75rem;
+}
+
+.quickStartIntro p {
+  margin: 0;
+  color: var(--ifm-color-content-secondary);
+}
+
+.quickStartCard {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  padding: 1.5rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 12px;
+  background: var(--ifm-background-surface-color);
+}
+
+.quickStartCard h3 {
+  margin-bottom: 0.75rem;
+  font-size: 1.15rem;
+}
+
+.quickStartCard p {
+  margin: 0;
+  color: var(--ifm-color-content-secondary);
+  line-height: 1.6;
+}
+
+.quickStartLinks {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-top: auto;
+  padding-top: 1.25rem;
+}
+
+.quickStartLink,
+.secondaryLink {
+  font-weight: 600;
+}
+
+.secondaryLink {
+  color: var(--ifm-color-content-secondary);
+}
+
+@media screen and (max-width: 996px) {
+  .quickStart {
+    padding: 3rem 0 1rem;
+  }
+
+  .quickStartCard {
+    margin-bottom: 1rem;
+  }
 }
