@@ -152,6 +152,15 @@ const config: Config = {
             },
           ],
         },
+        {
+          title: "Legal",
+          items: [
+            {
+              label: "API Terms of Use",
+              to: "/blog/api-terms-of-use",
+            },
+          ],
+        },
       ],
       copyright: `Copyright © ${new Date().getFullYear()} UniSat. `,
     },

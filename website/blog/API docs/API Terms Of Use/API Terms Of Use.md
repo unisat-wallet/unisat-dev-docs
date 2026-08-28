@@ -1,3 +1,7 @@
+---
+slug: api-terms-of-use
+---
+
 # API Terms Of Use
 
 Last Updated: February 10, 2026
