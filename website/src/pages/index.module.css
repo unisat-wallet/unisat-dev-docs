@@ -3,31 +3,8 @@
  * and scoped locally.
  */
 
-.heroBanner {
-  padding: 4rem 0;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-  background-color: rgba(187, 78, 6, 0.618);
-}
-
-@media screen and (max-width: 996px) {
-  .heroBanner {
-    padding: 2rem;
-  }
-
-}
-
-.buttons {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 0.75rem;
-}
-
 .quickStart {
-  padding: 4rem 0 2rem;
+  padding: 4rem 0;
 }
 
 .quickStartIntro {
@@ -74,18 +51,13 @@
   padding-top: 1.25rem;
 }
 
-.quickStartLink,
-.secondaryLink {
+.quickStartLink {
   font-weight: 600;
-}
-
-.secondaryLink {
-  color: var(--ifm-color-content-secondary);
 }
 
 @media screen and (max-width: 996px) {
   .quickStart {
-    padding: 3rem 0 1rem;
+    padding: 3rem 0;
   }
 
   .quickStartCard {
