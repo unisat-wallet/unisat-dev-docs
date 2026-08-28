@@ -1,3 +1,7 @@
+---
+slug: how-to-acquire-a-unisat-api-key
+---
+
 # How to Acquire a UniSat API Key
 
 Previously, API keys were requested by contacting the UniSat team and applying via email. With the new Developer Center, you will need to register with your email and choose the appropriate plan.
@@ -26,7 +30,7 @@ Before acquiring a plan, you need to register a Developer Center account using y
 
 ## 4. View the Dashboard
 
-Once registered, go to the Dashboard page where you will see your API Key, Current API Key Configuration, and your API Request Log. For newly registered accounts, we will continue to offer developers a monthly free access quota of 5 calls/second, up to 2,000 calls/day.
+Once registered, go to the Dashboard page where you will see your API Key, Current API Key Configuration, and your API Request Log. Newly registered accounts receive a free access quota of 5 calls per second and up to 2,000 calls per day on Bitcoin.
 
 ![Developer Center dashboard](image-3.png)
 

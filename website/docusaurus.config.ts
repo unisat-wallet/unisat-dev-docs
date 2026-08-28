@@ -132,6 +132,18 @@ const config: Config = {
               label: "FAQ",
               to: "/blog/faq",
             },
+            {
+              label: "Get a UniSat API Key",
+              to: "/blog/how-to-acquire-a-unisat-api-key",
+            },
+            {
+              label: "Plans",
+              to: "/blog/plans",
+            },
+            {
+              label: "Enable Two-Factor Authentication",
+              to: "/blog/enable-two-factor-authentication",
+            },
           ],
         },
         // {

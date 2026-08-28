@@ -1,3 +1,7 @@
+---
+slug: enable-two-factor-authentication
+---
+
 # Enable the Two-Factor Authentication
 
 Two-factor authentication (2FA) is an additional security feature that requires users to enter a six-digit verification code when logging into their accounts. This greatly enhances account security and effectively prevents unauthorized access.

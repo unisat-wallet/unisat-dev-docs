@@ -6,7 +6,7 @@ slug: faq
 
 ## How can I begin using UniSat API?
 
-Visit the [Developer Center](https://developer.unisat.io/account/login) to register and get a free API key. New accounts receive a monthly quota of 30,000 calls (1,000 calls per day). For higher limits for personal or commercial projects, upgrade to a paid plan. See [How to Acquire a UniSat API Key](https://docs.unisat.io/dev-center/developer-center/how-to-acquire-a-unisat-api-key) for details.
+Visit the [Developer Center](https://developer.unisat.io/account/login) to register and get a free API key. New accounts receive a monthly quota of 60,000 calls (2,000 calls per day). For higher limits for personal or commercial projects, upgrade to a paid plan. See [How to Acquire a UniSat API Key](https://docs.unisat.io/dev-center/developer-center/how-to-acquire-a-unisat-api-key) for details.
 
 ## What is the UniSat API for?
 
