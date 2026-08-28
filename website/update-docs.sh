@@ -54,13 +54,13 @@ Welcome to the UniSat Open API documentation. This section contains comprehensiv
 
 ## Available APIs
 
-- **Blockchain Indexer**: APIs for retrieving blockchain data
-- **Inscription Indexer**: APIs for working with inscriptions
-- **BRC-20 APIs**: APIs for BRC-20 token operations
-- **Runes APIs**: APIs for Runes protocol operations
-- **Marketplace APIs**: APIs for marketplace functionality
-- **Inscribe Service**: APIs for creating inscriptions
-- **Fractal APIs**: APIs for fractal Bitcoin operations
+- [**Blockchain Indexer**](./blockchain-indexer): APIs for retrieving blockchain data
+- [**Inscription Indexer**](./inscription-indexer): APIs for working with inscriptions
+- [**BRC-20 APIs**](./brc20-indexer): APIs for BRC-20 token operations
+- [**Runes APIs**](./runes-indexer): APIs for Runes protocol operations
+- [**Marketplace APIs**](./brc20-marketplace): APIs for marketplace functionality
+- [**Inscribe Service**](./inscribe): APIs for creating inscriptions
+- [**Fractal APIs**](./fractal): APIs for Fractal Bitcoin operations
 
 ## Guides
 
