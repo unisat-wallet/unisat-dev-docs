@@ -16,6 +16,11 @@ const sidebars: SidebarsConfig = {
   // Main sidebar for the documentation
   docsSidebar: [
     {
+      type: "link",
+      label: "Home",
+      href: "/",
+    },
+    {
       type: "category",
       label: "Open API",
       items: [
