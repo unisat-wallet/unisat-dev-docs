@@ -1,3 +1,7 @@
+---
+slug: developer-service-legal-disclaimer
+---
+
 # Developer Service Legal Disclaimer
 
 Last Updated: August 07, 2025

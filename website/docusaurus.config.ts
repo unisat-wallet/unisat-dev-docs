@@ -128,6 +128,10 @@ const config: Config = {
               label: "UniSat Wallet Docs",
               to: "/docs/wallet-api/intro",
             },
+            {
+              label: "FAQ",
+              to: "/blog/faq",
+            },
           ],
         },
         // {
@@ -158,6 +162,10 @@ const config: Config = {
             {
               label: "API Terms of Use",
               to: "/blog/api-terms-of-use",
+            },
+            {
+              label: "Developer Service Legal Disclaimer",
+              to: "/blog/developer-service-legal-disclaimer",
             },
           ],
         },
