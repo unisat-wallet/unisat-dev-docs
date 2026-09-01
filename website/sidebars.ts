@@ -16,9 +16,9 @@ const sidebars: SidebarsConfig = {
   // Main sidebar for the documentation
   docsSidebar: [
     {
-      type: "link",
+      type: "doc",
+      id: "home",
       label: "Home",
-      href: "/",
     },
     {
       type: "category",
