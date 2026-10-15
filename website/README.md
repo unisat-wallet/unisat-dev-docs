@@ -40,6 +40,23 @@ To run the complete build process (generate docs from source, copy to website, a
 
 ## Deployment
 
+Build the Nginx image from the repository root so both the website and API
+sources are available. Build from a clean commit to keep the manifest metadata
+aligned with the published content:
+
+```bash
+docker build -f website/Dockerfile \
+  --build-arg GIT_COMMIT="$(git rev-parse HEAD)" \
+  --build-arg VERSION="$(git rev-parse --short HEAD)" \
+  -t unisat-dev-docs .
+docker run --rm -p 8080:80 unisat-dev-docs
+```
+
+The container serves the site at `http://localhost:8080` and the Swagger
+bundle at `http://localhost:8080/swagger/swagger.yaml`.
+
+Alternatively, deploy to GitHub Pages:
+
 Using SSH:
 
 ```bash

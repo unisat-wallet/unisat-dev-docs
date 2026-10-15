@@ -102,6 +102,10 @@ cp "$SOURCE_WALLET_API/README.md" "$WEBSITE_DOCS/wallet-api/" 2>/dev/null || tru
 echo "Documentation update completed successfully!"
 
 # Optionally, rebuild the site if needed
+if [ "${SKIP_WEBSITE_BUILD:-0}" = "1" ]; then
+    exit 0
+fi
+
 read -p "Do you want to build the website now? (y/n): " -n 1 -r
 echo
 if [[ $REPLY =~ ^[Yy]$ ]]; then

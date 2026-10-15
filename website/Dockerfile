@@ -1,23 +1,36 @@
-FROM node:20-alpine AS builder
+FROM node:22-alpine AS builder
 
 WORKDIR /app
+RUN apk add --no-cache bash
 
+# Install dependencies before copying source to keep these layers cacheable.
+# The root prepare script runs the build, so skip it until source is present.
+COPY package.json package-lock.json ./
+RUN npm ci --ignore-scripts
 
-# Copy website package files
-COPY website/* /app/
+COPY website/package.json website/yarn.lock ./website/
+RUN cd website && yarn install --frozen-lockfile
 
-# Install dependencies
-RUN yarn install --frozen-lockfile
+COPY tools ./tools
+COPY build ./build
+COPY open-api ./open-api
+COPY errors ./errors
+COPY wallet-api ./wallet-api
+COPY website ./website
 
-
-COPY open-api/auto-generated/docs/*.md docs/open-api/auto-generated/docs/ 
-COPY open-api/note-source docs/open-api/
-
-RUN yarn build
-
+# Pass these from CI so the published manifest identifies the source revision.
+ARG GIT_COMMIT
+ARG VERSION
+WORKDIR /app/website
+RUN GITHUB_SHA="${GIT_COMMIT:-unknown}" \
+    OPENAPI_VERSION="${VERSION:-${GIT_COMMIT:-unknown}}" \
+    ./build-website.sh
+RUN test -s build/swagger/swagger.yaml && test -s build/swagger/manifest.json
 
 FROM nginx:stable-alpine
 
-COPY --from=builder /app/build/ /usr/share/nginx/html/
+COPY website/nginx.conf /etc/nginx/conf.d/default.conf
+COPY --from=builder /app/website/build/ /usr/share/nginx/html/
+RUN nginx -t
 
 EXPOSE 80

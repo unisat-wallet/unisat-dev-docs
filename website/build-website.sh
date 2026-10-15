@@ -7,15 +7,15 @@ set -e  # Exit on any error
 
 echo "Starting UniSat documentation website build process..."
 
-# Step 1: Update documentation from source directories
-echo "Step 1: Updating documentation from source directories..."
-./update-docs.sh
-
-# Step 2: Run the original build process to generate auto-generated docs
-echo "Step 2: Running original documentation generation..."
+# Step 1: Generate source artifacts before copying them into the website.
+echo "Step 1: Generating documentation and Swagger assets..."
 cd ..
 npm run build
 cd website
+
+# Step 2: Update documentation from source directories without a second build.
+echo "Step 2: Updating documentation from source directories..."
+SKIP_WEBSITE_BUILD=1 ./update-docs.sh
 
 # Step 3: Copy the newly generated auto-generated docs to website
 echo "Step 3: Copying auto-generated documentation to website..."
