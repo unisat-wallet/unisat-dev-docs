@@ -95,9 +95,9 @@ To integrate with the UniSat wallet, start with our [Connection Guide](./connect
 EOF
 fi
 
-# Update README files
-cp "$SOURCE_OPEN_API/README.md" "$WEBSITE_DOCS/open-api/" 2>/dev/null || true
-cp "$SOURCE_WALLET_API/README.md" "$WEBSITE_DOCS/wallet-api/" 2>/dev/null || true
+# The source READMEs target the repository layout, not the flattened site docs.
+# Remove copies left by older builds; the site uses the intro pages above.
+rm -f "$WEBSITE_DOCS/open-api/README.md" "$WEBSITE_DOCS/wallet-api/README.md"
 
 echo "Documentation update completed successfully!"
 

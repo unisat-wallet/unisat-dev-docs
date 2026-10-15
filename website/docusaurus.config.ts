@@ -27,11 +27,11 @@ const config: Config = {
   projectName: "unisat-dev-docs", // Usually your repo name.
 
   onBrokenLinks: "warn", // Changed from 'throw' to 'warn' to handle broken links more gracefully
-  onBrokenMarkdownLinks: "warn",
   markdown: {
     format: "mdx",
     mermaid: true,
     hooks: {
+      onBrokenMarkdownLinks: "warn",
       onBrokenMarkdownImages: "warn",
     },
     mdx1Compat: {

@@ -537,11 +537,11 @@ A: Currently not supported. Each mint requires the complete 4-step process.
 
 ## 🔗 Related Resources
 
-- [BRC-20 4-byte Guide](./brc20-4byte-guide-en.md) - Standard 4-character tokens
-- [BRC-20 6-byte Guide](./brc20-6byte-guide-en.md) - 6-character tokens
-- [Inscribe Main Guide](./inscribe-guide-en.md) - Return to main documentation
+- [BRC-20 4-byte Guide](./brc20-4byte-guide.md) - Standard 4-character tokens
+- [BRC-20 6-byte Guide](./brc20-6byte-guide.md) - 6-character tokens
+- [Inscribe Main Guide](./inscribe-guide.md) - Return to main documentation
 - [Fee Rules](./btc-inscribe-fee-rules.md) - Inscription fee details
 
 ---
 
-Return to [Inscribe Service Guide](./inscribe-guide-en.md)
+Return to [Inscribe Service Guide](./inscribe-guide.md)

@@ -25,7 +25,7 @@ BRC-20 (6-byte) is a special BRC-20 token protocol with a ticker consisting of 6
 
 ---
 
-## 🚀 Deploy (Deploy Token)
+## 🚀 Deploy (Deploy Token) {#deploy-deploy-token}
 
 ### Endpoints
 
@@ -194,7 +194,7 @@ Order status changes to `inscribing`, waiting for confirmation to become `minted
 
 ---
 
-## Complete Deployment Example
+## Complete Deployment Example {#complete-examples}
 
 ```javascript
 async function progDeploy(deploys, activeHeight) {
@@ -308,7 +308,7 @@ await progDeploy(
 
 ---
 
-## ⚒️ Mint - Public Mode (self_mint = false)
+## ⚒️ Mint - Public Mode (self_mint = false) {#mint---public-mode-self_mint--false}
 
 ### Endpoint
 
@@ -371,7 +371,7 @@ Standard payment process:
 
 ---
 
-## 🔐 Mint - Authorized Mode (self_mint = true)
+## 🔐 Mint - Authorized Mode (self_mint = true) {#mint---authorized-mode-self_mint--true}
 
 ### Endpoints
 
@@ -607,7 +607,7 @@ await mintWithAuthorization("unisat", "5000");
 
 ---
 
-## 💸 Transfer (Transfer Inscription)
+## 💸 Transfer (Transfer Inscription) {#transfer-transfer-inscription}
 
 ### Endpoint
 
@@ -770,11 +770,11 @@ A: No. Minting permissions are determined during deployment and are permanent.
 
 ## 🔗 Related Resources
 
-- [BRC-20 4-byte Guide](./brc20-4byte-guide-en.md) - Standard 4-character tokens
-- [BRC-20 5-byte Guide](./brc20-5byte-guide-en.md) - 5-character authorized tokens
-- [Inscribe Main Guide](./inscribe-guide-en.md) - Return to main documentation
+- [BRC-20 4-byte Guide](./brc20-4byte-guide.md) - Standard 4-character tokens
+- [BRC-20 5-byte Guide](./brc20-5byte-guide.md) - 5-character authorized tokens
+- [Inscribe Main Guide](./inscribe-guide.md) - Return to main documentation
 - [Fee Rules](./btc-inscribe-fee-rules.md) - Inscription fee details
 
 ---
 
-Return to [Inscribe Service Guide](./inscribe-guide-en.md)
+Return to [Inscribe Service Guide](./inscribe-guide.md)

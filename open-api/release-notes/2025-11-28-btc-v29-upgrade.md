@@ -14,7 +14,7 @@ This enhancement ensures that low-fee transactions are handled more efficiently 
 
 Documentation:
 
-- [/v1/indexer/local_pushtx](../auto-generated/docs/blockchain-indexer.md#push-rawtx-to-bitcoin-node)
+- [/v1/indexer/local_pushtx](../auto-generated/docs/blockchain-indexer.md#broadcast-one-raw-transaction-to-the-selected-network)
 
 ---
 
@@ -29,7 +29,7 @@ With Bitcoin Core v29, UTXOs from low-fee transactions are now tracked and optio
 
 Documentation:
 
-- [/v1/indexer/address/:address/utxo-data](../auto-generated/docs/blockchain-indexer.md#get-btcutxo-list-by-address)
+- [/v1/indexer/address/:address/utxo-data](../auto-generated/docs/blockchain-indexer.md#list-utxos-for-an-address)
 - [BTC Balance and UTXO](../btc-balance-utxo.md)
 
 ---
@@ -51,7 +51,7 @@ GET /v1/indexer/address/:address/available-utxo-data?withLowFee=true
 
 Documentation:
 
-- [/v1/indexer/address/:address/available-utxo-data](../auto-generated/docs/blockchain-indexer.md#get-available-utxo-list-by-address)
+- [/v1/indexer/address/:address/available-utxo-data](../auto-generated/docs/blockchain-indexer.md#list-available-utxos-for-an-address)
 - [BTC Balance and UTXO](../btc-balance-utxo.md)
 
 ---

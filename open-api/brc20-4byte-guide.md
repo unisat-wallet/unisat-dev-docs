@@ -436,11 +436,11 @@ A: If inscription succeeds but token is already fully minted, the inscription is
 
 ## 🔗 Related Resources
 
-- [BRC-20 5-byte Guide](./brc20-5byte-guide-en.md) - 5-character token protocol
-- [BRC-20 6-byte Guide](./brc20-6byte-guide-en.md) - 6-character token protocol
-- [Inscribe Main Guide](./inscribe-guide-en.md) - Return to main documentation
+- [BRC-20 5-byte Guide](./brc20-5byte-guide.md) - 5-character token protocol
+- [BRC-20 6-byte Guide](./brc20-6byte-guide.md) - 6-character token protocol
+- [Inscribe Main Guide](./inscribe-guide.md) - Return to main documentation
 - [Fee Rules](./btc-inscribe-fee-rules.md) - Inscription fee details
 
 ---
 
-Return to [Inscribe Service Guide](./inscribe-guide-en.md)
+Return to [Inscribe Service Guide](./inscribe-guide.md)

@@ -14,13 +14,13 @@ UniSat Inscribe API provides complete Bitcoin inscription services, supporting s
 
 ### BRC-20 Protocol
 
-- **[BRC-20 (4-byte) Standard Protocol](./brc20-4byte-guide-en.md)** - Most common 4-character tokens
+- **[BRC-20 (4-byte) Standard Protocol](./brc20-4byte-guide.md)** - Most common 4-character tokens
   - Deploy / Mint / Transfer
   - Public minting, anyone can participate
-- **[BRC-20 (5-byte) Authorized Protocol](./brc20-5byte-guide-en.md)** - 5-character authorized tokens
+- **[BRC-20 (5-byte) Authorized Protocol](./brc20-5byte-guide.md)** - 5-character authorized tokens
   - Deploy / Mint (requires PSBT authorization) / Transfer
   - Only deployer can mint
-- **[BRC-20 (6-byte) BRC2.0 Programmable Module](./brc20-6byte-guide-en.md)** - 6-character tokens
+- **[BRC-20 (6-byte) BRC2.0 Programmable Module](./brc20-6byte-guide.md)** - 6-character tokens
   - BRC2.0 - Programmable Module
 
 ### Runes Protocol
@@ -37,7 +37,7 @@ UniSat Inscribe API provides complete Bitcoin inscription services, supporting s
 
 ---
 
-## 🚀 Basic Inscription Process
+## 🚀 Basic Inscription Process {#basic-inscription-process}
 
 ### 1. Basic Process Overview
 
@@ -128,13 +128,13 @@ BRC-20 is the most popular token protocol on Bitcoin. UniSat supports three diff
 
 | Protocol Type                           | Ticker Length | Deploy Method    | Minting Permission       | Use Cases                  |
 | --------------------------------------- | ------------- | ---------------- | ------------------------ | -------------------------- |
-| **[4-byte](./brc20-4byte-guide-en.md)** | 4 characters  | Standard payment | Anyone can mint          | Fair launch, community     |
-| **[5-byte](./brc20-5byte-guide-en.md)** | 5 characters  | Standard payment | Deployer only            | Project tokens, controlled |
-| **[6-byte](./brc20-6byte-guide-en.md)** | 6 characters  | PSBT signing     | Configurable (self_mint) | Timed launch, permissions  |
+| **[4-byte](./brc20-4byte-guide.md)** | 4 characters  | Standard payment | Anyone can mint          | Fair launch, community     |
+| **[5-byte](./brc20-5byte-guide.md)** | 5 characters  | Standard payment | Deployer only            | Project tokens, controlled |
+| **[6-byte](./brc20-6byte-guide.md)** | 6 characters  | PSBT signing     | Configurable (self_mint) | Timed launch, permissions  |
 
 ### 🔗 Detailed Documentation Links
 
-#### **[→ BRC-20 (4-byte) Standard Protocol Complete Guide](./brc20-4byte-guide-en.md)**
+#### **[→ BRC-20 (4-byte) Standard Protocol Complete Guide](./brc20-4byte-guide.md)**
 
 Most commonly used BRC-20 token type:
 
@@ -144,7 +144,7 @@ Most commonly used BRC-20 token type:
 - ✅ Standard payment process, simple and easy
 - 💡 Suitable for: Community fair launch, Meme tokens
 
-#### **[→ BRC-20 (5-byte) Authorized Protocol Complete Guide](./brc20-5byte-guide-en.md)**
+#### **[→ BRC-20 (5-byte) Authorized Protocol Complete Guide](./brc20-5byte-guide.md)**
 
 Authorized 5-character tokens:
 
@@ -154,7 +154,7 @@ Authorized 5-character tokens:
 - 🔧 Minting requires 4-step PSBT signing process
 - 💡 Suitable for: Project-controlled tokens, whitelist distribution
 
-#### **[→ BRC-20 (6-byte) Protocol Complete Guide](./brc20-6byte-guide-en.md)**
+#### **[→ BRC-20 (6-byte) Protocol Complete Guide](./brc20-6byte-guide.md)**
 
 6-character token deployment method:
 
@@ -231,7 +231,7 @@ curl -X POST "https://open-api.unisat.io/v2/inscribe/order/create/runes-etch" \
 
 Complete Runes Etch parameter descriptions and configuration details:
 
-- [→ Runes Etch API Complete Documentation](./auto-generated/docs/inscribe.md#create-an-order-to-etch-runes)
+- [→ Runes Etch API Complete Documentation](./auto-generated/docs/inscribe.md#create-runes-etch-inscription-order)
 
 ---
 
@@ -265,11 +265,11 @@ curl -X POST "https://open-api.unisat.io/v2/inscribe/order/create/runes-mint" \
 
 Complete Runes Mint parameter descriptions:
 
-- [→ Runes Mint API Complete Documentation](./auto-generated/docs/inscribe.md#create-an-order-to-mint-runes)
+- [→ Runes Mint API Complete Documentation](./auto-generated/docs/inscribe.md#create-runes-mint-inscription-order)
 
 ---
 
-## 🔧 Advanced Features
+## 🔧 Advanced Features {#advanced-features}
 
 ### Order List Query
 
@@ -294,7 +294,7 @@ When an order has issues (such as payment containing inscriptions, incorrect pay
 
 ---
 
-## 📊 Limits and Rules
+## 📊 Limits and Rules {#limits-and-rules}
 
 ### Quantity Limits
 
@@ -321,7 +321,7 @@ Detailed fee rules:
 
 ---
 
-## ⚠️ FAQ and Notes
+## ⚠️ FAQ and Notes {#faq-and-notes}
 
 ### 1. Payment Related
 
@@ -340,9 +340,9 @@ Detailed fee rules:
 **Q: Which BRC-20 protocol should I choose?**
 
 - A:
-  - Need fair launch → [4-byte Standard Protocol](./brc20-4byte-guide-en.md)
-  - Need minting control → [5-byte Authorized Protocol](./brc20-5byte-guide-en.md)
-  - Need 6-character or timed activation → [6-byte Protocol](./brc20-6byte-guide-en.md)
+  - Need fair launch → [4-byte Standard Protocol](./brc20-4byte-guide.md)
+  - Need minting control → [5-byte Authorized Protocol](./brc20-5byte-guide.md)
+  - Need 6-character or timed activation → [6-byte Protocol](./brc20-6byte-guide.md)
 
 **Q: What's the difference between Runes and BRC-20?**
 
@@ -368,9 +368,9 @@ Detailed fee rules:
 
 ### BRC-20 Protocol Documentation
 
-- **[BRC-20 (4-byte) Complete Guide](./brc20-4byte-guide-en.md)** - Standard 4-character tokens
-- **[BRC-20 (5-byte) Complete Guide](./brc20-5byte-guide-en.md)** - 5-character authorized tokens
-- **[BRC-20 (6-byte) Complete Guide](./brc20-6byte-guide-en.md)** - 6-character tokens
+- **[BRC-20 (4-byte) Complete Guide](./brc20-4byte-guide.md)** - Standard 4-character tokens
+- **[BRC-20 (5-byte) Complete Guide](./brc20-5byte-guide.md)** - 5-character authorized tokens
+- **[BRC-20 (6-byte) Complete Guide](./brc20-6byte-guide.md)** - 6-character tokens
 
 ### API Documentation
 
@@ -401,7 +401,7 @@ Detailed fee rules:
 
 ---
 
-## 💡 Best Practices
+## 💡 Best Practices {#best-practices}
 
 ### 1. Error Handling
 
