@@ -27,6 +27,12 @@ echo "Step 4: Copying image assets..."
 mkdir -p static/img
 # Copy note-source images that are referenced in documentation
 cp -r ../open-api/note-source/* docs/open-api/ 2>/dev/null || true
+find ../open-api/note-source -type f \( -iname '*.png' -o -iname '*.jpg' -o -iname '*.jpeg' -o -iname '*.gif' -o -iname '*.svg' -o -iname '*.webp' -o -iname '*.avif' \) -print0 |
+  while IFS= read -r -d '' image; do
+    relative_path="${image#../open-api/note-source/}"
+    mkdir -p "static/img/note-source/$(dirname "$relative_path")"
+    cp "$image" "static/img/note-source/$relative_path"
+  done
 
 # Step 5: Build the Docusaurus website
 echo "Step 5: Building Docusaurus website..."

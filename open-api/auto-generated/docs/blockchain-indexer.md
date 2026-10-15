@@ -420,14 +420,14 @@ The return result of this UTXO interface will have three scenarios:
 
 1. When UTXO has not been spent, it will return the information of this UTXO, and isSpent will be set to false.
 
-   ![image](./p1.png)
+   ![image](/img/note-source/blockchain-indexer/p1.png)
 
 2. When UTXO has been spent, but the transaction that spent it has not yet been confirmed, it will return the information of this UTXO, and isSpent will be set to true.
 
-   ![image](./p2.avif)
+   ![image](/img/note-source/blockchain-indexer/p2.avif)
 
 3. When UTXO has been spent and the transacted spend has been confirmed, it will return null.
-   ![image](./p3.avif)
+   ![image](/img/note-source/blockchain-indexer/p3.avif)
 
 #### This endpoint was updated on 2025-05-20
 

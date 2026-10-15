@@ -66,6 +66,12 @@ We provide an online interactive Swagger UI for quick exploration and testing:
 
 Alternatively, you can load the OpenAPI YAML files into popular API client tools such as Postman or Insomnia, or generate client SDKs for your preferred language.
 
+Public machine-readable artifacts:
+
+- Complete Swagger: `https://api-docs.unisat.io/swagger/swagger.yaml`
+- Artifact manifest and split-file index: `https://api-docs.unisat.io/swagger/manifest.json`
+- Legacy complete Swagger URL: `https://api-docs.unisat.io/swagger/openapi-swagger.yaml`
+
 ---
 
 ## Usage

@@ -36,8 +36,8 @@ BRC20 Swap API provides a set of Fractal-only interfaces for BRC20 Swap and InSw
 | [GET `/v1/brc20-swap/swap_history`](#list-inswap-token-swap-history) | List InSwap token swap history |
 | [GET `/v1/brc20-swap/rollup_history`](#list-inswap-rollup-inscription-history) | List InSwap rollup inscription history |
 | [GET `/v1/brc20-swap/deposit_list`](#list-inswap-deposit-records-for-an-address) | List InSwap deposit records for an address |
-| [GET `/v1/brc20-swap/create_deposit`](#build-an-inswap-deposit-psbt-or-bridge-deposit-draft) | Build an InSwap deposit PSBT or bridge deposit draft |
-| [POST `/v1/brc20-swap/confirm_deposit`](#submit-a-signed-inswap-deposit-confirmation) | Submit a signed InSwap deposit confirmation |
+| [GET `/v1/brc20-swap/create_deposit`](#build-inswap-deposit-signing-material) | Build InSwap deposit signing material |
+| [POST `/v1/brc20-swap/confirm_deposit`](#submit-signed-inswap-deposit-transactions) | Submit signed InSwap deposit transactions |
 | [GET `/v1/brc20-swap/system_status`](#check-whether-inswap-rollup-committing-is-active) | Check whether InSwap rollup committing is active |
 | [GET `/v1/brc20-swap/withdraw_history`](#list-inswap-withdrawal-records-for-an-address) | List InSwap withdrawal records for an address |
 | [GET `/v1/brc20-swap/create_retry_withdraw`](#build-payment-and-approve-psbts-for-retrying-a-withdrawal) | Build payment and approve PSBTs for retrying a withdrawal |
@@ -1103,71 +1103,83 @@ Default Response
 
 ---
 
-### Build an InSwap deposit PSBT or bridge deposit draft
-<a id="build-an-inswap-deposit-psbt-or-bridge-deposit-draft"></a>
+### Build InSwap deposit signing material
+<a id="build-inswap-deposit-signing-material"></a>
 
 **Method**: `GET`  
 **Path**: `/v1/brc20-swap/create_deposit`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/getBrc20SwapCreateDeposit)  
 
 #### Description
-Returns deposit signing material such as PSBT, deposit type, expiration timestamp, and recommended deposit amount for direct, matching, or bridge deposit flows.
+Returns either a single psbt or a BRC20 transaction chain, selected from the available balance and transfer inscriptions. Sign each returned PSBT using its corresponding ToSignInputs when provided, then submit the signed fields to confirm_deposit. A Fractal BRC20 request with inscriptionId can omit tick and amount; both are read from the inscription. Transaction chains contain commitPsbt and revealPsbt, an optional consumePsbt, and sendPsbt for BTC deposits.
 
 #### Parameters
-- `inscriptionId` (query, string): 
+- `inscriptionId` (query, string): Existing BRC20 transfer inscription. Omit to let the service select or build transfer transactions.
 - `pubkey` (query, string) **(required)**: 
 - `address` (query, string) **(required)**: 
-- `amount` (query, string): Required for bridge deposits.
-- `tick` (query, string): Required for bridge deposits.
-- `assetType` (query, string): Asset type. Required for bridge deposits.; enum: `btc`, `brc20`, `runes`, `alkanes`
-- `networkType` (query, string): Network type. Required for bridge deposits.; enum: `FRACTAL_BITCOIN_MAINNET`, `FRACTAL_BITCOIN_TESTNET`, `BITCOIN_MAINNET`, `BITCOIN_TESTNET`, `BITCOIN_TESTNET4`, `BITCOIN_SIGNET`
-- `feeRate` (query, number): 
+- `amount` (query, string): Required unless depositing a Fractal BRC20 inscription specified by inscriptionId.
+- `tick` (query, string): Required unless depositing a Fractal BRC20 inscription specified by inscriptionId.
+- `assetType` (query, string): Asset type. Non-BRC20 assets use a single bridge PSBT.; enum: `btc`, `brc20`, `runes`, `alkanes`; default: `brc20`
+- `networkType` (query, string): Source network. Must be supported by the configured indexer and bridge service.; enum: `FRACTAL_BITCOIN_MAINNET`, `FRACTAL_BITCOIN_TESTNET`, `BITCOIN_MAINNET`, `BITCOIN_TESTNET`, `BITCOIN_TESTNET4`, `BITCOIN_SIGNET`; default: `FRACTAL_BITCOIN_MAINNET`
+- `feeRate` (query, number): Positive network fee rate in sat/vB. Omit to use the service default; zero is not accepted.
 
 #### Response (200)
-Default Response
+Single PSBT or BRC20 transaction chain to sign.
 
 - `code` (number): required
 - `msg` (string): required
 - `data` (object):
-  - `psbt` (string):
+  - `psbt` (string): Single deposit PSBT. Returned instead of transaction-chain PSBT fields.
   - `type` (string): Deposit type.; enum: `direct`, `matching`, `bridge`
   - `expiredTimestamp` (number):
   - `recommendDeposit` (string):
+  - `consumePsbt` (string): Optional transaction consuming existing transferable inscriptions.
+  - `commitPsbt` (string): Commit transaction for a new transfer inscription.
+  - `revealPsbt` (string): Reveal transaction for the new transfer inscription.
+  - `sendPsbt` (string): Final bridge send transaction for BTC BRC20 deposits.
+  - `consumeToSignInputs` (array):
+    - `index` (integer): required; Zero-based PSBT input index to sign.
+    - `address` (string): required; Address whose key signs this input.
+    - `disableTweakSigner` (boolean): Whether the Taproot signer must disable key tweaking for this input.
+  - `commitToSignInputs` (array):
+    - `index` (integer): required; Zero-based PSBT input index to sign.
+    - `address` (string): required; Address whose key signs this input.
+    - `disableTweakSigner` (boolean): Whether the Taproot signer must disable key tweaking for this input.
+  - `revealToSignInputs` (array):
+    - `index` (integer): required; Zero-based PSBT input index to sign.
+    - `address` (string): required; Address whose key signs this input.
+    - `disableTweakSigner` (boolean): Whether the Taproot signer must disable key tweaking for this input.
+  - `sendToSignInputs` (array):
+    - `index` (integer): required; Zero-based PSBT input index to sign.
+    - `address` (string): required; Address whose key signs this input.
+    - `disableTweakSigner` (boolean): Whether the Taproot signer must disable key tweaking for this input.
 
 
 ---
 
-### Submit a signed InSwap deposit confirmation
-<a id="submit-a-signed-inswap-deposit-confirmation"></a>
+### Submit signed InSwap deposit transactions
+<a id="submit-signed-inswap-deposit-transactions"></a>
 
 **Method**: `POST`  
 **Path**: `/v1/brc20-swap/confirm_deposit`  
 **Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Swap-BRC20/postBrc20SwapConfirmDeposit)  
 
 #### Description
-Confirms a prepared deposit using the signed PSBT and optional bridge metadata, returning the transaction id and remaining pending-confirmation count.
+Submit either psbt for a single transaction or the signed transaction-chain fields returned by create_deposit; do not mix them. A Fractal BRC20 single deposit only requires psbt; inscriptionId is optional. A BRC20 chain requires address, tick, amount, commitPsbt and revealPsbt. Include consumePsbt if it was returned. BTC BRC20 chains additionally require pubkey and sendPsbt. BTC single deposits and non-BRC20 bridge deposits require psbt, pubkey, address, tick, amount, assetType and networkType. Transaction chains only support BRC20. Omitted networkType and assetType default to FRACTAL_BITCOIN_MAINNET and brc20. Returns the transaction id and required confirmation count.
 
 #### Request Body
 Content-Type: `application/json` **(required)**
 
-- `psbt` (string): required
-- `inscriptionId` (string):
-- `pubkey` (string):
-- `address` (string):
-- `amount` (string):
-- `tick` (string):
-- `assetType` (string): enum: `btc`, `brc20`, `runes`, `alkanes`
-- `networkType` (string): enum: `FRACTAL_BITCOIN_MAINNET`, `FRACTAL_BITCOIN_TESTNET`, `BITCOIN_MAINNET`, `BITCOIN_TESTNET`, `BITCOIN_TESTNET4`, `BITCOIN_SIGNET`
-- `feeRate` (number):
+- `assetType` (string): enum: `brc20`
 
 #### Response (200)
-Default Response
+Deposit transaction submitted.
 
 - `code` (number): required
 - `msg` (string): required
 - `data` (object):
   - `txid` (string): Transaction ID
-  - `pendingNum` (number): Number of pending confirmations
+  - `pendingNum` (number): Required number of confirmations for the deposit.
 
 
 ---

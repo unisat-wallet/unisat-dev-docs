@@ -12,6 +12,7 @@ swagger:
   - collection-marketplace
   - domain-marketplace
   - brc20-swap
+  - cat20-dex
   - fractal
   - collection-indexer
   - brc20-prog-api
@@ -30,6 +31,7 @@ doc:
   - collection-marketplace
   - domain-marketplace
   - brc20-swap
+  - cat20-dex
   - fractal
   - collection-indexer
   - brc20-prog-api

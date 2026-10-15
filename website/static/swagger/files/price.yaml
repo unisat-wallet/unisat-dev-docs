@@ -1,0 +1,98 @@
+openapi: 3.0.3
+info:
+  title: Price API
+  version: 1.0.0
+  description: >-
+    This API provides real-time price information for BTC and FB (Fractal Bitcoin).
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+tags:
+  - name: Price
+    description: Price APIs
+paths:
+  /v1/price/btc:
+    get:
+      tags:
+        - Price
+      operationId: getBtcPrice
+      summary: "Get latest BTC price in USD"
+      description: >-
+        Returns the latest BTC price quote with the USD price and Unix updateTime timestamp. Use this read-only endpoint for wallets, marketplaces, fee estimators, and portfolio views that need a public BTC reference price without creating orders, signatures, or transactions.
+      x-unisat-domain: price
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: ok
+                  data:
+                    $ref: "#/components/schemas/PriceInfo"
+        "401":
+          description: Invalid API Key
+  /v1/price/fb:
+    get:
+      tags:
+        - Price
+      operationId: getFbPrice
+      summary: "Get latest Fractal Bitcoin price in USD"
+      description: >-
+        Returns the latest FB (Fractal Bitcoin) price quote with the USD price and Unix updateTime timestamp. Use this read-only endpoint for Fractal wallets, marketplaces, analytics, and portfolio screens that need a public FB reference price without side effects or user confirmation.
+      x-unisat-domain: price
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: ok
+                  data:
+                    $ref: "#/components/schemas/PriceInfo"
+        "401":
+          description: Invalid API Key
+components:
+  schemas:
+    PriceInfo:
+      type: object
+      properties:
+        price:
+          type: number
+          description: Current price in USD
+          example: 71373.42718545307
+        updateTime:
+          type: integer
+          format: int64
+          description: Unix timestamp of last price update
+          example: 1770558840
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

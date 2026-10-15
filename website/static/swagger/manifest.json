@@ -1,0 +1,130 @@
+{
+  "schemaVersion": 1,
+  "version": "2cfc5a9",
+  "generatedAt": "2026-10-15T13:47:39.901Z",
+  "source": {
+    "repository": "unisat-wallet/unisat-dev-docs",
+    "commit": "2cfc5a92a5c7e4b6b23f47fbe82278f1852a1b2b"
+  },
+  "bundle": {
+    "path": "swagger.yaml",
+    "sha256": "54d91a5a265b12bf3ad45266ee538abc8cce7e777cd1904226102f397f4b62c6",
+    "size": 825299
+  },
+  "files": [
+    {
+      "name": "main",
+      "path": "files/main.yaml",
+      "sha256": "941e8f50725fbc44bb7b1fb94e9c3fc5a149cce45b78218d5744adc4bf4401aa",
+      "size": 1287
+    },
+    {
+      "name": "blockchain-indexer",
+      "path": "files/blockchain-indexer.yaml",
+      "sha256": "35d0401d6c0101fb856400ce90ac0b4059a578d5a0afc3209fcd6bf188dfdde8",
+      "size": 37555
+    },
+    {
+      "name": "inscription-indexer",
+      "path": "files/inscription-indexer.yaml",
+      "sha256": "14def53d51325ad48118a432dfeac8b0ed13fbb84d9baae04b682e62a6771c42",
+      "size": 17335
+    },
+    {
+      "name": "brc20-indexer",
+      "path": "files/brc20-indexer.yaml",
+      "sha256": "a45ddf547a07928c89c7ff648cc73ae06cf7d503162c82a9e138ed834fe9edbb",
+      "size": 45023
+    },
+    {
+      "name": "runes-indexer",
+      "path": "files/runes-indexer.yaml",
+      "sha256": "a9305af4fd1625fd4bfac8f2f0637c7bf84cef203697a755aa3ecb7010b0b029",
+      "size": 22502
+    },
+    {
+      "name": "alkanes-indexer",
+      "path": "files/alkanes-indexer.yaml",
+      "sha256": "7229eac05a0c0e7396d8e5b7935fd01c7cefff74f88979ebd9e8c6b85cddafe5",
+      "size": 30845
+    },
+    {
+      "name": "inscribe",
+      "path": "files/inscribe.yaml",
+      "sha256": "c80475344b18e80522d17e0bcc21fc9e5f39196eacede7e5e692a26af7db7486",
+      "size": 44161
+    },
+    {
+      "name": "inscribe-v5",
+      "path": "files/inscribe-v5.yaml",
+      "sha256": "132ebb32c56cb343b4c3d61fc38ee36c5b86663345d8bc8181b8a2931017da16",
+      "size": 83588
+    },
+    {
+      "name": "brc20-marketplace",
+      "path": "files/brc20-marketplace.yaml",
+      "sha256": "167e3820d0edd71df8850e09a58b22393d4b5b6da7848c167f568120de7534d8",
+      "size": 65875
+    },
+    {
+      "name": "runes-marketplace",
+      "path": "files/runes-marketplace.yaml",
+      "sha256": "0c10e94049b3567c555e6da6ba6d6b1f1cf986ae9af1134ba4b93cf6be00458d",
+      "size": 62699
+    },
+    {
+      "name": "alkanes-marketplace",
+      "path": "files/alkanes-marketplace.yaml",
+      "sha256": "919b1e754ecb7c20707b858bf234e92601d7000c31dd576dd7ac7cfb5f04499a",
+      "size": 62356
+    },
+    {
+      "name": "collection-marketplace",
+      "path": "files/collection-marketplace.yaml",
+      "sha256": "7ec49788d184e018a6481acf84611c3ad291d9be236e8c5579a3c021585dcf7e",
+      "size": 69587
+    },
+    {
+      "name": "domain-marketplace",
+      "path": "files/domain-marketplace.yaml",
+      "sha256": "738da0ddbb134ab7105db88b40438aaeb70a35305882bbe48a28b8439cd7c260",
+      "size": 60756
+    },
+    {
+      "name": "brc20-swap",
+      "path": "files/brc20-swap.yaml",
+      "sha256": "774533fbcd9e0efe6b0be809a3d6e37aa074185e7dd511248405d112cc31197d",
+      "size": 249548
+    },
+    {
+      "name": "cat20-dex",
+      "path": "files/cat20-dex.yaml",
+      "sha256": "da611bea7cf6010504e1a5de380bf20114bf027b83d00cb7352c220d3fd28c23",
+      "size": 4901
+    },
+    {
+      "name": "fractal",
+      "path": "files/fractal.yaml",
+      "sha256": "479dfc7b7d42ac89997ab0dcf5755cc7483061fb7c55648ccb77d2b53f36b28a",
+      "size": 6057
+    },
+    {
+      "name": "collection-indexer",
+      "path": "files/collection-indexer.yaml",
+      "sha256": "15cd1ba7f04cd33f2d3f3d85bd400a155506f79d5cc01ea5e5e6c52993660ec6",
+      "size": 21055
+    },
+    {
+      "name": "brc20-prog-api",
+      "path": "files/brc20-prog-api.yaml",
+      "sha256": "3d449911434285839f0679893a4c0e38cb6387d2fe032ef454491c502f11e4b0",
+      "size": 35306
+    },
+    {
+      "name": "price",
+      "path": "files/price.yaml",
+      "sha256": "ddf94622022a5ebecde0fe091ebb3f0287ae8490420044b70457ba4d5015be31",
+      "size": 3065
+    }
+  ]
+}

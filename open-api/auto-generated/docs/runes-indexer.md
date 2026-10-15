@@ -51,7 +51,7 @@ successful operation
 - minimumRune: The minimumRune can be edicted
 - halvingBlockCount: The number of blocks remaining until the next halving
 
-![image](./runes_p1.avif)
+![image](/img/note-source/runes-indexer/runes_p1.avif)
 
 
 ---

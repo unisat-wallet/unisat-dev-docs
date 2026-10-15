@@ -1,0 +1,1296 @@
+openapi: 3.0.3
+info:
+  title: Inscribe API
+  version: 1.0.0
+  description: >-
+    Legacy V2 inscription API. `GET /v2/inscribe/order/summary` remains supported; all other V2 inscription endpoints are deprecated and new integrations must use the Inscribe API V5 endpoints under /inscribe-v5. See open-api/inscribe-v5-migration.md.
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+  - url: https://open-api-staging.unisat.io
+  - url: https://open-api-testnet.unisat.io
+  - url: https://open-api-testnet4.unisat.io
+  - url: https://open-api-signet.unisat.io
+  - url: https://open-api-fractal.unisat.io
+  - url: https://open-api-fractal-testnet.unisat.io
+tags:
+  - name: Inscribe
+    description: Legacy V2 inscription workflow. The order summary endpoint remains supported; all other V2 endpoints are deprecated in favor of Inscribe V5.
+paths:
+  /v2/inscribe/order/summary:
+    get:
+      tags:
+        - Inscribe
+      operationId: getOrderSummary
+      summary: Summarize inscription order counts
+      description: >-
+        Returns orderCount totals by status for the current API key, including pending, inscribing, minted, closed, and refunded buckets. Use it for dashboard totals and reconcile the counts before drilling into order lists; it never creates payment state or broadcasts transactions.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe read-only inscription query: call without extra confirmation when required identifiers are provided.
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/OrderSummary"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/list:
+    get:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: getOrderList
+      summary: List inscription orders with status details
+      description: >-
+        Returns paginated inscription orders, including orderId, status, payment amounts, receiveAddress, fee fields, counts, and optional file details. Use it to monitor order progress or reconcile payments; check status, paidAmount, amount, and files before taking follow-up signing or refund actions.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe read-only inscription query: call without extra confirmation when required identifiers are provided.
+      parameters:
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+        - name: sort
+          description: Sort by (asc/desc)
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+          example: asc
+        - name: status
+          description: Status of order
+          in: query
+          required: false
+          schema:
+            type: string
+            enum:
+              - pending
+              - inscribing
+              - minted
+              - closed
+              - refunded
+        - name: receiveAddress
+          description: ReceiveAddress of order
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: clientId
+          description: ClientId of order
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: withFiles
+          description: Whether to include files
+          in: query
+          required: false
+          schema:
+            type: boolean
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Order"
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+        "401":
+          description: Invalid API Key
+
+  /v2/inscribe/order/{orderId}:
+    get:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: getOrderById
+      summary: Get one inscription order state
+      description: >-
+        Returns a single order with status, payAddress, receiveAddress, paidAmount, required amount, fee breakdown, inscription counts, file statuses, and refund fields. Poll it before payment, commit signing, reveal signing, or refund decisions; verify status and amount fields because this endpoint is read-only.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe read-only inscription query: call without extra confirmation when required identifiers are provided.
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: createOrder
+      summary: Create generic inscription payment order
+      description: >-
+        Creates an inscription order for arbitrary files and returns orderId, payAddress, required amount, receiveAddress, fee breakdown, and order/file status. Confirm receiveAddress, file data, outputValue, feeRate, dev fee fields, and expected payment amount before calling because it starts payable order state.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create/brc20-deploy:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: createOrderBRC20Deploy
+      summary: Create deprecated BRC-20 deploy inscription order
+      description: >-
+        Creates a payable inscription order for legacy BRC-20 deploy content and returns orderId, payAddress, amount, receiveAddress, fee fields, and status. Confirm ticker, max, limit, receiveAddress, feeRate, outputValue, and payment amount before use; prefer newer workflows when available.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateBRC20DeployParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create/brc20-mint:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: createOrderBRC20Mint
+      summary: Create deprecated BRC-20 mint inscription order
+      description: >-
+        Creates a payable inscription order for legacy BRC-20 mint content and returns orderId, payAddress, amount, receiveAddress, fee fields, and status. Confirm ticker, mint amount, count, receiveAddress, feeRate, outputValue, and total payment before use; prefer newer workflows when available.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateBRC20MintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create/brc20-transfer:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: createOrderBRC20Transfer
+      summary: Create deprecated BRC-20 transfer inscription order
+      description: >-
+        Creates a payable inscription order for legacy BRC-20 transfer content and returns orderId, payAddress, amount, receiveAddress, fee fields, and status. Confirm ticker, transfer amount, receiveAddress, feeRate, outputValue, and payment amount before use; prefer newer workflows when available.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateBRC20TransferParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/request-commit:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: requestCommit
+      summary: Prepare inscription commit PSBT
+      description: >-
+        Returns commit transaction PSBT hex and inputsToSign for a paid inscription order. Confirm orderId, payerAddress, payerPubkey, payment status, and signing indexes before signing; this prepares spend material but later sign endpoints advance the on-chain workflow.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Prepares payment/signing material: ask for confirmation and verify orderId, payer address, pubkey, PSBT, and signing indexes.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderRequestCommitBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/OrderRequestCommitBRC205ByteMintResponse"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/sign-commit:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: signCommit
+      summary: Submit signed inscription commit PSBT
+      description: >-
+        Submits the signed commit PSBT for an inscription order and returns next-step PSBT/signing material when accepted. Verify orderId, PSBT content, payer inputs, payment amount, and fee assumptions before calling because it advances the transaction workflow.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Submits signed transaction data: require explicit confirmation and verify orderId, PSBT, addresses, and fees before calling.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderSignCommitBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/OrderSignCommitBRC205ByteMintResponse"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/sign-reveal:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: signReveal
+      summary: Submit signed inscription reveal PSBT
+      description: >-
+        Submits the signed reveal PSBT and returns the resulting inscriptionId when the reveal is accepted. Verify orderId, PSBT content, receiveAddress, file payload, and fees before calling because this can finalize inscription creation on-chain.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Submits signed transaction data: require explicit confirmation and verify orderId, PSBT, addresses, and fees before calling.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderSignRevealBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/OrderSignRevealBRC205ByteMintResponse"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create/brc20-5byte-mint:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: createOrderBRC205ByteMint
+      summary: Create deprecated BRC-20 5-byte mint order
+      description: >-
+        Creates a payable inscription order for legacy BRC-20 5-byte mint content and returns orderId, payAddress, amount, receiveAddress, fee fields, and status. Confirm deployer address/pubkey, ticker, mint amount, receiveAddress, feeRate, outputValue, and payment amount before use; prefer newer workflows when available.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/request-commit/brc20-5byte-mint:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: requestCommitBRC205ByteMint
+      summary: Prepare deprecated 5-byte commit PSBT
+      description: >-
+        Returns commit PSBT hex and inputsToSign for a paid legacy BRC-20 5-byte mint order. Confirm orderId, payerAddress, payerPubkey, payment status, and signing indexes before signing; deprecated endpoint kept for compatibility.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Prepares payment/signing material: ask for confirmation and verify orderId, payer address, pubkey, PSBT, and signing indexes.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderRequestCommitBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/OrderRequestCommitBRC205ByteMintResponse"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/sign-commit/brc20-5byte-mint:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: signCommitBRC205ByteMint
+      summary: Submit deprecated signed 5-byte commit
+      description: >-
+        Submits the signed commit PSBT for a legacy BRC-20 5-byte mint order and returns next-step PSBT/signing material when accepted. Verify orderId, PSBT content, payer inputs, payment amount, and fees before calling; deprecated endpoint kept for compatibility.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Submits signed transaction data: require explicit confirmation and verify orderId, PSBT, addresses, and fees before calling.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderSignCommitBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/OrderSignCommitBRC205ByteMintResponse"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/sign-reveal/brc20-5byte-mint:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: signRevealBRC205ByteMint
+      summary: Submit deprecated signed 5-byte reveal
+      description: >-
+        Submits the signed reveal PSBT for a legacy BRC-20 5-byte mint order and returns inscriptionId when accepted. Verify orderId, PSBT content, receiveAddress, inscription payload, and fees before calling; deprecated endpoint kept for compatibility.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: deprecated
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Submits signed transaction data: require explicit confirmation and verify orderId, PSBT, addresses, and fees before calling.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderSignRevealBRC205ByteMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/OrderSignRevealBRC205ByteMintResponse"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create/runes-etch:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: createOrderRunesEtch
+      summary: Create Runes etch inscription order
+      description: >-
+        Creates a payable inscription order for Runes etching and returns orderId, payAddress, amount, receiveAddress, fee fields, and status. Confirm rune name/symbol/divisibility, premine and terms, file payload, receiveAddress, feeRate, outputValue, and total payment before calling.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateRunesEtchParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/create/runes-mint:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: createOrderRunesMint
+      summary: Create Runes mint inscription order
+      description: >-
+        Creates a payable inscription order for Runes minting and returns orderId, payAddress, amount, receiveAddress, fee fields, and status. Confirm runeid, count, receiveAddress, feeRate, outputValue, dev fee fields, and total payment before calling.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Creates payable inscription order state: ask for explicit user confirmation before calling.
+        - Verify receive address, fee rate, output value, content or asset parameters, and total payment amount.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/OrderCreateRunesMintParams"
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                  data:
+                    $ref: "#/components/schemas/Order"
+        "401":
+          description: Invalid API Key
+
+  /v2/inscribe/order/{orderId}/refund:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: refundOrder
+      summary: Submit inscription order refund
+      description: >-
+        Requests a refund transaction for a paid inscription order and returns the refund txid when accepted. Verify orderId, order status, paidAmount, safe refund amount, refundFeeRate, and destination assumptions before calling because it can move funds.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Funds-moving refund workflow: require explicit confirmation and verify orderId, refundFeeRate, paid amount, and safe refund amount.
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                refundFeeRate:
+                  type: number
+                  format: float
+                  example: 1
+        required: true
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      txid:
+                        type: string
+                        description: txid of refunded transaction
+        "401":
+          description: Invalid API Key
+  /v2/inscribe/order/{orderId}/refund-estimate:
+    post:
+      deprecated: true
+      tags:
+        - Inscribe
+      operationId: estimateRefundOrder
+      summary: Estimate inscription refund amount
+      description: >-
+        Returns paidAmount, refundTxSize, and safeRefundAmount for an inscription order refund check. Use it before refund submission to compare fee impact and recoverable value; it never creates, signs, or broadcasts the refund transaction.
+      x-unisat-domain: inscribe
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Safe read-only inscription query: call without extra confirmation when required identifiers are provided.
+      parameters:
+        - name: orderId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                    enum:
+                      - 0
+                      - -1
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    properties:
+                      paidAmount:
+                        type: integer
+                        format: int32
+                      refundTxSize:
+                        type: integer
+                        format: int32
+                        description: The refund amount = size * refundFeeRate
+                      safeRefundAmount:
+                        type: integer
+                        format: int32
+        "401":
+          description: Invalid API Key
+components:
+  schemas:
+    Order:
+      type: object
+      properties:
+        orderId:
+          type: string
+          example: ""
+        status:
+          type: string
+          description: Order Status
+          example: pending
+          enum:
+            - pending
+            - inscribing
+            - minted
+        payAddress:
+          type: string
+          description: Pay to this address to start inscribing
+          example: ""
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        amount:
+          type: integer
+          description: The BTC amount (in satoshis) need to pay
+          example: 3000
+        paidAmount:
+          type: integer
+          description: The paid BTC amount (in satoshis)
+        outputValue:
+          type: integer
+          description: The outputValue of each inscription
+        feeRate:
+          type: number
+          description: The feeRate of inscribing transactions
+        minerFee:
+          type: number
+          description: The miner fee of this order
+        serviceFee:
+          type: number
+          description: The service fee of this order
+        devFee:
+          type: number
+          description: The developer fee of this order
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              filename:
+                type: string
+                example: 10000.sats
+              inscriptionId:
+                type: string
+                example: ""
+              status:
+                type: string
+                enum:
+                  - pending
+                  - unconfirmed
+                  - confirmed
+        count:
+          type: integer
+          example: 1
+          description: The total inscriptions count
+        pendingCount:
+          type: integer
+          description: The pending inscriptions count
+          example: 1
+        unconfirmedCount:
+          type: integer
+          format: int32
+          description: The unconfirmed inscriptions count
+          example: 0
+        confirmedCount:
+          type: integer
+          format: int32
+          description: The confirmed inscriptions count
+          example: 0
+        createTime:
+          type: integer
+          example: 1693439128100
+        refundTxid:
+          type: string
+          example: ""
+        refundAmount:
+          type: integer
+        refundFeeRate:
+          type: number
+    OrderSummary:
+      type: object
+      properties:
+        orderCount:
+          type: object
+          properties:
+            total:
+              type: integer
+            pendingCount:
+              type: integer
+            inscribingCount:
+              type: integer
+            mintedCount:
+              type: integer
+            closedCount:
+              type: integer
+            refundedCount:
+              type: integer
+
+    OrderCreateParams:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              filename:
+                type: string
+              dataURL:
+                type: string
+          example:
+            - filename: 1000.sats
+              dataURL: >-
+                data:text/plain;charset=utf-8;base64,eyJwIjoic25zIiwib3AiOiJyZWciLCJuYW1lIjoiMTAwMDAuc2F0cyJ9
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+    OrderCreateBRC20DeployParams:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+          example: ""
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+        brc20Ticker:
+          type: string
+          description: tick in brc20-deploy
+          example: ""
+        brc20Max:
+          type: string
+          description: max in brc20-deploy
+          example: ""
+        brc20Limit:
+          type: string
+          description: lim in brc20-deploy
+          example: ""
+    OrderCreateBRC20MintParams:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+          example: ""
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+        brc20Ticker:
+          type: string
+          description: tick in brc20-mint
+          example: ""
+        brc20Amount:
+          type: string
+          description: amt in brc20-mint
+          example: ""
+        count:
+          type: integer
+          format: int32
+          description: Repetition count
+          example: 1
+    OrderCreateBRC20TransferParams:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+          example: ""
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+        brc20Ticker:
+          type: string
+          description: tick in brc20-transfer
+          example: ""
+        brc20Amount:
+          type: string
+          description: amt in brc20-transfer
+          example: ""
+    OrderCreateBRC205ByteMintParams:
+      type: object
+      properties:
+        deployerAddress:
+          type: string
+          description: The deployer address that deployed the ticker
+          example: ""
+        deployerPubkey:
+          type: string
+          description: The deployer pubkey that deployed the ticker
+          example: ""
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+          example: ""
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+        brc20Ticker:
+          type: string
+          description: tick in brc20-mint
+          example: ""
+        brc20Amount:
+          type: string
+          description: amt in brc20-mint
+          example: ""
+    OrderRequestCommitBRC205ByteMintParams:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: orderId
+          example: ""
+        payerAddress:
+          type: string
+          description: payer's bitcoin address
+          example: ""
+        payerPubkey:
+          type: string
+          description: payer's pubkey
+          example: ""
+    OrderRequestCommitBRC205ByteMintResponse:
+      type: object
+      properties:
+        psbtHex:
+          type: string
+          description: psbt hex string
+          example: ""
+        inputsToSign:
+          type: array
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+              signingIndexes:
+                type: array
+                items:
+                  type: integer
+    OrderSignCommitBRC205ByteMintParams:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: orderId
+          example: ""
+        psbt:
+          type: string
+          description: psbt hex string
+          example: ""
+    OrderSignCommitBRC205ByteMintResponse:
+      type: object
+      properties:
+        psbtHex:
+          type: string
+          description: psbt hex string
+          example: ""
+        inputsToSign:
+          type: array
+          items:
+            type: object
+            properties:
+              address:
+                type: string
+              signingIndexes:
+                type: array
+                items:
+                  type: integer
+    OrderSignRevealBRC205ByteMintParams:
+      type: object
+      properties:
+        orderId:
+          type: string
+          description: orderId
+          example: ""
+        psbt:
+          type: string
+          description: psbt hex string
+          example: ""
+    OrderSignRevealBRC205ByteMintResponse:
+      type: object
+      properties:
+        inscriptionId:
+          type: string
+          description: inscriptionId
+          example: ""
+    OrderCreateRunesEtchParams:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        files:
+          type: array
+          items:
+            type: object
+            properties:
+              filename:
+                type: string
+              dataURL:
+                type: string
+              runes_etch:
+                type: object
+                properties:
+                  etching:
+                    type: object
+                    properties:
+                      spacedRune:
+                        type: string
+                      symbol:
+                        type: string
+                      divisibility:
+                        type: integer
+                      premine:
+                        type: string
+                      terms:
+                        type: object
+                        properties:
+                          amount:
+                            type: string
+                          cap:
+                            type: string
+                          height:
+                            type: array
+                            items:
+                              type: integer
+                          offset:
+                            type: array
+                            items:
+                              type: integer
+
+          example:
+            - filename: logo
+              dataURL: >-
+                data:text/plain;charset=utf-8;base64,eyJwIjoic25zIiwib3AiOiJyZWciLCJuYW1lIjoiMTAwMDAuc2F0cyJ9
+              runes_etch:
+                etching:
+                  spacedRune: AAAABBBBB
+                  symbol: G
+                  divisibility: 0
+                  premine: 100
+                  terms:
+                    amount: 1000
+                    cap: 21000000
+                    height: [840000, 880000]
+                    offset: [0, 10000]
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+    OrderCreateRunesMintParams:
+      type: object
+      properties:
+        receiveAddress:
+          type: string
+          description: Bitcoin address to receive the inscriptions
+          example: ""
+        feeRate:
+          type: number
+          format: float
+          description: The fee rate of transaction
+          example: 1
+        outputValue:
+          type: integer
+          format: int32
+          description: The balance of inscription
+          example: 546
+        runeid:
+          type: string
+          example: 848484:10
+        count:
+          type: integer
+          example: 2
+        devAddress:
+          type: string
+          description: Developer address to receive extra fee
+        devFee:
+          type: integer
+          format: int32
+          description: Extra fee to pay to developer's address
+
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
+security:
+  - bearerAuth: []

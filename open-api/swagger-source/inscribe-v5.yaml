@@ -3,6 +3,9 @@ info:
   title: Inscribe API V5
   version: 5.0.0
   description: Current inscription API. V5 replaces the deprecated /v2/inscribe endpoints and uses the order workflow implemented by the minting service.
+servers:
+  - url: https://open-api.unisat.io
+  - url: https://open-api-fractal.unisat.io
 tags:
   - name: Inscribe V5
     description: Current multi-network inscription workflow. V5 endpoints require a bearer API key and scope orders to the calling OpenAPI application.

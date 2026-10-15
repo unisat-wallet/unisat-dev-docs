@@ -1,0 +1,1065 @@
+openapi: 3.0.3
+info:
+  title: Alkanes Indexer API
+  version: 1.0.4
+  description: >-
+    The Alkanes Indexer API is developed by the UniSat team, providing a simplified and developer-friendly interface based on the official Alkanes indexer (kungfuflex/alkanes). 
+    It is built on specific versions of metashrew and alkanes-rs to ensure compatibility and consistency. 
+    We welcome feedback and suggestions for improvement.
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api.unisat.io
+  - url: https://open-api-staging.unisat.io
+  - url: https://open-api-signet.unisat.io
+tags:
+  - name: Indexer-Alkanes
+    description: Indexer-Alkanes APIs
+paths:
+  /v1/indexer/alkanes/status:
+    get:
+      tags:
+        - Indexer-Alkanes
+      operationId: getAlkanesStatus
+      summary: Get Alkanes indexer status, indexed height, and asset count
+      description: >-
+        Returns the current Alkanes indexer progress and runtime versions, including indexed block height, total tracked Alkane assets, metashrew version, and alkanes-rs version.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/AlkanesStatus"
+
+  /v1/indexer/alkanes/info-list:
+    get:
+      tags:
+        - Indexer-Alkanes
+      operationId: getAlkanesInfoList
+      summary: List indexed Alkanes assets across tokens, NFTs, and collections
+      description: >-
+        Returns a paginated catalog of Alkane asset metadata. Use it for global discovery across asset types, with optional type filtering and sorting by creation time or alkaneid.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      parameters:
+        - name: type
+          in: query
+          description: "search by type,optional"
+          required: false
+          schema:
+            type: string
+            enum:
+              - token
+              - collection
+              - nft
+              - contract
+        - name: sortBy
+          in: query
+          description: "sort by timestamp, alkaneid, default=timestamp"
+          required: false
+          schema:
+            type: string
+            enum:
+              - timestamp
+              - alkaneid
+            default: timestamp
+        - name: order
+          in: query
+          description: "sort order,optional,default=asc"
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/alkanes/{alkaneid}/info:
+    get:
+      tags:
+        - Indexer-Alkanes
+      operationId: getAlkanesInfo
+      summary: Get metadata for one Alkane asset by alkaneid
+      description: >-
+        Returns the asset type and type-specific metadata for a single Alkane, such as token supply fields, NFT content fields, or collection supply and holder counts.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      parameters:
+        - name: alkaneid
+          in: path
+          description: "Alkane id in block:tx format, for example 2:1."
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/alkanes/token-list:
+    get:
+      tags:
+        - Indexer-Alkanes
+      operationId: getAlkanesTokenList
+      summary: List fungible Alkanes tokens with supply and holder metadata
+      description: >-
+        Returns token-type Alkanes only, including token name, symbol, divisibility, supply, mint progress, and holder count. Supports lookup by alkaneid or name and sorted pagination.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      parameters:
+        - name: alkaneid
+          in: query
+          description: "search by alkaneid"
+          required: false
+          schema:
+            type: string
+            example: 2:1
+        - name: name
+          in: query
+          description: "search by name"
+          required: false
+          schema:
+            type: string
+        - name: sortBy
+          in: query
+          description: "sort by timestamp, alkaneid, default=timestamp"
+          required: false
+          schema:
+            type: string
+            enum:
+              - timestamp
+              - alkaneid
+            default: timestamp
+        - name: order
+          in: query
+          description: "sort order,optional,default=asc"
+          required: false
+          schema:
+            type: string
+            enum:
+              - asc
+              - desc
+            default: asc
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/alkanes/{alkaneid}/holders:
+    get:
+      tags:
+        - Indexer-Alkanes
+      operationId: getAlkanesHolders
+      summary: List holders and balances for an Alkane asset
+      description: >-
+        Returns paginated holder addresses and their indexed amount for the selected Alkane. Use it to inspect token distribution or collection ownership concentration.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      parameters:
+        - name: alkaneid
+          in: path
+          description: "Alkane id in block:tx format, for example 2:1."
+          required: true
+          schema:
+            type: string
+        - name: start
+          description: Start offset
+          in: query
+          required: false
+          schema:
+            type: integer
+          example: 0
+        - name: limit
+          description: "min=1,max=500,default=10"
+          in: query
+          required: false
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 1
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneHolder"
+
+  /v1/indexer/alkanes/{alkaneid}/collection-items:
+    get:
+      tags:
+        - Indexer-Alkanes
+      operationId: getAlkanesCollectionItems
+      summary: List NFT or child assets that belong to an Alkane collection
+      description: >-
+        Returns paginated Alkane item metadata for a collection, including each item's asset type and NFT or token details when available.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      parameters:
+        - name: alkaneid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      start:
+                        type: integer
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/alkanes/{alkaneid}/contract-events:
+    get:
+      tags:
+        - Indexer-Alkanes
+      operationId: getAlkanesContractEvents
+      summary: List contract execution events for an Alkane over a block range
+      description: >-
+        Returns indexed contract events with caller, opcode, fuel, inputs, execution status, block height, txid, and vout. Use it to audit contract activity within a bounded height range.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      parameters:
+        - name: alkaneid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: fromHeight
+          in: query
+          description: "search by from height"
+          required: true
+          schema:
+            type: integer
+        - name: toHeight
+          in: query
+          description: "search by to height"
+          required: true
+          schema:
+            type: integer
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                      start:
+                        type: integer
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneEvent"
+
+  /v1/indexer/alkanes/utxo/{txid}/{index}/balance:
+    get:
+      tags:
+        - Indexer-Alkanes
+      operationId: getAlkanesUtxoBalance
+      summary: Get all Alkane balances attached to a specific UTXO
+      description: >-
+        Returns the Alkane assets and amounts indexed on one transaction output, with token, NFT, or collection metadata attached when available.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      parameters:
+        - name: txid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: index
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: array
+                    items:
+                      $ref: "#/components/schemas/AlkanesUTXOBalance"
+
+  /v1/indexer/address/{address}/alkanes/{alkaneid}/utxo:
+    get:
+      tags:
+        - Indexer-Alkanes
+      operationId: getAddressAlkanesUtxo
+      summary: List an address's UTXOs that carry a specific Alkane
+      description: >-
+        Returns spendable transaction outputs for an address that contain the selected Alkane, including satoshi value, scriptPubKey, confirmations, and indexed Alkane balances on each UTXO.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      parameters:
+        - name: address
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: alkaneid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    properties:
+                      start:
+                        type: integer
+                      total:
+                        type: integer
+                      utxo:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneUtxo"
+
+  /v1/indexer/address/{address}/alkanes/token-list:
+    get:
+      tags:
+        - Indexer-Alkanes
+      operationId: getAddressAlkanesTokenList
+      summary: List fungible Alkanes tokens held by an address
+      description: >-
+        Returns token assets associated with an address, including each token's metadata and paginated list context. Use it for wallet asset discovery before querying per-token UTXOs or transfer history.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      parameters:
+        - name: address
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/address/{address}/alkanes/collection-list:
+    get:
+      tags:
+        - Indexer-Alkanes
+      operationId: getAddressAlkanesCollectionList
+      summary: List Alkane collections associated with an address
+      description: >-
+        Returns collection-type Alkane metadata indexed for an address, including collection name, supply, mint progress, and holder count when available.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      parameters:
+        - name: address
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/address/{address}/alkanes/{alkaneid}/collection-items:
+    get:
+      tags:
+        - Indexer-Alkanes
+      operationId: getAddressAlkanesCollectionItems
+      summary: List an address's items from a specific Alkane collection
+      description: >-
+        Returns collection item metadata scoped to one address, useful for showing which NFTs or child assets from a collection are held by that wallet.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      parameters:
+        - name: address
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: alkaneid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneInfo"
+
+  /v1/indexer/address/{address}/alkanes/{alkaneid}/transfer-history:
+    get:
+      tags:
+        - Indexer-Alkanes
+      operationId: getAddressAlkanesTransferHistory
+      summary: List an address's transfer history for a specific Alkane
+      description: >-
+        Returns indexed transfer records with block height, txid, transfer type, subtype, address, and amount. Use it to build an address-level activity view over a bounded height range.
+      x-unisat-domain: alkanes
+      x-unisat-network: bitcoin
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      parameters:
+        - name: address
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: alkaneid
+          in: path
+          description: ""
+          required: true
+          schema:
+            type: string
+        - name: fromHeight
+          in: query
+          description: "search by from height"
+          required: true
+          schema:
+            type: integer
+        - name: toHeight
+          in: query
+          description: "search by to height"
+          required: true
+          schema:
+            type: integer
+        - name: start
+          in: query
+          description: "default=0"
+          required: false
+          schema:
+            type: integer
+            example: 0
+        - name: limit
+          in: query
+          description: "min=1,max=500,default=10"
+          required: false
+          schema:
+            type: integer
+            example: 10
+      responses:
+        "200":
+          description: successful operation
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  code:
+                    type: integer
+                    example: 0
+                  msg:
+                    type: string
+                    example: ""
+                  data:
+                    type: object
+                    properties:
+                      total:
+                        type: integer
+                        example: 3045
+                      start:
+                        type: integer
+                        example: 0
+                      detail:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/AlkaneTransferHistory"
+
+components:
+  schemas:
+    AlkaneUtxo:
+      type: object
+      properties:
+        address:
+          type: string
+        satoshi:
+          type: integer
+          example: 10000
+        scriptPk:
+          type: string
+        txid:
+          type: string
+        vout:
+          type: integer
+          example: 0
+        confirmations:
+          type: integer
+        alkanes:
+          type: array
+          items:
+            $ref: "#/components/schemas/AlkanesUTXOBalance"
+    AlkaneType:
+      type: string
+      enum:
+        - token
+        - collection
+        - nft
+        - contract
+      example: token
+    AlkanesUTXOBalance:
+      type: object
+      properties:
+        alkaneid:
+          type: string
+        amount:
+          type: string
+        type:
+          $ref: "#/components/schemas/AlkaneType"
+        logo:
+          type: string
+        tokenData:
+          $ref: "#/components/schemas/TokenData"
+        nftData:
+          $ref: "#/components/schemas/NFTData"
+        collectionData:
+          $ref: "#/components/schemas/CollectionData"
+    AlkanesBalance:
+      type: object
+      properties:
+        amount:
+          type: string
+          example: "10000"
+        alkaneid:
+          type: string
+          example: "2584327:44"
+        alkane:
+          type: string
+          example: "AAAAAAAAAAAAAB"
+        symbol:
+          type: string
+          example: "G"
+        divisibility:
+          type: integer
+          example: 0
+    AlkaneHolder:
+      type: object
+      properties:
+        address:
+          type: string
+        amount:
+          type: string
+          example: "10000"
+    AlkaneInfo:
+      type: object
+      properties:
+        alkaneid:
+          type: string
+          example: "2583283:1333"
+        height:
+          type: integer
+          format: uint64
+          example: 2583283
+        txid:
+          type: string
+        timestamp:
+          type: integer
+        type:
+          type: string
+        logo:
+          type: string
+        tokenData:
+          $ref: "#/components/schemas/TokenData"
+        nftData:
+          $ref: "#/components/schemas/NFTData"
+        collectionData:
+          $ref: "#/components/schemas/CollectionData"
+    TokenData:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "MyToken"
+        symbol:
+          type: string
+          example: "MTK"
+        divisibility:
+          type: integer
+          example: 0
+        totalSupply:
+          type: string
+          example: "1000000"
+        maxSupply:
+          type: string
+          example: "1000000"
+        premine:
+          type: string
+          example: "100000"
+        perMint:
+          type: string
+          example: "1000"
+        cap:
+          type: string
+          example: "10000000"
+        minted:
+          type: string
+          example: "500000"
+        mintable:
+          type: boolean
+        holders:
+          type: integer
+          example: 100
+    NFTData:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "MyNFT"
+        attributes:
+          type: object
+        contentType:
+          type: string
+        contentUrl:
+          type: string
+        collectionId:
+          type: string
+    CollectionData:
+      type: object
+      properties:
+        name:
+          type: string
+          example: "MyCollection"
+        totalSupply:
+          type: string
+          example: "1000"
+        maxSupply:
+          type: string
+          example: "1000"
+        minted:
+          type: integer
+        holders:
+          type: integer
+    AlkanesStatus:
+      type: object
+      properties:
+        bestHeight:
+          type: integer
+        alkanes:
+          type: integer
+          example: 100
+        metashrewVersion:
+          type: string
+        alkanesRsVersion:
+          type: string
+    AlkaneEvent:
+      type: object
+      properties:
+        alkaneid:
+          type: string
+        caller:
+          type: string
+        type:
+          type: string
+        opcode:
+          type: string
+        fuel:
+          type: string
+        inputs:
+          type: array
+          items:
+            type: string
+        status:
+          type: string
+        height:
+          type: integer
+        txid:
+          type: string
+        vout:
+          type: integer
+    AlkaneTransferHistory:
+      type: object
+      properties:
+        height:
+          type: integer
+        txid:
+          type: string
+        type:
+          type: string
+        subType:
+          type: string
+        alkaneid:
+          type: string
+        address:
+          type: string
+        amount:
+          type: string
+          example: "10000"
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

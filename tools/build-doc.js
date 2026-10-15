@@ -135,7 +135,16 @@ function getRequestBody(operation, schemas) {
 function getExtraNotes(extraNotesDir, operationId) {
   const notesPath = path.join(extraNotesDir, `${operationId}.md`);
   if (fs.existsSync(notesPath)) {
-    return fs.readFileSync(notesPath, "utf8");
+    const notes = fs.readFileSync(notesPath, "utf8");
+    const section = path.basename(extraNotesDir);
+    // Notes live in a different directory from the generated pages. Point their
+    // relative images at the site's static assets instead of the page directory.
+    return notes.replace(/!\[([^\]]*)\]\(\.\/([^\s)]+)\)/g, (_, alt, image) => {
+      if (!fs.existsSync(path.join(extraNotesDir, image))) {
+        throw new Error(`Missing image referenced by ${notesPath}: ${image}`);
+      }
+      return `![${alt}](/img/note-source/${section}/${image})`;
+    });
   }
   return "";
 }
@@ -305,4 +314,5 @@ try {
   });
 } catch (e) {
   console.error("❌ Failed to generate documentation:", e);
+  process.exitCode = 1;
 }

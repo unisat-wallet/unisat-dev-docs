@@ -1,4 +1,6 @@
 const fs = require("fs");
+const crypto = require("crypto");
+const childProcess = require("child_process");
 const yaml = require("js-yaml");
 
 const projectName = "open-api";
@@ -22,6 +24,22 @@ function loadSwaggerFile(filename) {
     "utf8"
   );
   return yaml.load(file);
+}
+
+function sha256(content) {
+  return crypto.createHash("sha256").update(content).digest("hex");
+}
+
+function gitOutput(args, fallback = "unknown") {
+  try {
+    return childProcess.execFileSync("git", args, {
+      cwd: process.cwd(),
+      encoding: "utf8",
+      stdio: ["ignore", "pipe", "ignore"],
+    }).trim();
+  } catch (_error) {
+    return fallback;
+  }
 }
 
 const mainSwagger = loadSwaggerFile("main");
@@ -86,13 +104,64 @@ fs.writeFileSync(`${swaggerDir}/swagger.yaml`, str);
 
 const openApiSwaggerPath = `./open-api/auto-generated/swagger/openapi-swagger.yaml`;
 const websiteSwaggerDir = `./website/static/swagger`;
-const websiteSwaggerPath = `${websiteSwaggerDir}/openapi-swagger.yaml`;
+const websiteSwaggerPath = `${websiteSwaggerDir}/swagger.yaml`;
+const legacyWebsiteSwaggerPath = `${websiteSwaggerDir}/openapi-swagger.yaml`;
+const websiteSwaggerFilesDir = `${websiteSwaggerDir}/files`;
 
 fs.mkdirSync(`./open-api/auto-generated/swagger`, { recursive: true });
 fs.mkdirSync(websiteSwaggerDir, { recursive: true });
 fs.writeFileSync(openApiSwaggerPath, str);
 fs.writeFileSync(websiteSwaggerPath, str);
+// Keep the old public path during the migration window.
+fs.writeFileSync(legacyWebsiteSwaggerPath, str);
+
+fs.rmSync(websiteSwaggerFilesDir, { recursive: true, force: true });
+fs.mkdirSync(websiteSwaggerFilesDir, { recursive: true });
+
+const publishedSourceNames = ["main", ...config.swagger];
+const publishedFiles = publishedSourceNames.map((name) => {
+  const sourcePath = `${projectSourceDir}/swagger-source/${name}.yaml`;
+  const content = fs.readFileSync(sourcePath);
+  const relativePath = `files/${name}.yaml`;
+
+  fs.writeFileSync(`${websiteSwaggerDir}/${relativePath}`, content);
+
+  return {
+    name,
+    path: relativePath,
+    sha256: sha256(content),
+    size: content.length,
+  };
+});
+
+const commit = process.env.GITHUB_SHA || gitOutput(["rev-parse", "HEAD"]);
+const version =
+  process.env.OPENAPI_VERSION ||
+  (process.env.GITHUB_REF_TYPE === "tag" && process.env.GITHUB_REF_NAME) ||
+  gitOutput(["rev-parse", "--short", "HEAD"]);
+const bundleContent = Buffer.from(str, "utf8");
+const manifest = {
+  schemaVersion: 1,
+  version,
+  generatedAt: new Date().toISOString(),
+  source: {
+    repository: "unisat-wallet/unisat-dev-docs",
+    commit,
+  },
+  bundle: {
+    path: "swagger.yaml",
+    sha256: sha256(bundleContent),
+    size: bundleContent.length,
+  },
+  files: publishedFiles,
+};
+
+fs.writeFileSync(
+  `${websiteSwaggerDir}/manifest.json`,
+  `${JSON.stringify(manifest, null, 2)}\n`
+);
 
 console.log("build swagger success");
 console.log(`wrote ${openApiSwaggerPath}`);
 console.log(`wrote ${websiteSwaggerPath}`);
+console.log(`wrote ${websiteSwaggerDir}/manifest.json`);

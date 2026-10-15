@@ -1,0 +1,177 @@
+openapi: 3.0.3
+info:
+  title: Fractal Only API
+  version: 1.0.4
+  description: >-
+    This API is limited to Fractal only. It provides endpoints to interact with the Fractal network, including supply information, address statistics, and rich lists.
+  contact:
+    email: contact@unisat.io
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+servers:
+  - url: https://open-api-fractal.unisat.io
+  - url: https://open-api-fractal-testnet.unisat.io
+tags:
+  - name: Public-Fractal
+    description: Public-Fractal APIs
+paths:
+  /v1/public/fractal/supply:
+    get:
+      tags:
+        - Public-Fractal
+      operationId: getFractalSupply
+      summary: "Get current circulating Fractal supply and block height"
+      description: >-
+        Returns the indexed Fractal supply snapshot, including the latest indexed block count and current supply value. Use this read-only endpoint for Fractal dashboards, wallet balance context, and supply monitoring where data may lag the chain tip because of indexer confirmation and synchronization rules.
+      x-unisat-domain: fractal
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/FractalSupply"
+        "401":
+          description: Invalid API Key
+  /v1/public/fractal/total-supply:
+    get:
+      tags:
+        - Public-Fractal
+      operationId: getFractalTotalSupply
+      summary: "Get total Fractal supply and indexed block height"
+      description: >-
+        Returns the indexed Fractal total supply snapshot with block count and supply amount. Use this read-only endpoint to display aggregate FB issuance, compare supply metrics across environments, or power public Fractal statistics pages without creating orders, signatures, or transactions.
+      x-unisat-domain: fractal
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/FractalSupply"
+        "401":
+          description: Invalid API Key
+  /v1/public/address/total:
+    get:
+      tags:
+        - Public-Fractal
+      operationId: getFractalTotalAddress
+      summary: "Get total indexed Fractal address count"
+      description: >-
+        Returns the total number of Fractal addresses tracked by the indexer as a numeric value. Use this read-only endpoint for network growth metrics, explorer overviews, and public statistics where the count reflects UniSat indexing progress rather than an immediate chain-tip scan.
+      x-unisat-domain: fractal
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    type: number
+        "401":
+          description: Invalid API Key
+  /v1/public/address/rich-list:
+    get:
+      tags:
+        - Public-Fractal
+      operationId: getFractalRichList
+      summary: "List richest Fractal addresses by indexed balance"
+      description: >-
+        Returns a paginated rich list of Fractal address balances, with each item containing the address and indexed balance amount. Use cursor and size to page through holders for explorer leaderboards, distribution analysis, or wallet analytics; results are read-only and may lag final chain state while indexing catches up.
+      x-unisat-domain: fractal
+      x-unisat-network: fractal
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      parameters:
+        - name: cursor
+          description: Start offset
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 0
+        - name: size
+          description: Number of items returned (Max 10000)
+          in: query
+          required: true
+          schema:
+            type: integer
+          example: 16
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                properties:
+                  code:
+                    type: integer
+                    format: int32
+                  msg:
+                    type: string
+                    example: OK
+                  data:
+                    $ref: "#/components/schemas/AddressBalance"
+        "401":
+          description: Invalid API Key
+components:
+  schemas:
+    FractalSupply:
+      type: object
+      properties:
+        blocks:
+          type: number
+        supply:
+          type: number
+    AddressBalance:
+      type: array
+      items:
+        properties:
+          address:
+            type: string
+          balance:
+            type: number
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+security:
+  - bearerAuth: []

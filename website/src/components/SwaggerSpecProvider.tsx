@@ -7,7 +7,7 @@ export function SwaggerSpecProvider({ children }) {
   const [spec, setSpec] = useState(null);
 
   useEffect(() => {
-    fetch("/swagger/openapi-swagger.yaml")
+    fetch("/swagger/swagger.yaml")
       .then((res) => res.text())
       .then((yamlText) => {
         // swagger-ui-react 支持 YAML 字符串

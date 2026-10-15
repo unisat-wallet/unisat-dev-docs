@@ -189,7 +189,7 @@ Invalid API Key
 
 ### Notes
 
-![image](./brc20_p1.avif)
+![image](/img/note-source/brc20-indexer/brc20_p1.avif)
 
 Due to the inability to transmit special characters on the router, for tickers containing special characters, please use the hexadecimal encoding format.
 
@@ -199,7 +199,7 @@ export function stringToHex(stringToEncode: string) {
 }
 ```
 
-![image](./brc20_p2.avif)
+![image](/img/note-source/brc20-indexer/brc20_p2.avif)
 
 
 ---

@@ -2592,9 +2592,12 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapCreateDeposit
-      summary: Build an InSwap deposit PSBT or bridge deposit draft
+      summary: Build InSwap deposit signing material
       description: >-
-        Returns deposit signing material such as PSBT, deposit type, expiration timestamp, and recommended deposit amount for direct, matching, or bridge deposit flows.
+        Returns either a single psbt or a BRC20 transaction chain, selected from the available balance and transfer inscriptions.
+        Sign each returned PSBT using its corresponding ToSignInputs when provided, then submit the signed fields to confirm_deposit.
+        A Fractal BRC20 request with inscriptionId can omit tick and amount; both are read from the inscription.
+        Transaction chains contain commitPsbt and revealPsbt, an optional consumePsbt, and sendPsbt for BTC deposits.
       x-unisat-domain: swap
       x-unisat-network: fractal
       x-unisat-status: recommended
@@ -2608,6 +2611,7 @@ paths:
           in: query
           name: inscriptionId
           required: false
+          description: Existing BRC20 transfer inscription. Omit to let the service select or build transfer transactions.
         - schema:
             type: string
           in: query
@@ -2623,13 +2627,13 @@ paths:
           in: query
           name: amount
           required: false
-          description: Required for bridge deposits.
+          description: Required unless depositing a Fractal BRC20 inscription specified by inscriptionId.
         - schema:
             type: string
           in: query
           name: tick
           required: false
-          description: Required for bridge deposits.
+          description: Required unless depositing a Fractal BRC20 inscription specified by inscriptionId.
         - schema:
             enum:
               - btc
@@ -2637,10 +2641,11 @@ paths:
               - runes
               - alkanes
             type: string
+            default: brc20
           in: query
           name: assetType
           required: false
-          description: Asset type. Required for bridge deposits.
+          description: Asset type. Non-BRC20 assets use a single bridge PSBT.
         - schema:
             enum:
               - FRACTAL_BITCOIN_MAINNET
@@ -2650,18 +2655,22 @@ paths:
               - BITCOIN_TESTNET4
               - BITCOIN_SIGNET
             type: string
+            default: FRACTAL_BITCOIN_MAINNET
           in: query
           name: networkType
           required: false
-          description: Network type. Required for bridge deposits.
+          description: Source network. Must be supported by the configured indexer and bridge service.
         - schema:
             type: number
+            minimum: 0
+            exclusiveMinimum: true
           in: query
           name: feeRate
           required: false
+          description: Positive network fee rate in sat/vB. Omit to use the service default; zero is not accepted.
       responses:
         "200":
-          description: Default Response
+          description: Single PSBT or BRC20 transaction chain to sign.
           content:
             application/json:
               schema:
@@ -2676,6 +2685,7 @@ paths:
                     properties:
                       psbt:
                         type: string
+                        description: Single deposit PSBT. Returned instead of transaction-chain PSBT fields.
                       type:
                         description: Deposit type.
                         enum:
@@ -2685,8 +2695,38 @@ paths:
                         type: string
                       expiredTimestamp:
                         type: number
+                        nullable: true
                       recommendDeposit:
                         type: string
+                        nullable: true
+                      consumePsbt:
+                        type: string
+                        description: Optional transaction consuming existing transferable inscriptions.
+                      commitPsbt:
+                        type: string
+                        description: Commit transaction for a new transfer inscription.
+                      revealPsbt:
+                        type: string
+                        description: Reveal transaction for the new transfer inscription.
+                      sendPsbt:
+                        type: string
+                        description: Final bridge send transaction for BTC BRC20 deposits.
+                      consumeToSignInputs:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Brc20SwapDepositToSignInput"
+                      commitToSignInputs:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Brc20SwapDepositToSignInput"
+                      revealToSignInputs:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Brc20SwapDepositToSignInput"
+                      sendToSignInputs:
+                        type: array
+                        items:
+                          $ref: "#/components/schemas/Brc20SwapDepositToSignInput"
                     additionalProperties: false
                 required:
                   - msg
@@ -2697,9 +2737,15 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapConfirmDeposit
-      summary: Submit a signed InSwap deposit confirmation
+      summary: Submit signed InSwap deposit transactions
       description: >-
-        Confirms a prepared deposit using the signed PSBT and optional bridge metadata, returning the transaction id and remaining pending-confirmation count.
+        Submit either psbt for a single transaction or the signed transaction-chain fields returned by create_deposit; do not mix them.
+        A Fractal BRC20 single deposit only requires psbt; inscriptionId is optional.
+        A BRC20 chain requires address, tick, amount, commitPsbt and revealPsbt. Include consumePsbt if it was returned.
+        BTC BRC20 chains additionally require pubkey and sendPsbt.
+        BTC single deposits and non-BRC20 bridge deposits require psbt, pubkey, address, tick, amount, assetType and networkType.
+        Transaction chains only support BRC20. Omitted networkType and assetType default to FRACTAL_BITCOIN_MAINNET and brc20.
+        Returns the transaction id and required confirmation count.
       x-unisat-domain: swap
       x-unisat-network: fractal
       x-unisat-status: recommended
@@ -2710,22 +2756,58 @@ paths:
         content:
           application/json:
             schema:
-              required:
-                - psbt
               type: object
+              oneOf:
+                - required:
+                    - psbt
+                  not:
+                    anyOf:
+                      - required: [consumePsbt]
+                      - required: [commitPsbt]
+                      - required: [revealPsbt]
+                      - required: [sendPsbt]
+                - required:
+                    - commitPsbt
+                    - revealPsbt
+                    - address
+                    - tick
+                    - amount
+                  properties:
+                    assetType:
+                      type: string
+                      enum: [brc20]
+                  not:
+                    required: [psbt]
               properties:
                 psbt:
                   type: string
+                  description: Signed single deposit PSBT. Mutually exclusive with transaction-chain PSBT fields.
+                consumePsbt:
+                  type: string
+                  description: Signed consume PSBT, required when returned by create_deposit.
+                commitPsbt:
+                  type: string
+                  description: Signed commit PSBT for a BRC20 transaction chain.
+                revealPsbt:
+                  type: string
+                  description: Signed reveal PSBT for a BRC20 transaction chain.
+                sendPsbt:
+                  type: string
+                  description: Signed send PSBT, required for BTC BRC20 transaction chains.
                 inscriptionId:
                   type: string
                 pubkey:
                   type: string
+                  description: Required for BTC chains and all single bridge deposits.
                 address:
                   type: string
+                  description: Required for transaction chains and single bridge deposits.
                 amount:
                   type: string
+                  description: Required for transaction chains and single bridge deposits.
                 tick:
                   type: string
+                  description: Required for transaction chains and single bridge deposits.
                 assetType:
                   enum:
                     - btc
@@ -2733,6 +2815,7 @@ paths:
                     - runes
                     - alkanes
                   type: string
+                  description: Required explicitly for single bridge deposits; chains only support brc20.
                 networkType:
                   enum:
                     - FRACTAL_BITCOIN_MAINNET
@@ -2742,13 +2825,14 @@ paths:
                     - BITCOIN_TESTNET4
                     - BITCOIN_SIGNET
                   type: string
+                  description: Required explicitly for single bridge deposits; otherwise defaults to FRACTAL_BITCOIN_MAINNET.
                 feeRate:
                   type: number
               additionalProperties: false
         required: true
       responses:
         "200":
-          description: Default Response
+          description: Deposit transaction submitted.
           content:
             application/json:
               schema:
@@ -2765,7 +2849,7 @@ paths:
                         description: Transaction ID
                         type: string
                       pendingNum:
-                        description: Number of pending confirmations
+                        description: Required number of confirmations for the deposit.
                         type: number
                     additionalProperties: false
                 required:
@@ -7284,6 +7368,23 @@ paths:
                   - data
 components:
   schemas:
+    Brc20SwapDepositToSignInput:
+      type: object
+      required:
+        - index
+        - address
+      properties:
+        index:
+          type: integer
+          minimum: 0
+          description: Zero-based PSBT input index to sign.
+        address:
+          type: string
+          description: Address whose key signs this input.
+        disableTweakSigner:
+          type: boolean
+          description: Whether the Taproot signer must disable key tweaking for this input.
+      additionalProperties: false
   securitySchemes:
     bearerAuth:
       type: http
