@@ -25,6 +25,7 @@ const sidebars: SidebarsConfig = {
       label: "Open API",
       items: [
         "open-api/intro",
+        "open-api/openapi-cli",
         {
           type: "link",
           label: "Open API Swagger",
