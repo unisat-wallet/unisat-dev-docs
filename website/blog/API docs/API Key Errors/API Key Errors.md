@@ -46,7 +46,7 @@ CLI/MCP permission and request credits are separate checks:
 
 Despite that message, `-2011` can also occur when an ordinary API request requires request credits and the total credit balance is exhausted. Check both the total balance and any required CLI/MCP credits; this code alone does not identify which balance failed.
 
-Repeated immediate retries will not restore permissions or credits. Review the selected network, plan, and eligible credit balance before retrying. See [OpenAPI CLI](/docs/open-api/openapi-cli) for client configuration.
+Repeated immediate retries will not restore permissions or credits. Review the selected network, plan, and eligible credit balance before retrying. See [OpenAPI CLI & MCP](/docs/open-api/openapi-cli) for client configuration.
 
 ## Internal errors
 
