@@ -103,13 +103,13 @@ Use unisat-openapi-cli to find the address holding the most ORDI on Bitcoin and 
 
 [![ChatGPT desktop conversation and chart preview, accelerated playback — click to view at full resolution](/examples/openapi-cli/agent-ordi.gif)](/examples/openapi-cli/agent-ordi.gif)
 
-### Example 2: Compare blocks and fee rates
+### Example 2: Build a Bitcoin address explorer
 
 ```text
-Use unisat-openapi-cli to compare Bitcoin blocks H-1, H-2, and H-3, where H is the latest indexed height. Show transaction counts and sizes in bytes, calculate both averages, and summarize recommended fee rates in sat/vB. Keep the answer concise, flag missing or inconsistent data, and use read-only queries.
+Use unisat-openapi-cli to build a Bitcoin address explorer with BTC, BRC-20, Runes, inscriptions, asset search, and paginated transaction history with details. Include loading and error states, keep API keys server-side, and use read-only queries. Run it, test with a real address, and open it for preview.
 ```
 
-[![Actual Codex conversation screen recording, accelerated playback](/examples/openapi-cli/agent-blocks.gif)](/examples/openapi-cli/agent-blocks.gif)
+[![ChatGPT desktop conversation and website demo, accelerated playback — click to view at full resolution](/examples/openapi-cli/agent-explorer.gif)](/examples/openapi-cli/agent-explorer.gif)
 
 ## Troubleshooting
 
