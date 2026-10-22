@@ -121,6 +121,7 @@ const sidebars: SidebarsConfig = {
       items: [
         "developer-support/how-to-acquire-a-unisat-api-key",
         "developer-support/plans",
+        "developer-support/api-key-errors",
         "developer-support/enable-two-factor-authentication",
       ],
     },

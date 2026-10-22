@@ -122,4 +122,6 @@ Use unisat-openapi-cli to build a Bitcoin address explorer with BTC, BRC-20, Run
 
 For operations requiring confirmation, use `--confirm` only after the user explicitly authorizes that operation. The examples above are read-only queries.
 
+For authentication, CLI/MCP permissions, or request quotas, see [API Key Errors](/docs/developer-support/api-key-errors).
+
 See the [CLI source and package documentation](https://github.com/unisat-wallet/unisat-ai-kit/tree/main/packages/cli) for additional usage details.

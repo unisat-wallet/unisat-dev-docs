@@ -31,6 +31,10 @@ UniSat offers four API plans for different use cases:
 
 The Free and Specialist plans are limited to 5 requests per second. The Enterprise plan allows 10 requests per second. Custom Enterprise plans can provide higher throughput, with top-tier exchanges eligible for up to 500 requests per second. Contact the UniSat team to discuss your requirements.
 
+## How do I troubleshoot API key or quota errors?
+
+Check the HTTP status together with the response's `code` and `msg`. See [API Key Errors](/docs/developer-support/api-key-errors) for API key and CLI/MCP access errors, rate limits, quota reset times, and retry guidance.
+
 ## What if my API usage exceeds my current plan, and will I lose the remaining value if I upgrade?
 
 If you exceed your plan's usage limit, you can purchase additional usage through a pay-as-you-go package or upgrade to a higher-tier plan. When you upgrade, the remaining value of your current plan is calculated to the minute and applied as credit toward the new plan.
