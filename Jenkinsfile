@@ -1,7 +1,7 @@
 @Library('mylibs') _
 
 pipelineBuildDockerWithVersionParam(
-    repo: 'unisat/swap-api',
+    repo: 'unisat/unisat-dev-docs',
     dockerfilePath: 'website/Dockerfile',
 )
 
