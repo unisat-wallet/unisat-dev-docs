@@ -29,3 +29,9 @@
   --ifm-color-primary-lightest: #ffd699;
   --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
 }
+
+/* Keep this top-level sidebar item consistent with the other navigation labels. */
+.theme-doc-sidebar-menu
+  .menu__link--active[href="/docs/open-api/openapi-cli"] {
+  color: var(--ifm-menu-color);
+}
