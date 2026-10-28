@@ -25,7 +25,6 @@ const sidebars: SidebarsConfig = {
       label: "Open API",
       items: [
         "open-api/intro",
-        "open-api/openapi-cli",
         {
           type: "link",
           label: "Open API Swagger",
@@ -92,6 +91,11 @@ const sidebars: SidebarsConfig = {
           ],
         },
       ],
+    },
+    {
+      type: "doc",
+      id: "open-api/openapi-cli",
+      label: "OpenAPI CLI & MCP",
     },
     {
       type: "category",
