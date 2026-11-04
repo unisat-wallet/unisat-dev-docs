@@ -1078,6 +1078,197 @@ paths:
         "401":
           description: Invalid API Key
 
+  /v1/indexer/unavailable-utxo/unlock/prepare:
+    post:
+      tags:
+        - Indexer-Blockchain
+      operationId: prepareUnlockUnavailableUtxos
+      summary: Prepare a message for unlocking unavailable UTXOs
+      description: >-
+        Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Validates the requested UTXOs against the address's current lock state and returns the exact message and nonce that the wallet must sign. This step does not change UTXO availability. Unlocking is a high-risk action because protocol-asset UTXOs may subsequently be selected and spent as BTC.
+      servers:
+        - url: https://open-api.unisat.io
+          description: Bitcoin Mainnet
+        - url: https://open-api-fractal.unisat.io
+          description: Fractal Bitcoin Mainnet
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Call this endpoint first, display the returned message to the user, and sign it using Bitcoin Signed Message semantics.
+        - Preserve the address, ordered outpointList, message, and nonce for the execute request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrepareUTXOLockStateRequest"
+      responses:
+        "200":
+          description: Message prepared, or a validation error returned in the response envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrepareUTXOLockStateResponse"
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/unavailable-utxo/unlock:
+    post:
+      tags:
+        - Indexer-Blockchain
+      operationId: unlockUnavailableUtxos
+      summary: Unlock unavailable UTXOs after wallet authorization
+      description: >-
+        Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Verifies the signed prepare message and marks eligible UTXOs as manually unlocked. Unlocked UTXOs may appear in available balance and available UTXO results even when they carry inscriptions or other protocol assets. Spending such UTXOs can transfer or destroy those assets; obtain explicit user confirmation before submitting this request.
+      servers:
+        - url: https://open-api.unisat.io
+          description: Bitcoin Mainnet
+        - url: https://open-api-fractal.unisat.io
+          description: Fractal Bitcoin Mainnet
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Submit the same address, ordered outpointList, and nonce used to produce the signed prepare message.
+        - Warn the user that unlocked protocol-asset UTXOs can be selected for BTC spending.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommitUTXOLockStateRequest"
+      responses:
+        "200":
+          description: Unlock applied, or an error returned in the response envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UTXOLockStateMutationResponse"
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/unavailable-utxo/lock/prepare:
+    post:
+      tags:
+        - Indexer-Blockchain
+      operationId: prepareLockUnavailableUtxos
+      summary: Prepare a message for locking UTXOs
+      description: >-
+        Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Validates the requested UTXOs against the address's current unlock state and returns the exact message and nonce that the wallet must sign. This step does not change UTXO availability. Use the returned values with the lock execution endpoint.
+      servers:
+        - url: https://open-api.unisat.io
+          description: Bitcoin Mainnet
+        - url: https://open-api-fractal.unisat.io
+          description: Fractal Bitcoin Mainnet
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Call this endpoint first, display the returned message to the user, and sign it using Bitcoin Signed Message semantics.
+        - Preserve the address, ordered outpointList, message, and nonce for the execute request.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/PrepareUTXOLockStateRequest"
+      responses:
+        "200":
+          description: Message prepared, or a validation error returned in the response envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/PrepareUTXOLockStateResponse"
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/unavailable-utxo/lock:
+    post:
+      tags:
+        - Indexer-Blockchain
+      operationId: lockUnavailableUtxos
+      summary: Lock UTXOs after wallet authorization
+      description: >-
+        Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Verifies the signed prepare message and restores eligible UTXOs to the protected or unavailable set. Locked UTXOs are excluded from normal available balance and coin-selection results, helping prevent accidental spending of inscriptions and other protocol assets.
+      servers:
+        - url: https://open-api.unisat.io
+          description: Bitcoin Mainnet
+        - url: https://open-api-fractal.unisat.io
+          description: Fractal Bitcoin Mainnet
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: false
+      x-unisat-requires-confirmation: true
+      x-unisat-ai-hints:
+        - Submit the same address, ordered outpointList, and nonce used to produce the signed prepare message.
+        - Refresh available balance and available UTXOs after a successful lock.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CommitUTXOLockStateRequest"
+      responses:
+        "200":
+          description: Lock applied, or an error returned in the response envelope
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UTXOLockStateMutationResponse"
+        "401":
+          description: Invalid API Key
+
+  /v1/indexer/check/utxo/unlock:
+    post:
+      tags:
+        - Indexer-Blockchain
+      operationId: checkUtxosUnlocked
+      summary: Check whether UTXOs were manually unlocked
+      description: >-
+        Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Returns one boolean for each submitted outpoint, in the same order. true means the UTXO is present in the manual unlock history; false means it is not. This endpoint checks manual unlock state only and does not independently prove that a UTXO is unspent or currently spendable.
+      servers:
+        - url: https://open-api.unisat.io
+          description: Bitcoin Mainnet
+        - url: https://open-api-fractal.unisat.io
+          description: Fractal Bitcoin Mainnet
+      x-unisat-domain: blockchain
+      x-unisat-network: multi
+      x-unisat-status: recommended
+      x-unisat-readonly: true
+      x-unisat-requires-confirmation: false
+      x-unisat-ai-hints:
+        - Match each returned boolean to the request item at the same array index.
+        - Do not treat true as sufficient proof that the UTXO is unspent or safe to spend.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: array
+              minItems: 1
+              items:
+                $ref: "#/components/schemas/UTXOLockOutpoint"
+            example:
+              - txid: "0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+                index: 0
+      responses:
+        "200":
+          description: Successful operation
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CheckUTXOUnlockResponse"
+        "401":
+          description: Invalid API Key
+
 components:
   schemas:
     BlockInfo:
@@ -1208,6 +1399,112 @@ components:
           type: boolean
         offset:
           type: integer
+    UTXOLockOutpoint:
+      type: object
+      required:
+        - txid
+        - index
+      properties:
+        txid:
+          type: string
+          description: Transaction id of the UTXO as a 64-character hexadecimal string.
+          pattern: "^[0-9a-fA-F]{64}$"
+        index:
+          type: integer
+          description: Transaction output index (vout).
+          minimum: 0
+          maximum: 4294967295
+    PrepareUTXOLockStateRequest:
+      type: object
+      required:
+        - address
+        - outpointList
+      properties:
+        address:
+          type: string
+          description: Address that owns the requested UTXOs.
+        outpointList:
+          type: array
+          description: Ordered UTXO list. Preserve this exact order when submitting the signed execution request.
+          minItems: 1
+          maxItems: 1000
+          items:
+            $ref: "#/components/schemas/UTXOLockOutpoint"
+    CommitUTXOLockStateRequest:
+      allOf:
+        - $ref: "#/components/schemas/PrepareUTXOLockStateRequest"
+        - type: object
+          required:
+            - pubkey
+            - signature
+            - nonce
+          properties:
+            pubkey:
+              type: string
+              description: Hex-encoded secp256k1 public key used to verify the wallet signature.
+            signature:
+              type: string
+              description: Base64-encoded 65-byte compact ECDSA signature over the exact prepare message using the Bitcoin Signed Message prefix.
+            nonce:
+              type: integer
+              description: Nonce returned by the matching prepare request.
+    PrepareUTXOLockStateResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: 0 on success, -1 for a validation or processing error, or -1001 when the manual lock or unlock limit is exceeded.
+          enum:
+            - 0
+            - -1
+            - -1001
+        msg:
+          type: string
+          example: ok
+        data:
+          type: object
+          properties:
+            message:
+              type: string
+              description: Exact human-readable message that the wallet must sign without modification.
+            nonce:
+              type: integer
+              example: 123456
+    UTXOLockStateMutationResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          description: 0 on success, -1 for a validation, signature, or processing error, or -1001 when the manual lock or unlock limit is exceeded.
+          enum:
+            - 0
+            - -1
+            - -1001
+        msg:
+          type: string
+          example: ok
+    CheckUTXOUnlockResponse:
+      type: object
+      properties:
+        code:
+          type: integer
+          format: int32
+          enum:
+            - 0
+            - -1
+        msg:
+          type: string
+          example: ok
+        data:
+          type: array
+          description: Manual unlock flags aligned by index with the submitted outpoint array.
+          items:
+            type: boolean
+          example:
+            - true
+            - false
 
   securitySchemes:
     bearerAuth:

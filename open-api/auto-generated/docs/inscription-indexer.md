@@ -15,6 +15,7 @@ Inscription Indexer API is a RESTful API for accessing and managing inscriptions
 | [GET `/v1/indexer/address/(address)/inscription-data`](#list-inscriptions-currently-associated-with-an-address) | List inscriptions currently associated with an address |
 | [GET `/v1/indexer/address/(address)/inscription-utxo-data`](#list-inscription-bearing-utxos-for-an-address) | List inscription-bearing UTXOs for an address |
 | [GET `/v1/indexer/address/(address)/abandon-nft-utxo-data`](#list-abandoned-nft-style-inscription-utxos-for-an-address) | List abandoned NFT-style inscription UTXOs for an address |
+| [GET `/v1/indexer/utxo-nft-offset/(txid)/(index)`](#check-utxo-inscription-offsets-before-creating-a-brc-20-inscription) | Check UTXO inscription offsets before creating a BRC-20 inscription |
 
 ---
 
@@ -304,6 +305,33 @@ If you still need access to these UTXOs, please use the new `/abandon-nft-utxo-d
 - `/abandon-nft-utxo-data` returns UTXOs for abandoned inscriptions
 
 If you have any questions about this change, please contact the UniSat developer support team.
+
+
+---
+
+### Check UTXO inscription offsets before creating a BRC-20 inscription
+<a id="check-utxo-inscription-offsets-before-creating-a-brc-20-inscription"></a>
+
+**Method**: `GET`  
+**Path**: `/v1/indexer/utxo-nft-offset/{txid}/{index}`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Inscription Indexer/getUtxoNftOffsetsByTxIdAndIndex)  
+
+#### Description
+Returns the satoshi offsets of inscriptions recorded in the specified UTXO. Use this endpoint as a preflight check before creating any BRC-20 protocol inscription, including deploy, mint, and transfer. If the returned array contains 0, the first satoshi of the UTXO has already been inscribed; inscribing a BRC-20 operation on that satoshi would be a reinscription and the resulting BRC-20 operation would be invalid. In that case, select another UTXO or change the transaction construction. Stripped inscription records are included because a historical inscription on the satoshi must still be considered when preventing duplicate-satoshi inscription. At most the first 10 offsets are returned, in index order.
+
+#### Parameters
+- `txid` (path, string) **(required)**: Transaction id of the UTXO, encoded as a 64-character hexadecimal string.
+- `index` (path, integer) **(required)**: Transaction output index (vout) of the UTXO.
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"ok"`
+- `data` (array): Up to 10 inscription offsets, measured in satoshis from the start of the UTXO. A value of 0 means the first satoshi is already inscribed and must not be reused for a BRC-20 deploy, mint, or transfer inscription.; example: `[0,546]`
+
+#### Response (401)
+Invalid API Key
 
 
 ---

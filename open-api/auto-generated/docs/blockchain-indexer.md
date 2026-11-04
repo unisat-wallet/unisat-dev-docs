@@ -27,6 +27,11 @@ Blockchain API is a RESTful API for accessing Bitcoin blockchain data. It provid
 | [GET `/v1/indexer/address/(address)/all-utxo-data`](#list-all-indexed-utxos-for-an-address) | List all indexed UTXOs for an address |
 | [GET `/v1/indexer/address/(address)/available-balance`](#get-address-balance-grouped-by-available-and-unavailable-utxos) | Get address balance grouped by available and unavailable UTXOs |
 | [GET `/v1/indexer/address/(address)/available-utxo-data`](#list-available-utxos-for-an-address) | List available UTXOs for an address |
+| [POST `/v1/indexer/unavailable-utxo/unlock/prepare`](#prepare-a-message-for-unlocking-unavailable-utxos) | Prepare a message for unlocking unavailable UTXOs |
+| [POST `/v1/indexer/unavailable-utxo/unlock`](#unlock-unavailable-utxos-after-wallet-authorization) | Unlock unavailable UTXOs after wallet authorization |
+| [POST `/v1/indexer/unavailable-utxo/lock/prepare`](#prepare-a-message-for-locking-utxos) | Prepare a message for locking UTXOs |
+| [POST `/v1/indexer/unavailable-utxo/lock`](#lock-utxos-after-wallet-authorization) | Lock UTXOs after wallet authorization |
+| [POST `/v1/indexer/check/utxo/unlock`](#check-whether-utxos-were-manually-unlocked) | Check whether UTXOs were manually unlocked |
 
 ---
 
@@ -841,6 +846,168 @@ Successful operation
     - `txid` (string):
     - `vout` (integer): example: `0`
     - `isLowFee` (boolean): Whether the UTXO has a low fee rate (less than 1 sat/vB)
+
+#### Response (401)
+Invalid API Key
+
+
+---
+
+### Prepare a message for unlocking unavailable UTXOs
+<a id="prepare-a-message-for-unlocking-unavailable-utxos"></a>
+
+**Method**: `POST`  
+**Path**: `/v1/indexer/unavailable-utxo/unlock/prepare`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/prepareUnlockUnavailableUtxos)  
+
+#### Description
+Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Validates the requested UTXOs against the address's current lock state and returns the exact message and nonce that the wallet must sign. This step does not change UTXO availability. Unlocking is a high-risk action because protocol-asset UTXOs may subsequently be selected and spent as BTC.
+
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `address` (string): required; Address that owns the requested UTXOs.
+- `outpointList` (array): Ordered UTXO list. Preserve this exact order when submitting the signed execution request.
+  - `txid` (string): required; Transaction id of the UTXO as a 64-character hexadecimal string.
+  - `index` (integer): required; Transaction output index (vout).
+
+#### Response (200)
+Message prepared, or a validation error returned in the response envelope
+
+- `code` (integer (int32)): 0 on success, -1 for a validation or processing error, or -1001 when the manual lock or unlock limit is exceeded.; enum: `0`, `-1`, `-1001`
+- `msg` (string): example: `"ok"`
+- `data` (object):
+  - `message` (string): Exact human-readable message that the wallet must sign without modification.
+  - `nonce` (integer): example: `123456`
+
+#### Response (401)
+Invalid API Key
+
+
+---
+
+### Unlock unavailable UTXOs after wallet authorization
+<a id="unlock-unavailable-utxos-after-wallet-authorization"></a>
+
+**Method**: `POST`  
+**Path**: `/v1/indexer/unavailable-utxo/unlock`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/unlockUnavailableUtxos)  
+
+#### Description
+Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Verifies the signed prepare message and marks eligible UTXOs as manually unlocked. Unlocked UTXOs may appear in available balance and available UTXO results even when they carry inscriptions or other protocol assets. Spending such UTXOs can transfer or destroy those assets; obtain explicit user confirmation before submitting this request.
+
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `address` (string): required; Address that owns the requested UTXOs.
+- `outpointList` (array): Ordered UTXO list. Preserve this exact order when submitting the signed execution request.
+  - `txid` (string): required; Transaction id of the UTXO as a 64-character hexadecimal string.
+  - `index` (integer): required; Transaction output index (vout).
+- `pubkey` (string): required; Hex-encoded secp256k1 public key used to verify the wallet signature.
+- `signature` (string): required; Base64-encoded 65-byte compact ECDSA signature over the exact prepare message using the Bitcoin Signed Message prefix.
+- `nonce` (integer): required; Nonce returned by the matching prepare request.
+
+#### Response (200)
+Unlock applied, or an error returned in the response envelope
+
+- `code` (integer (int32)): 0 on success, -1 for a validation, signature, or processing error, or -1001 when the manual lock or unlock limit is exceeded.; enum: `0`, `-1`, `-1001`
+- `msg` (string): example: `"ok"`
+
+#### Response (401)
+Invalid API Key
+
+
+---
+
+### Prepare a message for locking UTXOs
+<a id="prepare-a-message-for-locking-utxos"></a>
+
+**Method**: `POST`  
+**Path**: `/v1/indexer/unavailable-utxo/lock/prepare`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/prepareLockUnavailableUtxos)  
+
+#### Description
+Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Validates the requested UTXOs against the address's current unlock state and returns the exact message and nonce that the wallet must sign. This step does not change UTXO availability. Use the returned values with the lock execution endpoint.
+
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `address` (string): required; Address that owns the requested UTXOs.
+- `outpointList` (array): Ordered UTXO list. Preserve this exact order when submitting the signed execution request.
+  - `txid` (string): required; Transaction id of the UTXO as a 64-character hexadecimal string.
+  - `index` (integer): required; Transaction output index (vout).
+
+#### Response (200)
+Message prepared, or a validation error returned in the response envelope
+
+- `code` (integer (int32)): 0 on success, -1 for a validation or processing error, or -1001 when the manual lock or unlock limit is exceeded.; enum: `0`, `-1`, `-1001`
+- `msg` (string): example: `"ok"`
+- `data` (object):
+  - `message` (string): Exact human-readable message that the wallet must sign without modification.
+  - `nonce` (integer): example: `123456`
+
+#### Response (401)
+Invalid API Key
+
+
+---
+
+### Lock UTXOs after wallet authorization
+<a id="lock-utxos-after-wallet-authorization"></a>
+
+**Method**: `POST`  
+**Path**: `/v1/indexer/unavailable-utxo/lock`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/lockUnavailableUtxos)  
+
+#### Description
+Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Verifies the signed prepare message and restores eligible UTXOs to the protected or unavailable set. Locked UTXOs are excluded from normal available balance and coin-selection results, helping prevent accidental spending of inscriptions and other protocol assets.
+
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- `address` (string): required; Address that owns the requested UTXOs.
+- `outpointList` (array): Ordered UTXO list. Preserve this exact order when submitting the signed execution request.
+  - `txid` (string): required; Transaction id of the UTXO as a 64-character hexadecimal string.
+  - `index` (integer): required; Transaction output index (vout).
+- `pubkey` (string): required; Hex-encoded secp256k1 public key used to verify the wallet signature.
+- `signature` (string): required; Base64-encoded 65-byte compact ECDSA signature over the exact prepare message using the Bitcoin Signed Message prefix.
+- `nonce` (integer): required; Nonce returned by the matching prepare request.
+
+#### Response (200)
+Lock applied, or an error returned in the response envelope
+
+- `code` (integer (int32)): 0 on success, -1 for a validation, signature, or processing error, or -1001 when the manual lock or unlock limit is exceeded.; enum: `0`, `-1`, `-1001`
+- `msg` (string): example: `"ok"`
+
+#### Response (401)
+Invalid API Key
+
+
+---
+
+### Check whether UTXOs were manually unlocked
+<a id="check-whether-utxos-were-manually-unlocked"></a>
+
+**Method**: `POST`  
+**Path**: `/v1/indexer/check/utxo/unlock`  
+**Swagger Link**: [View in Swagger UI](https://open-api.unisat.io/#/Indexer-Blockchain/checkUtxosUnlocked)  
+
+#### Description
+Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Returns one boolean for each submitted outpoint, in the same order. true means the UTXO is present in the manual unlock history; false means it is not. This endpoint checks manual unlock state only and does not independently prove that a UTXO is unspent or currently spendable.
+
+#### Request Body
+Content-Type: `application/json` **(required)**
+
+- (array):
+  - `txid` (string): required; Transaction id of the UTXO as a 64-character hexadecimal string.
+  - `index` (integer): required; Transaction output index (vout).
+
+#### Response (200)
+Successful operation
+
+- `code` (integer (int32)): enum: `0`, `-1`
+- `msg` (string): example: `"ok"`
+- `data` (array): Manual unlock flags aligned by index with the submitted outpoint array.; example: `[true,false]`
 
 #### Response (401)
 Invalid API Key

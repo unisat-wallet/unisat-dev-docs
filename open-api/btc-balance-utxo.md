@@ -2,6 +2,8 @@
 
 This document describes all endpoints and details related to Bitcoin (BTC) balance and UTXO management in UniSat OpenAPI.
 
+For the signed two-step workflow used to override UTXO availability on Bitcoin Mainnet and Fractal Bitcoin Mainnet, see the [UTXO Lock and Unlock Guide](./utxo-lock-unlock.md).
+
 ---
 
 ## 1. BTC Balance Endpoints
@@ -22,6 +24,7 @@ This document describes all endpoints and details related to Bitcoin (BTC) balan
   2. It excludes UTXOs with less than 600 satoshis ("dust"), as many protocol assets are attached to small-value UTXOs (e.g., 546 sat). This protects users even if new protocols are not yet recognized.
   3. By default, it returns UTXOs from both the blockchain and mempool. However, if the address holds assets from protocols that do not support mempool recognition (such as Runes and Alkanes), mempool UTXOs will not be returned.
   4. Through the [UTXO management tool](https://unisat.io/utxo), users can explicitly unlock specific UTXOs via wallet signature authorization. In this case, the endpoint will return these UTXOs as available, even if they contain protocol assets (inscriptions, Runes, Alkanes, etc.). This is considered a user-authorized action to treat these UTXOs as spendable BTC.
+     API integrations can implement the same signed workflow using the [UTXO lock and unlock endpoints](./utxo-lock-unlock.md). Unlocking does not remove attached assets; it only overrides the OpenAPI availability safeguard.
 - **Legacy Design:** Originally, `utxo-data` and `inscription-utxo-data` were provided to cover all UTXOs for an address. As more protocols (Runes, Alkanes, etc.) are supported, this design is now outdated and not recommended for new integrations.
 
 ---
@@ -96,6 +99,8 @@ A: If your address holds assets from protocols that do not support mempool recog
 
 **Q: Can I spend UTXOs that contain protocol assets?**
 A: Only if you explicitly unlock them using the [UTXO management tool](https://unisat.io/utxo) and authorize via wallet signature. Otherwise, these UTXOs are excluded for your safety.
+
+Developers integrating this flow directly should follow the [UTXO Lock and Unlock Guide](./utxo-lock-unlock.md), including its prepare, signature, execution, and post-operation verification steps.
 
 Alternatively, you can use `/v1/indexer/address/{address}/all-utxo-data` to retrieve all UTXOs (including those with protocol assets) for spending. However, this approach is only recommended if you are certain that the protocol assets on these UTXOs are no longer valuable to you, as spending them will transfer or destroy the attached protocol assets. Proceed with caution.
 
