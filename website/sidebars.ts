@@ -104,7 +104,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "doc",
           id: "developer-support/plans",
-          label: "Open API Plans",
+          label: "Open API Base Plans",
         },
         {
           type: "doc",
