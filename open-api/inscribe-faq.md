@@ -1,5 +1,11 @@
 # Inscribe FAQ
 
+## Why is my confirmed BRC-20 inscription invalid?
+
+A confirmed Ordinals inscription is not necessarily a valid BRC-20 operation. One common cause is reusing a commit UTXO whose first satoshi has already been inscribed. Before constructing the transaction, check the candidate UTXO with `/v1/indexer/utxo-nft-offset/{txid}/{index}` and reject it for a conventional offset-`0` inscription when the response contains `0`.
+
+See the [Bitcoin BRC-20 Validity and Troubleshooting Guide](./bitcoin-brc20-validity-rules.md) for the complete preflight checklist and other protocol validity rules.
+
 ## How to pay after creating an order?
 The order will start inscribing once the "payAddress" receives the required "amount". For example, if an order requires 3000 satoshis, you have to send 3000 satoshis to the payAddress. After that, the inscription will be processed.
 
