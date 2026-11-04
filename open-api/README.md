@@ -16,7 +16,7 @@ UniSat Open APIs provide standardized RESTful interfaces for accessing blockchai
 
 **UTXO Safety:** [BTC Balance and UTXO](./btc-balance-utxo.md) · [UTXO Lock and Unlock Guide](./utxo-lock-unlock.md)
 
-**BRC-20 Safety:** [Bitcoin BRC-20 Validity and Troubleshooting Guide](./bitcoin-brc20-validity-rules.md)
+**BRC-20 Safety:** [Bitcoin Validity and Troubleshooting](./bitcoin-brc20-validity-rules.md) · [Fractal Validity and Reinscription](./fractal-brc20-validity-rules.md)
 
 ### Blockchain Indexing API
 

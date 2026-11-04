@@ -2,7 +2,7 @@
 
 This guide explains the most common reasons a BRC-20 inscription is ignored by indexers on Bitcoin, with special attention to reinscriptions caused by reusing an already-inscribed satoshi.
 
-> **Network scope:** This page applies to Bitcoin. Fractal Bitcoin has different BRC-20 rules and should be checked against separate Fractal-specific documentation.
+> **Network scope:** This page applies to Bitcoin. For Fractal Bitcoin, see the [Fractal Bitcoin BRC-20 Validity and Reinscription Guide](./fractal-brc20-validity-rules.md).
 
 Creating and confirming an Ordinals inscription does not guarantee that its BRC-20 operation is valid. A transaction can confirm, and its inscription can be viewable, while the BRC-20 `deploy`, `mint`, or `transfer` operation is ignored by the BRC-20 indexer.
 

@@ -69,6 +69,7 @@ const sidebars: SidebarsConfig = {
           label: "BRC-20 Guides",
           items: [
             "open-api/bitcoin-brc20-validity-rules",
+            "open-api/fractal-brc20-validity-rules",
             "open-api/brc20-balance-and-transfer",
             "open-api/brc20-4byte-guide",
             "open-api/brc20-5byte-guide",
