@@ -1,4 +1,4 @@
-# Pricing and Plans
+# CLI & MCP Plans
 
 UniSat offers flexible API plans for different usage needs, from individual development and testing to large-scale applications. Choose **MCP & CLI Pricing** when you use UniSat OpenAPI through the CLI or an MCP-compatible AI agent. **Base Pricing** is available separately for other API usage.
 

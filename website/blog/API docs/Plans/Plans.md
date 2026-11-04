@@ -2,7 +2,7 @@
 slug: plans
 ---
 
-# Plans
+# Open API Plans
 
 UniSat API can still be accessed without an API key. However, to ensure fair allocation of resources, we recommend including an API key in all requests. Requests made without a key, or with a free key, may face strict rate limits or even no response under high load.
 
