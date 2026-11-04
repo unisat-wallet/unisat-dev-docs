@@ -26,6 +26,11 @@ const sidebars: SidebarsConfig = {
       items: [
         "open-api/intro",
         {
+          type: "doc",
+          id: "developer-support/plans",
+          label: "Open API Plans",
+        },
+        {
           type: "link",
           label: "Open API Swagger",
           href: "https://open-api.unisat.io/",
@@ -93,9 +98,13 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      id: "open-api/openapi-cli",
+      type: "category",
       label: "OpenAPI CLI & MCP",
+      link: {
+        type: "doc",
+        id: "open-api/openapi-cli",
+      },
+      items: ["open-api/openapi-cli-pricing-plans"],
     },
     {
       type: "category",
@@ -124,7 +133,6 @@ const sidebars: SidebarsConfig = {
       label: "Developer Support",
       items: [
         "developer-support/how-to-acquire-a-unisat-api-key",
-        "developer-support/plans",
         "developer-support/api-key-errors",
         "developer-support/enable-two-factor-authentication",
       ],
