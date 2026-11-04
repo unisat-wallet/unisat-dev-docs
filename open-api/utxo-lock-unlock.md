@@ -76,7 +76,7 @@ Display the exact returned `message` to the user. Sign its bytes without modifyi
 const signature = await window.unisat.signMessage(message, "ecdsa");
 ```
 
-Do not use `bip322-simple` for these endpoints. See the [Wallet signMessage reference](../wallet-api/api-docs/sign-message.md) for the signature format.
+Do not use `bip322-simple` for these endpoints. See the [Wallet signMessage reference](../wallet-api/sign-message.md) for the signature format.
 
 The server verifies the signature using Bitcoin Signed Message hashing:
 

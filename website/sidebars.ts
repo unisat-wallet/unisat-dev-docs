@@ -59,6 +59,7 @@ const sidebars: SidebarsConfig = {
           items: [
             "open-api/btc-and-protocol-assets",
             "open-api/btc-balance-utxo",
+            "open-api/utxo-lock-unlock",
             "open-api/brc20-balance-and-transfer",
             "open-api/runes-balance-utxo",
             "open-api/alkanes-balance-utxo",
