@@ -4,6 +4,9 @@ import type * as Preset from "@docusaurus/preset-classic";
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
+const releaseVersion = process.env.OPENAPI_VERSION || "dev";
+const shortGitCommit = (process.env.GITHUB_SHA || "unknown").slice(0, 7);
+
 const config: Config = {
   title: "UniSat API Documentation",
   tagline:
@@ -163,7 +166,7 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} UniSat. `,
+      copyright: `Copyright © ${new Date().getFullYear()} UniSat. Version ${releaseVersion} · ${shortGitCommit}`,
     },
     prism: {
       theme: prismThemes.github,
