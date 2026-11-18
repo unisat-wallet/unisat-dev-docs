@@ -14,6 +14,10 @@ UniSat offers flexible API plans for different usage needs, from individual deve
 
 UniSat provides several pricing options to accommodate different usage requirements.
 
+**Special Offer: 50% Off**
+
+We're currently offering **50% off Specialist and Enterprise plans** under MCP & CLI Pricing.
+
 Explore the available plans below and choose the one that best suits your needs.
 
 ### Plans for different needs
@@ -25,6 +29,8 @@ Explore the available plans below and choose the one that best suits your needs.
 | Enterprise | Wallets, exchanges, project teams, and high-volume applications | Higher request limits, dedicated infrastructure and SLA, and priority support |
 | Custom Plan | Projects with specific business, deployment, or infrastructure requirements | Custom request limits, flexible infrastructure and deployment options, and dedicated support |
 | Pay as You Go | Flexible or temporary usage needs | Purchase additional API calls as needed without a recurring subscription |
+
+![UniSat MCP and CLI pricing plans](/examples/openapi-cli/pricing-plans.png)
 
 ## Usage limits and billing
 

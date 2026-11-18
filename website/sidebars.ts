@@ -93,9 +93,24 @@ const sidebars: SidebarsConfig = {
       ],
     },
     {
-      type: "doc",
-      id: "open-api/openapi-cli",
-      label: "OpenAPI CLI & MCP",
+      type: "category",
+      label: "Open API CLI & MCP",
+      link: {
+        type: "doc",
+        id: "open-api/openapi-cli",
+      },
+      items: [
+        {
+          type: "doc",
+          id: "open-api/what-can-it-do",
+          label: "What Can It Do",
+        },
+        {
+          type: "doc",
+          id: "open-api/how-to-use-unisat-cli-mcp",
+          label: "Two Ways to Use It",
+        },
+      ],
     },
     {
       type: "category",
