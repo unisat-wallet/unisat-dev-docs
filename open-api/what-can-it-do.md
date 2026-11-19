@@ -12,7 +12,7 @@ Ask an agent to identify the largest ORDI holder on Bitcoin and visualize how th
 Use unisat-openapi-cli to find the address holding the most ORDI on Bitcoin and plot its balance changes over the last 30 days as a line chart.
 ```
 
-[![ChatGPT desktop conversation and chart preview, accelerated playback — click to view at full resolution](/examples/openapi-cli/agent-ordi.gif)](/examples/openapi-cli/agent-ordi.gif)
+<video controls width="100%" preload="metadata" src="/examples/openapi-cli/what-can-it-do-example-1.mp4"></video>
 
 ## Example 2: Build a Bitcoin Address Explorer
 
@@ -22,7 +22,7 @@ Go beyond individual queries and ask an agent to create a read-only Bitcoin addr
 Use unisat-openapi-cli to build a Bitcoin address explorer with BTC, BRC-20, Runes, inscriptions, asset search, and paginated transaction history with details. Include loading and error states, keep API keys server-side, and use read-only queries. Run it, test with a real address, and open it for preview.
 ```
 
-[![ChatGPT desktop conversation and website demo, accelerated playback — click to view at full resolution](/examples/openapi-cli/agent-explorer.gif)](/examples/openapi-cli/agent-explorer.gif)
+<video controls width="100%" preload="metadata" src="/examples/openapi-cli/what-can-it-do-example-2.mp4"></video>
 
 ## Get Started
 
