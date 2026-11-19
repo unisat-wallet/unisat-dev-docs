@@ -96,6 +96,12 @@ unisat-openapi-cli api call --env bitcoin --path "/v1/indexer/address/{address}/
 
 Use repeated `--query-param name=value` options for query parameters. Inspect `api call --help` for request body options. A dry-run only previews the request; it does not verify API access or return live data.
 
+See the following example for CLI installation and usage:
+
+<video controls width="100%" src="/examples/openapi-cli/cli-installation-and-usage.mp4"></video>
+
+<br />
+
 ## Connect an agent via MCP
 
 MCP (Model Context Protocol) lets an agent discover API operations, inspect their parameters, and make requests through tools. The UniSat MCP server runs locally over stdio; configure it as a command in your MCP client.
