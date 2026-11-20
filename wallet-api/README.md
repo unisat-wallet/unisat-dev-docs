@@ -13,6 +13,12 @@ Experimental RGB interfaces are documented separately because they have differen
 2. [Connect and request accounts](./api-docs/connect-extension.md)
 3. [Access account info](./api-docs/access-accounts.md)
 
+## Related Repositories
+
+- [UniSat Wallet Extension](https://github.com/unisat-wallet/extension) — The official UniSat browser wallet extension.
+- [UniSat Web3 Demo](https://github.com/unisat-wallet/unisat-web3-demo) — A simple example showing how to integrate with UniSat.
+  - [Live Demo](https://demo.unisat.io)
+
 ## Reference
 
 | Topic | Description |
