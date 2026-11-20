@@ -103,6 +103,42 @@ const sidebars: SidebarsConfig = {
     },
     {
       type: "category",
+      label: "Open API CLI & MCP",
+      link: {
+        type: "doc",
+        id: "open-api/openapi-cli",
+      },
+      items: [
+        {
+          type: "doc",
+          id: "open-api/what-can-it-do",
+          label: "What Can It Do",
+        },
+        {
+          type: "doc",
+          id: "open-api/how-to-use-unisat-cli-mcp",
+          label: "Two Ways to Use It",
+        },
+      ],
+    },
+    {
+      type: "category",
+      label: "Plans and Pricing",
+      items: [
+        {
+          type: "doc",
+          id: "developer-support/plans",
+          label: "Open API Base Plans",
+        },
+        {
+          type: "doc",
+          id: "open-api/openapi-cli-pricing-plans",
+          label: "CLI & MCP Plans",
+        },
+      ],
+    },
+    {
+      type: "category",
       label: "UniSat Wallet",
       items: [
         "wallet-api/intro",
@@ -128,7 +164,7 @@ const sidebars: SidebarsConfig = {
       label: "Developer Support",
       items: [
         "developer-support/how-to-acquire-a-unisat-api-key",
-        "developer-support/plans",
+        "developer-support/api-key-errors",
         "developer-support/enable-two-factor-authentication",
       ],
     },
