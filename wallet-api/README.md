@@ -1,6 +1,6 @@
-# UniSat Wallet API — dApp Integration Guide
+# UniSat Wallet dApp Integration Guide
 
-The `window.unisat` object is injected by the UniSat Wallet extension into every web page. dApps use this API to interact with the user's Bitcoin wallet.
+The `window.unisat` object is injected by the UniSat Wallet extension into every web page. dApps use this client-side provider to interact with the user's Bitcoin wallet. It is separate from the backend UniSat Open API and does not require an Open API key.
 
 Experimental RGB interfaces are documented separately because they have different method names, amount types, capabilities, and error codes:
 

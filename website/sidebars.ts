@@ -144,7 +144,7 @@ const sidebars: SidebarsConfig = {
         "wallet-api/intro",
         {
           type: "category",
-          label: "Wallet Integration",
+          label: "dApp Integration",
           items: [
             "wallet-api/connect-extension",
             "wallet-api/mobile-integration",

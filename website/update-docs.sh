@@ -74,13 +74,15 @@ if [ ! -f "$WEBSITE_DOCS/wallet-api/intro.md" ]; then
 sidebar_position: 1
 ---
 
-# Wallet API Documentation
+# UniSat Wallet dApp Integration
 
-Welcome to the UniSat Wallet API documentation. This section provides comprehensive guides and reference materials for integrating with the UniSat wallet.
+Integrate your dApp with UniSat Wallet through client-side wallet providers. The browser extension injects `window.unisat`, allowing users to connect their wallet, share account information, approve signatures, and submit transactions. Mobile dApps can use the supported deep-link flow.
 
-## Wallet Integration
+These wallet integration APIs are separate from the UniSat Open API: they are not backend REST endpoints and do not require an Open API key.
 
-The UniSat wallet provides a variety of APIs for dApp integration:
+## dApp Integration
+
+UniSat Wallet provides APIs for:
 
 - **Connection**: APIs for connecting to the wallet
 - **Account Management**: APIs for accessing accounts and addresses
@@ -92,7 +94,7 @@ The UniSat wallet provides a variety of APIs for dApp integration:
 
 ## Getting Started
 
-To integrate with the UniSat wallet, start with our [Connection Guide](./connect-extension).
+Start with the [Connection Guide](./connect-extension) for browser extension integration, or see [Mobile Integration](./mobile-integration) for mobile dApps.
 
 ## Experimental RGB APIs
 

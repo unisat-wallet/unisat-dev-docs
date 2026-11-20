@@ -38,7 +38,7 @@ Welcome to the UniSat developer resource hub. Here you will find all the essenti
 | BRC20 Swap   | Swap functionality for BRC20 tokens     | [`brc20-swap.md`](./open-api/auto-generated/docs/brc20-swap.md) |
 | CAT20 DEX    | Decentralized exchange for CAT20 tokens | [`cat20-dex.md`](./open-api/auto-generated/docs/cat20-dex.md)   |
 
-### 🔧 Wallet Integration
+### 🔧 Wallet dApp Integration
 
 Comprehensive documentation for integrating with UniSat Wallet:
 
