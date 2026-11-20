@@ -10,17 +10,17 @@ Here are the steps to acquire a UniSat API Key:
 
 ## 1. Visit the UniSat API Service Page
 
-Visit the UniSat website and click `API` in the homepage navigation bar. From the dropdown menu, select `API Service` to access the detailed API plans page. Alternatively, you can directly click here to view the API plans.
+Visit the UniSat website and click `API` in the homepage navigation bar.
 
-![UniSat API service page](image.png)
+![UniSat API service page](api-service-page.jpg)
 
 ## 2. Choose a Plan
 
 Choose the plan that suits your needs and click `Get Started` under the detailed description of the plan to go to the Developer Center plan acquire page. Or you can click `Developer Center` in the yellow box on the page to enter the Developer Center.
 
-Enjoy 20% off when you choose an annual Specialist or Enterprise plan.
+UniSat currently offers **50% off Specialist and Enterprise plans** under MCP & CLI Pricing. For Base Pricing, enjoy **20% off** when you choose an annual Specialist or Enterprise plan.
 
-![Choose a UniSat API plan](image-1.png)
+![Choose a UniSat API plan](choose-plan.png)
 
 ## 3. Register a Developer Center Account
 
