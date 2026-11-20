@@ -35,11 +35,13 @@ try {
 
 ```
 
-### getBalance
+### getBalance (deprecated)
 
 ```
 unisat.getBalance()
 ```
+
+> Deprecated. Use `getBalanceV2` instead, which returns available/unavailable breakdown.
 
 Get BTC balance
 
@@ -75,18 +77,25 @@ try {
 ### getBitcoinUtxos
 
 ```
-unisat.getBitcoinUtxos(cursor,size)
+unisat.getBitcoinUtxos(cursor, size)
 ```
 
-GetBitcoinUTXOS
+Get UTXOs of the current account that do not contain inscriptions or other protocol assets.
 
 **Parameters**
 
+- `cursor` - `number`: (optional) pagination offset, default `0`
+- `size` - `number`: (optional) page size, default `20`
+
 **Returns**
 
-- `Promise` - `object`:
-  - `txid` - `string`:
-  - `vout` - `integer`:
+- `Promise` - `object[]`:
+  - `txid` - `string`: transaction id
+  - `vout` - `number`: output index
+  - `satoshis` - `number`: value in satoshis
+  - `scriptPk` - `string`: scriptPubKey hex
+  - `addressType` - `number`: address type enum
+  - `inscriptions` - `object[]`: inscriptions on this UTXO (should be empty for spendable UTXOs)
 
 ### sendBitcoin
 

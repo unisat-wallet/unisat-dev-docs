@@ -88,10 +88,18 @@ The UniSat wallet provides a variety of APIs for dApp integration:
 - **Transaction Signing**: APIs for signing transactions
 - **Message Signing**: APIs for signing messages
 - **Network Management**: APIs for switching between networks
+- **RGB (Experimental)**: Native RGB and WebRGB provider APIs, including RGB/BTC swaps
 
 ## Getting Started
 
 To integrate with the UniSat wallet, start with our [Connection Guide](./connect-extension).
+
+## Experimental RGB APIs
+
+- [Native RGB API](./rgb)
+- [WebRGB v1 Provider](./webrgb)
+- [Backend-coordinated RGB swaps](./rgb-swap-backend)
+- [Pure P2P RGB swaps](./rgb-swap-p2p)
 EOF
 fi
 

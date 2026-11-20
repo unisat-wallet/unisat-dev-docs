@@ -85,3 +85,34 @@ unisat.removeListener('accountsChanged', handler: (accounts: Array<string>) => v
 ```
 
 The `accountsChanged` will be emitted whenever the user's exposed account address changes.
+
+---
+
+### getVersion
+
+```
+unisat.getVersion()
+```
+
+Get the version of the UniSat Wallet extension.
+
+**Parameters**
+
+none
+
+**Returns**
+
+- `Promise` - `string`: the version string (e.g. `"1.7.11"`)
+
+**Example**
+
+```javascript
+try {
+  let version = await window.unisat.getVersion();
+  console.log(version);
+} catch (e) {
+  console.log(e);
+}
+
+> "1.7.11"
+```

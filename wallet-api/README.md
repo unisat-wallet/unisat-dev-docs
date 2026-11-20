@@ -1,29 +1,31 @@
-# UniSat Wallet API
+# UniSat Wallet API — dApp Integration Guide
 
-Welcome to UniSat's Developer Documentation. This documentation is for learning to develop applications for UniSat Wallet.
+The `window.unisat` object is injected by the UniSat Wallet extension into every web page. dApps use this API to interact with the user's Bitcoin wallet.
+
+Experimental RGB interfaces are documented separately because they have different method names, amount types, capabilities, and error codes:
+
+- [Native RGB API (`window.unisat.rgb`)](./api-docs/rgb.md)
+- [WebRGB v1 Provider (`window.rgb`)](./api-docs/webrgb.md)
 
 ## Getting Started
 
-To develop for UniSat Wallet, install UniSat Wallet on your development machine. Download <a href="https://unisat.io/download">here</a>.
+1. [Detect the extension](./api-docs/browser-detection.md)
+2. [Connect and request accounts](./api-docs/connect-extension.md)
+3. [Access account info](./api-docs/access-accounts.md)
 
-Once UniSat Wallet is installed and running, you should find that new browser tabs have a window.unisat object available in the developer console. This is how your website will interact with UniSat Wallet.
+## Reference
 
-## 🔗 Related Repositories
-
-- 🧩 [UniSat Wallet Extension](https://github.com/unisat-wallet/extension) – The official UniSat browser wallet extension.
-- 🧪 [UniSat Web3 Demo](https://github.com/unisat-wallet/unisat-web3-demo) – A simple example showing how to integrate with UniSat.
-  - 🌐 [Live Demo](https://demo.unisat.io)
-
-## 📚 API Topics
-
-Here are additional documents covering specific topics of UniSat Wallet integration:
-
-- 🌐 [Browser Detection](./api-docs/browser-detection.md)
-- 🔌 [Connect Extension](./api-docs/connect-extension.md)
-- 🔑 [Access Accounts](./api-docs/access-accounts.md)
-- 🏷️ [Address Types](./api-docs/address-types.md)
-- 💰 [Manage Assets](./api-docs/manage-assets.md)
-- 🌍 [Manage Networks](./api-docs/manage-networks.md)
-- ✍️ [Sign Message](./api-docs/sign-message.md)
-- 📤 [Sign Transaction](./api-docs/sign-transaction.md)
-- 📱 [Mobile Integration](./api-docs/mobile-integration.md)
+| Topic | Description |
+| --- | --- |
+| [Browser Detection](./api-docs/browser-detection.md) | Check if UniSat is installed |
+| [Connect Extension](./api-docs/connect-extension.md) | Request wallet connection and accounts |
+| [Access Accounts](./api-docs/access-accounts.md) | Get current account, address, public key |
+| [Address Types](./api-docs/address-types.md) | Supported address formats |
+| [Manage Assets](./api-docs/manage-assets.md) | Send BTC, inscriptions, Runes, BRC-20 |
+| [Native RGB API (Experimental)](./api-docs/rgb.md) | UniSat-specific issuance, receive, payment, and RGB/BTC swap API |
+| [WebRGB v1 Provider](./api-docs/webrgb.md) | Standard provider discovery, receive, send, transfer tracking, events, and errors |
+| [Manage Networks](./api-docs/manage-networks.md) | Switch networks, listen for changes |
+| [Derive Context Hash (Experimental)](./api-docs/derive-context-hash.md) | Deterministic secret derivation from wallet seed (experimental) |
+| [Sign Message](./api-docs/sign-message.md) | BIP-322 and ECDSA message signing |
+| [Sign Transaction](./api-docs/sign-transaction.md) | PSBT signing and transaction broadcasting |
+| [Mobile Integration](./api-docs/mobile-integration.md) | Deep-link integration for mobile dApps |

@@ -59,7 +59,7 @@ switch chain
 
 **Parameters**
 
-- `chain` - `string`: the chain. BITCOIN_MAINNET or BITCOIN_TESTNET or FRACTAL_BITCOIN_MAINNET
+- `chain` - `string`: the chain enum. One of: `BITCOIN_MAINNET`, `BITCOIN_TESTNET`, `BITCOIN_TESTNET4`, `BITCOIN_SIGNET`, `FRACTAL_BITCOIN_MAINNET`, `FRACTAL_BITCOIN_TESTNET`
 
 **Returns**
 
@@ -112,7 +112,7 @@ try {
 }
 
 
-> 0
+"livenet"
 ```
 
 ### chainChanged
@@ -124,6 +124,20 @@ unisat.removeListener('chainChanged', handler: (network: string) => void);
 ```
 
 The `chainChanged` will be emitted whenever the user's network changes.
+
+### switchNetwork (deprecated)
+
+```
+unisat.switchNetwork(network)
+```
+
+> Deprecated. Use `switchChain` instead.
+
+**Parameters**
+
+- `network` - `string`: `"livenet"` | `"testnet"`
+
+---
 
 ### networkChanged (deprecated)
 

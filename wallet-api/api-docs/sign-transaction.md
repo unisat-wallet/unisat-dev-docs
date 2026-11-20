@@ -24,8 +24,9 @@ This method will traverse all inputs that match the current address to sign.
     - `address` - `string`: (at least specify either an address or a publicKey) Which corresponding private key to use for signing
     - `publicKey` - `string`: (at least specify either an address or a publicKey) Which corresponding private key to use for signing
     - `sighashTypes` - `number[]`: (optionals) sighashTypes
-    - `disableTweakSigner` - `boolean` :(optionals) Default value is false. Setting it true allows the use of the original private key when signing taproot inputs. (deprecated)
-    - `useTweakedSigner` - `boolean` :(optionals) . By setting useTweakedSigner, you can forcibly decide whether or not to use tweakedSigner. It has a higher priority than disableTweakSigner.
+    - `disableTweakSigner` - `boolean`: (optional, deprecated) Default false. Setting true uses the original private key for taproot inputs. Use `useTweakedSigner` instead.
+    - `useTweakedSigner` - `boolean`: (optional) Explicitly control whether to use the tweaked signer. Takes priority over `disableTweakSigner`.
+    - `tapLeafHashToSign` - `string`: (optional) Hex-encoded tapleaf hash. When specified, only the input with this tapleaf hash will be signed (used for script-path spending).
 
 **Returns**
 
@@ -88,7 +89,8 @@ This method will traverse all inputs that match the current address to sign.
     - `address` - `string`: (at least specify either an address or a publicKey) Which corresponding private key to use for signing
     - `publicKey` - `string`: (at least specify either an address or a publicKey) Which corresponding private key to use for signing
     - `sighashTypes` - `number[]`: (optionals) sighashTypes
-    - `useTweakedSigner` - `boolean` :(optionals) . By setting useTweakedSigner, you can forcibly decide whether or not to use tweakedSigner. It has a higher priority than disableTweakSigner.
+    - `useTweakedSigner` - `boolean`: (optional) Explicitly control whether to use the tweaked signer. Takes priority over `disableTweakSigner`.
+    - `tapLeafHashToSign` - `string`: (optional) Hex-encoded tapleaf hash for script-path spending.
 
 **Returns**
 
@@ -143,15 +145,14 @@ try {
 ### pushTx
 
 ```
-unisat.pushTx(options)
+unisat.pushTx(rawtx)
 ```
 
 You can use this API to broadcast a fully signed transaction. Please note that `rawtx` and `PSBT` are completely different formats.
 
 **Parameters**
 
-- `options` - `Object`:
-  - `rawtx` - `string`: rawtx to push
+- `rawtx` - `string`: the raw transaction hex to broadcast
 
 **Returns**
 
@@ -161,9 +162,7 @@ You can use this API to broadcast a fully signed transaction. Please note that `
 
 ```javascript
 try {
-  let txid = await window.unisat.pushTx({
-    rawtx: "0200000000010135bd7d...",
-  });
+  let txid = await window.unisat.pushTx("0200000000010135bd7d...");
   console.log(txid);
 } catch (e) {
   console.log(e);

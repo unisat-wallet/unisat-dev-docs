@@ -93,3 +93,73 @@ try {
 > AkcwRAIgeHUcjr0jODaR7GMM8cenWnIj0MYdGmmrpGyMoryNSkgCICzVXWrLIKKp5cFtaCTErY7FGNXTFe6kuEofl4G+Vi5wASECaIeVi8xMtvjATqSSYPDRDjEsQbr0hSUpU7FHJNtVKqw=
 
 ```
+
+---
+
+### verifyMessageOfBIP322Simple
+
+```
+unisat.verifyMessageOfBIP322Simple(address, message, signature[, network])
+```
+
+Verify a BIP-322 simple signature.
+
+**Parameters**
+
+- `address` - `string`: the Bitcoin address that signed the message
+- `message` - `string`: the original message
+- `signature` - `string`: the Base64-encoded BIP-322 signature to verify
+- `network` - `number`: (optional) network type
+
+**Returns**
+
+- `Promise` - `boolean`: `true` if the signature is valid
+
+**Example**
+
+```javascript
+try {
+  let valid = await window.unisat.verifyMessageOfBIP322Simple(
+    "bc1p....",
+    "hello world",
+    "AkcwRAIg...."
+  );
+  console.log(valid); // true
+} catch (e) {
+  console.log(e);
+}
+```
+
+---
+
+### multiSignMessage
+
+```
+unisat.multiSignMessage(messages)
+```
+
+Sign multiple messages at once with the current account's private key.
+
+**Parameters**
+
+- `messages` - `object[]`:
+  - `text` - `string`: the message to sign
+  - `type` - `string`: `"ecdsa"` | `"bip322-simple"`. Default is `"ecdsa"`
+
+**Returns**
+
+- `Promise` - `string[]`: array of Base64-encoded signatures
+
+**Example**
+
+```javascript
+try {
+  let res = await window.unisat.multiSignMessage([
+    { text: "hello", type: "ecdsa" },
+    { text: "world", type: "bip322-simple" },
+  ]);
+  console.log(res);
+} catch (e) {
+  console.log(e);
+}
+```

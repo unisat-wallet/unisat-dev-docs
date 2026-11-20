@@ -26,17 +26,17 @@ unisat://request?method=switchChain&data=[chain]&from=yourAppName&nonce=xxxxx
 
 Chain: `BITCOIN_MAINNET`, `BITCOIN_TESTNET`, `BITCOIN_TESTNET4`, `BITCOIN_SIGNET`, `FRACTAL_BITCOIN_MAINNET`, `FRACTAL_BITCOIN_TESTNET`
 
-And the chain is a based64 emcpded JSON array. For example, data=toBase64(JSON.stringify([FRACTAL_BITCOIN_MAINNET]))
+And the chain is a base64 encoded JSON array. For example, data=toBase64(JSON.stringify([FRACTAL_BITCOIN_MAINNET]))
 
 ### Signing Message:
 
 When requesting the wallet to sign a message, use the following URL format:
 
 ```
-unisat://request?method=signMessage&data=[text,type]from=yourAppName&nonce=xxxxx
+unisat://request?method=signMessage&data=[text,type]&from=yourAppName&nonce=xxxxx
 ```
 
-Here, data is a based64 emcpded JSON array. For example, data=toBase64(JSON.stringify([text,type]))
+Here, data is a base64 encoded JSON array. For example, data=toBase64(JSON.stringify([text,type]))
 
 ### Signing PSBT:
 
@@ -46,7 +46,7 @@ To request the wallet to sign a PSBT, use the following URL format:
 unisat://request?method=signPsbt&data=[psbtHex,options]&from=yourAppName&nonce=xxxxx
 ```
 
-Here, data is a based64 emcpded JSON array. For example, data=toBase64(JSON.stringify([psbtHex, options]))
+Here, data is a base64 encoded JSON array. For example, data=toBase64(JSON.stringify([psbtHex, options]))
 
 ## Return datas
 
