@@ -80,7 +80,7 @@ Public machine-readable artifacts:
 
 ## Usage
 
-For terminal and AI agent workflows, see [OpenAPI CLI & MCP](./openapi-cli.md) for installation, API key configuration, MCP connection, and agent examples.
+For terminal and AI agent workflows, see [UniSat AI Kit](./openapi-cli.md).
 
 1. Choose the API and version you want to work with.
 2. Review the endpoint definitions, parameters, and response schemas in the OpenAPI YAML files or generated Markdown docs.
