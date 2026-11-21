@@ -1,4 +1,4 @@
-# OpenAPI CLI & MCP
+# UniSat AI Kit
 
 UniSat AI Kit makes it easier to explore on-chain data, analyze assets, and build applications using AI agents. Simply describe what you need in natural language, and let your agent interact with UniSat Open API through CLI or MCP.
 
@@ -8,9 +8,4 @@ MCP connects compatible AI clients to UniSat Open API through a local MCP server
 
 Both provide access to the same UniSat Open API capabilities across Bitcoin and Fractal Bitcoin mainnet, with separate API keys for each network.
 
-<br />
-
-#### Explore Open API CLI & MCP
-
-- [What Can It Do](./what-can-it-do.md)
-- [Two Ways to Use It](./how-to-use-unisat-cli-mcp.md)
+For more details, see the [UniSat AI Kit GitHub repository](https://github.com/unisat-wallet/unisat-ai-kit).
