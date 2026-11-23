@@ -107,6 +107,7 @@ On an RGB-enabled L1 wallet, `getInfo().methods` contains:
 | `sendAsset`         |             Yes | Prepare, sign, deliver, ACK, and broadcast an RGB payment.                  |
 | `burnAsset`         |             Yes | Burn a BFA asset to an approved bridge destination.                        |
 | `getConsignment`    |             Yes | Share a saved BFA burn proof with the requesting site.                     |
+| `getReceivedMint`   |              No | Inspect a validated BFA mint bound to an owned invoice.                    |
 | `listTransfers`     |              No | Return local send/receive history.                                          |
 | `getTransferStatus` |              No | Find one transfer by wallet ID, recipient ID, or txid.                      |
 | `decodeRgbInvoice`  |              No | Decode an invoice without moving funds.                                     |
@@ -365,9 +366,11 @@ const burn = await rgb.burnAsset({
   network: info.network,
   assetId: 'rgb:...',
   amount: '1000000000000000000',
-  burnRecipient: {
+  burnDestination: {
+    version: 1,
     chainId: 'eip155:42161',
     address: '0x...',
+    dstEid: 0,
   },
   feeRate: 2,
   minConfirmations: 3,
@@ -376,7 +379,8 @@ const burn = await rgb.burnAsset({
 
 Use `getInfo().burnRecipientNamespaces` to feature-detect destination address
 families. UniSat currently returns `['eip155', 'tron']`; the concrete chain
-must also be one of the wallet's configured BFA bridge routes. A signing
+and `dstEid` must also match one of the wallet's configured BFA bridge routes.
+Legacy `burnRecipient` and mixed old/new requests are rejected. A signing
 rejection releases the unsigned RGB allocation reservation.
 
 Current-schema BFA Burn transitions cannot contain a change assignment. If
@@ -405,6 +409,24 @@ const proof = await rgb.getConsignment({ assetId: burn.assetId, txid: burn.txid 
 //   digest: { algorithm: 'keccak256', value: '0x...' },
 // }
 ```
+
+### `getReceivedMint({ invoice })`
+
+This read-only method checks a prepared BFA mint against the complete,
+unchanged witness invoice created by the same site. It returns `null` while no
+consignment is available. A returned receipt is derived from the locally
+validated consignment; the asset ID is never copied from dApp state.
+
+```ts
+const mint = await rgb.getReceivedMint({ invoice })
+if (mint) {
+  // Verify assetId, amount, lockId, deadline, chain and bridge before paying.
+  console.log(mint.assetId, mint.amount, mint.lockId, mint.beforeBlock)
+}
+```
+
+The invoice must belong to the active wallet and requesting origin. Modified,
+foreign, expired, non-witness, and non-mint invoices reject.
 
 ## Transfers
 

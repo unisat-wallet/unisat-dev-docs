@@ -37,8 +37,10 @@ rejected, signed, finalized, canceled, or aborted by another origin.
   outpoint; a witness invoice requires the sender transaction to create its
   receiver output.
 - The wallet owns RGB state, private keys, transition construction,
-  consignment transport, ACK handling, and final broadcasting. A dApp must
-  not call generic `signPsbt`/`pushPsbt` to complete an RGB operation.
+  consignment transport, ACK handling, and normal-payment broadcasting. A
+  dApp must not call generic `signPsbt`/`pushPsbt` to complete an RGB operation.
+  Instant Swap is the explicit exception: its dedicated API returns the final
+  PSBT for the trading application to finalize and broadcast.
 
 ## API overview
 
@@ -56,12 +58,16 @@ rejected, signed, finalized, canceled, or aborted by another origin.
 | `cancelPayment` / `getPaymentStatus`       | Yes / No | Cancel an unacknowledged payment or inspect its status.                                      |
 | `prepareSwap`                              |      Yes | Prepare a seller-side RGB-for-BTC atomic swap.                                               |
 | `signSellSwapAndPublishConsignment`        |      Yes | Add seller signatures and publish the consignment, without broadcasting.                     |
-| `signBuySwapCommit`                        |       No | Pure P2P: bind one buyer PSBT hash using the seller transfer's Proxy sender key.              |
+| `signBuySwapCommit`                        |       No | Pure P2P: bind one buyer PSBT hash using the seller transfer's Proxy sender key.             |
 | `confirmSellSwap`                          |       No | Verify the buyer's returned signed PSBT and ACK; the dApp finalizes and broadcasts it.       |
 | `syncSellSwapAck`                          |       No | Query and verify the receiver's Proxy ACK without importing or returning the final PSBT.     |
 | `applySellSwapAbort` / `applyBuySwapAbort` |      Yes | Apply a mutually signed, terminal swap-abort agreement to local seller/buyer RGB state.      |
 | `cancelSwap` / `getOperationStatus`        | Yes / No | Cancel or inspect a swap.                                                                    |
-| `signBuySwap` / `acceptBuySwap`            |      Yes | Sign buyer BTC inputs, then ACK a backend-committed swap.                                     |
+| `signBuySwap` / `acceptBuySwap`            |      Yes | Sign buyer BTC inputs, then ACK a backend-committed swap.                                    |
+| `prepareInstantSwap`                       |      Yes | Prepare and reserve an NIA seller listing with a fixed PSBT layout.                          |
+| `signInstantSwapListing`                   |      Yes | Sign and return a public, reusable Instant Swap listing package.                             |
+| `signInstantSwap`                          |      Yes | Validate/stage the RGB receive and sign only the buyer's BTC inputs.                         |
+| `settleInstantSwapListing`                 |       No | Reconcile the externally broadcast final transaction into seller state.                      |
 
 ## Assets
 
@@ -342,16 +348,17 @@ methods.
 
 ### Version requirements
 
-| Method | Minimum wallet version |
-| --- | --- |
-| `prepareSwap` | v1.8.0 |
-| `signSellSwapAndPublishConsignment` | v1.8.0 |
-| `confirmSellSwap` | v1.8.0 |
-| `cancelSwap` / `getOperationStatus` | v1.8.0 |
-| `createReceiveInvoice({ purpose: "buy_swap" })` | v1.8.3 |
-| `signBuySwap` / `acceptBuySwap` | v1.8.3 |
-| `syncSellSwapAck` | **v1.8.4** |
-| `signBuySwapCommit` | **v1.8.4** |
+| Method                                          | Minimum wallet version |
+| ----------------------------------------------- | ---------------------- |
+| `prepareSwap`                                   | v1.8.0                 |
+| `signSellSwapAndPublishConsignment`             | v1.8.0                 |
+| `confirmSellSwap`                               | v1.8.0                 |
+| `cancelSwap` / `getOperationStatus`             | v1.8.0                 |
+| `createReceiveInvoice({ purpose: "buy_swap" })` | v1.8.3                 |
+| `signBuySwap` / `acceptBuySwap`                 | v1.8.3                 |
+| `syncSellSwapAck`                               | **v1.8.4**             |
+| `signBuySwapCommit`                             | **v1.8.4**             |
+| Instant Swap methods                            | **v1.8.4**             |
 
 The RGB-seller flow in each integration model requires **v1.8.4 or later**.
 The backend-coordinated BTC-to-RGB buyer flow remains available in v1.8.3.
@@ -374,11 +381,16 @@ if (typeof window.unisat?.rgb?.signBuySwapCommit !== 'function') {
 - [Pure P2P mode](./rgb-swap-p2p.md): both users sign with their own UniSat
   wallets and the trading page combines the two partial PSBTs. Use
   `signBuySwapCommit` followed by `confirmSellSwap`.
+- [Instant Swap](./rgb-instant-swap.md): the seller publishes a reusable
+  `SINGLE|ANYONECANPAY` NIA listing; the buyer validates, signs, and broadcasts
+  the completed transaction without a Proxy ACK round trip.
 
-Both modes use `purpose: "buy_swap"` for the buyer invoice, origin-bind every
-operation, persist restart-safe state, and disable unilateral cancellation after
-a positive ACK. The dedicated documents define the only supported call order,
-commitment format and recovery procedure for each mode.
+The backend-coordinated and pure P2P modes use `purpose: "buy_swap"` for the
+buyer invoice, origin-bind every operation, persist restart-safe state, and
+disable unilateral cancellation after a positive ACK. Instant Swap instead
+uses a normal witness invoice and has no ACK step. The dedicated documents
+define the only supported call order, commitment format and recovery procedure
+for each mode.
 
 ## Receiver and ACK requirements
 

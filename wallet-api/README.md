@@ -29,6 +29,7 @@ Experimental RGB interfaces are documented separately because they have differen
 | [Address Types](./api-docs/address-types.md) | Supported address formats |
 | [Manage Assets](./api-docs/manage-assets.md) | Send BTC, inscriptions, Runes, BRC-20 |
 | [Native RGB API (Experimental)](./api-docs/rgb.md) | UniSat-specific issuance, receive, payment, and RGB/BTC swap API |
+| [RGB Instant Swap](./api-docs/rgb-instant-swap.md) | Reusable NIA seller listings completed and broadcast by a BTC buyer |
 | [WebRGB v1 Provider](./api-docs/webrgb.md) | Standard provider discovery, receive, send, transfer tracking, events, and errors |
 | [Manage Networks](./api-docs/manage-networks.md) | Switch networks, listen for changes |
 | [Derive Context Hash (Experimental)](./api-docs/derive-context-hash.md) | Deterministic secret derivation from wallet seed (experimental) |

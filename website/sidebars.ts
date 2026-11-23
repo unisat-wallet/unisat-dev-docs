@@ -163,6 +163,7 @@ const sidebars: SidebarsConfig = {
           label: "RGB (Experimental)",
           items: [
             "wallet-api/rgb",
+            "wallet-api/rgb-instant-swap",
             "wallet-api/webrgb",
             "wallet-api/rgb-swap-backend",
             "wallet-api/rgb-swap-p2p",

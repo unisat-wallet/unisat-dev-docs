@@ -99,6 +99,7 @@ Start with the [Connection Guide](./connect-extension) for browser extension int
 ## Experimental RGB APIs
 
 - [Native RGB API](./rgb)
+- [RGB Instant Swap](./rgb-instant-swap)
 - [WebRGB v1 Provider](./webrgb)
 - [Backend-coordinated RGB swaps](./rgb-swap-backend)
 - [Pure P2P RGB swaps](./rgb-swap-p2p)
