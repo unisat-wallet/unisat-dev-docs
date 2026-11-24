@@ -12,52 +12,52 @@ UniSat Open APIs provide standardized RESTful interfaces for accessing blockchai
 
 ## Available API Documentation
 
-**Recommended Reading:** [BTC Assets and Other Protocol Assets Overview](./btc-and-protocol-assets.md)
+**Recommended Reading:** [BTC Assets and Other Protocol Assets Overview](../docs/open-api/btc-and-protocol-assets.md)
 
-**UTXO Safety:** [BTC Balance and UTXO](./btc-balance-utxo.md) · [UTXO Lock and Unlock Guide](./utxo-lock-unlock.md)
+**UTXO Safety:** [BTC Balance and UTXO](../docs/open-api/btc-balance-utxo.md) · [UTXO Lock and Unlock Guide](../docs/open-api/utxo-lock-unlock.md)
 
-**BRC-20 Safety:** [Bitcoin Validity and Troubleshooting](./bitcoin-brc20-validity-rules.md) · [Fractal Validity and Reinscription](./fractal-brc20-validity-rules.md)
+**BRC-20 Safety:** [Bitcoin Validity and Troubleshooting](../docs/open-api/bitcoin-brc20-validity-rules.md) · [Fractal Validity and Reinscription](../docs/open-api/fractal-brc20-validity-rules.md)
 
 ### Blockchain Indexing API
 
 | API Category      | Description                                     | Documentation Link                                                       |
 | ----------------- | ----------------------------------------------- | ------------------------------------------------------------------------ |
-| Blockchain Level  | Core blockchain and transaction indexing        | [`blockchain-indexer.md`](./auto-generated/docs/blockchain-indexer.md)   |
-| Inscription Level | Indexing of inscriptions                        | [`inscription-indexer.md`](./auto-generated/docs/inscription-indexer.md) |
-| BRC20             | Indexing and data for BRC20 tokens              | [`brc20-indexer.md`](./auto-generated/docs/brc20-indexer.md)             |
-| Runes             | Indexing for Runes tokens                       | [`runes-indexer.md`](./auto-generated/docs/runes-indexer.md)             |
-| Alkanes           | Developer-friendly API built on Alkanes indexer | [`alkanes-indexer.md`](./auto-generated/docs/alkanes-indexer.md)         |
-| Collection        | NFT collections indexing                        | [`collection-indexer.md`](./auto-generated/docs/collection-indexer.md)   |
+| Blockchain Level  | Core blockchain and transaction indexing        | [`blockchain-indexer.md`](https://api-docs.unisat.io/docs/open-api/blockchain-indexer)   |
+| Inscription Level | Indexing of inscriptions                        | [`inscription-indexer.md`](https://api-docs.unisat.io/docs/open-api/inscription-indexer) |
+| BRC20             | Indexing and data for BRC20 tokens              | [`brc20-indexer.md`](https://api-docs.unisat.io/docs/open-api/brc20-indexer)             |
+| Runes             | Indexing for Runes tokens                       | [`runes-indexer.md`](https://api-docs.unisat.io/docs/open-api/runes-indexer)             |
+| Alkanes           | Developer-friendly API built on Alkanes indexer | [`alkanes-indexer.md`](https://api-docs.unisat.io/docs/open-api/alkanes-indexer)         |
+| Collection        | NFT collections indexing                        | [`collection-indexer.md`](https://api-docs.unisat.io/docs/open-api/collection-indexer)   |
 
 ### UniSat Services API
 
 | API Category           | Description                         | Documentation Link                                                                            |
 | ---------------------- | ----------------------------------- | --------------------------------------------------------------------------------------------- |
-| UniSat Inscribe        | Inscription creation and management | [`inscribe.md`](./auto-generated/docs/inscribe.md) [`inscribe-guide.md`](./inscribe-guide.md) |
-| BRC20 Marketplace      | BRC20 marketplace                   | [`brc20-marketplace.md`](./auto-generated/docs/brc20-marketplace.md)                          |
-| Runes Marketplace      | Runes marketplace                   | [`runes-marketplace.md`](./auto-generated/docs/runes-marketplace.md)                          |
-| Alkanes Marketplace    | Alkanes marketplace                 | [`alkanes-marketplace.md`](./auto-generated/docs/alkanes-marketplace.md)                      |
-| Collection Marketplace | Ordinals Collection marketplace     | [`collection-marketplace.md`](./auto-generated/docs/collection-marketplace.md)                |
-| Domain Marketplace     | Ordinals Domain marketplace         | [`domain-marketplace.md`](./auto-generated/docs/domain-marketplace.md)                        |
+| UniSat Inscribe        | Inscription creation and management | [`inscribe.md`](https://api-docs.unisat.io/docs/open-api/inscribe) [`inscribe-guide.md`](../docs/open-api/inscribe-guide.md) |
+| BRC20 Marketplace      | BRC20 marketplace                   | [`brc20-marketplace.md`](https://api-docs.unisat.io/docs/open-api/brc20-marketplace)                          |
+| Runes Marketplace      | Runes marketplace                   | [`runes-marketplace.md`](https://api-docs.unisat.io/docs/open-api/runes-marketplace)                          |
+| Alkanes Marketplace    | Alkanes marketplace                 | [`alkanes-marketplace.md`](https://api-docs.unisat.io/docs/open-api/alkanes-marketplace)                      |
+| Collection Marketplace | Ordinals Collection marketplace     | [`collection-marketplace.md`](https://api-docs.unisat.io/docs/open-api/collection-marketplace)                |
+| Domain Marketplace     | Ordinals Domain marketplace         | [`domain-marketplace.md`](https://api-docs.unisat.io/docs/open-api/domain-marketplace)                        |
 
 ### Fractal Bitcoin Specific API
 
 | API Category | Description                             | Documentation Link                                     |
 | ------------ | --------------------------------------- | ------------------------------------------------------ |
-| Fractal      | Fractal network related APIs            | [`fractal.md`](./auto-generated/docs/fractal.md)       |
-| BRC20 Swap   | Swap functionality for BRC20 tokens     | [`brc20-swap.md`](./auto-generated/docs/brc20-swap.md) |
-| CAT20 DEX    | Decentralized exchange for CAT20 tokens | [`cat20-dex.md`](./auto-generated/docs/cat20-dex.md)   |
+| Fractal      | Fractal network related APIs            | [`fractal.md`](https://api-docs.unisat.io/docs/open-api/fractal)       |
+| BRC20 Swap   | Swap functionality for BRC20 tokens     | [`brc20-swap.md`](https://api-docs.unisat.io/docs/open-api/brc20-swap) |
+| CAT20 DEX    | Decentralized exchange for CAT20 tokens | [`cat20-dex.md`](https://api-docs.unisat.io/docs/open-api/cat20-dex)   |
 
 ## Fractal OpenAPI Inscribe Fee Rules
 
-- **[Event Inscribe Fee Rules (July 22 – Sep 30, 2024)](./fractal-openapi-inscribe-fee-rules.md)**  
+- **[Event Inscribe Fee Rules (July 22 – Sep 30, 2024)](../docs/open-api/fractal-openapi-inscribe-fee-rules.md)**
   Special rules and discounts during the event period.
-- **[Standard Inscribe Fee Rules](./fractal-openapi-inscribe-fee-rules-standard.md)**  
+- **[Standard Inscribe Fee Rules](../docs/open-api/fractal-openapi-inscribe-fee-rules-standard.md)**
   Regular rules effective outside of event periods.
 
 ## Bitcoin OpenAPI Inscribe Fee Rules
 
-- **[Bitcoin Inscribe Fee Rules](./btc-inscribe-fee-rules.md)**  
+- **[Bitcoin Inscribe Fee Rules](../docs/open-api/btc-inscribe-fee-rules.md)**
   Service fee and per-inscription fee details for Bitcoin Mainnet.
 
 ---
@@ -80,7 +80,7 @@ Public machine-readable artifacts:
 
 ## Usage
 
-For terminal and AI agent workflows, see [UniSat AI Kit](./openapi-cli.md).
+For terminal and AI agent workflows, see [UniSat AI Kit](../docs/open-api/openapi-cli.md).
 
 1. Choose the API and version you want to work with.
 2. Review the endpoint definitions, parameters, and response schemas in the OpenAPI YAML files or generated Markdown docs.

@@ -4,14 +4,14 @@ The `window.unisat` object is injected by the UniSat Wallet extension into every
 
 Experimental RGB interfaces are documented separately because they have different method names, amount types, capabilities, and error codes:
 
-- [Native RGB API (`window.unisat.rgb`)](./api-docs/rgb.md)
-- [WebRGB v1 Provider (`window.rgb`)](./api-docs/webrgb.md)
+- [Native RGB API (`window.unisat.rgb`)](../specs/wallet-api/rgb.md)
+- [WebRGB v1 Provider (`window.rgb`)](../specs/wallet-api/webrgb.md)
 
 ## Getting Started
 
-1. [Detect the extension](./api-docs/browser-detection.md)
-2. [Connect and request accounts](./api-docs/connect-extension.md)
-3. [Access account info](./api-docs/access-accounts.md)
+1. [Detect the extension](../specs/wallet-api/browser-detection.md)
+2. [Connect and request accounts](../specs/wallet-api/connect-extension.md)
+3. [Access account info](../specs/wallet-api/access-accounts.md)
 
 ## Related Repositories
 
@@ -23,16 +23,16 @@ Experimental RGB interfaces are documented separately because they have differen
 
 | Topic | Description |
 | --- | --- |
-| [Browser Detection](./api-docs/browser-detection.md) | Check if UniSat is installed |
-| [Connect Extension](./api-docs/connect-extension.md) | Request wallet connection and accounts |
-| [Access Accounts](./api-docs/access-accounts.md) | Get current account, address, public key |
-| [Address Types](./api-docs/address-types.md) | Supported address formats |
-| [Manage Assets](./api-docs/manage-assets.md) | Send BTC, inscriptions, Runes, BRC-20 |
-| [Native RGB API (Experimental)](./api-docs/rgb.md) | UniSat-specific issuance, receive, payment, and RGB/BTC swap API |
-| [RGB Instant Swap](./api-docs/rgb-instant-swap.md) | Reusable NIA seller listings completed and broadcast by a BTC buyer |
-| [WebRGB v1 Provider](./api-docs/webrgb.md) | Standard provider discovery, receive, send, transfer tracking, events, and errors |
-| [Manage Networks](./api-docs/manage-networks.md) | Switch networks, listen for changes |
-| [Derive Context Hash (Experimental)](./api-docs/derive-context-hash.md) | Deterministic secret derivation from wallet seed (experimental) |
-| [Sign Message](./api-docs/sign-message.md) | BIP-322 and ECDSA message signing |
-| [Sign Transaction](./api-docs/sign-transaction.md) | PSBT signing and transaction broadcasting |
-| [Mobile Integration](./api-docs/mobile-integration.md) | Deep-link integration for mobile dApps |
+| [Browser Detection](../specs/wallet-api/browser-detection.md) | Check if UniSat is installed |
+| [Connect Extension](../specs/wallet-api/connect-extension.md) | Request wallet connection and accounts |
+| [Access Accounts](../specs/wallet-api/access-accounts.md) | Get current account, address, public key |
+| [Address Types](../specs/wallet-api/address-types.md) | Supported address formats |
+| [Manage Assets](../specs/wallet-api/manage-assets.md) | Send BTC, inscriptions, Runes, BRC-20 |
+| [Native RGB API (Experimental)](../specs/wallet-api/rgb.md) | UniSat-specific issuance, receive, payment, and RGB/BTC swap API |
+| [RGB Instant Swap](../specs/wallet-api/rgb-instant-swap.md) | Reusable NIA seller listings completed and broadcast by a BTC buyer |
+| [WebRGB v1 Provider](../specs/wallet-api/webrgb.md) | Standard provider discovery, receive, send, transfer tracking, events, and errors |
+| [Manage Networks](../specs/wallet-api/manage-networks.md) | Switch networks, listen for changes |
+| [Derive Context Hash (Experimental)](../specs/wallet-api/derive-context-hash.md) | Deterministic secret derivation from wallet seed (experimental) |
+| [Sign Message](../specs/wallet-api/sign-message.md) | BIP-322 and ECDSA message signing |
+| [Sign Transaction](../specs/wallet-api/sign-transaction.md) | PSBT signing and transaction broadcasting |
+| [Mobile Integration](../specs/wallet-api/mobile-integration.md) | Deep-link integration for mobile dApps |

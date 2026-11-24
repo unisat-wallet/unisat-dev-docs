@@ -1,6 +1,5 @@
 const fs = require("fs");
 const yaml = require("js-yaml");
-const path = require("path");
 
 const swaggerBaseUrl = "https://open-api.unisat.io/#/";
 const swaggerSpecUrl = "swagger/openapi-swagger.yaml";
@@ -132,23 +131,6 @@ function getRequestBody(operation, schemas) {
   return `Content-Type: \`${Object.keys(content)[0]}\`${required}\n\n${rendered}`;
 }
 
-function getExtraNotes(extraNotesDir, operationId) {
-  const notesPath = path.join(extraNotesDir, `${operationId}.md`);
-  if (fs.existsSync(notesPath)) {
-    const notes = fs.readFileSync(notesPath, "utf8");
-    const section = path.basename(extraNotesDir);
-    // Notes live in a different directory from the generated pages. Point their
-    // relative images at the site's static assets instead of the page directory.
-    return notes.replace(/!\[([^\]]*)\]\(\.\/([^\s)]+)\)/g, (_, alt, image) => {
-      if (!fs.existsSync(path.join(extraNotesDir, image))) {
-        throw new Error(`Missing image referenced by ${notesPath}: ${image}`);
-      }
-      return `![${alt}](/img/note-source/${section}/${image})`;
-    });
-  }
-  return "";
-}
-
 function normalizeAnchor(text) {
   return text
     .toLowerCase()
@@ -171,7 +153,7 @@ function groupEndpointsByTag(endpoints) {
   return groups;
 }
 
-function generateMarkdown(swagger, extraNotesDir) {
+function generateMarkdown(swagger) {
   const schemas = swagger.components?.schemas || {};
   const paths = swagger.paths;
   const endpoints = [];
@@ -270,7 +252,7 @@ ${swagger.info.description}
         }
       }
 
-      const notes = getExtraNotes(extraNotesDir, opId);
+      const notes = operation["x-doc-notes"];
       if (notes) {
         output += `${notes.trim()}\n\n`;
       }
@@ -299,17 +281,16 @@ try {
   const configFile = fs.readFileSync(`./tools/build-config.yaml`, "utf8");
   const config = yaml.load(configFile);
 
+  fs.mkdirSync("./.generated/docs/open-api/auto-generated/docs", { recursive: true });
+
   config.doc.forEach((item) => {
     const doc = yaml.load(
-      fs.readFileSync(`./open-api/swagger-source/${item}.yaml`, "utf8")
+      fs.readFileSync(`./specs/openapi/${item}.yaml`, "utf8")
     );
-    const extraNotesDir = path.join(`./open-api/note-source/${item}`);
-    const markdown = generateMarkdown(doc, extraNotesDir);
-    fs.writeFileSync(
-      `./open-api/auto-generated/docs/${item}.md`,
-      markdown,
-      "utf8"
-    );
+    const markdown = generateMarkdown(doc);
+    for (const dir of ["open-api", "open-api/auto-generated/docs"]) {
+      fs.writeFileSync(`./.generated/docs/${dir}/${item}.md`, markdown, "utf8");
+    }
     console.log(`✅ ${item}.md generated successfully!`);
   });
 } catch (e) {

@@ -104,7 +104,7 @@ To regenerate the API types from the OpenAPI spec:
 npm run generate
 ```
 
-This script uses the latest OpenAPI spec from `../../open-api/auto-generated/swagger/openapi-swagger.yaml`.
+This script uses the latest OpenAPI spec from `../../.generated/static/swagger/swagger.yaml`.
 
 ### Build
 
