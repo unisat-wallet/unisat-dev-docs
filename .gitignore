@@ -112,25 +112,6 @@ local-test
 log
 ignore
 
-# Generated API reference pages, copied into the site by update-docs.sh.
-/website/docs/open-api/alkanes-indexer.md
-/website/docs/open-api/alkanes-marketplace.md
-/website/docs/open-api/blockchain-indexer.md
-/website/docs/open-api/brc20-indexer.md
-/website/docs/open-api/brc20-marketplace.md
-/website/docs/open-api/brc20-prog-api.md
-/website/docs/open-api/brc20-swap.md
-/website/docs/open-api/cat20-dex.md
-/website/docs/open-api/collection-indexer.md
-/website/docs/open-api/collection-marketplace.md
-/website/docs/open-api/domain-marketplace.md
-/website/docs/open-api/fractal.md
-/website/docs/open-api/inscribe-v5.md
-/website/docs/open-api/inscribe.md
-/website/docs/open-api/inscription-indexer.md
-/website/docs/open-api/price.md
-/website/docs/open-api/runes-indexer.md
-/website/docs/open-api/runes-marketplace.md
 /.generated/
 /.docusaurus/
 /build/

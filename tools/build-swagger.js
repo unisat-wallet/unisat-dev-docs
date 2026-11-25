@@ -96,11 +96,6 @@ components.forEach((other) => {
 
 const str = yaml.dump(mainSwagger);
 
-const swaggerDir = "./dist/open-api/swagger";
-fs.mkdirSync(swaggerDir, { recursive: true });
-fs.cpSync("./tools/swagger-ui", swaggerDir, { recursive: true });
-fs.writeFileSync(`${swaggerDir}/swagger.yaml`, str);
-
 const websiteSwaggerDir = `./.generated/static/swagger`;
 const websiteSwaggerPath = `${websiteSwaggerDir}/swagger.yaml`;
 const legacyWebsiteSwaggerPath = `${websiteSwaggerDir}/openapi-swagger.yaml`;

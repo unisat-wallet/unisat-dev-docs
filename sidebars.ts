@@ -1,3 +1,5 @@
+import { readFileSync } from "node:fs";
+import { join } from "node:path";
 import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
@@ -12,6 +14,10 @@ import type { SidebarsConfig } from "@docusaurus/plugin-content-docs";
 
  Create as many sidebars as you want.
  */
+const endpointGroups = JSON.parse(
+  readFileSync(join(__dirname, ".generated/endpoint-sidebar.json"), "utf8"),
+);
+
 const sidebars: SidebarsConfig = {
   // Main sidebar for the documentation
   docsSidebar: [
@@ -33,24 +39,7 @@ const sidebars: SidebarsConfig = {
         {
           type: "category",
           label: "All Open API Endpoints",
-          items: [
-            "open-api/blockchain-indexer",
-            "open-api/inscription-indexer",
-            "open-api/brc20-indexer",
-            "open-api/runes-indexer",
-            "open-api/alkanes-indexer",
-            "open-api/inscribe",
-            "open-api/inscribe-v5",
-            "open-api/brc20-marketplace",
-            "open-api/runes-marketplace",
-            "open-api/alkanes-marketplace",
-            "open-api/collection-marketplace",
-            "open-api/domain-marketplace",
-            "open-api/brc20-swap",
-            "open-api/fractal",
-            "open-api/cat20-dex",
-            "open-api/collection-indexer",
-          ],
+          items: endpointGroups,
         },
 
         {

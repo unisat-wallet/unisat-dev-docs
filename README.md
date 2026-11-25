@@ -15,7 +15,19 @@ Maintain REST API definitions in `specs/openapi/`. Use the
 Maintain error code definitions in `specs/errors/` and edit the
 Wallet API Markdown directly in `specs/wallet-api/`. Edit guides and release notes in `docs/open-api/`, and support pages in `docs/developer-support/`.
 
-[`Open API README.md`](./open-api/README.md)
+Keep CLI guide images and videos in `docs/open-api/assets/cli/` and API
+reference illustrations in `specs/openapi/assets/`. The build publishes them
+under `/examples/openapi-cli/` and `/img/note-source/` respectively.
+Use `static/` for site-wide files such as the logo, favicon, and hosting settings.
+
+Start with the [Open API guide](docs/open-api/intro.md) or the
+[interactive Swagger UI](https://open-api.unisat.io/). For terminal and
+AI workflows, see the [UniSat AI Kit guide](docs/open-api/openapi-cli.md).
+
+The site publishes [the complete Swagger YAML](https://api-docs.unisat.io/swagger/swagger.yaml),
+[its legacy URL](https://api-docs.unisat.io/swagger/openapi-swagger.yaml), and
+[the manifest](https://api-docs.unisat.io/swagger/manifest.json), which lists
+the individual YAML files and their SHA-256 hashes.
 
 **Recommended Reading:** [BTC Assets and Other Protocol Assets Overview](docs/open-api/btc-and-protocol-assets.md)
 
@@ -53,15 +65,14 @@ Wallet API Markdown directly in `specs/wallet-api/`. Edit guides and release not
 
 Comprehensive documentation for integrating with UniSat Wallet:
 
-See [wallet-api/README.md](./wallet-api/README.md)
+See the [Wallet dApp Integration guide](specs/wallet-api/intro.md).
 
 ### ⚠️ Error Codes
 
-Download the latest error code definitions for handling API errors programmatically:
+See [Open API Errors](docs/developer-support/api-key-errors.mdx) for gateway error codes
+and troubleshooting. To download the machine-readable definitions:
 
 ```bash
 # Download the latest Open API error codes
 curl -O https://raw.githubusercontent.com/unisat-wallet/unisat-dev-support/main/errors/auto-generated/open-api-errors.json
-
-
 ```

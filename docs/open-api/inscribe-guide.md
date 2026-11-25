@@ -231,7 +231,7 @@ curl -X POST "https://open-api.unisat.io/v2/inscribe/order/create/runes-etch" \
 
 Complete Runes Etch parameter descriptions and configuration details:
 
-- [→ Runes Etch API Complete Documentation](./inscribe.md#create-runes-etch-inscription-order)
+- [→ Runes Etch API Complete Documentation](./inscribe/createOrderRunesEtch.mdx)
 
 ---
 
@@ -265,7 +265,7 @@ curl -X POST "https://open-api.unisat.io/v2/inscribe/order/create/runes-mint" \
 
 Complete Runes Mint parameter descriptions:
 
-- [→ Runes Mint API Complete Documentation](./inscribe.md#create-runes-mint-inscription-order)
+- [→ Runes Mint API Complete Documentation](./inscribe/createOrderRunesMint.mdx)
 
 ---
 

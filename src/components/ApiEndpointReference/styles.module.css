@@ -1,0 +1,226 @@
+.reference {
+  container: endpoint-reference / inline-size;
+}
+
+.layout {
+  display: grid;
+  gap: 1.5rem;
+}
+
+.details,
+.examples {
+  min-width: 0;
+}
+
+.endpoint {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.7rem;
+  margin-bottom: 1.35rem;
+  padding: 0.8rem;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 0.55rem;
+  background: var(--ifm-background-surface-color);
+}
+
+.endpoint code {
+  align-self: center;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  overflow-wrap: anywhere;
+}
+
+.method,
+.status,
+.format {
+  display: inline-block;
+  flex-shrink: 0;
+  padding: 0.16rem 0.48rem;
+  border-radius: 0.35rem;
+  color: var(--ifm-color-content);
+  background: var(--ifm-color-emphasis-200);
+  font-family: var(--ifm-font-family-monospace);
+  font-size: 0.74rem;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.method[data-method="GET"],
+.status[data-status="2"] {
+  color: #176745;
+  background: #e3f5ea;
+}
+
+.method[data-method="POST"],
+.method[data-method="PUT"],
+.method[data-method="PATCH"] {
+  color: #804718;
+  background: #fcedda;
+}
+
+.method[data-method="DELETE"],
+.status[data-status="4"],
+.status[data-status="5"] {
+  color: #9e2f39;
+  background: #fce8ea;
+}
+
+:global([data-theme="dark"]) .method[data-method="GET"],
+:global([data-theme="dark"]) .status[data-status="2"] {
+  color: #a3ebc9;
+  background: #193b2f;
+}
+
+:global([data-theme="dark"]) .method[data-method="POST"],
+:global([data-theme="dark"]) .method[data-method="PUT"],
+:global([data-theme="dark"]) .method[data-method="PATCH"] {
+  color: #ffcf92;
+  background: #47301b;
+}
+
+:global([data-theme="dark"]) .method[data-method="DELETE"],
+:global([data-theme="dark"]) .status[data-status="4"],
+:global([data-theme="dark"]) .status[data-status="5"] {
+  color: #ffc0c3;
+  background: #4b262b;
+}
+
+.examples {
+  display: grid;
+  gap: 1rem;
+  align-content: start;
+}
+
+.panel {
+  overflow: hidden;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 0.75rem;
+  background: var(--ifm-background-surface-color);
+}
+
+.panelHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.85rem 1rem;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.panel .panelTitle {
+  margin: 0;
+  font-size: 0.96rem;
+  line-height: 1.3;
+}
+
+.responseControls {
+  padding: 0.75rem 1rem 0;
+}
+
+.select {
+  width: 100%;
+  padding: 0.4rem 0.5rem;
+  border: 1px solid var(--ifm-color-emphasis-300);
+  border-radius: 0.35rem;
+  color: var(--ifm-color-content);
+  background: var(--ifm-background-color);
+  font: inherit;
+  font-size: 0.82rem;
+  text-overflow: ellipsis;
+}
+
+.responseMeta {
+  padding: 0.75rem 1rem;
+}
+
+.responseMeta p,
+.empty {
+  margin: 0;
+  color: var(--ifm-color-content-secondary);
+  font-size: 0.87rem;
+}
+
+.responseMeta p + .responseLabels {
+  margin-top: 0.4rem;
+}
+
+.responseLabels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.3rem 0.6rem;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.76rem;
+}
+
+.empty {
+  padding: 0 1rem 0.9rem;
+}
+
+.panel .code > div {
+  margin: 0;
+  border-radius: 0;
+  font-size: 0.84rem;
+}
+
+.panel .code pre {
+  max-height: 28rem;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  padding: 0.7rem 1rem;
+  border-top: 1px solid var(--ifm-color-emphasis-200);
+}
+
+.testLink {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.38rem 0.76rem;
+  border: 1px solid transparent;
+  border-radius: 0.4rem;
+  color: #26180b;
+  background: var(--ifm-color-primary);
+  font-size: 0.85rem;
+  font-weight: 700;
+}
+
+.testLink:hover {
+  color: #26180b;
+  background: var(--ifm-color-primary-light);
+  text-decoration: none;
+}
+
+.testLink:focus-visible,
+.select:focus-visible {
+  outline: 2px solid var(--ifm-color-emphasis-900);
+  outline-offset: 2px;
+}
+
+.mobileTest {
+  margin-bottom: 1.2rem;
+}
+
+.srOnly {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@container endpoint-reference (min-width: 53rem) {
+  .layout {
+    grid-template-columns: minmax(0, 1.14fr) minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .mobileTest {
+    display: none;
+  }
+}

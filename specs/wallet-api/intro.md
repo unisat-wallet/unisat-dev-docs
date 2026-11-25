@@ -24,6 +24,8 @@ UniSat Wallet provides APIs for:
 
 Start with the [Connection Guide](./connect-extension) for browser extension integration, or see [Mobile Integration](./mobile-integration) for mobile dApps.
 
+See the [UniSat Wallet extension source](https://github.com/unisat-wallet/extension), the [Web3 demo source](https://github.com/unisat-wallet/unisat-web3-demo), or the [live demo](https://demo.unisat.io).
+
 ## Experimental RGB APIs
 
 - [Native RGB API](./rgb)

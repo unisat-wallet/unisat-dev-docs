@@ -188,6 +188,6 @@ Use `"environment": "fractal"` for Fractal; Bitcoin is the default. A discovery 
 
 Non-GET MCP requests require explicit user confirmation. For operations requiring confirmation, use CLI `--confirm` or MCP `confirm: true` only after the user explicitly authorizes that operation. The examples above use read-only queries.
 
-For authentication, CLI/MCP permissions, or request quotas, see [API Key Errors](/docs/developer-support/api-key-errors).
+For authentication, CLI/MCP permissions, or request quotas, see [Open API Errors](/docs/developer-support/api-key-errors).
 
 See the [CLI documentation](https://github.com/unisat-wallet/unisat-ai-kit/tree/main/packages/cli) and [MCP setup guide](https://github.com/unisat-wallet/unisat-ai-kit/blob/main/docs/mcp-setup.md) for additional usage details.

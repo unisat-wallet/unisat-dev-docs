@@ -7,11 +7,8 @@ RUN yarn install --frozen-lockfile
 COPY tools ./tools
 COPY specs ./specs
 COPY docs ./docs
-COPY errors/README.md ./errors/README.md
-COPY blog ./blog
 COPY src ./src
 COPY static ./static
-COPY i18n ./i18n
 COPY docusaurus.config.ts sidebars.ts tsconfig.json ./
 
 ARG GIT_COMMIT

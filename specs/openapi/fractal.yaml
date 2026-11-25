@@ -44,8 +44,12 @@ paths:
                     example: OK
                   data:
                     $ref: "#/components/schemas/FractalSupply"
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
   /v1/public/fractal/total-supply:
     get:
       tags:
@@ -74,8 +78,12 @@ paths:
                     example: OK
                   data:
                     $ref: "#/components/schemas/FractalSupply"
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
   /v1/public/address/total:
     get:
       tags:
@@ -104,8 +112,12 @@ paths:
                     example: OK
                   data:
                     type: number
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
   /v1/public/address/rich-list:
     get:
       tags:
@@ -149,10 +161,33 @@ paths:
                     example: OK
                   data:
                     $ref: "#/components/schemas/AddressBalance"
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
 components:
   schemas:
+    InvalidApiKeyError:
+      type: object
+      required: [code, msg, data]
+      properties:
+        code:
+          type: integer
+          enum: [-2002]
+          description: Gateway error code for invalid API key authentication.
+        msg:
+          type: string
+          description: Authentication failure message.
+        data:
+          type: object
+          nullable: true
+          description: No response data.
+      example:
+        code: -2002
+        msg: "Invalid API key. Check the key and use Authorization: Bearer <API_KEY>."
+        data: null
     FractalSupply:
       type: object
       properties:

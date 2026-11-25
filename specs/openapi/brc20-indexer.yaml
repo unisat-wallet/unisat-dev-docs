@@ -70,8 +70,12 @@ paths:
                       total:
                         description: total number of brc20 tickers
                         type: integer
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
 
   /v1/indexer/brc20/list:
     get:
@@ -128,8 +132,12 @@ paths:
                         type: integer
                       total:
                         type: integer
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
   /v1/indexer/brc20/status:
     get:
       tags:
@@ -209,8 +217,12 @@ paths:
                         type: array
                         items:
                           $ref: "#/components/schemas/BRC20InfoItem"
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
 
   /v1/indexer/brc20/{ticker}/info:
     get:
@@ -267,8 +279,12 @@ paths:
                   data:
                     $ref: "#/components/schemas/BRC20InfoItem"
 
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
   /v1/indexer/brc20/{ticker}/holders:
     get:
       tags:
@@ -341,8 +357,12 @@ paths:
                         type: integer
                       total:
                         type: integer
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
   /v1/indexer/brc20/{ticker}/history:
     get:
       tags:
@@ -424,8 +444,12 @@ paths:
                         type: integer
                       total:
                         type: integer
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
   /v1/indexer/brc20/{ticker}/tx/{txid}/history:
     get:
       tags:
@@ -507,8 +531,12 @@ paths:
                         type: integer
                       total:
                         type: integer
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
   /v1/indexer/brc20/history-by-height/{height}:
     get:
       tags:
@@ -575,8 +603,12 @@ paths:
                         items:
                           $ref: "#/components/schemas/BRC20HistoryItem"
 
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
   /v1/indexer/address/{address}/brc20/summary:
     get:
       tags:
@@ -684,8 +716,12 @@ paths:
                               type: string
                             availableBalance:
                               type: string
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
   /v1/indexer/address/{address}/brc20/summary-by-height/{height}:
     get:
       tags:
@@ -765,8 +801,12 @@ paths:
                               type: string
                             availableBalance:
                               type: string
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
 
   /v1/indexer/address/{address}/brc20/{ticker}/info:
     get:
@@ -838,8 +878,12 @@ paths:
                         type: array
                         items:
                           $ref: "#/components/schemas/BRC20HistoryInscription"
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
   /v1/indexer/address/{address}/brc20/history:
     get:
       tags:
@@ -902,8 +946,12 @@ paths:
                         type: integer
                       total:
                         type: integer
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
 
   /v1/indexer/address/{address}/brc20/{ticker}/history:
     get:
@@ -986,8 +1034,12 @@ paths:
                         type: integer
                       total:
                         type: integer
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
   /v1/indexer/address/{address}/brc20/{ticker}/transferable-inscriptions:
     get:
       tags:
@@ -1074,8 +1126,12 @@ paths:
                         type: integer
                       total:
                         type: integer
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
   /v1/indexer/brc20-module/{module}/history:
     get:
       tags:
@@ -1153,8 +1209,12 @@ paths:
                         type: integer
                       total:
                         type: integer
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
 
   /v1/indexer/brc20-module/withdraw-history:
     get:
@@ -1226,11 +1286,34 @@ paths:
                         type: integer
                       total:
                         type: integer
-        "401":
-          description: Invalid API Key
+        "403":
+          description: Invalid API key or malformed Authorization header (gateway code -2002).
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InvalidApiKeyError"
 
 components:
   schemas:
+    InvalidApiKeyError:
+      type: object
+      required: [code, msg, data]
+      properties:
+        code:
+          type: integer
+          enum: [-2002]
+          description: Gateway error code for invalid API key authentication.
+        msg:
+          type: string
+          description: Authentication failure message.
+        data:
+          type: object
+          nullable: true
+          description: No response data.
+      example:
+        code: -2002
+        msg: "Invalid API key. Check the key and use Authorization: Bearer <API_KEY>."
+        data: null
     BRC20InfoItem:
       type: object
       properties:
