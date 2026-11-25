@@ -2,7 +2,7 @@
 
 pipelineBuildDockerWithVersionParam(
     repo: 'unisat/unisat-dev-docs',
-    dockerfilePath: 'website/Dockerfile',
+    dockerfilePath: 'Dockerfile',
     semaphore: [
         template: 'unisat-docs:update',
         vars: { ctx ->

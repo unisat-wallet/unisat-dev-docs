@@ -1,0 +1,154 @@
+.frame {
+  margin: 0.65rem 0 1.35rem;
+  overflow: hidden;
+  border: 1px solid var(--ifm-color-emphasis-200);
+  border-radius: 0.65rem;
+  background: var(--ifm-background-surface-color);
+}
+
+.frame .table {
+  display: table;
+  width: 100%;
+  margin: 0;
+  table-layout: fixed;
+  font-size: 0.86rem;
+  line-height: 1.45;
+}
+
+.fieldColumn {
+  width: 32%;
+}
+
+.typeColumn {
+  width: 21%;
+}
+
+.table thead,
+.table tbody tr {
+  border: 0;
+}
+
+.table thead tr {
+  border: 0;
+  background: var(--ifm-color-emphasis-100);
+}
+
+.table tbody tr:nth-child(n) {
+  background: transparent;
+}
+
+.table th,
+.table td {
+  padding: 0.62rem 0.72rem;
+  border: 0;
+  border-bottom: 1px solid var(--ifm-color-emphasis-200);
+  vertical-align: top;
+  text-align: left;
+  overflow-wrap: anywhere;
+}
+
+.table thead th {
+  color: var(--ifm-color-emphasis-800);
+  font-weight: 650;
+}
+
+.table tbody tr:last-child > * {
+  border-bottom: 0;
+}
+
+.table .fieldName,
+.table .type {
+  padding: 0;
+  border: 0;
+  background: none;
+  white-space: normal;
+  overflow-wrap: anywhere;
+}
+
+.table .fieldName {
+  display: block;
+  font-weight: 650;
+}
+
+.fieldPath {
+  color: var(--ifm-color-emphasis-700);
+  font-weight: 400;
+}
+
+.table .type {
+  color: var(--ifm-color-emphasis-800);
+}
+
+.required,
+.optional {
+  display: inline-block;
+  margin-top: 0.25rem;
+  font-size: 0.73rem;
+  font-weight: 500;
+}
+
+.required {
+  padding: 0.07rem 0.33rem;
+  border-radius: 0.25rem;
+  background: #fcedda;
+  color: #804718;
+}
+
+:global([data-theme="dark"]) .required {
+  background: #47301b;
+  color: #ffcf92;
+}
+
+.optional {
+  color: var(--ifm-color-emphasis-700);
+}
+
+.description {
+  white-space: pre-line;
+}
+
+.details {
+  display: grid;
+  gap: 0.15rem;
+  margin: 0;
+  color: var(--ifm-color-emphasis-700);
+  font-size: 0.78rem;
+}
+
+.description + .details {
+  margin-top: 0.38rem;
+}
+
+.details dt,
+.details dd {
+  display: inline;
+  margin: 0;
+}
+
+.details dd {
+  margin-inline-start: 0.4rem;
+}
+
+.details code {
+  padding: 0 0.22rem;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}
+
+.visuallyHidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+@media (max-width: 480px) {
+  .table th,
+  .table td {
+    padding: 0.52rem 0.45rem;
+  }
+}

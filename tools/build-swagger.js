@@ -5,8 +5,7 @@ const yaml = require("js-yaml");
 
 const projectName = "open-api";
 
-const projectSourceDir = `./open-api`;
-const projectOutputDir = `./dist/${projectName}`;
+const projectSourceDir = "./specs/openapi";
 
 const configFile = fs.readFileSync(`./tools/build-config.yaml`, "utf8");
 const config = yaml.load(configFile);
@@ -20,7 +19,7 @@ if (config.swagger === undefined) {
 
 function loadSwaggerFile(filename) {
   const file = fs.readFileSync(
-    `${projectSourceDir}/swagger-source/${filename}.yaml`,
+    `${projectSourceDir}/${filename}.yaml`,
     "utf8"
   );
   return yaml.load(file);
@@ -97,20 +96,12 @@ components.forEach((other) => {
 
 const str = yaml.dump(mainSwagger);
 
-const swaggerDir = `${projectOutputDir}/swagger`;
-fs.mkdirSync(swaggerDir, { recursive: true });
-fs.cpSync("./build", swaggerDir, { recursive: true });
-fs.writeFileSync(`${swaggerDir}/swagger.yaml`, str);
-
-const openApiSwaggerPath = `./open-api/auto-generated/swagger/openapi-swagger.yaml`;
-const websiteSwaggerDir = `./website/static/swagger`;
+const websiteSwaggerDir = `./.generated/static/swagger`;
 const websiteSwaggerPath = `${websiteSwaggerDir}/swagger.yaml`;
 const legacyWebsiteSwaggerPath = `${websiteSwaggerDir}/openapi-swagger.yaml`;
 const websiteSwaggerFilesDir = `${websiteSwaggerDir}/files`;
 
-fs.mkdirSync(`./open-api/auto-generated/swagger`, { recursive: true });
 fs.mkdirSync(websiteSwaggerDir, { recursive: true });
-fs.writeFileSync(openApiSwaggerPath, str);
 fs.writeFileSync(websiteSwaggerPath, str);
 // Keep the old public path during the migration window.
 fs.writeFileSync(legacyWebsiteSwaggerPath, str);
@@ -120,7 +111,7 @@ fs.mkdirSync(websiteSwaggerFilesDir, { recursive: true });
 
 const publishedSourceNames = ["main", ...config.swagger];
 const publishedFiles = publishedSourceNames.map((name) => {
-  const sourcePath = `${projectSourceDir}/swagger-source/${name}.yaml`;
+  const sourcePath = `${projectSourceDir}/${name}.yaml`;
   const content = fs.readFileSync(sourcePath);
   const relativePath = `files/${name}.yaml`;
 
@@ -162,6 +153,5 @@ fs.writeFileSync(
 );
 
 console.log("build swagger success");
-console.log(`wrote ${openApiSwaggerPath}`);
 console.log(`wrote ${websiteSwaggerPath}`);
 console.log(`wrote ${websiteSwaggerDir}/manifest.json`);

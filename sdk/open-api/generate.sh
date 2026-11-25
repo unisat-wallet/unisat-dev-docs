@@ -6,7 +6,7 @@
 set -e
 
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SWAGGER_FILE="$SCRIPT_DIR/../../open-api/auto-generated/swagger/openapi-swagger.yaml"
+SWAGGER_FILE="$SCRIPT_DIR/../../.generated/static/swagger/swagger.yaml"
 OUTPUT_DIR="$SCRIPT_DIR/src"
 
 echo "🔄 Generating API types from OpenAPI spec..."

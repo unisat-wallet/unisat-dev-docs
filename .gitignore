@@ -38,7 +38,6 @@ bower_components
 .lock-wscript
 
 # Compiled binary addons (https://nodejs.org/api/addons.html)
-build/Release
 
 # Dependency directories
 node_modules/
@@ -113,8 +112,6 @@ local-test
 log
 ignore
 
-website/.docusaurus
-website/build
-website/docs/open-api
-website/docs/wallet-api
-website/docs/errors
+/.generated/
+/.docusaurus/
+/build/

@@ -2,7 +2,7 @@
 
 ## 目标
 
-`unisat-dev-docs/open-api/swagger-source` 是唯一允许编辑的 OpenAPI Swagger 来源。
+`specs/openapi/` 是 OpenAPI Swagger 的源文件目录。
 
 - `unisat-dev-docs` 发布合并后的 `swagger.yaml`、拆分文件和 `manifest.json`。
 - `openapi-swagger` 不保存 Swagger YAML，Swagger UI 每次打开直接读取远程 `swagger.yaml`。
@@ -32,7 +32,7 @@ Manifest `schemaVersion` 当前为 `1`，`version` 优先使用构建环境提�
 ### unisat-dev-docs
 
 - [x] `tools/build-swagger.js` 生成 `swagger.yaml`。
-- [x] 发布参与合并的拆分 YAML 到 `website/static/swagger/files`。
+- [x] 发布参与合并的拆分 YAML 到 `.generated/static/swagger/files`。
 - [x] 生成带版本、commit、bundle hash、文件 hash 和文件大小的 `manifest.json`。
 - [x] 保留 `openapi-swagger.yaml` 兼容旧公开 URL。
 - [x] 将 `cat20-dex` 纳入合并文档及拆分文件列表。
