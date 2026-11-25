@@ -23,6 +23,6 @@ for (const [source, target] of [
   fs.cpSync(source, target, { recursive: true });
 }
 
-for (const script of ["build-doc.js", "build-swagger.js", "build-error.js"]) {
+for (const script of ["build-doc.js", "build-swagger.js"]) {
   execFileSync(process.execPath, [path.join(__dirname, script)], { stdio: "inherit" });
 }

@@ -12,8 +12,7 @@ in `.generated/`. Build the container from the repository root with
 
 Maintain REST API definitions in `specs/openapi/`. Use the
 `x-doc-notes` field on an operation for Markdown shown in its API reference.
-Maintain error code definitions in `specs/errors/` and edit the
-Wallet API Markdown directly in `specs/wallet-api/`. Edit guides and release notes in `docs/open-api/`, and support pages in `docs/developer-support/`.
+Edit Wallet API Markdown directly in `specs/wallet-api/`. Edit guides and release notes in `docs/open-api/`, and support pages in `docs/developer-support/`.
 
 Keep CLI guide images and videos in `docs/open-api/assets/cli/` and API
 reference illustrations in `specs/openapi/assets/`. The build publishes them
@@ -70,9 +69,4 @@ See the [Wallet dApp Integration guide](specs/wallet-api/intro.md).
 ### ⚠️ Error Codes
 
 See [Open API Errors](docs/developer-support/api-key-errors.mdx) for gateway error codes
-and troubleshooting. To download the machine-readable definitions:
-
-```bash
-# Download the latest Open API error codes
-curl -O https://raw.githubusercontent.com/unisat-wallet/unisat-dev-support/main/errors/auto-generated/open-api-errors.json
-```
+and troubleshooting.

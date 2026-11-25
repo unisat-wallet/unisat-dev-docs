@@ -15,7 +15,6 @@
     "typecheck": "tsc",
     "build:openapi-swagger": "node tools/build-swagger.js",
     "build:openapi-doc": "node tools/build-doc.js",
-    "build:error-codes": "node tools/build-error.js",
     "sdk:generate": "cd sdk/open-api && npm run generate",
     "sdk:build": "cd sdk/open-api && npm run build",
     "sdk": "npm run sdk:generate",
