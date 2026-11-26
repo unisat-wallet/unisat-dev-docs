@@ -13,12 +13,9 @@ Choose the base URL for your network and append the endpoint path. Supported net
 | Chain | Network | Base URL |
 | --- | --- | --- |
 | Bitcoin | Mainnet | `https://open-api.unisat.io` |
-| Bitcoin | Mainnet (staging) | `https://open-api-staging.unisat.io` |
-| Bitcoin | Testnet | `https://open-api-testnet.unisat.io` |
 | Bitcoin | Testnet4 | `https://open-api-testnet4.unisat.io` |
 | Bitcoin | Signet | `https://open-api-signet.unisat.io` |
 | Fractal Bitcoin | Mainnet | `https://open-api-fractal.unisat.io` |
-| Fractal Bitcoin | Testnet | `https://open-api-fractal-testnet.unisat.io` |
 
 ## Available APIs
 
