@@ -25,10 +25,12 @@ const sidebars: SidebarsConfig = {
       type: "doc",
       id: "home",
       label: "Home",
+      className: "sidebar-icon-home",
     },
     {
       type: "category",
       label: "Open API",
+      className: "sidebar-icon-reference",
       items: [
         {
           type: "doc",

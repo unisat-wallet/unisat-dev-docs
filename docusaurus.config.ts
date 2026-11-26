@@ -1,4 +1,4 @@
-import { themes as prismThemes } from "prism-react-renderer";
+import type { PrismTheme } from "prism-react-renderer";
 import type { Config } from "@docusaurus/types";
 import type * as Preset from "@docusaurus/preset-classic";
 
@@ -10,6 +10,19 @@ const footerBuildLabel = [
   releaseVersion && releaseVersion !== "unknown" ? `Version ${releaseVersion}` : "",
   gitCommit && gitCommit !== "unknown" ? gitCommit.slice(0, 7) : "",
 ].filter(Boolean).join(" · ");
+
+const docsPrismTheme: PrismTheme = {
+  plain: {
+    color: "var(--docs-text)",
+    backgroundColor: "var(--docs-surface)",
+  },
+  styles: [
+    { types: ["comment", "prolog", "doctype"], style: { color: "var(--docs-muted)", fontStyle: "italic" } },
+    { types: ["string", "attr-value", "char", "regex", "url"], style: { color: "var(--docs-code-string)" } },
+    { types: ["keyword", "boolean", "number", "constant", "selector"], style: { color: "var(--docs-code-keyword)" } },
+    { types: ["function", "class-name", "builtin", "tag", "attr-name", "property"], style: { color: "var(--docs-heading)" } },
+  ],
+};
 
 const config: Config = {
   title: "UniSat API Documentation",
@@ -161,8 +174,8 @@ const config: Config = {
       copyright: `© ${new Date().getFullYear()} UniSat`,
     },
     prism: {
-      theme: prismThemes.github,
-      darkTheme: prismThemes.dracula,
+      theme: docsPrismTheme,
+      darkTheme: docsPrismTheme,
       additionalLanguages: ["http"],
     },
   } satisfies Preset.ThemeConfig,

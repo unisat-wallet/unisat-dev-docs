@@ -1,10 +1,10 @@
 .frame {
-  --table-border: var(--docs-border, var(--ifm-color-emphasis-200));
-  --table-surface: var(--docs-surface, var(--ifm-background-surface-color));
+  --table-border: var(--docs-border);
+  --table-surface: var(--docs-canvas);
   margin: 0.65rem 0 1.3rem;
   overflow: hidden;
   border: 1px solid var(--table-border);
-  border-radius: 0.6rem;
+  border-radius: var(--docs-panel-radius);
   background: var(--table-surface);
 }
 
@@ -32,7 +32,7 @@
 }
 
 .table thead tr {
-  background-color: var(--ifm-color-emphasis-100);
+  background-color: var(--docs-surface);
 }
 
 .table tbody tr:nth-child(n) {
@@ -56,7 +56,7 @@
 }
 
 .table thead th {
-  color: var(--ifm-color-emphasis-800);
+  color: var(--docs-heading);
   font-weight: 650;
 }
 
@@ -80,24 +80,18 @@
 }
 
 .schemaFrame {
-  --table-border: var(--ifm-color-emphasis-300);
-  --schema-neutral-surface: color-mix(in srgb, var(--table-border) 60%, var(--table-surface));
-  --schema-tree-surface: #edf3fa;
+  --schema-neutral-surface: var(--docs-hover);
+  --schema-tree-surface: color-mix(in srgb, var(--docs-code-keyword) 9%, var(--docs-surface));
   container-type: inline-size;
   overflow-x: auto;
 }
 
-:global([data-theme="dark"]) .schemaFrame {
-  --schema-tree-surface: #39485e;
-}
-
 .schemaFrame:focus-visible {
-  outline: 2px solid var(--ifm-color-emphasis-600);
+  outline: 2px solid var(--docs-focus);
   outline-offset: 2px;
 }
 
 .frame .schemaTable {
-  --schema-row-border: var(--ifm-color-emphasis-200);
   --schema-token-surface: var(--schema-neutral-surface);
   --schema-pad-block: 0.625rem;
   --schema-pad-inline: 0.875rem;
@@ -118,17 +112,12 @@
 }
 
 .schemaTable :is(th, td) {
-  border-bottom-color: var(--schema-row-border);
   padding: var(--schema-pad-block) var(--schema-pad-inline);
   vertical-align: middle;
 }
 
 .schemaTable thead th {
   font-weight: 600;
-}
-
-.schemaTable :is(th, td) + :is(th, td) {
-  border-inline-start-color: var(--schema-row-border);
 }
 
 .schemaTable .fieldName {
@@ -184,7 +173,7 @@
 }
 
 .treeToggle:focus-visible {
-  outline: 2px solid var(--ifm-color-emphasis-600);
+  outline: 2px solid var(--docs-focus);
   outline-offset: 1px;
 }
 
@@ -225,13 +214,8 @@
 .required {
   padding: 0.07rem 0.33rem;
   border-radius: 0.25rem;
-  background: #fcedda;
-  color: #804718;
-}
-
-:global([data-theme="dark"]) .required {
-  background: #47301b;
-  color: #ffcf92;
+  background: var(--docs-selected);
+  color: var(--ifm-color-primary);
 }
 
 .description {

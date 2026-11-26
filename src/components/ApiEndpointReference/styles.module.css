@@ -1,17 +1,11 @@
 .reference {
-  --action-ink: #804718;
-  --action-surface: color-mix(in srgb, var(--ifm-color-primary) 13%, var(--docs-surface));
   min-width: 0;
-}
-
-:global([data-theme='dark']) .reference {
-  --action-ink: var(--ifm-color-primary-light);
 }
 
 .reference > h1 {
   margin: 0 0 0.65rem;
   font-size: clamp(2rem, 3.15vw, 2.85rem);
-  font-weight: 750;
+  font-weight: 650;
   letter-spacing: -0.045em;
   line-height: 1.1;
   overflow-wrap: anywhere;
@@ -20,7 +14,7 @@
 .reference > h2 {
   margin: 1.6rem 0 0.75rem;
   font-size: 1.4rem;
-  font-weight: 720;
+  font-weight: 650;
   letter-spacing: -0.025em;
   line-height: 1.2;
 }
@@ -48,7 +42,7 @@
   min-height: 3rem;
   padding: 0.45rem 0.5rem 0.45rem 0.75rem;
   border: 1px solid var(--docs-border);
-  border-radius: 0.625rem;
+  border-radius: var(--docs-panel-radius);
   background: var(--docs-surface);
 }
 
@@ -93,8 +87,8 @@
 .method[data-method='POST'],
 .method[data-method='PUT'],
 .method[data-method='PATCH'] {
-  background: #fcedda;
-  color: #804718;
+  background: var(--docs-selected);
+  color: var(--ifm-color-primary);
 }
 
 .method[data-method='DELETE'] {
@@ -106,13 +100,6 @@
 :global([data-theme='dark']) .reference :global(.api-response-heading) > h3 {
   background: #193b2f;
   color: #a3ebc9;
-}
-
-:global([data-theme='dark']) .method[data-method='POST'],
-:global([data-theme='dark']) .method[data-method='PUT'],
-:global([data-theme='dark']) .method[data-method='PATCH'] {
-  background: #47301b;
-  color: #ffcf92;
 }
 
 :global([data-theme='dark']) .method[data-method='DELETE'] {
@@ -185,7 +172,7 @@
 
 .responseTabs > button[aria-selected='true'] {
   border-bottom-color: var(--ifm-color-primary);
-  color: var(--action-ink);
+  color: var(--ifm-color-primary);
   font-weight: 650;
 }
 
@@ -194,7 +181,7 @@
   margin: 0.65rem 0 1.3rem;
   overflow: hidden;
   border: 1px solid var(--docs-border);
-  border-radius: 0.6rem;
+  border-radius: var(--docs-panel-radius);
   background: var(--docs-surface);
 }
 
@@ -272,14 +259,15 @@
 }
 
 .testLink {
-  border-color: var(--ifm-color-primary);
-  background: var(--action-surface);
-  color: var(--action-ink);
+  border-color: var(--docs-action);
+  background: var(--docs-action);
+  color: var(--docs-action-text);
 }
 
 .testLink:hover {
-  background: color-mix(in srgb, var(--ifm-color-primary) 23%, var(--docs-surface));
-  color: var(--action-ink);
+  border-color: var(--docs-action-hover);
+  background: var(--docs-action-hover);
+  color: var(--docs-action-text);
   text-decoration: none;
 }
 
@@ -306,7 +294,7 @@
 .copyButton:focus-visible,
 .select:focus-visible,
 .responseTabs > button:focus-visible {
-  outline: 2px solid var(--ifm-color-emphasis-900);
+  outline: 2px solid var(--docs-focus);
   outline-offset: 2px;
 }
 

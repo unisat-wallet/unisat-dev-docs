@@ -10,9 +10,13 @@
   flex-direction: column;
   min-height: 100%;
   padding: 1.5rem;
-  border: 1px solid var(--ifm-color-emphasis-200);
-  border-radius: 12px;
-  background: var(--ifm-background-surface-color);
+  border: 1px solid var(--docs-border);
+  border-radius: var(--docs-panel-radius);
+  background: var(--docs-surface);
+}
+
+.card:focus-within {
+  border-color: var(--docs-focus);
 }
 
 .title {

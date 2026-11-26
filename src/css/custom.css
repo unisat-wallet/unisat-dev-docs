@@ -1,33 +1,99 @@
 html:root {
-  --docs-canvas: var(--ifm-background-color);
-  --docs-surface: var(--ifm-background-surface-color);
-  --docs-border: var(--ifm-color-emphasis-200);
-  --docs-muted: var(--ifm-color-emphasis-700);
-  --docs-hover: var(--ifm-hover-overlay);
+  --docs-canvas: #fff;
+  --docs-surface: #f6f7f9;
+  --docs-hover: #eff1f4;
+  --docs-border: #e8eaee;
+  --docs-heading: #20242c;
+  --docs-text: #505866;
+  --docs-muted: #626c7a;
+  --docs-selected: #fdf2e5;
+  --docs-action: #ffac60;
+  --docs-action-hover: #ffbf83;
+  --docs-action-text: #35200d;
+  --docs-focus: #a64b05;
+  --docs-code-string: #38675d;
+  --docs-code-keyword: #5f537b;
+  --docs-panel-radius: 0.8125rem;
   --doc-sidebar-width: clamp(15rem, 20.5vw, 19.75rem);
-  --ifm-color-primary: #e9983d;
-  --ifm-color-primary-dark: #d88736;
-  --ifm-color-primary-darker: #c97830;
-  --ifm-color-primary-darkest: #a96127;
-  --ifm-color-primary-light: #f0a44a;
-  --ifm-color-primary-lighter: #f3ad52;
-  --ifm-color-primary-lightest: #f7bb61;
+  --ifm-color-primary: #9c4708;
+  --ifm-color-primary-dark: #8a3e07;
+  --ifm-color-primary-darker: #7c3706;
+  --ifm-color-primary-darkest: #672d05;
+  --ifm-color-primary-light: #a64b05;
+  --ifm-color-primary-lighter: #b6530a;
+  --ifm-color-primary-lightest: #c65b0b;
+  --ifm-color-primary-contrast-background: var(--docs-selected);
+  --ifm-color-primary-contrast-foreground: var(--docs-heading);
+  --ifm-color-content: var(--docs-text);
+  --ifm-color-content-secondary: var(--docs-muted);
+  --ifm-background-color: var(--docs-canvas);
+  --ifm-background-surface-color: var(--docs-surface);
+  --ifm-hover-overlay: var(--docs-hover);
+  --ifm-font-family-base: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ifm-font-family-monospace: ui-monospace, 'SF Mono', Consolas, monospace;
+  --ifm-heading-color: var(--docs-heading);
+  --ifm-heading-font-weight: 650;
+  --ifm-code-background: var(--docs-surface);
   --ifm-code-font-size: 92%;
-  --ifm-font-family-base: Geist, Inter, system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  --ifm-navbar-background-color: var(--docs-canvas);
   --ifm-navbar-height: 3.875rem;
   --ifm-navbar-shadow: inset 0 -1px var(--docs-border);
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.1);
+  --ifm-navbar-link-hover-color: var(--docs-heading);
+  --ifm-menu-color: var(--docs-text);
+  --ifm-table-border-color: var(--docs-border);
+  --ifm-table-head-background: var(--docs-surface);
+  --ifm-table-head-color: var(--docs-heading);
+  --ifm-table-stripe-background: var(--docs-surface);
+  --ifm-toc-border-color: var(--docs-border);
+  --docusaurus-highlighted-code-line-bg: var(--docs-hover);
 }
 
-html[data-theme='dark'] {
-  --ifm-color-primary: #ffb366;
-  --ifm-color-primary-dark: #e69c5c;
-  --ifm-color-primary-darker: #cc8f53;
-  --ifm-color-primary-darkest: #996b40;
-  --ifm-color-primary-light: #ffbf73;
-  --ifm-color-primary-lighter: #ffc680;
-  --ifm-color-primary-lightest: #ffd699;
-  --docusaurus-highlighted-code-line-bg: rgba(0, 0, 0, 0.3);
+html:root[data-theme='dark'] {
+  --docs-canvas: #15171b;
+  --docs-surface: #1c2026;
+  --docs-hover: #252a32;
+  --docs-border: #2c3139;
+  --docs-heading: #ebedf2;
+  --docs-text: #b5bdc9;
+  --docs-muted: #a3adbb;
+  --docs-selected: #30251f;
+  --docs-focus: #ffb577;
+  --docs-code-string: #a2d2bf;
+  --docs-code-keyword: #c1b1e5;
+  --ifm-color-primary: #ffb577;
+  --ifm-color-primary-dark: #f5a766;
+  --ifm-color-primary-darker: #eb9c59;
+  --ifm-color-primary-darkest: #da8c48;
+  --ifm-color-primary-light: #ffbf89;
+  --ifm-color-primary-lighter: #ffc99b;
+  --ifm-color-primary-lightest: #ffd5b2;
+}
+
+:is(a, button, select, summary):focus-visible {
+  outline: 2px solid var(--docs-focus);
+  outline-offset: 2px;
+}
+
+.markdown h1 {
+  letter-spacing: -0.045em;
+}
+
+.markdown h2,
+.markdown h3 {
+  letter-spacing: -0.025em;
+}
+
+.theme-code-block {
+  --ifm-code-border-radius: var(--docs-panel-radius);
+  box-shadow: 0 0 0 1px var(--docs-border);
+}
+
+.pagination-nav__link {
+  border-color: var(--docs-border);
+}
+
+.pagination-nav__link:hover {
+  background: var(--docs-surface);
 }
 
 .navbar {
@@ -44,11 +110,18 @@ html[data-theme='dark'] {
 }
 
 .navbar__title {
-  letter-spacing: -0.022em;
+  color: var(--docs-heading);
+  font-weight: 650;
+  letter-spacing: -0.035em;
 }
 
 .navbar__link {
   font-size: 0.94rem;
+  font-weight: 500;
+}
+
+.navbar .navbar__link--active {
+  color: var(--ifm-color-primary);
   font-weight: 600;
 }
 
@@ -61,17 +134,6 @@ html[data-theme='dark'] {
     align-items: center;
     align-self: stretch;
     display: inline-flex;
-    position: relative;
-  }
-
-  .navbar__items > .navbar__link--active::after {
-    background: var(--ifm-color-primary);
-    border-radius: 3px 3px 0 0;
-    bottom: calc(-1 * var(--ifm-navbar-padding-vertical));
-    content: '';
-    height: 3px;
-    inset-inline: 0.6rem;
-    position: absolute;
   }
 
   .navbar__items--right > .navbar__link {
@@ -91,19 +153,15 @@ html[data-theme='dark'] {
 .theme-doc-sidebar-menu {
   --ifm-menu-link-padding-horizontal: 0.625rem;
   --ifm-menu-link-padding-vertical: 0.4rem;
-  --sidebar-current-color: color-mix(in srgb, var(--ifm-color-primary-darkest) 82%, var(--ifm-color-content));
-  --sidebar-current-bg: color-mix(in srgb, var(--ifm-color-primary) 10%, var(--docs-surface));
+  --ifm-menu-color-background-active: var(--docs-selected);
+  --ifm-menu-color-background-hover: var(--docs-surface);
   font-size: 0.91rem;
   font-weight: 450;
 }
 
-html[data-theme='dark'] .theme-doc-sidebar-menu {
-  --sidebar-current-color: var(--ifm-color-primary-light);
-}
-
 .theme-doc-sidebar-menu .menu__link,
 .theme-doc-sidebar-menu .menu__list-item-collapsible {
-  border-radius: 0.4rem;
+  border-radius: 0.4375rem;
 }
 
 .theme-doc-sidebar-menu .menu__link > span[title] {
@@ -117,7 +175,7 @@ html[data-theme='dark'] .theme-doc-sidebar-menu {
   margin-inline-start: 0.55rem;
   padding: 0;
   padding-inline-start: 0.55rem;
-  border-inline-start: 1px solid var(--ifm-color-emphasis-300);
+  border-inline-start: 1px solid var(--docs-border);
 }
 
 .theme-doc-sidebar-menu .menu__list-item-collapsible > .menu__link,
@@ -128,13 +186,35 @@ html[data-theme='dark'] .theme-doc-sidebar-menu {
 
 .theme-doc-sidebar-menu > .menu__list-item > .menu__link,
 .theme-doc-sidebar-menu > .menu__list-item > .menu__list-item-collapsible > .menu__link {
-  color: var(--ifm-color-content);
-  font-size: 0.96rem;
-  font-weight: 600;
+  min-height: 2.3125rem;
+  color: var(--docs-text);
+  font-size: 0.875rem;
+  font-weight: 450;
+  line-height: 1.4;
 }
 
 .theme-doc-sidebar-menu > .menu__list-item:not(:first-child) {
-  margin-block-start: 0.4rem;
+  margin-block-start: 0.25rem;
+}
+
+.theme-doc-sidebar-menu .sidebar-icon-home {
+  --sidebar-item-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m3 11 9-7 9 7M5 10v10h14V10m-9 10v-6h4v6'/%3E%3C/svg%3E");
+}
+
+.theme-doc-sidebar-menu .sidebar-icon-reference {
+  --sidebar-item-icon: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.6' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 4h12a2 2 0 0 1 2 2v14H6a2 2 0 0 1 0-4h13M5 4a1 1 0 0 0-1 1v13m4-9h7'/%3E%3C/svg%3E");
+}
+
+.theme-doc-sidebar-menu .sidebar-icon-home > .menu__link::before,
+.theme-doc-sidebar-menu .sidebar-icon-reference > .menu__list-item-collapsible > .menu__link::before {
+  content: '';
+  flex: none;
+  inline-size: 0.9375rem;
+  block-size: 0.9375rem;
+  margin-inline-end: 0.625rem;
+  background: currentColor;
+  mask: var(--sidebar-item-icon) center / contain no-repeat;
+  opacity: 0.85;
 }
 
 .theme-doc-sidebar-menu .menu__list .menu__list-item:not(:first-child) {
@@ -157,15 +237,19 @@ html[data-theme='dark'] .theme-doc-sidebar-menu {
   padding-inline: 0.55rem;
 }
 
+.theme-doc-sidebar-menu .menu__link:hover:not([aria-current='page']) {
+  color: var(--docs-heading);
+}
+
 .theme-doc-sidebar-menu .menu__list-item-collapsible--active,
 .theme-doc-sidebar-menu .menu__list-item > .menu__link[aria-current='page'] {
-  background-color: var(--sidebar-current-bg);
+  background-color: var(--docs-selected);
 }
 
 .theme-doc-sidebar-menu .menu__link[aria-current='page'],
 .theme-doc-sidebar-menu .menu__list-item-collapsible .menu__link[aria-current='page'] {
-  color: var(--sidebar-current-color);
-  font-weight: 500;
+  color: var(--ifm-color-primary);
+  font-weight: 600;
 }
 
 @media (max-width: 996px) {
@@ -180,6 +264,7 @@ html[data-theme='dark'] .theme-doc-sidebar-menu {
 
 .theme-doc-breadcrumbs {
   --ifm-breadcrumb-border-radius: 0.35rem;
+  --ifm-breadcrumb-item-background-active: var(--docs-selected);
   --ifm-breadcrumb-padding-horizontal: 0.25rem;
   --ifm-breadcrumb-padding-vertical: 0.3rem;
   --ifm-breadcrumb-size-multiplier: 0.88;
