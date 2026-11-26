@@ -15,11 +15,12 @@ type Props = {
   rows: FieldRow[];
   fieldLabel?: string;
   caption: string;
+  variant?: "parameters" | "schema" | "headers";
 };
 
 type DetailProps = Pick<FieldRow, "description" | "details">;
 
-function FieldDetails({ description, details, hideLabels = false }: DetailProps & { hideLabels?: boolean }) {
+function FieldDetails({ description, details }: DetailProps) {
   return (
     <>
       {description && <div className={styles.description}>{description}</div>}
@@ -27,24 +28,12 @@ function FieldDetails({ description, details, hideLabels = false }: DetailProps 
         <dl className={styles.details}>
           {details.map(({ label, value }, index) => (
             <div key={`${label}:${index}`}>
-              <dt className={hideLabels ? styles.visuallyHidden : undefined}>{label}:</dt>
+              <dt>{label}:</dt>
               <dd><code>{value}</code></dd>
             </div>
           ))}
         </dl>
       )}
-    </>
-  );
-}
-
-function ResponseDetailCells({ description, details }: DetailProps) {
-  const examples = details?.filter(({ label }) => label === "Example");
-  const constraints = details?.filter(({ label }) => label !== "Example");
-
-  return (
-    <>
-      <td className={styles.exampleCell}><FieldDetails details={examples} hideLabels /></td>
-      <td><FieldDetails description={description} details={constraints} /></td>
     </>
   );
 }
@@ -59,15 +48,15 @@ function FieldName({ field, name }: { field: string; name: string }) {
   );
 }
 
-type ResponseNode = {
+type SchemaNode = {
   row: FieldRow;
   index: number;
-  children: ResponseNode[];
+  children: SchemaNode[];
 };
 
-function responseTree(rows: FieldRow[]): ResponseNode[] {
-  const nodes: ResponseNode[] = rows.map((row, index) => ({ row, index, children: [] }));
-  const roots: ResponseNode[] = [];
+function schemaTree(rows: FieldRow[]): SchemaNode[] {
+  const nodes: SchemaNode[] = rows.map((row, index) => ({ row, index, children: [] }));
+  const roots: SchemaNode[] = [];
 
   for (const node of nodes) {
     const { parentIndex } = node.row;
@@ -78,7 +67,7 @@ function responseTree(rows: FieldRow[]): ResponseNode[] {
   return roots;
 }
 
-function ResponseFieldRows({ rows }: Pick<Props, "rows">) {
+function SchemaFieldRows({ rows }: Pick<Props, "rows">) {
   const [collapsed, setCollapsed] = useState<Set<number>>(() => new Set());
 
   function toggle(index: number) {
@@ -90,7 +79,7 @@ function ResponseFieldRows({ rows }: Pick<Props, "rows">) {
     });
   }
 
-  function renderRows(nodes: ResponseNode[], depth = 0): React.ReactNode {
+  function renderRows(nodes: SchemaNode[], depth = 0): React.ReactNode {
     return nodes.map(({ row, index, children }) => {
       const hasChildren = children.length > 0;
       const expanded = hasChildren && !collapsed.has(index);
@@ -99,7 +88,7 @@ function ResponseFieldRows({ rows }: Pick<Props, "rows">) {
       return (
         <React.Fragment key={index}>
           <tr data-collapsible={hasChildren || undefined} style={{ "--tree-depth": depth } as CSSProperties}>
-            <th scope="row" className={styles.responseFieldCell}>
+            <th scope="row" className={styles.schemaFieldCell}>
               {hasChildren ? (
                 <button
                   type="button"
@@ -116,7 +105,7 @@ function ResponseFieldRows({ rows }: Pick<Props, "rows">) {
               {row.required === false && <span className={styles.visuallyHidden}>Optional</span>}
             </th>
             <td><code className={styles.type}>{row.type}</code></td>
-            <ResponseDetailCells description={row.description} details={row.details} />
+            <td><FieldDetails description={row.description} details={row.details} /></td>
           </tr>
           {expanded && renderRows(children, depth + 1)}
         </React.Fragment>
@@ -124,82 +113,64 @@ function ResponseFieldRows({ rows }: Pick<Props, "rows">) {
     });
   }
 
-  return <>{renderRows(responseTree(rows))}</>;
+  return <>{renderRows(schemaTree(rows))}</>;
 }
 
 export default function ApiFieldTable({
   rows,
   fieldLabel = "Field",
   caption,
+  variant = "parameters",
 }: Props) {
   if (!rows.length) return null;
 
   const [firstField] = rows;
   const bearerAuthorization = caption === "Authorization" && rows.length === 1
     && firstField.type === "Bearer token" && firstField.required === true;
-  const schema = fieldLabel === "Field";
-  const response = schema && /^\w+ response fields /.test(caption);
-  const responseHierarchy = response && rows.some(({ parentIndex }) => parentIndex !== undefined);
-  const parents = new Set(
-    rows.filter(({ type }) => type === "object" || type.endsWith("[]")).map(({ field }) => field),
-  );
+  const headers = bearerAuthorization || variant === "headers";
+  const schema = variant === "schema";
 
   return (
     <>
       <div
-        className={response ? `${styles.frame} ${styles.responseFrame}` : styles.frame}
-        role={response ? "region" : undefined}
-        aria-label={response ? caption : undefined}
-        tabIndex={response ? 0 : undefined}
+        className={schema ? `${styles.frame} ${styles.schemaFrame}` : styles.frame}
+        role={schema ? "region" : undefined}
+        aria-label={schema ? caption : undefined}
+        tabIndex={schema ? 0 : undefined}
       >
-        <table className={response ? `${styles.table} ${styles.responseTable}` : styles.table}>
+        <table className={schema ? `${styles.table} ${styles.schemaTable}` : styles.table}>
           <caption className={styles.visuallyHidden}>{caption}</caption>
           <colgroup>
             <col className={styles.fieldColumn} />
             <col className={styles.typeColumn} />
-            {response && <col className={styles.exampleColumn} />}
             <col />
           </colgroup>
           <thead>
             <tr>
-              <th scope="col">{bearerAuthorization ? "Header" : fieldLabel}</th>
+              <th scope="col">{headers ? "Header" : fieldLabel}</th>
               <th scope="col">Type</th>
-              {response && <th scope="col">Example</th>}
-              <th scope="col">{bearerAuthorization ? "Required" : "Details"}</th>
+              <th scope="col">{headers ? "Required" : "Details"}</th>
             </tr>
           </thead>
           <tbody>
-            {responseHierarchy ? <ResponseFieldRows rows={rows} /> : rows.map(({ field, type, required, description, details }, index) => {
-              const leafStart = field.lastIndexOf(".") + 1;
-              const parent = field.slice(0, leafStart - 1);
-              const nested = schema && leafStart > 0
-                && (parents.has(parent) || parents.has(parent.replace(/(?:\[\])+$/, "")));
-              const prefix = nested ? field.slice(0, leafStart) : "";
-              const depth = nested ? Math.min(prefix.split(".").length - 1, 3) : undefined;
-
-              return (
-                <tr key={`${field}:${index}`}>
-                  <th scope="row" className={styles.fieldCell} data-depth={depth}>
-                    <FieldName field={field} name={field.slice(prefix.length)} />
-                    {!bearerAuthorization && required === true && (
-                      <span className={styles.required}>Required</span>
-                    )}
-                    {required === false && (
-                      <span className={response ? styles.visuallyHidden : styles.optional}>Optional</span>
-                    )}
-                  </th>
-                  <td><code className={styles.type}>{type}</code></td>
-                  {response ? <ResponseDetailCells description={description} details={details} /> : (
-                    <td>
-                      {bearerAuthorization ? "Yes" : <FieldDetails description={description} details={details} />}
-                      {!bearerAuthorization && !description && !details?.length && (
-                        <span className={styles.empty}>&mdash;</span>
-                      )}
-                    </td>
+            {schema ? <SchemaFieldRows rows={rows} /> : rows.map(({ field, type, required, description, details }, index) => (
+              <tr key={`${field}:${index}`}>
+                <th scope="row">
+                  <FieldName field={field} name={field} />
+                  {!headers && required === true && (
+                    <span className={styles.required}>Required</span>
                   )}
-                </tr>
-              );
-            })}
+                  {!headers && required === false && <span className={styles.optional}>Optional</span>}
+                </th>
+                <td><code className={styles.type}>{type}</code></td>
+                <td>
+                  {headers ? (required ? "Yes" : "No") : <FieldDetails description={description} details={details} />}
+                  {!headers && !description && !details?.length && (
+                    <span className={styles.empty}>&mdash;</span>
+                  )}
+                </td>
+              </tr>
+            ))}
           </tbody>
         </table>
       </div>

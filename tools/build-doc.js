@@ -285,9 +285,18 @@ function endpointParameters({ pathItem, operation }, bundle) {
   return [...entries.values()];
 }
 
-function fieldTable(rows, caption, fieldLabel) {
+function fieldTable(rows, caption, options) {
   if (!rows.length) return "";
-  return `<ApiFieldTable {...${JSON.stringify({ rows, caption, fieldLabel })}} />`;
+  return `<ApiFieldTable {...${JSON.stringify({ rows, caption, ...options })}} />`;
+}
+
+function renderRequestBody(requestBody, bundle) {
+  const required = requestBody.required === true;
+  const content = Object.entries(requestBody.content || {}).flatMap(([type, media]) => [
+    fieldTable([{ field: "Content-Type", type, required }], `Request body content type ${type}`, { variant: "headers" }),
+    fieldTable(schemaRows(media.schema, bundle, "request"), `Request body fields for ${type}`, { variant: "schema" }),
+  ]);
+  return ["## Request Body", requestBody.description, ...content].filter(Boolean).join("\n\n");
 }
 
 function renderAuthorization(security, bundle) {
@@ -313,7 +322,7 @@ function renderAuthorization(security, bundle) {
   const note = anonymous
     ? "Authorization is optional."
     : security.length > 1 ? "Use one of the authorization options below." : "";
-  return [note, fieldTable(rows, "Authorization", "Credential")].filter(Boolean).join("\n\n");
+  return [note, fieldTable(rows, "Authorization", { fieldLabel: "Credential" })].filter(Boolean).join("\n\n");
 }
 
 function generateEndpointPage(endpoint, swagger, root, bundle) {
@@ -332,17 +341,11 @@ function generateEndpointPage(endpoint, swagger, root, bundle) {
 
   for (const [location, heading] of [["path", "Path Parameters"], ["query", "Query Parameters"], ["header", "Headers"], ["cookie", "Cookies"]]) {
     const fields = parameters.filter((parameter) => parameter.in === location);
-    if (fields.length) sections.push(`## ${heading}\n\n${fieldTable(parameterRows(fields, bundle), heading, "Parameter")}`);
+    if (fields.length) sections.push(`## ${heading}\n\n${fieldTable(parameterRows(fields, bundle), heading, { fieldLabel: "Parameter" })}`);
   }
 
   const requestBody = resolveOpenApiReference(operation.requestBody, bundle);
-  if (requestBody) {
-    const required = requestBody.required ? " **(required)**" : "";
-    const body = Object.entries(requestBody.content || {}).map(([type, media]) =>
-      `Content-Type: \`${type}\`${required}\n\n${fieldTable(schemaRows(media.schema, bundle, "request"), `Request body fields for ${type}`)}`.trimEnd()
-    );
-    sections.push(["## Request Body", requestBody.description || "", ...body].filter(Boolean).join("\n\n"));
-  }
+  if (requestBody) sections.push(renderRequestBody(requestBody, bundle));
 
   const responseSections = ["## Responses"];
   for (const [status, response] of documentedResponses(operation, bundle)) {

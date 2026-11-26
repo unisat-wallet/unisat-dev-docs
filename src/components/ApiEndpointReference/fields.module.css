@@ -79,60 +79,28 @@
   font-weight: 550;
 }
 
-.fieldCell[data-depth="2"] {
-  --indent: 2;
-}
-
-.fieldCell[data-depth="3"] {
-  --indent: 3;
-}
-
-.table .fieldCell[data-depth] {
-  --indent-width: 0.65rem;
-  --guide-start: calc(0.75rem + (var(--indent, 1) - 1) * var(--indent-width));
-  position: relative;
-  padding-inline-start: calc(var(--guide-start) + var(--indent-width));
-}
-
-.fieldCell[data-depth]::before {
-  position: absolute;
-  inset-block: 0;
-  inset-inline-start: var(--guide-start);
-  border-inline-start: 1px solid var(--table-border);
-  content: "";
-}
-
-.fieldCell[data-depth]::after {
-  position: absolute;
-  inset-block-start: 1.05rem;
-  inset-inline-start: var(--guide-start);
-  width: calc(var(--indent-width) * 0.56);
-  border-block-start: 1px solid var(--table-border);
-  content: "";
-}
-
-.responseFrame {
+.schemaFrame {
   --table-border: var(--ifm-color-emphasis-300);
-  --response-neutral-surface: color-mix(in srgb, var(--table-border) 60%, var(--table-surface));
-  --response-tree-surface: #edf3fa;
+  --schema-neutral-surface: color-mix(in srgb, var(--table-border) 60%, var(--table-surface));
+  --schema-tree-surface: #edf3fa;
   container-type: inline-size;
   overflow-x: auto;
 }
 
-:global([data-theme="dark"]) .responseFrame {
-  --response-tree-surface: #39485e;
+:global([data-theme="dark"]) .schemaFrame {
+  --schema-tree-surface: #39485e;
 }
 
-.responseFrame:focus-visible {
+.schemaFrame:focus-visible {
   outline: 2px solid var(--ifm-color-emphasis-600);
   outline-offset: 2px;
 }
 
-.frame .responseTable {
-  --response-row-border: var(--ifm-color-emphasis-200);
-  --response-token-surface: var(--response-neutral-surface);
-  --response-pad-block: 0.625rem;
-  --response-pad-inline: 0.875rem;
+.frame .schemaTable {
+  --schema-row-border: var(--ifm-color-emphasis-200);
+  --schema-token-surface: var(--schema-neutral-surface);
+  --schema-pad-block: 0.625rem;
+  --schema-pad-inline: 0.875rem;
   --tree-step: 1.125rem;
   --tree-disclosure: 1rem;
   --tree-chevron-size: 0.45rem;
@@ -141,59 +109,55 @@
   line-height: 1.5;
 }
 
-.responseTable .fieldColumn {
+.schemaTable .fieldColumn {
   width: 34%;
 }
 
-.responseTable .typeColumn {
+.schemaTable .typeColumn {
   width: max(14%, 6.375rem);
 }
 
-.responseTable .exampleColumn {
-  width: 18%;
-}
-
-.responseTable :is(th, td) {
-  border-bottom-color: var(--response-row-border);
-  padding: var(--response-pad-block) var(--response-pad-inline);
+.schemaTable :is(th, td) {
+  border-bottom-color: var(--schema-row-border);
+  padding: var(--schema-pad-block) var(--schema-pad-inline);
   vertical-align: middle;
 }
 
-.responseTable thead th {
+.schemaTable thead th {
   font-weight: 600;
 }
 
-.responseTable :is(th, td) + :is(th, td) {
-  border-inline-start-color: var(--response-row-border);
+.schemaTable :is(th, td) + :is(th, td) {
+  border-inline-start-color: var(--schema-row-border);
 }
 
-.responseTable .fieldName {
+.schemaTable .fieldName {
   font: 500 1rem/1.5 var(--ifm-font-family-base);
 }
 
-.frame .responseTable .type {
+.frame .schemaTable .type {
   color: inherit;
   font-size: inherit;
 }
 
-.frame .responseTable .required {
+.frame .schemaTable .required {
   margin-block-start: 0;
   margin-inline-start: 0.4rem;
-  background: var(--response-token-surface);
+  background: var(--schema-token-surface);
   color: inherit;
   vertical-align: middle;
 }
 
-.responseTable .responseFieldCell {
-  padding-inline-start: calc(var(--response-pad-inline) + var(--tree-disclosure) + var(--tree-depth, 0) * var(--tree-step));
+.schemaTable .schemaFieldCell {
+  padding-inline-start: calc(var(--schema-pad-inline) + var(--tree-disclosure) + var(--tree-depth, 0) * var(--tree-step));
 }
 
-.responseTable tbody tr[data-collapsible] {
+.schemaTable tbody tr[data-collapsible] {
   --tree-tint: calc(100% / (1 + var(--tree-depth, 0) * 0.65));
-  background-color: color-mix(in srgb, var(--response-tree-surface) var(--tree-tint), var(--table-surface));
+  background-color: color-mix(in srgb, var(--schema-tree-surface) var(--tree-tint), var(--table-surface));
 }
 
-.responseTable :is(.responseFieldCell, .fieldCell) > .fieldName {
+.schemaTable .schemaFieldCell > .fieldName {
   display: inline;
 }
 
@@ -301,7 +265,7 @@
   margin-top: 0.25rem;
 }
 
-.responseTable .details {
+.schemaTable .details {
   display: flex;
   flex-wrap: wrap;
   gap: 0.2rem 0.65rem;
@@ -309,19 +273,15 @@
   font-size: inherit;
 }
 
-.responseTable .details > div {
+.schemaTable .details > div {
   max-inline-size: 100%;
   min-inline-size: 0;
 }
 
-.responseTable .exampleCell dd {
-  margin-inline-start: 0;
-}
-
-.responseTable .details code {
+.schemaTable .details code {
   padding: 0.06rem 0.3rem;
   border: 0;
-  background: var(--response-token-surface);
+  background: var(--schema-token-surface);
   color: inherit;
   font-size: 0.875rem;
 }
@@ -343,32 +303,23 @@
 }
 
 @media (max-width: 480px) {
-  .table:not(.responseTable) :is(th, td) {
+  .table:not(.schemaTable) :is(th, td) {
     padding: 0.45rem 0.42rem;
-  }
-
-  .table .fieldCell[data-depth] {
-    --indent-width: 0.42rem;
-    --guide-start: calc(0.42rem + (var(--indent, 1) - 1) * var(--indent-width));
   }
 }
 
 @container (max-width: 36rem) {
-  .frame .responseTable {
-    --response-pad-inline: 0.5rem;
+  .frame .schemaTable {
+    --schema-pad-inline: 0.5rem;
     --tree-step: 0.8rem;
     --tree-disclosure: 0.9rem;
   }
 
-  .responseTable .fieldColumn {
+  .schemaTable .fieldColumn {
     width: 38%;
   }
 
-  .responseTable .typeColumn {
+  .schemaTable .typeColumn {
     width: 5.75rem;
-  }
-
-  .responseTable .exampleColumn {
-    width: 16%;
   }
 }

@@ -79,19 +79,16 @@ function schemaRows(input, bundle, direction) {
     const plainObjectItem = field.endsWith("[]") && properties.length && !recursive;
     let childParentIndex = parentIndex;
     if ((field && !plainObjectItem) || (!properties.length && !parts.length) || details.length || schema.description) {
-      const row = {
+      childParentIndex = rows.length;
+      rows.push({
         field: field || "Body",
+        name,
+        parentIndex: parentIndex ?? null,
         type: schemaType(schema, bundle),
         required,
         description: recursive ? schema.description || "Recursive reference." : schema.description,
         details,
-      };
-      if (direction === "response") {
-        row.parentIndex = parentIndex ?? null;
-        row.name = name;
-      }
-      childParentIndex = rows.length;
-      rows.push(row);
+      });
     }
     if (recursive) return;
     const next = [...ancestors, schema];

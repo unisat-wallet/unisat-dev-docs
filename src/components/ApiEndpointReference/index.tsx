@@ -129,7 +129,7 @@ export function ApiResponseBody({ status, mediaType, rows, examples }: ResponseB
   const [view, setView] = useState<ResponseView>("fields");
   const tabRefs = useRef<Partial<Record<ResponseView, HTMLButtonElement | null>>>({});
 
-  const fields = rows.length > 0 && <ApiFieldTable rows={rows} caption={`${status} response fields for ${mediaType}`} />;
+  const fields = rows.length > 0 && <ApiFieldTable rows={rows} caption={`${status} response fields for ${mediaType}`} variant="schema" />;
   const example = examples.length > 0 && <ResponseExamplePanel mediaType={mediaType} examples={examples} />;
   if (!fields || !example) return fields || example || null;
 
