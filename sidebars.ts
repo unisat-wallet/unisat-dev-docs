@@ -25,12 +25,12 @@ const sidebars: SidebarsConfig = {
       type: "doc",
       id: "home",
       label: "Home",
-      className: "sidebar-icon-home",
+      className: "sidebar-icon sidebar-icon-home",
     },
     {
       type: "category",
       label: "Open API",
-      className: "sidebar-icon-reference",
+      className: "sidebar-icon sidebar-icon-reference",
       items: [
         {
           type: "doc",
@@ -101,10 +101,12 @@ const sidebars: SidebarsConfig = {
       type: "doc",
       id: "open-api/openapi-cli",
       label: "UniSat AI Kit",
+      className: "sidebar-icon sidebar-icon-ai",
     },
     {
       type: "category",
       label: "Plans and Pricing",
+      className: "sidebar-icon sidebar-icon-pricing",
       items: [
         {
           type: "doc",
@@ -121,6 +123,7 @@ const sidebars: SidebarsConfig = {
     {
       type: "category",
       label: "UniSat Wallet",
+      className: "sidebar-icon sidebar-icon-wallet",
       items: [
         "wallet-api/intro",
         {
@@ -155,15 +158,28 @@ const sidebars: SidebarsConfig = {
     {
       type: "category",
       label: "Developer Support",
+      className: "sidebar-icon sidebar-icon-support",
       items: [
         "developer-support/how-to-acquire-a-unisat-api-key",
         "developer-support/api-key-errors",
         "developer-support/enable-two-factor-authentication",
       ],
     },
-    "developer-support/faq",
-    "developer-support/api-terms-of-use",
-    "developer-support/developer-service-legal-disclaimer",
+    {
+      type: "doc",
+      id: "developer-support/faq",
+      className: "sidebar-icon sidebar-icon-faq",
+    },
+    {
+      type: "doc",
+      id: "developer-support/api-terms-of-use",
+      className: "sidebar-icon sidebar-icon-terms",
+    },
+    {
+      type: "doc",
+      id: "developer-support/developer-service-legal-disclaimer",
+      className: "sidebar-icon sidebar-icon-legal",
+    },
   ],
 };
 
