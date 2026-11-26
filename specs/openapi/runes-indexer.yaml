@@ -28,6 +28,7 @@ paths:
       tags:
         - Runes Indexer
       operationId: getRunesStatus
+      x-sidebar-label: "Indexer status"
       x-doc-notes: |-
         ### Notes
 
@@ -69,6 +70,7 @@ paths:
       tags:
         - Runes Indexer
       operationId: getRunesList
+      x-sidebar-label: "Rune list"
       summary: "Search and list Rune metadata entries"
       description: >-
         Returns paginated Rune entries with rune id, raw and spaced names, divisibility, symbol, etching transaction, premine, terms, mints, burned amount, holders, transactions, supply, mintability, and remaining amount. Use it for Rune discovery, filtering, and ranking; spaced names may contain bullet separators.
@@ -147,6 +149,7 @@ paths:
       tags:
         - Runes Indexer
       operationId: getRuneInfo
+      x-sidebar-label: "Rune metadata"
       summary: "Get detailed metadata for a Rune"
       description: >-
         Returns one Rune entry by block:tx rune id, including names, symbol, divisibility, etching transaction, premine, mint terms, supply, burned amount, holder and transaction counts, mintability, and remaining supply. Use it for Rune detail pages and validation before balance or holder queries.
@@ -186,6 +189,7 @@ paths:
       tags:
         - Runes Indexer
       operationId: getRuneHolders
+      x-sidebar-label: "Rune holders"
       summary: "List holders for a Rune"
       description: >-
         Returns holder addresses and Rune amounts for a specific block:tx rune id with pagination totals. Use it for holder distribution and ownership analysis; amounts are indexed token balances and do not authorize transfers or UTXO spends.
@@ -250,6 +254,7 @@ paths:
       tags:
         - Runes Indexer
       operationId: getRunesBalanceList
+      x-sidebar-label: "Address balances"
       summary: "List all Rune balances for an address"
       description: >-
         Returns paginated Rune balances held by an address, including rune id, raw and spaced names, symbol, divisibility, and amount. Use it for wallet portfolio displays or account audits; balances are indexer-derived and should be reconciled with UTXOs before spending.
@@ -311,6 +316,7 @@ paths:
       tags:
         - Runes Indexer
       operationId: getRunesBalance
+      x-sidebar-label: "Address balance by Rune"
       summary: "Get an address's balance for one Rune"
       description: >-
         Returns the indexed amount and Rune identity fields for one address and block:tx rune id. Use it for single-token wallet views or pre-transfer checks; spend construction must still inspect Rune UTXOs and current mempool state.
@@ -356,6 +362,7 @@ paths:
       tags:
         - Runes Indexer
       operationId: getRunesUtxoBalance
+      x-sidebar-label: "UTXO Rune balances"
       summary: "Get Rune balances carried by a specific UTXO"
       description: >-
         Returns all Rune balances associated with one transaction output, including rune id, names, symbol, divisibility, and amount. Use it for coin selection diagnostics or validating a Rune-bearing UTXO; callers must confirm the UTXO is still unspent before spending.
@@ -403,6 +410,7 @@ paths:
       tags:
         - Runes Indexer
       operationId: getRunesUtxoByAddressAndRuneid
+      x-sidebar-label: "Address UTXOs by Rune"
       summary: "List an address's transferable UTXOs for one Rune"
       description: >-
         Returns UTXOs for an address that carry the selected Rune, including address, satoshi value, script, outpoint, and embedded Rune balances. Use it to prepare transfer candidates; revalidate ownership, dust policy, and mempool state before signing or broadcasting.
@@ -469,6 +477,7 @@ paths:
       tags:
         - Runes Indexer
       operationId: getRunesEvents
+      x-sidebar-label: "Rune events"
       summary: "Search Rune etch, mint, burn, send, and receive events"
       description: >-
         Returns paginated Rune events with type, address, amount, height, transaction index, txid, timestamp, raw rune name, and rune id. Use it for activity feeds, compliance exports, or block and transaction investigations; results are read-only indexer events and may lag recent confirmations.
@@ -558,6 +567,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:

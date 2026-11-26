@@ -30,6 +30,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20BestHeight
+      x-sidebar-label: "Indexer status"
       summary: "Get Classic BRC-20 indexer height and ticker total"
       description: >-
         Returns the latest indexed block height, block hash, block timestamp, and total Classic BRC-20 ticker count. Use it to check indexer freshness before reading token status, holders, history, or address balances; data may lag the chain tip and should not be used for BRC20-Prog 6-character tickers.
@@ -72,6 +73,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -82,6 +84,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20TickerList
+      x-sidebar-label: "Ticker list"
       summary: "List indexed Classic BRC-20 tickers"
       description: >-
         Returns a paginated ticker list with total count and start offset for Classic BRC-20 discovery. Use these tickers with the Classic BRC-20 info, holder, history, and address-balance endpoints; route BRC20-Prog 6-character tickers to the brc20-prog API instead.
@@ -134,6 +137,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -143,6 +147,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20Status
+      x-sidebar-label: "Ticker status list"
       summary: "Search Classic BRC-20 ticker status and mint progress"
       description: >-
         Returns indexed Classic BRC-20 ticker status records including deployment metadata, minted supply, holder and history counts, and completion state. Use sort and completion filters for token discovery or ranking; balances are indexer-derived and may change as new blocks are processed.
@@ -219,6 +224,7 @@ paths:
                           $ref: "#/components/schemas/BRC20InfoItem"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -229,6 +235,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20InfoByTicker
+      x-sidebar-label: "Ticker info"
       x-doc-notes: |-
         ### Notes
 
@@ -281,6 +288,7 @@ paths:
 
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -290,6 +298,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20HoldersByTicker
+      x-sidebar-label: "Holders by ticker"
       summary: "List Classic BRC-20 holders and balances for a ticker"
       description: >-
         Returns holder addresses with overall, transferable, and available balances for the selected Classic BRC-20 ticker. Use it for holder distribution views or balance audits; values are indexed token balances and do not authorize transfers or create inscriptions.
@@ -359,6 +368,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -368,6 +378,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20HistoryByTicker
+      x-sidebar-label: "History by ticker"
       summary: "List Classic BRC-20 history events for a ticker"
       description: >-
         Returns deploy, mint, transfer-inscription, send, and receive events with inscription, transaction, balance, height, and validity fields. Use it for token activity feeds or reconciliation at a height; invalid or unconfirmed protocol actions should be interpreted according to the returned validity and indexer state.
@@ -446,6 +457,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -455,6 +467,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20HistoryByTickerAndTxid
+      x-sidebar-label: "History by ticker and txid"
       summary: "Get Classic BRC-20 ticker events in a transaction"
       description: >-
         Returns ticker-specific history events found in a transaction, including event type, inscription id, amount, counterparties, balances, and validity. Use it to explain how a transaction affected a Classic BRC-20 ticker; always treat returned balances as indexed results rather than spend authorization.
@@ -533,6 +546,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -542,6 +556,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20HistoryByHeight
+      x-sidebar-label: "History by height"
       summary: "List Classic BRC-20 events indexed at a block height"
       description: >-
         Returns paginated Classic BRC-20 history events for a specific block height with ticker, transaction, inscription, amount, and validity details. Use it for block-level indexing audits or backfills; results represent the indexer's view of confirmed protocol events at that height.
@@ -605,6 +620,7 @@ paths:
 
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -614,6 +630,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20SummaryByAddress
+      x-sidebar-label: "Balances by address"
       x-doc-notes: |-
         ### Notes
 
@@ -718,6 +735,7 @@ paths:
                               type: string
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -727,6 +745,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20SummaryByAddressAndHeight
+      x-sidebar-label: "Address balances at height"
       summary: "List an address's Classic BRC-20 balances at a height"
       description: >-
         Returns the address's indexed Classic BRC-20 balance summaries as of a specific block height, including ticker, overall, transferable, and available balances. Use it for historical portfolio snapshots or reconciliation; balances are read-only indexer state and may differ from current spendability.
@@ -803,6 +822,7 @@ paths:
                               type: string
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -813,6 +833,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20InfoByAddressAndTicker
+      x-sidebar-label: "Address balance by ticker"
       summary: "Get an address's Classic BRC-20 balance details for a ticker"
       description: >-
         Returns one address's overall, available, safe, unsafe, and transferable balances for a Classic BRC-20 ticker, plus related transfer inscriptions and history counts. Use it before building transfer flows or balance displays; this endpoint only reports indexed state and does not guarantee UTXO spend safety.
@@ -880,6 +901,7 @@ paths:
                           $ref: "#/components/schemas/BRC20HistoryInscription"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -889,6 +911,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20HistoryByAddress
+      x-sidebar-label: "History by address"
       summary: "List all Classic BRC-20 history events for an address"
       description: >-
         Returns paginated Classic BRC-20 events involving an address across tickers, including event type, amount, counterparties, transaction, inscription, and balance fields. Use it for wallet activity timelines and audits; events are indexer-derived and should be checked for validity before user-facing accounting.
@@ -948,6 +971,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -958,6 +982,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20HistoryByAddressAndTicker
+      x-sidebar-label: "Address history by ticker"
       summary: "List an address's Classic BRC-20 history for a ticker"
       description: >-
         Returns ticker-specific Classic BRC-20 events for an address with event type, transaction, inscription, amount, balance, height, and validity fields. Use it to explain wallet balance changes for one ticker; read the validity flag and confirmation context before treating events as final.
@@ -1036,6 +1061,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -1045,6 +1071,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20TransferableInscriptionsByAddressAndTicker
+      x-sidebar-label: "Transferable inscriptions"
       summary: "List transferable Classic BRC-20 inscriptions for an address"
       description: >-
         Returns unused transferable inscriptions for a Classic BRC-20 ticker with inscription id, inscription number, satoshi value, confirmations, and transfer amount payload. Use it to select candidate transfer inscriptions; callers must still validate UTXO ownership, confirmation policy, and signing context before spending.
@@ -1128,6 +1155,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -1137,6 +1165,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20ModuleHistoryByAddress
+      x-sidebar-label: "Module history"
       summary: "List Classic BRC-20 module history for a module inscription"
       description: >-
         Returns module-related Classic BRC-20 events across a height range, including inscription, satpoint, address, amount, validity, and block metadata. Use it to inspect module deposit or movement workflows; this is an indexer audit view and does not submit withdrawals or transfers.
@@ -1211,6 +1240,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -1221,6 +1251,7 @@ paths:
       tags:
         - BRC20 Indexer
       operationId: getBrc20WithdrawHistory
+      x-sidebar-label: "Module withdrawal history"
       summary: "List Classic BRC-20 module withdrawal history"
       description: >-
         Returns withdrawal-related module events within a height range, including inscription, satpoint, address, token amount, transaction, validity, and block metadata. Use it for module withdrawal monitoring and reconciliation; this endpoint is read-only and never creates, signs, or broadcasts withdrawals.
@@ -1288,6 +1319,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:

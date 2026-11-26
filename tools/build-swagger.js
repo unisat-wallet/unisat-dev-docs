@@ -1,29 +1,10 @@
-const fs = require("fs");
+const fs = require("node:fs");
+const path = require("node:path");
 const crypto = require("crypto");
 const childProcess = require("child_process");
 const yaml = require("js-yaml");
 
-const projectName = "open-api";
-
-const projectSourceDir = "./specs/openapi";
-
-const configFile = fs.readFileSync(`./tools/build-config.yaml`, "utf8");
-const config = yaml.load(configFile);
-
-if (config.swagger === undefined) {
-  console.log(`skip build swagger for ${projectName}`);
-  return;
-} else {
-  console.log(`build swagger for ${projectName}`);
-}
-
-function loadSwaggerFile(filename) {
-  const file = fs.readFileSync(
-    `${projectSourceDir}/${filename}.yaml`,
-    "utf8"
-  );
-  return yaml.load(file);
-}
+const { loadOpenApiSpecs } = require("./openapi-spec");
 
 function sha256(content) {
   return crypto.createHash("sha256").update(content).digest("hex");
@@ -41,60 +22,9 @@ function gitOutput(args, fallback = "unknown") {
   }
 }
 
-const mainSwagger = loadSwaggerFile("main");
-
-const components = config.swagger.map((v) => loadSwaggerFile(v));
-
-components.forEach((other) => {
-  // check if the tag already exists, and merge them
-  other.tags = other.tags || [];
-
-  other.servers = other.servers || [];
-
-  if (other.servers.length > 0) {
-    other.tags.forEach((tag) => {
-      tag.urls = other.servers.map((server) => server.url);
-    });
-  }
-
-  other.tags.forEach((tag) => {
-    if (mainSwagger.tags.find((t) => t.name === tag.name)) {
-      throw new Error(`Tag ${tag.name} already exists`);
-    }
-  });
-  mainSwagger.tags = [...mainSwagger.tags, ...other.tags];
-
-  // check if the path already exists, and merge them
-  other.paths = other.paths || {};
-  Object.keys(other.paths).forEach((path) => {
-    if (mainSwagger.paths[path]) {
-      throw new Error(`Path ${path} already exists`);
-    }
-  });
-  mainSwagger.paths = { ...mainSwagger.paths, ...other.paths };
-
-  // check if the component already exists, and merge them
-  other.components.schemas = other.components.schemas || {};
-  Object.keys(other.components.schemas).forEach((schema) => {
-    if (mainSwagger.components.schemas[schema]) {
-      // check if the schema is the same
-      if (
-        JSON.stringify(mainSwagger.components.schemas[schema]) !==
-        JSON.stringify(other.components.schemas[schema])
-      ) {
-        throw new Error(
-          `Schema ${schema} already exists with a different definition`
-        );
-      }
-    }
-  });
-  mainSwagger.components.schemas = {
-    ...mainSwagger.components.schemas,
-    ...other.components.schemas,
-  };
-});
-
-const str = yaml.dump(mainSwagger);
+console.log("build swagger for open-api");
+const { rootSource, modules, bundle, dependencies } = loadOpenApiSpecs();
+const str = yaml.dump(bundle);
 
 const websiteSwaggerDir = `./.generated/static/swagger`;
 const websiteSwaggerPath = `${websiteSwaggerDir}/swagger.yaml`;
@@ -109,21 +39,21 @@ fs.writeFileSync(legacyWebsiteSwaggerPath, str);
 fs.rmSync(websiteSwaggerFilesDir, { recursive: true, force: true });
 fs.mkdirSync(websiteSwaggerFilesDir, { recursive: true });
 
-const publishedSourceNames = ["main", ...config.swagger];
-const publishedFiles = publishedSourceNames.map((name) => {
-  const sourcePath = `${projectSourceDir}/${name}.yaml`;
-  const content = fs.readFileSync(sourcePath);
+const publishedFiles = [rootSource, ...modules].map(({ name, contents }) => {
   const relativePath = `files/${name}.yaml`;
-
-  fs.writeFileSync(`${websiteSwaggerDir}/${relativePath}`, content);
-
+  fs.writeFileSync(path.join(websiteSwaggerDir, relativePath), contents);
   return {
     name,
     path: relativePath,
-    sha256: sha256(content),
-    size: content.length,
+    sha256: sha256(contents),
+    size: contents.length,
   };
 });
+for (const { relativePath, contents } of dependencies) {
+  const filename = path.join(websiteSwaggerFilesDir, relativePath);
+  fs.mkdirSync(path.dirname(filename), { recursive: true });
+  fs.writeFileSync(filename, contents);
+}
 
 const commit = process.env.GITHUB_SHA || gitOutput(["rev-parse", "HEAD"]);
 const version =

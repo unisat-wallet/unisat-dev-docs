@@ -25,6 +25,7 @@ paths:
       tags:
         - Inscription Indexer
       operationId: getInscriptionInfo
+      x-sidebar-label: "Inscription metadata"
       summary: "Get inscription metadata by id or number"
       description: >-
         Returns inscription owner, number, content metadata, parent and delegate flags, metaprotocol fields, BRC-20 payload when present, and current UTXO context. Use either an inscription id or inscription number; verify network and confirmation state before relying on ownership-sensitive results.
@@ -62,6 +63,7 @@ paths:
                     $ref: "#/components/schemas/InscriptionData"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -71,6 +73,7 @@ paths:
       tags:
         - Inscription Indexer
       operationId: getInscriptionContent
+      x-sidebar-label: "Inscription content"
       summary: "Fetch raw inscription content by id or number"
       description: >-
         Streams the inscription content body for rendering, preview, or archival workflows. The identifier may be an inscription id or inscription number where supported; callers should trust the returned content type from inscription metadata and avoid executing untrusted content directly.
@@ -94,6 +97,7 @@ paths:
           content: {}
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -103,6 +107,7 @@ paths:
       tags:
         - Inscription Indexer
       operationId: getInscriptionEvents
+      x-sidebar-label: "Inscription events"
       summary: "List inscription mint and transfer events by block range"
       description: >-
         Returns paginated inscription events with transfer flag, inscription id and number, address, content fields for mint events, transaction data, satoshi value, timestamp, and block metadata. Use it for indexer backfills, activity feeds, or monitoring; end=0 may include mempool-visible data that is not final.
@@ -170,6 +175,7 @@ paths:
                           $ref: "#/components/schemas/InscriptionEvent"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -179,6 +185,7 @@ paths:
       tags:
         - Inscription Indexer
       operationId: getInscriptionDataByAddress
+      x-sidebar-label: "Inscriptions by address"
       summary: "List inscriptions currently associated with an address"
       description: >-
         Returns paginated inscription metadata for an address with confirmed and unconfirmed totals, spend-pending counts, content metadata, optional BRC-20 payload, and UTXO context. Use it for wallet galleries and ownership views; unconfirmed and unconfirmed-spend values require extra caution before spending.
@@ -244,6 +251,7 @@ paths:
                           $ref: "#/components/schemas/InscriptionData"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -253,6 +261,7 @@ paths:
       tags:
         - Inscription Indexer
       operationId: getInscriptionUtxoDataByAddress
+      x-sidebar-label: "Inscription UTXOs"
       summary: "List inscription-bearing UTXOs for an address"
       description: >-
         Returns paginated UTXO records that carry inscriptions for an address, along with confirmed, unconfirmed, and unconfirmed-spend totals. Use it to prepare wallet coin selection or inscription transfer screens; always revalidate UTXO ownership and mempool status before signing.
@@ -318,6 +327,7 @@ paths:
                           $ref: "#/components/schemas/UTXO"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -328,6 +338,7 @@ paths:
       tags:
         - Inscription Indexer
       operationId: getAbandonNftUtxoDataByAddress
+      x-sidebar-label: "Abandoned NFT UTXOs"
       x-doc-notes: |-
         ### Notes
 
@@ -414,6 +425,7 @@ paths:
                           $ref: "#/components/schemas/AbandonNFTUTXO"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -424,6 +436,7 @@ paths:
       tags:
         - Inscription Indexer
       operationId: getUtxoNftOffsetsByTxIdAndIndex
+      x-sidebar-label: "UTXO inscription offsets"
       summary: "Check UTXO inscription offsets before creating a BRC-20 inscription"
       description: >-
         Returns the satoshi offsets of inscriptions recorded in the specified UTXO. Use this endpoint as a preflight check before creating any BRC-20 protocol inscription, including deploy, mint, and transfer. If the returned array contains 0, the first satoshi of the UTXO has already been inscribed; inscribing a BRC-20 operation on that satoshi would be a reinscription and the resulting BRC-20 operation would be invalid. In that case, select another UTXO or change the transaction construction. Stripped inscription records are included because a historical inscription on the satoshi must still be considered when preventing duplicate-satoshi inscription. At most the first 10 offsets are returned, in index order.
@@ -480,6 +493,7 @@ paths:
                       - 546
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:

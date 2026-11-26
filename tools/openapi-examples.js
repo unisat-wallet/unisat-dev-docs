@@ -1,20 +1,7 @@
+const { resolveOpenApiReference } = require("./openapi-spec");
+
 const has = (object, key) => Object.hasOwn(object, key);
 const isObject = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
-
-function resolveComponent(value, components, section) {
-  const prefix = `#/components/${section}/`;
-  const seen = new Set();
-
-  while (isObject(value) && typeof value.$ref === "string") {
-    const ref = value.$ref;
-    if (!ref.startsWith(prefix) || seen.has(ref)) return undefined;
-    seen.add(ref);
-    const name = ref.slice(prefix.length).replace(/~1/g, "/").replace(/~0/g, "~");
-    value = has(components, name) ? components[name] : undefined;
-  }
-
-  return value;
-}
 
 function sampleString(schema) {
   const formats = {
@@ -60,11 +47,11 @@ function sampleNumber(schema, integer) {
   return sample === exclusiveLower ? sample + 1 : sample - 1;
 }
 
-function sampleSchema(input, schemas, direction, ancestors = []) {
-  const schema = resolveComponent(input, schemas, "schemas");
+function sampleSchema(input, bundle, direction, ancestors = []) {
+  const schema = resolveOpenApiReference(input, bundle);
   if (!isObject(schema) || ancestors.includes(schema) || ancestors.length >= 24) return undefined;
   const next = [...ancestors, schema];
-  const read = (value) => sampleSchema(value, schemas, direction, next);
+  const read = (value) => sampleSchema(value, bundle, direction, next);
 
   if (has(schema, "example")) return schema.example;
   if (Array.isArray(schema.examples) && schema.examples.length) return schema.examples[0];
@@ -85,7 +72,7 @@ function sampleSchema(input, schemas, direction, ancestors = []) {
   if (choices?.length) {
     const { oneOf, anyOf, ...base } = schema;
     for (const choice of choices) {
-      const branch = resolveComponent(choice, schemas, "schemas");
+      const branch = resolveOpenApiReference(choice, bundle);
       if (!isObject(branch) || next.includes(branch)) continue;
       const required = [...new Set([...(base.required || []), ...(branch.required || [])])];
       const properties = { ...base.properties, ...branch.properties };
@@ -119,7 +106,7 @@ function sampleSchema(input, schemas, direction, ancestors = []) {
   if (type === "object" || schema.properties || schema.additionalProperties) {
     const properties = [];
     for (const [name, definition] of Object.entries(schema.properties || {})) {
-      const field = resolveComponent(definition, schemas, "schemas");
+      const field = resolveOpenApiReference(definition, bundle);
       if (direction === "request" ? field?.readOnly : field?.writeOnly) continue;
       const sample = read(definition);
       if (sample !== undefined) properties.push([name, sample]);
@@ -131,7 +118,7 @@ function sampleSchema(input, schemas, direction, ancestors = []) {
   return schema.nullable ? null : {};
 }
 
-function getMediaExamples(media, schemas = {}, components = {}, mediaType = "application/json", direction = "response") {
+function getMediaExamples(media, bundle, mediaType, direction = "response") {
   if (!isObject(media)) return [];
   const json = /(?:\+|\/)json(?:\s*;|$)/i.test(mediaType);
   const format = (value) => typeof value === "string" && !json ? value : JSON.stringify(value, null, 2);
@@ -140,21 +127,21 @@ function getMediaExamples(media, schemas = {}, components = {}, mediaType = "app
 
   const authored = [];
   for (const [name, definition] of Object.entries(media.examples || {})) {
-    const example = resolveComponent(definition, components, "examples");
+    const example = resolveOpenApiReference(definition, bundle);
     if (isObject(example) && has(example, "value")) {
       authored.push({ name, example: format(example.value), generated: false });
     }
   }
   if (authored.length) return authored;
 
-  const schema = resolveComponent(media.schema, schemas, "schemas");
+  const schema = resolveOpenApiReference(media.schema, bundle);
   if (!isObject(schema)) return [];
   if (has(schema, "example")) return [{ example: format(schema.example), generated: false }];
   if (Array.isArray(schema.examples) && schema.examples.length) {
     return schema.examples.map((value) => ({ example: format(value), generated: false }));
   }
 
-  const sample = sampleSchema(schema, schemas, direction);
+  const sample = sampleSchema(schema, bundle, direction);
   return sample === undefined ? [] : [{ example: format(sample), generated: true }];
 }
 

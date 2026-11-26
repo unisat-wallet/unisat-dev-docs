@@ -8,7 +8,6 @@ V5 uses the same bearer API key. When OpenAPI mode is enabled, every V5 order is
 
 | Deprecated V2 endpoint | V5 replacement | Migration note |
 | --- | --- | --- |
-| `GET /v2/inscribe/order/summary` | `GET /v5/inscribe/fees-config` and `GET /v5/inscribe/order/list` | V5 has no status-count summary. Use the order list for order state and `fees-config` for fee and eligibility data. |
 | `GET /v2/inscribe/order/list` | `GET /v5/inscribe/order/list` | Send `cursor`, `size`, and a JSON-encoded `filter` query parameter. |
 | `GET /v2/inscribe/order/{orderId}` | `GET /v5/inscribe/order/{orderId}` | V5 adds `availableActions`, `availablePaymentMethods`, `outputValueFee`, and optional `compactFiles`. |
 | `POST /v2/inscribe/order/create` | `POST /v5/inscribe/order/create` | Replace `receiveAddress` with `receiver`; supply `clientId`, `refundAddress`, `userAddress`, and `userPubkey`. |
@@ -17,6 +16,8 @@ V5 uses the same bearer API key. When OpenAPI mode is enabled, every V5 order is
 | `POST /v2/inscribe/order/sign-reveal` | `POST /v5/inscribe/order/sign-reveal` | The signed PSBT remains in `psbt`. |
 | `POST /v2/inscribe/order/{orderId}/refund-estimate` | `POST /v5/inscribe/refund/estimate` | Move `orderId` from the path into the JSON body. |
 | `POST /v2/inscribe/order/{orderId}/refund` | `POST /v5/inscribe/refund` | Move `orderId` into the JSON body and rename `refundFeeRate` to `feeRate`. |
+
+The supported V2 order summary provides status counts. In V5, use `GET /v5/inscribe/order/list` for individual order statuses and `GET /v5/inscribe/fees-config` for fee and eligibility data.
 
 ## Protocol Endpoint Mapping
 

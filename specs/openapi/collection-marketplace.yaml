@@ -20,6 +20,7 @@ paths:
   /v3/market/collection/auction/collection_statistic:
     post:
       operationId: getCollectionStatistic
+      x-sidebar-label: "Collection statistics"
       summary: Get collection market statistics
       description: Query read-only marketplace statistics for a specific Ordinals collection, including floor price, listed count, and volume. This query-style POST only reads market data; readonly true and requires confirmation false.
       tags:
@@ -104,6 +105,7 @@ paths:
   /v3/market/collection/auction/collection_statistic_list:
     post:
       operationId: getCollectionStatisticList
+      x-sidebar-label: "List collection statistics"
       summary: List collection market statistics
       description: Query read-only marketplace statistics for Ordinals collections with filters and pagination. This query-style POST only reads market data; readonly true and requires confirmation false.
       tags:
@@ -215,6 +217,7 @@ paths:
   /v3/market/collection/auction/collection_summary:
     post:
       operationId: getCollectionSummary
+      x-sidebar-label: "Address collection summary"
       summary: Get address collection summary
       description: Query read-only Ordinals collection holdings summary for an address. This query-style POST only reads address and collection data; readonly true and requires confirmation false.
       tags:
@@ -279,6 +282,7 @@ paths:
   /v3/market/collection/auction/collection_inscriptions:
     post:
       operationId: getCollectionInscriptions
+      x-sidebar-label: "Address collection inscriptions"
       summary: List address collection inscriptions
       description: Query read-only inscription details for a collection held by an address. This query-style POST only reads collection data; readonly true and requires confirmation false.
       tags:
@@ -358,6 +362,7 @@ paths:
   /v3/market/collection/auction/inscription_info:
     post:
       operationId: getCollectionMarketInscriptionInfo
+      x-sidebar-label: "Inscription market info"
       summary: Get marketplace inscription detail
       description: Query read-only marketplace inscription detail for one inscription, including listing and asset metadata. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
@@ -385,6 +390,7 @@ paths:
   /v3/market/collection/auction/inscription_info_list:
     post:
       operationId: getInscriptionInfoList
+      x-sidebar-label: "Batch inscription market info"
       summary: Get marketplace inscription details in batch
       description: Query read-only marketplace listing details for multiple inscriptions. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
@@ -412,6 +418,7 @@ paths:
   /v3/market/collection/auction/list:
     post:
       operationId: getMarketList
+      x-sidebar-label: "Search listings"
       summary: Search Ordinals collection marketplace listings
       description: Query read-only Ordinals collection marketplace listings with filters, sorting, and pagination. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
@@ -651,6 +658,7 @@ paths:
   /v3/market/collection/auction/actions:
     post:
       operationId: getMarketActions
+      x-sidebar-label: "Marketplace activity"
       summary: List Ordinals collection marketplace activity history
       description: Query read-only Ordinals collection marketplace activity history such as listings, delistings, sales, claims, and updates. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
@@ -865,6 +873,7 @@ paths:
   /v3/market/collection/auction/create_put_on:
     post:
       operationId: createMarketPutOn
+      x-sidebar-label: "Create listing PSBT"
       summary: Create collection listing PSBT draft
       description: Creates an Ordinals collection listing draft and returns auctionId, PSBT, and signing indexes for the seller. Review inscriptionId, collectionId, item metadata, initPrice, unitPrice, marketType, and receiving address before signing or confirming the listing.
       tags:
@@ -892,6 +901,7 @@ paths:
   /v3/market/collection/auction/confirm_put_on:
     post:
       operationId: confirmMarketPutOn
+      x-sidebar-label: "Publish listing"
       summary: Publish signed collection listing
       description: Confirms the seller-signed listing PSBT and activates the Ordinals collection marketplace listing. Verify auctionId, PSBT encoding, inscriptionId, collection item, listing price, seller address, and market type before submitting.
       tags:
@@ -920,6 +930,7 @@ paths:
   /v3/market/collection/auction/create_bid_prepare:
     post:
       operationId: createMarketBidPrepare
+      x-sidebar-label: "Estimate purchase fees"
       summary: Estimate collection purchase fees and balance
       description: Returns pre-purchase fee estimates, available balances, network fee rate, transaction size, and inscription value for an Ordinals collection listing. This is a quote/material preparation step only; before any later purchase submission, verify auctionId, bidPrice, buyer address, feeRate, and inscription details.
       tags:
@@ -947,6 +958,7 @@ paths:
   /v3/market/collection/auction/create_bid:
     post:
       operationId: createMarketBid
+      x-sidebar-label: "Create purchase PSBT"
       summary: Create collection purchase PSBT order
       description: Creates an Ordinals collection purchase order and returns bidId, PSBT data, signing indexes, server/network fees, feeRate, and inscription value. Confirm auctionId, bidPrice, buyer address, inscriptionId, collection item, and fee totals before requesting signatures.
       tags:
@@ -974,6 +986,7 @@ paths:
   /v3/market/collection/auction/confirm_bid:
     post:
       operationId: confirmMarketBid
+      x-sidebar-label: "Submit purchase"
       summary: Submit signed collection purchase order
       description: Submits the signed collection purchase PSBT and returns the settlement transaction id when accepted. Before calling, verify auctionId, bidId, PSBT content, final price, inscriptionId, buyer/seller addresses, and fee values because this can settle the purchase.
       tags:
@@ -1002,6 +1015,7 @@ paths:
   /v3/market/collection/auction/create_put_off:
     post:
       operationId: createMarketPutOff
+      x-sidebar-label: "Create delisting PSBT"
       summary: Create collection delisting PSBT draft
       description: Creates delisting signing material for an active Ordinals collection marketplace order, including PSBT/signing data when needed. Confirm auctionId, owner addresses, inscriptionId, and collection item before signing because the next confirmation removes the listing.
       tags:
@@ -1029,6 +1043,7 @@ paths:
   /v3/market/collection/auction/confirm_put_off:
     post:
       operationId: confirmMarketPutOff
+      x-sidebar-label: "Remove listing"
       summary: Remove signed collection listing
       description: Confirms signed delisting data and removes the Ordinals collection listing from the marketplace. Verify auctionId, PSBT/signature payload, owner address, inscriptionId, and collection item before submitting.
       tags:
@@ -1057,6 +1072,7 @@ paths:
   /v3/market/collection/auction/create_modify_price:
     post:
       operationId: createMarketModifyPrice
+      x-sidebar-label: "Create price update PSBT"
       summary: Create collection price-update PSBT draft
       description: Creates signing material to update an existing Ordinals collection listing price. Verify auctionId, inscriptionId, collection item, old and new prices, seller address, and returned PSBT/sign indexes before signing.
       tags:
@@ -1084,6 +1100,7 @@ paths:
   /v3/market/collection/auction/confirm_modify_price:
     post:
       operationId: confirmMarketModifyPrice
+      x-sidebar-label: "Apply price update"
       summary: Apply signed collection listing price update
       description: Confirms signed price-update data and changes the active Ordinals collection listing price. Verify auctionId, signed PSBT, inscriptionId, seller address, and final price before submitting.
       tags:

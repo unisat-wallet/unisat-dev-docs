@@ -22,6 +22,7 @@ paths:
   /v3/market/runes/auction/runes_types:
     post:
       operationId: getRunesTypes
+      x-sidebar-label: "Market statistics"
       summary: List Runes market statistics
       description: Query read-only Runes marketplace statistics such as price, volume, market capitalization, holders, and transaction counts. This query-style POST only reads market data; readonly true and requires confirmation false.
       tags:
@@ -108,6 +109,7 @@ paths:
   /v3/market/runes/auction/runes_types_specified:
     post:
       operationId: getRunesTypesSpecified
+      x-sidebar-label: "Market statistics by Rune"
       summary: Get specified Runes market statistics
       description: Query read-only marketplace statistics for a specified Runes ticker. This query-style POST only reads market data; readonly true and requires confirmation false.
       tags:
@@ -183,6 +185,7 @@ paths:
   /v3/market/runes/auction/list:
     post:
       operationId: getRunesAuctionList
+      x-sidebar-label: "Search listings"
       summary: Search Runes marketplace listings
       description: Query read-only Runes marketplace listings with filters, sorting, and pagination. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
@@ -339,6 +342,7 @@ paths:
   /v3/market/runes/auction/actions:
     post:
       operationId: getRunesAuctionActions
+      x-sidebar-label: "Marketplace activity"
       summary: List Runes marketplace activity history
       description: Query read-only Runes marketplace activity history such as listings, delistings, sales, claims, and updates. This query-style POST only reads marketplace data; readonly true and requires confirmation false.
       tags:
@@ -549,6 +553,7 @@ paths:
   /v3/market/runes/auction/create_put_on:
     post:
       operationId: createRunesPutOn
+      x-sidebar-label: "Create listing PSBT"
       summary: Create Runes listing PSBT draft
       description: Creates a Runes listing draft and returns auctionId, PSBT, and signing indexes for the seller. Review rune UTXO, rune amount, initPrice, unitPrice, marketType, and receiving address before signing or confirming the listing.
       tags:
@@ -576,6 +581,7 @@ paths:
   /v3/market/runes/auction/confirm_put_on:
     post:
       operationId: confirmRunesPutOn
+      x-sidebar-label: "Publish listing"
       summary: Publish signed Runes listing
       description: Confirms the seller-signed listing PSBT and activates the Runes marketplace listing. Verify auctionId, PSBT encoding, rune amount, listing price, seller address, and market type before submitting.
       tags:
@@ -604,6 +610,7 @@ paths:
   /v3/market/runes/auction/create_bid_prepare:
     post:
       operationId: createRunesBidPrepare
+      x-sidebar-label: "Estimate purchase fees"
       summary: Estimate Runes purchase fees and balance
       description: Returns pre-purchase fee estimates, available balances, network fee rate, transaction size, and inscription value for a Runes auction. This is a quote/material preparation step only; before any later purchase submission, verify auctionId, bidPrice, buyer address, feeRate, and rune amount.
       tags:
@@ -631,6 +638,7 @@ paths:
   /v3/market/runes/auction/create_bid:
     post:
       operationId: createRunesBid
+      x-sidebar-label: "Create purchase PSBT"
       summary: Create Runes purchase PSBT order
       description: Creates a Runes marketplace purchase order and returns bidId, PSBT data, signing indexes, server/network fees, feeRate, and inscription value. Confirm auctionId, bidPrice, buyer address, rune name/amount, and fee totals before requesting signatures.
       tags:
@@ -658,6 +666,7 @@ paths:
   /v3/market/runes/auction/confirm_bid:
     post:
       operationId: confirmRunesBid
+      x-sidebar-label: "Submit purchase"
       summary: Submit signed Runes purchase order
       description: Submits the signed Runes purchase PSBT and returns the settlement transaction id when accepted. Before calling, verify auctionId, bidId, PSBT content, final price, rune amount, buyer/seller addresses, and fee values because this can settle the purchase.
       tags:
@@ -686,6 +695,7 @@ paths:
   /v3/market/runes/auction/create_put_off:
     post:
       operationId: createRunesPutOff
+      x-sidebar-label: "Create delisting PSBT"
       summary: Create Runes delisting PSBT draft
       description: Creates delisting signing material for an active Runes marketplace order, including PSBT/signing data when needed. Confirm auctionId, owner addresses, and rune amount before signing because the next confirmation removes the listing.
       tags:
@@ -713,6 +723,7 @@ paths:
   /v3/market/runes/auction/confirm_put_off:
     post:
       operationId: confirmRunesPutOff
+      x-sidebar-label: "Remove listing"
       summary: Remove signed Runes listing
       description: Confirms signed delisting data and removes the Runes listing from the marketplace. Verify auctionId, PSBT/signature payload, owner address, and target rune amount before submitting.
       tags:
@@ -741,6 +752,7 @@ paths:
   /v3/market/runes/auction/create_modify_price:
     post:
       operationId: createRunesModifyPrice
+      x-sidebar-label: "Create price update PSBT"
       summary: Create Runes price-update PSBT draft
       description: Creates signing material to update an existing Runes listing price. Verify auctionId, current rune amount, old and new prices, seller address, and returned PSBT/sign indexes before signing.
       tags:
@@ -768,6 +780,7 @@ paths:
   /v3/market/runes/auction/confirm_modify_price:
     post:
       operationId: confirmRunesModifyPrice
+      x-sidebar-label: "Apply price update"
       summary: Apply signed Runes listing price update
       description: Confirms signed price-update data and changes the active Runes listing price. Verify auctionId, signed PSBT, rune amount, seller address, and final price before submitting.
       tags:
@@ -796,6 +809,7 @@ paths:
   /v3/market/runes/auction/create_batch_put_on:
     post:
       operationId: createRunesBatchPutOn
+      x-sidebar-label: "Create batch listing PSBT"
       summary: Create batch Runes listing PSBT drafts
       description: Creates multiple Runes listing drafts and returns signing material for each listing. Verify every rune UTXO, asset amount, listing price, seller address, auctionId, and PSBT/sign index before signing.
       tags:
@@ -824,6 +838,7 @@ paths:
   /v3/market/runes/auction/confirm_batch_put_on:
     post:
       operationId: confirmRunesBatchPutOn
+      x-sidebar-label: "Publish batch listings"
       summary: Publish signed batch Runes listings
       description: Confirms signed PSBTs and activates multiple Runes marketplace listings. Verify every auctionId, signed PSBT, rune amount, listing price, seller address, and market type before submitting.
       tags:
@@ -853,6 +868,7 @@ paths:
   /v3/market/runes/auction/create_batch_bid_prepare:
     post:
       operationId: createRunesBatchBidPrepare
+      x-sidebar-label: "Estimate batch purchase fees"
       summary: Estimate batch Runes purchase fees
       description: Returns quote-only fee, balance, transaction-size, and valid-listing data for multiple Runes purchases. This does not submit orders; before any later batch purchase, verify every auctionId, bid price, buyer address, rune amount, and fee estimate.
       tags:
@@ -881,6 +897,7 @@ paths:
   /v3/market/runes/auction/create_batch_bid:
     post:
       operationId: createRunesBatchBid
+      x-sidebar-label: "Create batch purchase PSBT"
       summary: Create batch Runes purchase PSBT orders
       description: Creates multiple Runes purchase orders and returns per-order signing material. Confirm every auctionId, bid price, buyer address, rune amount, feeRate, and returned PSBT/sign indexes before signing.
       tags:
@@ -909,6 +926,7 @@ paths:
   /v3/market/runes/auction/confirm_batch_bid:
     post:
       operationId: confirmRunesBatchBid
+      x-sidebar-label: "Submit batch purchase"
       summary: Submit signed batch Runes purchases
       description: Confirms signed batch purchase PSBTs and can settle multiple Runes orders. Verify each auctionId, bidId, PSBT, final price, buyer/seller address, rune amount, and fee value before submitting.
       tags:

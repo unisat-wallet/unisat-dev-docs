@@ -10,8 +10,11 @@ the production site in `build/`. Both commands prepare the Docusaurus inputs
 in `.generated/`. Build the container from the repository root with
 `docker build -t unisat-dev-docs .`.
 
-Maintain REST API definitions in `specs/openapi/`. Use the
-`x-doc-notes` field on an operation for Markdown shown in its API reference.
+Maintain REST API definitions in `specs/openapi/`. Register new modules in the
+`modules` list in `tools/build-config.yaml`. Use `x-sidebar-label` for the page
+title and sidebar label, and `x-doc-notes` for additional Markdown. Set
+`deprecated: true` to hide the operation from **All Open API Endpoints**.
+
 Edit Wallet API Markdown directly in `specs/wallet-api/`. Edit guides and release notes in `docs/open-api/`, and support pages in `docs/developer-support/`.
 
 Keep CLI guide images and videos in `docs/open-api/assets/cli/` and API
@@ -58,7 +61,6 @@ the individual YAML files and their SHA-256 hashes.
 | ------------ | --------------------------------------- | --------------------------------------------------------------- |
 | Fractal      | Fractal network related APIs            | [`fractal.md`](https://api-docs.unisat.io/docs/open-api/fractal)       |
 | BRC20 Swap   | Swap functionality for BRC20 tokens     | [`brc20-swap.md`](https://api-docs.unisat.io/docs/open-api/brc20-swap) |
-| CAT20 DEX    | Decentralized exchange for CAT20 tokens | [`cat20-dex.md`](https://api-docs.unisat.io/docs/open-api/cat20-dex)   |
 
 ### 🔧 Wallet dApp Integration
 

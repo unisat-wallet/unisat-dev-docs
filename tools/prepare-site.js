@@ -23,6 +23,7 @@ for (const [source, target] of [
   fs.cpSync(source, target, { recursive: true });
 }
 
-for (const script of ["build-doc.js", "build-swagger.js"]) {
-  execFileSync(process.execPath, [path.join(__dirname, script)], { stdio: "inherit" });
+execFileSync(process.execPath, [path.join(__dirname, "build-doc.js")], { stdio: "inherit" });
+if (!process.argv.includes("--docs-only")) {
+  execFileSync(process.execPath, [path.join(__dirname, "build-swagger.js")], { stdio: "inherit" });
 }

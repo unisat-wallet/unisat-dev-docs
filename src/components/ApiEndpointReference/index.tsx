@@ -1,143 +1,193 @@
-import React, { useId, useState, type ReactNode } from "react";
-import CodeBlock from "@theme/CodeBlock";
+import React, { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { usePrismTheme } from "@docusaurus/theme-common";
+import { Highlight } from "prism-react-renderer";
+import IconCopy from "@theme/Icon/Copy";
+import IconSuccess from "@theme/Icon/Success";
+import ApiFieldTable, { type FieldRow } from "./ApiFieldTable";
 import styles from "./styles.module.css";
 
-type SecurityScheme = {
-  name: string;
-  type: string;
-  in?: string;
-  header?: string;
-  scheme?: string;
-};
-
 type ResponseExample = {
-  status: string;
-  description: string;
-  mediaType?: string;
   name?: string;
-  example?: string;
+  example: string;
   generated?: boolean;
 };
 
-type Props = {
+type EndpointPathProps = {
   method: string;
   path: string;
   testUrl: string;
   server?: string;
-  securitySchemes?: SecurityScheme[];
-  requestExample?: string;
-  responses: ResponseExample[];
-  children: ReactNode;
 };
 
-function formatRequest(
-  method: string,
-  path: string,
-  server?: string,
-  schemes: SecurityScheme[] = [],
-): string {
-  let requestPath = path;
-  const headers: string[] = [];
-  if (server) {
+type ResponseBodyProps = {
+  status: string;
+  mediaType: string;
+  rows: FieldRow[];
+  examples: ResponseExample[];
+};
+
+const responseViews = [
+  { id: "fields", label: "Fields" },
+  { id: "example", label: "Response example" },
+] as const;
+
+type ResponseView = (typeof responseViews)[number]["id"];
+
+function CopyButton({ text, label }: { text: string; label: string }) {
+  const [feedback, setFeedback] = useState("");
+  const resetTimer = useRef<number>(undefined);
+
+  useEffect(() => () => window.clearTimeout(resetTimer.current), []);
+
+  async function copy() {
+    window.clearTimeout(resetTimer.current);
     try {
-      const url = new URL(server);
-      requestPath = url.pathname.replace(/\/$/, "") + path;
-      if (url.host) headers.push(`Host: ${url.host}`);
+      await navigator.clipboard.writeText(text);
+      setFeedback("Copied to clipboard");
     } catch {
-      // Some specifications use a relative server path or a URL template.
-      requestPath = server.replace(/\/$/, "") + path;
+      setFeedback("Could not copy to clipboard");
     }
+    resetTimer.current = window.setTimeout(() => setFeedback(""), 2000);
   }
-  for (const scheme of schemes) {
-    if (scheme.type === "http" && scheme.scheme?.toLowerCase() === "bearer") {
-      headers.push("Authorization: Bearer YOUR_API_KEY");
-    } else if (scheme.type === "apiKey" && scheme.in === "header") {
-      headers.push(`${scheme.header || scheme.name}: YOUR_API_KEY`);
-    }
-  }
-  headers.push("Accept: */*");
-  return [`${method} ${requestPath} HTTP/1.1`, ...headers].join("\n");
+
+  return (
+    <span className={styles.copyControl}>
+      <button className={styles.copyButton} type="button" onClick={copy}>
+        {feedback === "Copied to clipboard" ? <IconSuccess aria-hidden="true" /> : <IconCopy aria-hidden="true" />}
+        {label}
+      </button>
+      <span className={styles.srOnly} role="status">{feedback}</span>
+    </span>
+  );
 }
 
-function exampleLanguage(mediaType?: string): string {
-  if (mediaType?.includes("json")) return "json";
-  if (mediaType?.includes("xml")) return "xml";
+function ExampleCode({ code, language }: { code: string; language: string }) {
+  const theme = usePrismTheme();
+  return (
+    <Highlight code={code} language={language} theme={theme}>
+      {({ style, tokens, getTokenProps }) => (
+        <pre className={styles.code} style={style}>
+          <code>
+            {tokens.map((line, index) => (
+              <React.Fragment key={index}>
+                {index > 0 && "\n"}
+                {line.map((token, tokenIndex) => <span key={tokenIndex} {...getTokenProps({ token })} />)}
+              </React.Fragment>
+            ))}
+          </code>
+        </pre>
+      )}
+    </Highlight>
+  );
+}
+
+function exampleLanguage(mediaType: string) {
+  const normalized = mediaType.toLowerCase();
+  if (normalized.includes("json")) return "json";
+  if (normalized.includes("xml")) return "xml";
   return "text";
 }
 
-function ResponseExamples({ responses }: { responses: ResponseExample[] }) {
-  const titleId = useId();
+function ResponseExamplePanel({ mediaType, examples }: Pick<ResponseBodyProps, "mediaType" | "examples">) {
   const selectorId = useId();
-  const defaultExample = responses.findIndex(
-    ({ status, example }) => /^2(?:\d{2}|XX)$/i.test(status) && example !== undefined,
-  );
-  const firstExample = responses.findIndex(({ example }) => example !== undefined);
-  const [selectedIndex, setSelectedIndex] = useState(
-    defaultExample < 0 ? Math.max(firstExample, 0) : defaultExample,
-  );
-  const response = responses[selectedIndex] ?? responses[0];
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const sample = examples[selectedIndex] ?? examples[0];
+  const language = exampleLanguage(mediaType);
+  const format = language === "text" ? "Text" : language.toUpperCase();
 
   return (
-    <section className={styles.panel} aria-labelledby={titleId}>
+    <div className={styles.panel}>
       <div className={styles.panelHeader}>
-        <h2 className={styles.panelTitle} id={titleId}>Response example</h2>
-        {response && (
-          <span className={styles.status} data-status={response.status[0]}>
-            {response.status}
-          </span>
-        )}
-      </div>
-      {responses.length > 1 && (
-        <div className={styles.responseControls}>
-          <label className={styles.srOnly} htmlFor={selectorId}>
-            Select a response example
-          </label>
-          <select
-            className={styles.select}
-            id={selectorId}
-            value={selectedIndex}
-            onChange={(event) => setSelectedIndex(Number(event.target.value))}
-          >
-            {responses.map(({ status, name, description, mediaType }, index) => (
-              <option key={index} value={index}>
-                {[status, name || description, mediaType].filter(Boolean).join(" · ")}
-              </option>
-            ))}
-          </select>
+        <div className={styles.panelContext}>
+          <span className={styles.format}>{format}</span>
+          {examples.length > 1 ? (
+            <>
+              <label className={styles.srOnly} htmlFor={selectorId}>Select a response example</label>
+              <select
+                className={styles.select}
+                id={selectorId}
+                value={selectedIndex}
+                onChange={(event) => setSelectedIndex(Number(event.target.value))}
+              >
+                {examples.map(({ name }, index) => (
+                  <option key={index} value={index}>{name || `Example ${index + 1}`}</option>
+                ))}
+              </select>
+            </>
+          ) : sample.name && <span className={styles.exampleSource}>{sample.name}</span>}
+          {sample.generated && <span className={styles.exampleSource}>Generated from schema</span>}
         </div>
-      )}
-      {response ? (
-        <>
-          <div className={styles.responseMeta}>
-            {response.description && <p>{response.description}</p>}
-            {(response.mediaType || response.generated) && (
-              <div className={styles.responseLabels}>
-                {response.mediaType && <span>{response.mediaType}</span>}
-                {response.generated && <span>Generated from schema</span>}
-              </div>
-            )}
-          </div>
-          {response.example === undefined ? (
-            <p className={styles.empty}>No response body example is documented.</p>
-          ) : (
-            <div className={styles.code}>
-              <CodeBlock language={exampleLanguage(response.mediaType)}>
-                {response.example}
-              </CodeBlock>
-            </div>
-          )}
-        </>
-      ) : (
-        <p className={styles.empty}>No responses are documented.</p>
-      )}
-    </section>
+        <CopyButton key={selectedIndex} text={sample.example} label={language === "text" ? "Copy text" : `Copy ${format}`} />
+      </div>
+      <ExampleCode code={sample.example} language={language} />
+    </div>
   );
 }
 
-function TestLink({ url, className }: { url: string; className?: string }) {
+export function ApiResponseBody({ status, mediaType, rows, examples }: ResponseBodyProps) {
+  const id = useId();
+  const [view, setView] = useState<ResponseView>("fields");
+  const tabRefs = useRef<Partial<Record<ResponseView, HTMLButtonElement | null>>>({});
+
+  const fields = rows.length > 0 && <ApiFieldTable rows={rows} caption={`${status} response fields for ${mediaType}`} />;
+  const example = examples.length > 0 && <ResponseExamplePanel mediaType={mediaType} examples={examples} />;
+  if (!fields || !example) return fields || example || null;
+
+  function moveTab(event: KeyboardEvent<HTMLButtonElement>, current: ResponseView) {
+    let next: ResponseView;
+    switch (event.key) {
+      case "ArrowLeft":
+      case "ArrowRight":
+        next = current === "fields" ? "example" : "fields";
+        break;
+      case "Home":
+        next = "fields";
+        break;
+      case "End":
+        next = "example";
+        break;
+      default:
+        return;
+    }
+    event.preventDefault();
+    setView(next);
+    tabRefs.current[next]?.focus();
+  }
+
+  return (
+    <div>
+      <div className={styles.responseTabs} role="tablist" aria-label={`${status} ${mediaType} response view`}>
+        {responseViews.map(({ id: tab, label }) => (
+          <button
+            key={tab}
+            type="button"
+            role="tab"
+            id={`${id}-${tab}-tab`}
+            aria-selected={view === tab}
+            aria-controls={`${id}-${tab}-panel`}
+            tabIndex={view === tab ? 0 : -1}
+            ref={(button) => { tabRefs.current[tab] = button; }}
+            onClick={() => setView(tab)}
+            onKeyDown={(event) => moveTab(event, tab)}
+          >
+            {label}
+          </button>
+        ))}
+      </div>
+      <div role="tabpanel" id={`${id}-fields-panel`} aria-labelledby={`${id}-fields-tab`} hidden={view !== "fields"}>
+        {fields}
+      </div>
+      <div role="tabpanel" id={`${id}-example-panel`} aria-labelledby={`${id}-example-tab`} hidden={view !== "example"}>
+        {example}
+      </div>
+    </div>
+  );
+}
+
+function TestLink({ url }: { url: string }) {
   return (
     <a
-      className={[styles.testLink, className].filter(Boolean).join(" ")}
+      className={styles.testLink}
       href={url}
       target="_blank"
       rel="noopener noreferrer"
@@ -148,49 +198,26 @@ function TestLink({ url, className }: { url: string; className?: string }) {
   );
 }
 
-export default function ApiEndpointReference({
-  method,
-  path,
-  testUrl,
-  server,
-  securitySchemes,
-  requestExample,
-  responses,
-  children,
-}: Props) {
-  const requestTitleId = useId();
+export function ApiEndpointPath({ method, path, testUrl, server }: EndpointPathProps) {
   const verb = method.toUpperCase();
   const endpointUrl = server ? server.replace(/\/$/, "") + path : path;
 
   return (
-    <div className={styles.reference}>
-      <div className={styles.layout}>
-        <div className={styles.details}>
-          <div className={styles.endpoint}>
-            <span className={styles.method} data-method={verb}>{verb}</span>
-            <code>{endpointUrl}</code>
-          </div>
-          <TestLink url={testUrl} className={styles.mobileTest} />
-          {children}
-        </div>
-        <aside className={styles.examples} aria-label="Request and response examples">
-          <section className={styles.panel} aria-labelledby={requestTitleId}>
-            <div className={styles.panelHeader}>
-              <h2 className={styles.panelTitle} id={requestTitleId}>Request example</h2>
-              <span className={styles.format}>HTTP</span>
-            </div>
-            <div className={styles.code}>
-              <CodeBlock language="http">
-                {requestExample ?? formatRequest(verb, path, server, securitySchemes)}
-              </CodeBlock>
-            </div>
-            <div className={styles.actions}>
-              <TestLink url={testUrl} />
-            </div>
-          </section>
-          <ResponseExamples key={`${verb}:${endpointUrl}`} responses={responses} />
-        </aside>
+    <div className={styles.endpoint}>
+      <span className={styles.method} data-method={verb}>{verb}</span>
+      <code title={endpointUrl}>{path}</code>
+      <div className={styles.endpointActions}>
+        <CopyButton key={endpointUrl} text={endpointUrl} label="Copy URL" />
+        <TestLink url={testUrl} />
       </div>
+    </div>
+  );
+}
+
+export default function ApiEndpointReference({ children }: { children: ReactNode }) {
+  return (
+    <div className={`api-endpoint-reference ${styles.reference}`}>
+      {children}
     </div>
   );
 }

@@ -20,6 +20,7 @@ paths:
       tags:
         - Price
       operationId: getBtcPrice
+      x-sidebar-label: "BTC price in USD"
       summary: "Get latest BTC price in USD"
       description: >-
         Returns the latest BTC price quote with the USD price and Unix updateTime timestamp. Use this read-only endpoint for wallets, marketplaces, fee estimators, and portfolio views that need a public BTC reference price without creating orders, signatures, or transactions.
@@ -45,6 +46,7 @@ paths:
                     $ref: "#/components/schemas/PriceInfo"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -54,6 +56,7 @@ paths:
       tags:
         - Price
       operationId: getFbPrice
+      x-sidebar-label: "Fractal Bitcoin price in USD"
       summary: "Get latest Fractal Bitcoin price in USD"
       description: >-
         Returns the latest FB (Fractal Bitcoin) price quote with the USD price and Unix updateTime timestamp. Use this read-only endpoint for Fractal wallets, marketplaces, analytics, and portfolio screens that need a public FB reference price without side effects or user confirmation.
@@ -79,6 +82,7 @@ paths:
                     $ref: "#/components/schemas/PriceInfo"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:

@@ -1,0 +1,46 @@
+.column {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-width: 0;
+}
+
+.main {
+  display: flex;
+  flex: 1 0 auto;
+  min-width: 0;
+}
+
+.footerBar {
+  padding-block: 0.75rem;
+  border-block-start: 1px solid var(--docs-border);
+  color: var(--docs-muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  text-align: center;
+}
+
+@media (min-width: 997px) {
+  .column {
+    flex-grow: 1;
+    max-width: calc(100% - var(--doc-sidebar-width));
+  }
+
+  .expandedColumn {
+    max-width: calc(100% - var(--doc-sidebar-hidden-width));
+  }
+
+  .expandedContainer {
+    max-width: calc(var(--ifm-container-width) + var(--doc-sidebar-width)) !important;
+  }
+
+  /* Share the desktop article width with the aligned footer under the same grid. */
+  .column:has(.main :global(.theme-doc-markdown)) {
+    --doc-article-width: 75%;
+  }
+
+  .main > :global(.container > .row > .col:first-child),
+  :global(.row) > .footerContent {
+    max-width: var(--doc-article-width, 100%);
+  }
+}

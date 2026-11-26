@@ -23,6 +23,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapConfig
+      x-sidebar-label: "Swap settings"
       summary: Get InSwap module, fee tick, and deposit confirmation config
       description: >-
         Returns Fractal BRC20 Swap service settings, including module id, service gas tick, and confirmation thresholds for direct and matching deposits.
@@ -68,6 +69,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapBalance
+      x-sidebar-label: "Balance by ticker"
       summary: Get an address's InSwap balance for one tick
       description: >-
         Returns module, swap, pending-swap, and pending-available balances plus decimal precision for a specific address and token tick.
@@ -131,6 +133,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapAllBalances
+      x-sidebar-label: "All address balances"
       summary: List all InSwap balances for an address
       description: >-
         Returns a ticker-keyed balance map with module, swap, pending balances, decimals, asset type, network type, and optional price metadata.
@@ -211,6 +214,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPoolInfo
+      x-sidebar-label: "Pool details"
       summary: Get pool liquidity, volume, and reward details for a pair
       description: >-
         Returns pair-level pool metadata, including whether the pool exists, token reserves, LP supply, TVL, recent volume, reward fields, and per-token asset metadata.
@@ -315,6 +319,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapSelect
+      x-sidebar-label: "Tradable address tokens"
       summary: List address ticks available for InSwap trading
       description: >-
         Returns BRC-20 ticks available to an address for swap operations, including decimal precision, module balance, and swap balance.
@@ -373,6 +378,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPreDeployPool
+      x-sidebar-label: "Prepare pool deployment"
       summary: Prepare signatures and fees for deploying an InSwap pool
       description: >-
         Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value needed before submitting a pool deployment.
@@ -499,6 +505,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapDeployPool
+      x-sidebar-label: "Deploy pool"
       summary: Submit a signed InSwap pool deployment
       description: >-
         Creates a new swap pool using prepared signature data, token pair, timestamp, fee tick, and fee payment fields. Review the pair, fee amount, and signatures before submission.
@@ -580,6 +587,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPreAddLiq
+      x-sidebar-label: "Prepare liquidity addition"
       summary: Prepare signatures and fee data for adding liquidity
       description: >-
         Returns signature ids, sign messages, fee fields, and pool-share preparation data for adding two token amounts into an InSwap liquidity pool.
@@ -730,6 +738,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapAddLiq
+      x-sidebar-label: "Add liquidity"
       summary: Submit a signed InSwap add-liquidity operation
       description: >-
         Adds token amounts to a liquidity pool using prepared signatures, fee fields, and slippage controls. Review both token amounts, expected LP, fee payment, and signatures before submission.
@@ -864,6 +873,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPreRemoveLiq
+      x-sidebar-label: "Prepare liquidity removal"
       summary: Prepare signatures and fee data for removing liquidity
       description: >-
         Returns signature ids, sign messages, fee fields, and expected token amounts for removing LP from an InSwap liquidity pool.
@@ -1018,6 +1028,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapRemoveLiq
+      x-sidebar-label: "Remove liquidity"
       summary: Submit a signed InSwap remove-liquidity operation
       description: >-
         Removes LP from a liquidity pool using prepared signatures and fee fields, returning execution metadata. Review LP amount, expected token outputs, fee payment, and signatures before submission.
@@ -1152,6 +1163,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPreSend
+      x-sidebar-label: "Prepare token transfer"
       summary: Prepare signatures and fees for an InSwap token transfer
       description: >-
         Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value for transferring a tick amount to a recipient.
@@ -1256,6 +1268,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapPreBatchSend
+      x-sidebar-label: "Prepare batch transfers"
       summary: Prepare signatures and fees for batch InSwap transfers
       description: >-
         Returns per-item signature ids, sign messages, and fee metadata for transferring multiple tick amounts to recipients in one batch workflow.
@@ -1364,6 +1377,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPreSwap
+      x-sidebar-label: "Prepare swap"
       summary: Prepare signatures and fees for an InSwap token swap
       description: >-
         Returns signature ids, sign messages, fee fields, and fee-balance metadata for a quoted swap between input and output ticks.
@@ -1489,6 +1503,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapSend
+      x-sidebar-label: "Transfer tokens"
       summary: Submit a signed InSwap token transfer
       description: >-
         Transfers a tick amount from an address to one or more recipients using prepared signatures and fee fields. Review recipients, amounts, fee payment, and signatures before submission.
@@ -1580,6 +1595,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapBatchSend
+      x-sidebar-label: "Batch transfer tokens"
       summary: Submit signed batch InSwap token transfers
       description: >-
         Executes multiple prepared tick transfers in one request using per-item signatures and fee fields. Review every recipient, amount, fee payment, and signature before submission.
@@ -1670,6 +1686,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapSwap
+      x-sidebar-label: "Submit swap"
       summary: Submit a signed InSwap token swap
       description: >-
         Executes a prepared swap between input and output ticks with exact-in or exact-out semantics. Review quoted amounts, slippage, fee payment, and signatures before submission.
@@ -1812,6 +1829,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPoolList
+      x-sidebar-label: "Pool list"
       summary: List InSwap pools with TVL, volume, and reserves
       description: >-
         Returns paginated pool pairs with LP token, TVL, 24h/7d/30d volume, and reserve amounts for each token.
@@ -1893,6 +1911,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapMyPoolList
+      x-sidebar-label: "Address pool positions"
       summary: List an address's InSwap liquidity positions
       description: >-
         Returns paginated pool positions for an address, including LP amount, pool share, token amounts, and claimed or unclaimed rewards.
@@ -1981,6 +2000,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapMyPool
+      x-sidebar-label: "Address position by pool"
       summary: Get an address's InSwap position in one pool
       description: >-
         Returns LP amount, pool share, token amounts, locked LP, and claimed or unclaimed rewards for a specific address and token pair.
@@ -2063,6 +2083,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapOverview
+      x-sidebar-label: "Swap overview"
       summary: Get InSwap liquidity, volume, transaction, and pair totals
       description: >-
         Returns protocol overview metrics including total liquidity, 24h and 7d volume, 24h transaction count, and number of active pairs.
@@ -2111,6 +2132,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapGasHistory
+      x-sidebar-label: "Gas fee history"
       summary: List InSwap gas fee history
       description: >-
         Returns paginated gas-fee records with function type, token pair, gas amount, fee tick, recipient address, and timestamp.
@@ -2189,6 +2211,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapSendHistory
+      x-sidebar-label: "Token transfer history"
       summary: List InSwap token transfer history
       description: >-
         Returns paginated transfer records filtered by address or tick, including token tick, amount, recipient, and timestamp.
@@ -2262,6 +2285,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapLiqHistory
+      x-sidebar-label: "Liquidity history"
       summary: List InSwap add/remove liquidity history
       description: >-
         Returns paginated liquidity records with action type, token pair, token amounts, rewards, LP amount, and timestamp.
@@ -2356,6 +2380,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapSwapHistory
+      x-sidebar-label: "Swap history"
       summary: List InSwap token swap history
       description: >-
         Returns paginated swap records filtered by address or tick, including input/output ticks, amounts, exact type, and timestamp.
@@ -2442,6 +2467,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapRollupHistory
+      x-sidebar-label: "Rollup history"
       summary: List InSwap rollup inscription history
       description: >-
         Returns paginated rollup records with transaction id, block height, transaction count, inscription id, inscription number, and timestamp.
@@ -2513,6 +2539,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapDepositList
+      x-sidebar-label: "Deposit history"
       summary: List InSwap deposit records for an address
       description: >-
         Returns paginated deposit records with tick, amount, current and required confirmations, timestamp, txid, and deposit type.
@@ -2592,6 +2619,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapCreateDeposit
+      x-sidebar-label: "Prepare deposit"
       summary: Build InSwap deposit signing material
       description: >-
         Returns either a single psbt or a BRC20 transaction chain, selected from the available balance and transfer inscriptions.
@@ -2737,6 +2765,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapConfirmDeposit
+      x-sidebar-label: "Submit deposit"
       summary: Submit signed InSwap deposit transactions
       description: >-
         Submit either psbt for a single transaction or the signed transaction-chain fields returned by create_deposit; do not mix them.
@@ -2861,6 +2890,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapSystemStatus
+      x-sidebar-label: "Rollup commit status"
       summary: Check whether InSwap rollup committing is active
       description: >-
         Returns the current system committing flag so clients can decide whether rollup-related operations are temporarily in progress.
@@ -2898,6 +2928,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapWithdrawHistory
+      x-sidebar-label: "Withdrawal history"
       summary: List InSwap withdrawal records for an address
       description: >-
         Returns paginated withdrawal records with id, tick, total and completed amounts, confirmation progress, status, type, and timestamp.
@@ -2983,6 +3014,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapCreateRetryWithdraw
+      x-sidebar-label: "Prepare withdrawal retry"
       summary: Build payment and approve PSBTs for retrying a withdrawal
       description: >-
         Returns payment PSBT, approve-inscription PSBT, and network fee required to retry a previously created withdrawal order.
@@ -3041,6 +3073,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapConfirmRetryWithdraw
+      x-sidebar-label: "Submit withdrawal retry"
       summary: Submit signed PSBTs to retry an InSwap withdrawal
       description: >-
         Confirms a retry withdrawal order by submitting its id with signed payment and approve PSBTs. Verify the order id and both signed PSBTs before submission.
@@ -3094,6 +3127,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapCreateWithdraw
+      x-sidebar-label: "Prepare withdrawal"
       summary: Build InSwap withdrawal signing data
       description: >-
         Prepares withdrawal data for a tick amount, fee tick, payment type, and optional bridge asset metadata before the signed confirmation step.
@@ -3198,6 +3232,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapConfirmWithdraw
+      x-sidebar-label: "Submit withdrawal"
       summary: Submit a signed InSwap withdrawal confirmation
       description: >-
         Confirms a withdrawal order using payment and approve PSBTs plus fee and signature fields. Review order id, amount, tick, fee payment, and signed PSBTs before submission.
@@ -3301,6 +3336,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapWithdrawProcess
+      x-sidebar-label: "Withdrawal progress"
       summary: Get confirmation progress for an InSwap withdrawal
       description: >-
         Returns withdrawal status details including confirmation counts, rollup/payment/inscribe/approve txids, completed amount, and match history.
@@ -3414,6 +3450,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapQuoteSwap
+      x-sidebar-label: "Quote swap"
       summary: Quote expected output for an InSwap token swap
       description: >-
         Estimates swap result values for exact-in or exact-out requests, including input USD value, expected USD value, and expected token amount.
@@ -3491,6 +3528,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapQuoteAddLiq
+      x-sidebar-label: "Quote liquidity addition"
       summary: Quote required amounts and LP for adding liquidity
       description: >-
         Estimates real token amounts, USD values, LP minted, pair exchange ratios, and resulting pool share for an add-liquidity request.
@@ -3577,6 +3615,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapQuoteRemoveLiq
+      x-sidebar-label: "Quote liquidity removal"
       summary: Quote token outputs for removing InSwap liquidity
       description: >-
         Estimates the token pair amounts and USD values returned when removing a specified LP amount from a pool.
@@ -3649,6 +3688,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPreStake
+      x-sidebar-label: "Prepare LP stake"
       summary: Prepare signatures and fees for staking InSwap LP
       description: >-
         Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value for staking an LP amount in a reward pool.
@@ -3746,6 +3786,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPreUnstake
+      x-sidebar-label: "Prepare LP unstake"
       summary: Prepare signatures and fees for unstaking InSwap LP
       description: >-
         Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value for unstaking an LP amount from a reward pool.
@@ -3843,6 +3884,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPreClaim
+      x-sidebar-label: "Prepare reward claim"
       summary: Prepare signatures and fees for claiming InSwap rewards
       description: >-
         Returns signature ids, sign messages, fee amount, fee tick price, fee balance, and USD fee value for claiming rewards from a staking pool.
@@ -3934,6 +3976,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPreSendLp
+      x-sidebar-label: "Prepare LP transfer"
       summary: Prepare signatures and fees for transferring LP tokens
       description: >-
         Returns signature ids, sign messages, fee fields, LP token conversion data, and fee-balance metadata for sending LP tokens to another address.
@@ -4048,6 +4091,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapSendLp
+      x-sidebar-label: "Transfer LP tokens"
       summary: Submit a signed InSwap LP token transfer
       description: >-
         Transfers LP tokens for a token pair to another address using prepared signatures and fee fields. Review recipient, LP amount, fee payment, and signatures before submission.
@@ -4139,6 +4183,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapStake
+      x-sidebar-label: "Stake LP tokens"
       summary: Submit a signed InSwap LP stake operation
       description: >-
         Stakes an LP amount in a reward pool using prepared signatures and fee fields. Review pool id, amount, fee payment, and signatures before submission.
@@ -4221,6 +4266,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapUnstake
+      x-sidebar-label: "Unstake LP tokens"
       summary: Submit a signed InSwap LP unstake operation
       description: >-
         Unstakes an LP amount from a reward pool using prepared signatures and fee fields. Review pool id, amount, fee payment, and signatures before submission.
@@ -4303,6 +4349,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapClaim
+      x-sidebar-label: "Claim rewards"
       summary: Submit a signed InSwap reward claim
       description: >-
         Claims rewards from a staking pool using prepared signatures and fee fields, returning the claimed reward amount when available.
@@ -4384,6 +4431,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapLpRewardHistory
+      x-sidebar-label: "LP reward history"
       summary: List LP reward history for an InSwap pool position
       description: >-
         Returns paginated LP reward records for an address and token pair, including reward amounts, event type, and timestamp.
@@ -4468,6 +4516,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapStakeHistory
+      x-sidebar-label: "Staking history"
       summary: List InSwap stake, unstake, and claim history
       description: >-
         Returns paginated staking records for an address, filtered by pool, search text, and action type, with pool pair, amount, reward tick, and timestamp.
@@ -4563,6 +4612,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapStakeList
+      x-sidebar-label: "Staking campaigns"
       summary: List active InSwap staking campaigns and reward pools
       description: >-
         Returns staking campaign windows with reward pool summaries, including pool id, pool pair, reward tick, current total LP, base reward, and staged reward thresholds.
@@ -4637,6 +4687,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapStakeItem
+      x-sidebar-label: "Staking campaign details"
       summary: Get one InSwap staking campaign by event id
       description: >-
         Returns a staking campaign item plus newest indexed height, including reward pool summaries, staged LP requirements, and staged added rewards.
@@ -4717,6 +4768,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapStakeUserInfo
+      x-sidebar-label: "Address staking info"
       summary: Get staking-related InSwap user information
       description: >-
         Returns staking user data for an address. The response is extensible because the server may include campaign-specific or user-specific fields.
@@ -4756,6 +4808,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapUserInfo
+      x-sidebar-label: "Fee payment preferences"
       summary: Get an address's default InSwap fee payment settings
       description: >-
         Returns the user's remembered fee payment preference, including default pay type and whether the preference should be remembered.
@@ -4806,6 +4859,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapSelectDeposit
+      x-sidebar-label: "Deposit options"
       summary: Get deposit selection data for an InSwap address
       description: >-
         Returns server-provided deposit selection data for a pubkey and address. The schema is intentionally open to support direct, matching, or bridge deposit choices.
@@ -4855,6 +4909,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapFuncInfo
+      x-sidebar-label: "Operation details"
       summary: Get execution details for one InSwap function id
       description: >-
         Returns server-side function execution data for a submitted operation id. The response is open because details vary by operation type.
@@ -4894,6 +4949,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapDepositBalance
+      x-sidebar-label: "Depositable balance"
       summary: Get depositable balance data for one tick
       description: >-
         Returns server-provided deposit balance data for a pubkey, address, and tick. The response shape is open to support multiple deposit modes.
@@ -4943,6 +4999,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapDepositProcess
+      x-sidebar-label: "Deposit progress"
       summary: Get confirmation progress for an InSwap deposit
       description: >-
         Returns deposit progress by txid, including tick, amount, current and required confirmations, timestamp, type, and status.
@@ -5001,6 +5058,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapTickPrice
+      x-sidebar-label: "Token price"
       summary: Get the current InSwap price for one tick
       description: >-
         Returns the latest price value for a tick as used by InSwap quote, valuation, or portfolio views.
@@ -5043,6 +5101,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapAddressGas
+      x-sidebar-label: "Address fee token balance"
       summary: Get an address's available fee-tick gas amount
       description: >-
         Returns the total available fee-token amount for an address and fee tick, useful before preparing fee-paying swap operations.
@@ -5090,6 +5149,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPriceLine
+      x-sidebar-label: "Pair price history"
       summary: Get historical InSwap price points for a pair
       description: >-
         Returns time-series price and USD price points for a token pair over a selected range such as 24h, 7d, 30d, 90d, or all.
@@ -5159,6 +5219,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapTickHolders
+      x-sidebar-label: "Top token holders"
       summary: List top holders for an InSwap tick
       description: >-
         Returns paginated holder records for a tick, including address, amount, overall percentage, and relative percentage.
@@ -5226,6 +5287,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPoolHolders
+      x-sidebar-label: "Pool LP holders"
       summary: List LP holders for an InSwap pool
       description: >-
         Returns paginated LP holder records for a token pair, including token amounts, LP amount, pool share, and locked LP breakdown.
@@ -5309,6 +5371,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapRewardCurve
+      x-sidebar-label: "Address pool reward curve"
       summary: Get InSwap reward curve data for a pool position
       description: >-
         Returns reward-curve data for an address and token pair over a time range. The response is open because curve series fields may vary by campaign.
@@ -5368,6 +5431,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapSendLpHistory
+      x-sidebar-label: "LP transfer history"
       summary: List InSwap LP token transfer history
       description: >-
         Returns paginated LP transfer records filtered by address or tick, including tick, amount, recipient, and timestamp.
@@ -5446,6 +5510,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapBurnHistory
+      x-sidebar-label: "LP burn history"
       summary: List InSwap LP burn history and burn totals
       description: >-
         Returns paginated burn records plus total LP and burned LP amounts, with optional address, tick, fuzzy-search, and timestamp filters.
@@ -5535,6 +5600,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapTaskList
+      x-sidebar-label: "Address tasks"
       summary: List InSwap task completion items for an address
       description: >-
         Returns task metadata for an address, including task id, item ids, completion flags, and task start/end times when available.
@@ -5603,6 +5669,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapAddressUsd
+      x-sidebar-label: "Address USD valuation"
       summary: Get an address's InSwap asset and LP USD values
       description: >-
         Returns USD valuation entries for an address, separating token asset value and LP position value.
@@ -5649,6 +5716,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPreLockLp
+      x-sidebar-label: "Prepare LP lock"
       summary: Prepare signatures and fees for locking InSwap LP
       description: >-
         Returns signature ids, sign messages, fee fields, LP token conversion data, and fee-balance metadata for locking LP tokens for a selected duration.
@@ -5762,6 +5830,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapLockLp
+      x-sidebar-label: "Lock LP tokens"
       summary: Submit a signed InSwap LP lock operation
       description: >-
         Locks LP tokens for a token pair and lock duration using prepared signatures and fee fields. Review lock duration, LP amount, fee payment, and signatures before submission.
@@ -5850,6 +5919,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPreUnlockLp
+      x-sidebar-label: "Prepare LP unlock"
       summary: Prepare signatures and fees for unlocking InSwap LP
       description: >-
         Returns signature ids, sign messages, fee fields, LP token conversion data, and fee-balance metadata for unlocking previously locked LP tokens.
@@ -5958,6 +6028,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapUnlockLp
+      x-sidebar-label: "Unlock LP tokens"
       summary: Submit a signed InSwap LP unlock operation
       description: >-
         Unlocks LP tokens for a token pair using prepared signatures and fee fields. Review LP amount, fee payment, and signatures before submission.
@@ -6043,6 +6114,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapLockLpHistory
+      x-sidebar-label: "LP lock history"
       summary: List InSwap LP lock history
       description: >-
         Returns paginated LP lock records with address, pair, LP amount, token amounts, USD values, lock duration, unlock time, pool share, and timestamp.
@@ -6147,6 +6219,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapUnlockLpHistory
+      x-sidebar-label: "LP unlock history"
       summary: List InSwap LP unlock history
       description: >-
         Returns paginated LP unlock records with address, pair, LP amount, token amounts, USD values, and timestamp.
@@ -6240,6 +6313,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapExportLockLpHistory
+      x-sidebar-label: "Export LP lock history"
       summary: Export InSwap LP lock history as CSV
       description: >-
         Downloads CSV-formatted LP lock records for a token pair, optionally filtered by lock duration or lock time.
@@ -6282,6 +6356,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapMyLockLp
+      x-sidebar-label: "Address LP lock summary"
       summary: Get an address's locked and available LP for a pool
       description: >-
         Returns total LP, locked LP, available LP, available underlying token amounts, and pool share for one address and token pair.
@@ -6344,6 +6419,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapSelectPool
+      x-sidebar-label: "Swap route tokens"
       summary: List routed pool candidates for an InSwap trade
       description: >-
         Returns swappable tick candidates for an address with decimals, module balance, swap balance, and available route ticks.
@@ -6416,6 +6492,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapPreMultiSwap
+      x-sidebar-label: "Prepare multi-hop swap"
       summary: Prepare signatures and fees for a multi-hop InSwap swap
       description: >-
         Returns per-route signature ids, sign messages, fee fields, and fee-balance metadata for a multi-hop swap between input and output ticks.
@@ -6543,6 +6620,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapMultiSwap
+      x-sidebar-label: "Submit multi-hop swap"
       summary: Submit signed multi-hop InSwap swaps
       description: >-
         Executes one or more prepared multi-hop swap items and returns per-item success, amounts, exact type, value, timestamp, and failure reason when applicable.
@@ -6683,6 +6761,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapQuoteMultiSwap
+      x-sidebar-label: "Quote multi-hop swap"
       summary: Quote expected output and route amounts for a multi-hop swap
       description: >-
         Estimates a multi-hop swap with input USD value, expected USD value, expected output amount, and per-route expected amounts.
@@ -6765,6 +6844,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: getBrc20SwapMultiSwapHistory
+      x-sidebar-label: "Multi-hop swap history"
       summary: List InSwap multi-hop swap history
       description: >-
         Returns paginated multi-hop swap records with aggregate input/output amounts, value, route details, route success flags, and failure reasons.
@@ -6907,6 +6987,7 @@ paths:
       tags:
         - Swap-BRC20
       operationId: postBrc20SwapBatchHistory
+      x-sidebar-label: "Batch history lookup"
       summary: Fetch multiple InSwap history categories in one request
       description: >-
         Returns selected history groups for an address, such as gas, send, liquidity, swap, withdrawal, stake, LP transfer, burn, LP lock, LP unlock, and multi-hop swap records.

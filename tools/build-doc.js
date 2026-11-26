@@ -1,18 +1,19 @@
 const fs = require("node:fs");
 const path = require("node:path");
-const yaml = require("js-yaml");
 const { getMediaExamples } = require("./openapi-examples");
-const { resolveSchema, parameterRows, schemaRows } = require("./openapi-fields");
+const { parameterRows, schemaRows } = require("./openapi-fields");
 const { endpointSidebarLabel } = require("./endpoint-labels");
+const { writeEndpointRedirects } = require("./openapi-doc-redirects");
+const { loadOpenApiSpecs, resolveOpenApiReference } = require("./openapi-spec");
 
 const swaggerBaseUrl = "https://open-api.unisat.io/#/";
 const errorDocumentation =
   "For failed requests, see [Open API Errors](/docs/developer-support/api-key-errors).";
 
-function successfulResponses(operation) {
-  return Object.entries(operation.responses || {}).filter(([status]) =>
-    /^2(?:\d{2}|XX)$/i.test(status),
-  );
+function documentedResponses(operation, bundle) {
+  return Object.entries(operation.responses || {})
+    .map(([status, response]) => [status, resolveOpenApiReference(response, bundle)])
+    .filter(([, response]) => response["x-doc-shared-error"] !== true);
 }
 
 function escapeMdxText(route) {
@@ -24,8 +25,8 @@ function escapeMdx(value) {
   return String(value).replace(/</g, "&lt;").replace(/>/g, "&gt;");
 }
 
-function formatSchemaType(schema, schemas) {
-  const resolved = resolveSchema(schema, schemas) || {};
+function formatSchemaType(schema, bundle) {
+  const resolved = resolveOpenApiReference(schema, bundle) || {};
   if (resolved.type === "array") {
     return "array";
   }
@@ -38,8 +39,8 @@ function formatSchemaType(schema, schemas) {
   return "any";
 }
 
-function formatSchemaMeta(schema, schemas) {
-  const resolved = resolveSchema(schema, schemas) || {};
+function formatSchemaMeta(schema, bundle) {
+  const resolved = resolveOpenApiReference(schema, bundle) || {};
   const meta = [];
   if (resolved.description) meta.push(escapeMdx(resolved.description));
   if (resolved.enum) meta.push(`enum: ${resolved.enum.map((v) => `\`${escapeMdx(v)}\``).join(", ")}`);
@@ -52,28 +53,28 @@ function formatSchemaMeta(schema, schemas) {
   return meta.join("; ");
 }
 
-function getParameters(params = [], schemas = {}) {
+function getParameters(params, bundle) {
   if (!params.length) return "";
   return params
     .map((p) => {
       const required = p.required ? " **(required)**" : "";
-      const schema = resolveSchema(p.schema, schemas) || {};
-      const type = formatSchemaType(schema, schemas);
-      const meta = [p.description ? escapeMdx(p.description) : "", formatSchemaMeta(schema, schemas)].filter(Boolean).join("; ");
+      const schema = resolveOpenApiReference(p.schema, bundle) || {};
+      const type = formatSchemaType(schema, bundle);
+      const meta = [p.description ? escapeMdx(p.description) : "", formatSchemaMeta(schema, bundle)].filter(Boolean).join("; ");
       return `- \`${p.name}\` (${p.in}, ${type})${required}: ${meta}`;
     })
     .join("\n");
 }
 
-function renderSchema(schema, schemas, indent = 0, name = "", required = false, ancestors = new Set()) {
-  const resolved = resolveSchema(schema, schemas);
+function renderSchema(schema, bundle, indent = 0, name = "", required = false, ancestors = new Set()) {
+  const resolved = resolveOpenApiReference(schema, bundle);
   if (!resolved) return "";
 
   const lines = [];
   const prefix = "  ".repeat(indent);
   const label = name ? `\`${name}\` ` : "";
-  const type = formatSchemaType(resolved, schemas);
-  const meta = [required ? "**required**" : "", formatSchemaMeta(resolved, schemas)].filter(Boolean).join("; ");
+  const type = formatSchemaType(resolved, bundle);
+  const meta = [required ? "**required**" : "", formatSchemaMeta(resolved, bundle)].filter(Boolean).join("; ");
   if (ancestors.has(resolved)) return `${prefix}- ${label}(${type}): recursive schema`;
   ancestors = new Set([...ancestors, resolved]);
   const requiredFields = new Set(Array.isArray(resolved.required) ? resolved.required : []);
@@ -82,7 +83,7 @@ function renderSchema(schema, schemas, indent = 0, name = "", required = false, 
     const variants = resolved.allOf || resolved.oneOf || resolved.anyOf;
     if (name) lines.push(`${prefix}- ${label}(${type}): ${meta}`.trimEnd());
     variants.forEach((item) => {
-      const rendered = renderSchema(item, schemas, indent + (name ? 1 : 0), "", false, ancestors);
+      const rendered = renderSchema(item, bundle, indent + (name ? 1 : 0), "", false, ancestors);
       if (rendered) lines.push(rendered);
     });
     return lines.join("\n");
@@ -90,7 +91,7 @@ function renderSchema(schema, schemas, indent = 0, name = "", required = false, 
 
   if (resolved.type === "array" && resolved.items) {
     lines.push(`${prefix}- ${label}(array): ${meta}`.trimEnd());
-    const rendered = renderSchema(resolved.items, schemas, indent + 1, "items", false, ancestors);
+    const rendered = renderSchema(resolved.items, bundle, indent + 1, "items", false, ancestors);
     if (rendered) lines.push(rendered);
     return lines.join("\n");
   }
@@ -98,14 +99,14 @@ function renderSchema(schema, schemas, indent = 0, name = "", required = false, 
   if (resolved.properties) {
     if (name) lines.push(`${prefix}- ${label}(${type}): ${meta}`.trimEnd());
     for (const [key, val] of Object.entries(resolved.properties)) {
-      const child = resolveSchema(val, schemas) || val;
-      const childMeta = [requiredFields.has(key) ? "required" : "", formatSchemaMeta(child, schemas)]
+      const child = resolveOpenApiReference(val, bundle) || val;
+      const childMeta = [requiredFields.has(key) ? "required" : "", formatSchemaMeta(child, bundle)]
         .filter(Boolean)
         .join("; ");
-      const childType = formatSchemaType(child, schemas);
+      const childType = formatSchemaType(child, bundle);
 
       if (child.properties || child.items || child.allOf || child.oneOf || child.anyOf || child.$ref) {
-        const rendered = renderSchema(child, schemas, indent + (name ? 1 : 0), key, requiredFields.has(key), ancestors);
+        const rendered = renderSchema(child, bundle, indent + (name ? 1 : 0), key, requiredFields.has(key), ancestors);
         if (rendered) lines.push(rendered);
       } else {
         lines.push(`${prefix}${name ? "  " : ""}- \`${key}\` (${childType}): ${childMeta}`.trimEnd());
@@ -116,7 +117,7 @@ function renderSchema(schema, schemas, indent = 0, name = "", required = false, 
 
   if (resolved.additionalProperties) {
     lines.push(`${prefix}- ${label}(object): ${meta}`.trimEnd());
-    const rendered = renderSchema(resolved.additionalProperties, schemas, indent + 1, "additional properties", false, ancestors);
+    const rendered = renderSchema(resolved.additionalProperties, bundle, indent + 1, "additional properties", false, ancestors);
     if (rendered) lines.push(rendered);
     return lines.join("\n");
   }
@@ -128,14 +129,14 @@ function renderSchema(schema, schemas, indent = 0, name = "", required = false, 
   return lines.join("\n");
 }
 
-function getRequestBody(operation, schemas) {
-  const requestBody = operation.requestBody;
+function getRequestBody(operation, bundle) {
+  const requestBody = resolveOpenApiReference(operation.requestBody, bundle);
   if (!requestBody) return "";
   const content = requestBody.content || {};
   const json = content["application/json"] || content["multipart/form-data"] || content["application/x-www-form-urlencoded"];
   if (!json?.schema) return "";
   const required = requestBody.required ? " **(required)**" : "";
-  const rendered = renderSchema(json.schema, schemas);
+  const rendered = renderSchema(json.schema, bundle);
   return `Content-Type: \`${Object.keys(content)[0]}\`${required}\n\n${rendered}`;
 }
 
@@ -161,11 +162,13 @@ function groupEndpointsByTag(endpoints) {
   return groups;
 }
 
-function collectEndpoints(swagger) {
+function collectEndpoints(swagger, bundle) {
   const endpoints = [];
-  for (const [route, methods] of Object.entries(swagger.paths || {})) {
+  for (const [route, pathItem] of Object.entries(swagger.paths || {})) {
+    const methods = resolveOpenApiReference(pathItem, bundle);
     for (const [method, operation] of Object.entries(methods)) {
       if (!["get", "put", "post", "delete", "options", "head", "patch", "trace"].includes(method)) continue;
+      if (operation.deprecated === true) continue;
       const opId = operation.operationId || normalizeAnchor(`${method}-${route}`);
       const summary = operation.summary || opId;
       const description = operation.description || "";
@@ -183,8 +186,7 @@ function collectEndpoints(swagger) {
   return endpoints;
 }
 
-function generateMarkdown(swagger, endpoints) {
-  const schemas = swagger.components?.schemas || {};
+function generateMarkdown(swagger, endpoints, bundle) {
   // 2. Group endpoints by tags
   const groupedEndpoints = groupEndpointsByTag(endpoints);
 
@@ -219,14 +221,8 @@ ${swagger.info.description}
     const tagDisplay = tag === "_untagged" ? "Other APIs" : tag;
     output += `## ${tagDisplay}\n\n`;
 
-    for (const {
-      opId,
-      summary,
-      description,
-      method,
-      route,
-      operation,
-    } of eps) {
+    for (const endpoint of eps) {
+      const { opId, summary, description, method, route, operation } = endpoint;
       const anchor = normalizeAnchor(summary);
 
       output += `### ${summary}\n`;
@@ -239,22 +235,23 @@ ${swagger.info.description}
         output += `#### Description\n${description}\n\n`;
       }
 
-      if (operation.parameters?.length) {
-        output += `#### Parameters\n${getParameters(operation.parameters, schemas)}\n\n`;
+      const parameters = endpointParameters(endpoint, bundle);
+      if (parameters.length) {
+        output += `#### Parameters\n${getParameters(parameters, bundle)}\n\n`;
       }
 
-      const requestBody = getRequestBody(operation, schemas);
+      const requestBody = getRequestBody(operation, bundle);
       if (requestBody) {
         output += `#### Request Body\n${requestBody}\n\n`;
       }
 
-      for (const [statusCode, response] of successfulResponses(operation)) {
+      for (const [statusCode, response] of documentedResponses(operation, bundle)) {
         output += `#### Response (${statusCode})\n`;
         if (response.description) {
           output += `${escapeMdx(response.description)}\n\n`;
         }
         const content = response.content?.["application/json"];
-        const rendered = renderSchema(content?.schema, schemas);
+        const rendered = renderSchema(content?.schema, bundle);
         if (rendered) {
           output += `${rendered}\n\n`;
         }
@@ -279,9 +276,10 @@ function swaggerLink(operation, opId) {
   return `${swaggerBaseUrl}${encodeURIComponent(tag)}/${encodeURIComponent(opId)}`;
 }
 
-function endpointParameters({ pathItem, operation }) {
+function endpointParameters({ pathItem, operation }, bundle) {
   const entries = new Map();
-  for (const parameter of [...(pathItem.parameters || []), ...(operation.parameters || [])]) {
+  for (const definition of [...(pathItem.parameters || []), ...(operation.parameters || [])]) {
+    const parameter = resolveOpenApiReference(definition, bundle);
     entries.set(`${parameter.in}:${parameter.name}`, parameter);
   }
   return [...entries.values()];
@@ -292,11 +290,11 @@ function fieldTable(rows, caption, fieldLabel) {
   return `<ApiFieldTable {...${JSON.stringify({ rows, caption, fieldLabel })}} />`;
 }
 
-function renderAuthorization(security, securitySchemes) {
+function renderAuthorization(security, bundle) {
   const anonymous = security.some((option) => !Object.keys(option).length);
   const rows = security.flatMap((requirement, index) =>
     Object.entries(requirement).map(([name, scopes]) => {
-      const scheme = securitySchemes[name];
+      const scheme = resolveOpenApiReference(bundle.components?.securitySchemes?.[name], bundle);
       const details = [];
       if (security.length > 1) details.push({ label: "Option", value: String(index + 1) });
       if (scopes.length) details.push({ label: "Scopes", value: scopes.join(", ") });
@@ -318,91 +316,51 @@ function renderAuthorization(security, securitySchemes) {
   return [note, fieldTable(rows, "Authorization", "Credential")].filter(Boolean).join("\n\n");
 }
 
-function requestSnippet(endpoint, parameters, security, securitySchemes, server, schemas, examples) {
-  let requestPath = endpoint.route;
-  const query = [];
-  for (const parameter of parameters) {
-    const schema = resolveSchema(parameter.schema, schemas) || {};
-    const value = parameter.example ?? schema.example ?? schema.default;
-    if (value === undefined || value === null || typeof value === "object") {
-      if (parameter.in === "query" && parameter.required) {
-        query.push(`${encodeURIComponent(parameter.name)}={${parameter.name}}`);
-      }
-      continue;
-    }
-    if (parameter.in === "path") {
-      requestPath = requestPath.replaceAll(`{${parameter.name}}`, encodeURIComponent(value));
-    } else if (parameter.in === "query") {
-      query.push(`${encodeURIComponent(parameter.name)}=${encodeURIComponent(value)}`);
-    }
-  }
-
-  const url = new URL(server);
-  const basePath = url.pathname.replace(/\/$/, "");
-  const target = `${basePath}${requestPath}${query.length ? `?${query.join("&")}` : ""}`;
-  const lines = [`${endpoint.method.toUpperCase()} ${target} HTTP/1.1`, `Host: ${url.host}`];
-  const requirement = security.find((option) => Object.keys(option).length === 0) || security[0] || {};
-  for (const name of Object.keys(requirement)) {
-    const scheme = securitySchemes[name];
-    if (scheme?.type === "http" && scheme.scheme === "bearer") {
-      lines.push("Authorization: Bearer YOUR_API_KEY");
-    } else if (scheme?.type === "apiKey" && scheme.in === "header") {
-      lines.push(`${scheme.name}: YOUR_API_KEY`);
-    }
-  }
-
-  const [[, response] = []] = successfulResponses(endpoint.operation);
-  const [accept] = Object.keys(response?.content || {});
-  if (accept) lines.push(`Accept: ${accept}`);
-  const [request] = Object.entries(endpoint.operation.requestBody?.content || {});
-  if (request) {
-    const [type, media] = request;
-    lines.push(`Content-Type: ${type}`);
-    const sample = getMediaExamples(media, schemas, examples, type, "request")[0];
-    lines.push("", type === "application/json" && sample ? sample.example : "<request body>");
-  }
-  return lines.join("\n");
-}
-
-function generateEndpointPage(endpoint, swagger, root) {
+function generateEndpointPage(endpoint, swagger, root, bundle) {
   const { operation, opId, summary, method, route, pathItem } = endpoint;
-  const schemas = swagger.components?.schemas || {};
-  const examples = swagger.components?.examples || {};
+  const title = endpointSidebarLabel(endpoint);
   const security = operation.security ?? swagger.security ?? root.security ?? [];
-  const securitySchemes = { ...root.components?.securitySchemes, ...swagger.components?.securitySchemes };
   const server = (operation.servers || pathItem.servers || swagger.servers || root.servers)?.[0]?.url;
-  const parameters = endpointParameters(endpoint);
-  const sections = [
-    endpoint.description || "See the request parameters and response fields below.",
-    `## Authorization\n\n${renderAuthorization(security, securitySchemes)}`,
-  ];
+  const parameters = endpointParameters(endpoint, bundle);
+  const intro = endpoint.description || (summary !== title ? `<p>{${JSON.stringify(summary)}}</p>` : "");
+  const sections = [`<h1>{${JSON.stringify(title)}}</h1>`];
+  if (intro) sections.push(`<div className="api-endpoint-intro">\n\n${intro}\n\n</div>`);
+  sections.push(
+    "<ApiEndpointPath {...endpoint} />",
+    `## Authorization\n\n${renderAuthorization(security, bundle)}`,
+  );
 
   for (const [location, heading] of [["path", "Path Parameters"], ["query", "Query Parameters"], ["header", "Headers"], ["cookie", "Cookies"]]) {
     const fields = parameters.filter((parameter) => parameter.in === location);
-    if (fields.length) sections.push(`## ${heading}\n\n${fieldTable(parameterRows(fields, schemas), heading, "Parameter")}`);
+    if (fields.length) sections.push(`## ${heading}\n\n${fieldTable(parameterRows(fields, bundle), heading, "Parameter")}`);
   }
 
-  if (operation.requestBody) {
-    const required = operation.requestBody.required ? " **(required)**" : "";
-    const body = Object.entries(operation.requestBody.content || {}).map(([type, media]) =>
-      `Content-Type: \`${type}\`${required}\n\n${fieldTable(schemaRows(media.schema, schemas, "request"), `Request body fields for ${type}`)}`.trimEnd()
+  const requestBody = resolveOpenApiReference(operation.requestBody, bundle);
+  if (requestBody) {
+    const required = requestBody.required ? " **(required)**" : "";
+    const body = Object.entries(requestBody.content || {}).map(([type, media]) =>
+      `Content-Type: \`${type}\`${required}\n\n${fieldTable(schemaRows(media.schema, bundle, "request"), `Request body fields for ${type}`)}`.trimEnd()
     );
-    sections.push(["## Request Body", operation.requestBody.description || "", ...body].filter(Boolean).join("\n\n"));
+    sections.push(["## Request Body", requestBody.description || "", ...body].filter(Boolean).join("\n\n"));
   }
 
-  const responses = [];
   const responseSections = ["## Responses"];
-  for (const [status, response] of successfulResponses(operation)) {
+  for (const [status, response] of documentedResponses(operation, bundle)) {
     const description = response.description || "";
-    const fields = [`### ${status}`, escapeMdx(description)];
     const content = Object.entries(response.content || {});
-    if (!content.length) responses.push({ status, description });
+    const mediaLabel = content.length === 1 ? `\`${content[0][0]}\`` : "";
+    const heading = ['<div className="api-response-heading">', `### ${status}`, mediaLabel, "</div>"];
+    const fields = [heading.filter(Boolean).join("\n\n")];
+    if (description.trim() !== "Successful operation") fields.push(escapeMdx(description));
     for (const [mediaType, media] of content) {
-      fields.push(`\`${mediaType}\``, fieldTable(schemaRows(media.schema, schemas, "response"), `${status} response fields for ${mediaType}`));
-      const samples = getMediaExamples(media, schemas, examples, mediaType);
-      for (const sample of samples.length ? samples : [{}]) {
-        responses.push({ status, description, mediaType, ...sample });
-      }
+      if (!mediaLabel) fields.push(`\`${mediaType}\``);
+      const body = {
+        status,
+        mediaType,
+        rows: schemaRows(media.schema, bundle, "response"),
+        examples: getMediaExamples(media, bundle, mediaType),
+      };
+      fields.push(`<ApiResponseBody {...${JSON.stringify(body)}} />`);
     }
     responseSections.push(fields.filter(Boolean).join("\n\n"));
   }
@@ -415,18 +373,19 @@ function generateEndpointPage(endpoint, swagger, root) {
     path: route,
     testUrl: swaggerLink(operation, opId),
     server,
-    requestExample: requestSnippet(endpoint, parameters, security, securitySchemes, server, schemas, examples),
-    responses,
   };
   return [
     "---",
     `title: ${JSON.stringify(summary)}`,
+    "hide_title: true",
     "hide_table_of_contents: true",
     "---",
-    'import ApiEndpointReference from "@site/src/components/ApiEndpointReference";',
+    'import ApiEndpointReference, { ApiEndpointPath, ApiResponseBody } from "@site/src/components/ApiEndpointReference";',
     'import ApiFieldTable from "@site/src/components/ApiEndpointReference/ApiFieldTable";',
     "",
-    `<ApiEndpointReference {...${JSON.stringify(props)}}>`,
+    `export const endpoint = ${JSON.stringify(props)};`,
+    "",
+    "<ApiEndpointReference>",
     "",
     sections.join("\n\n"),
     "",
@@ -459,16 +418,18 @@ function generateGroupOverview(swagger, module, endpoints) {
 }
 
 try {
-  const config = yaml.load(fs.readFileSync("tools/build-config.yaml", "utf8"));
-  const readSpec = (name) => yaml.load(fs.readFileSync(`specs/openapi/${name}.yaml`, "utf8"));
-  const root = readSpec("main");
+  const { root, modules, bundle } = loadOpenApiSpecs();
   const docDir = ".generated/docs/open-api";
   const legacyDir = path.join(docDir, "auto-generated/docs");
-  fs.mkdirSync(legacyDir, { recursive: true });
+  const groups = modules.map(({ name: module, spec: swagger }) => ({
+    module,
+    swagger,
+    endpoints: collectEndpoints(swagger, bundle),
+  }));
+  writeEndpointRedirects(docDir, groups);
 
-  const sidebar = config.doc.map((module) => {
-    const swagger = readSpec(module);
-    const endpoints = collectEndpoints(swagger);
+  fs.mkdirSync(legacyDir, { recursive: true });
+  const sidebar = groups.map(({ module, swagger, endpoints }) => {
     const endpointDir = path.join(docDir, module);
     fs.mkdirSync(endpointDir, { recursive: true });
     const ids = new Set();
@@ -477,11 +438,11 @@ try {
       const id = endpoint.opId.toLowerCase();
       if (ids.has(id)) throw new Error(`Duplicate operationId in ${module}: ${endpoint.opId}`);
       ids.add(id);
-      fs.writeFileSync(path.join(endpointDir, `${endpoint.opId}.mdx`), generateEndpointPage(endpoint, swagger, root));
+      fs.writeFileSync(path.join(endpointDir, `${endpoint.opId}.mdx`), generateEndpointPage(endpoint, swagger, root, bundle));
     }
 
     fs.writeFileSync(path.join(docDir, `${module}.md`), generateGroupOverview(swagger, module, endpoints));
-    fs.writeFileSync(path.join(legacyDir, `${module}.md`), generateMarkdown(swagger, endpoints));
+    fs.writeFileSync(path.join(legacyDir, `${module}.md`), generateMarkdown(swagger, endpoints, bundle));
     console.log(`Generated ${endpoints.length} endpoint pages for ${module}`);
     return {
       type: "category",
@@ -490,7 +451,7 @@ try {
       items: endpoints.map((endpoint) => ({
         type: "doc",
         id: `open-api/${module}/${endpoint.opId}`,
-        label: endpointSidebarLabel(module, endpoint),
+        label: endpointSidebarLabel(endpoint),
       })),
     };
   });

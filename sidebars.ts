@@ -30,11 +30,16 @@ const sidebars: SidebarsConfig = {
       type: "category",
       label: "Open API",
       items: [
-        "open-api/intro",
+        {
+          type: "doc",
+          id: "open-api/intro",
+          className: "open-api-sidebar-link",
+        },
         {
           type: "link",
           label: "Open API Swagger",
           href: "https://open-api.unisat.io/",
+          className: "open-api-sidebar-link",
         },
         {
           type: "category",

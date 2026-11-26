@@ -1418,29 +1418,6 @@ export interface MarketConfirmBatchBidResponse {
   };
 }
 
-export interface CAT20TokenStats {
-  tokenId?: string;
-  volume?: string;
-  volume30d?: string;
-  volume24h?: string;
-  volume7d?: string;
-  volume6h?: string;
-  price?: number;
-  price6h?: number;
-  price24h?: number;
-  price7d?: number;
-  price30d?: number;
-  name?: string;
-  symbol?: string;
-  decimals?: number;
-  max?: number;
-  volumeToken?: string;
-  volumeToken30d?: string;
-  volumeToken24h?: string;
-  volumeToken7d?: string;
-  volumeToken6h?: string;
-}
-
 export interface FractalSupply {
   blocks?: number;
   supply?: number;

@@ -19,6 +19,7 @@ paths:
   /v3/market/alkanes/auction/alkanes_types:
     post:
       operationId: getAlkanesTypes
+      x-sidebar-label: "Market statistics"
       summary: List Alkanes market statistics by time window
       description: Returns paginated market metrics for Alkanes tickers, including current price, price change, BTC and asset volume, market cap, holder count, transaction count, warning flag, and the BTC price used for valuation.
       tags:
@@ -105,6 +106,7 @@ paths:
   /v3/market/alkanes/auction/alkanes_types_specified:
     post:
       operationId: getAlkanesTypesSpecified
+      x-sidebar-label: "Statistics by ticker"
       summary: Get market statistics for one Alkanes ticker
       description: Returns ticker-level marketplace metrics such as symbol, current price, price change, BTC and asset volume, cap in BTC and USD, deploy time, holder count, inscription number, transaction count, and warning flag.
       tags:
@@ -180,6 +182,7 @@ paths:
   /v3/market/alkanes/auction/list:
     post:
       operationId: getAlkanesAuctionList
+      x-sidebar-label: "Search listings"
       summary: Search active and ended Alkanes marketplace listings
       description: Returns paginated listing records with auction id, inscription id and number, seller address, price, ticker, amount, unit price, market type, and latest listing timestamp context.
       tags:
@@ -336,6 +339,7 @@ paths:
   /v3/market/alkanes/auction/actions:
     post:
       operationId: getAlkanesAuctionActions
+      x-sidebar-label: "Marketplace activity"
       summary: List Alkanes marketplace listing, sale, and update events
       description: Returns paginated marketplace activity records, including auction id, inscription id and number, event type, price, from/to addresses, timestamp, confirmation count, newest-event marker, and asset-specific metadata.
       tags:
@@ -546,6 +550,7 @@ paths:
   /v3/market/alkanes/auction/create_put_on:
     post:
       operationId: createAlkanesPutOn
+      x-sidebar-label: "Create listing PSBT"
       summary: Create an Alkanes listing PSBT
       description: Builds a fixed-price listing draft for an Alkanes UTXO and returns an auction id, PSBT, and wallet sign indexes. Review the asset UTXO, total price, unit price, public key, and receiving address before use.
       tags:
@@ -573,6 +578,7 @@ paths:
   /v3/market/alkanes/auction/confirm_put_on:
     post:
       operationId: confirmAlkanesPutOn
+      x-sidebar-label: "Publish listing"
       summary: Publish a signed Alkanes listing
       description: Confirms the signed listing PSBT for an auction id and activates the marketplace listing. The response is empty on success, so callers should verify state through listing or activity queries after confirmation.
       tags:
@@ -601,6 +607,7 @@ paths:
   /v3/market/alkanes/auction/create_bid_prepare:
     post:
       operationId: createAlkanesBidPrepare
+      x-sidebar-label: "Estimate purchase fees"
       summary: Estimate fees and balance for an Alkanes purchase
       description: Calculates purchase preparation data for an auction id and bid price, including service fee, real fee, fee rate, estimated transaction size, inscription satoshi value, network fee rate, available balance, and total balance.
       tags:
@@ -628,6 +635,7 @@ paths:
   /v3/market/alkanes/auction/create_bid:
     post:
       operationId: createAlkanesBid
+      x-sidebar-label: "Create purchase PSBT"
       summary: Create an Alkanes purchase PSBT
       description: Builds a purchase order for a listing and returns bid id, bid PSBT, optional auction-mode PSBT fields, platform fee, network fee, fee rate, inscription value, and wallet sign indexes.
       tags:
@@ -655,6 +663,7 @@ paths:
   /v3/market/alkanes/auction/confirm_bid:
     post:
       operationId: confirmAlkanesBid
+      x-sidebar-label: "Submit purchase"
       summary: Submit a signed Alkanes purchase
       description: Confirms the signed bid PSBT for an auction and bid id, then returns the settlement transaction id when the purchase is accepted.
       tags:
@@ -683,6 +692,7 @@ paths:
   /v3/market/alkanes/auction/create_put_off:
     post:
       operationId: createAlkanesPutOff
+      x-sidebar-label: "Create delisting PSBT"
       summary: Create an Alkanes delisting PSBT
       description: Builds a delisting transaction for an auction id and returns PSBT, estimated transaction size, BTC sign indexes, and asset sign indexes. Optional inputs support custom UTXOs, RBF, off-chain cancellation, and multi-address wallets.
       tags:
@@ -710,6 +720,7 @@ paths:
   /v3/market/alkanes/auction/confirm_put_off:
     post:
       operationId: confirmAlkanesPutOff
+      x-sidebar-label: "Remove listing"
       summary: Remove a listed Alkanes order
       description: Confirms the signed delisting PSBT for an auction id and returns the cancellation transaction id when removal is completed or accepted.
       tags:
@@ -738,6 +749,7 @@ paths:
   /v3/market/alkanes/auction/create_modify_price:
     post:
       operationId: createAlkanesModifyPrice
+      x-sidebar-label: "Create price update PSBT"
       summary: Create an Alkanes listing price-update PSBT
       description: Builds a PSBT to change an existing listing's total and unit price, returning the signing payload and sign indexes for the specified auction id.
       tags:
@@ -765,6 +777,7 @@ paths:
   /v3/market/alkanes/auction/confirm_modify_price:
     post:
       operationId: confirmAlkanesModifyPrice
+      x-sidebar-label: "Apply price update"
       summary: Apply a signed Alkanes listing price update
       description: Confirms the signed price-update PSBT for an auction id and updates the active listing price. The response is empty on success, so use listing or activity queries to verify the new price.
       tags:
@@ -793,6 +806,7 @@ paths:
   /v3/market/alkanes/auction/create_batch_put_on:
     post:
       operationId: createAlkanesBatchPutOn
+      x-sidebar-label: "Create batch listing PSBT"
       summary: Create batch Alkanes listing PSBTs
       description: Builds a batch listing draft for multiple Alkanes UTXOs and returns batch auction id, PSBT, and sign indexes. Verify every UTXO, shared unit price, public key, and receiving address before signing.
       tags:
@@ -821,6 +835,7 @@ paths:
   /v3/market/alkanes/auction/confirm_batch_put_on:
     post:
       operationId: confirmAlkanesBatchPutOn
+      x-sidebar-label: "Publish batch listings"
       summary: Publish signed batch Alkanes listings
       description: Confirms a signed batch listing PSBT and activates all listings in the batch. The response is empty on success, so verify the published listings through list or activity endpoints.
       tags:
@@ -850,6 +865,7 @@ paths:
   /v3/market/alkanes/auction/create_batch_bid_prepare:
     post:
       operationId: createAlkanesBatchBidPrepare
+      x-sidebar-label: "Estimate batch purchase fees"
       summary: Estimate fees and validate listings for batch Alkanes purchases
       description: Calculates batch purchase preparation data for auction ids, including service fee, real fee, fee rate, estimated transaction size, network fee rate, available balance, valid auction ids, and invalid auction ids.
       tags:
@@ -878,6 +894,7 @@ paths:
   /v3/market/alkanes/auction/create_batch_bid:
     post:
       operationId: createAlkanesBatchBid
+      x-sidebar-label: "Create batch purchase PSBT"
       summary: Create batch Alkanes purchase PSBTs
       description: Builds batch purchase orders for multiple auction ids and bid prices, returning bid id, bid PSBT, platform fee, network fee, fee rate, and wallet sign indexes.
       tags:
@@ -906,6 +923,7 @@ paths:
   /v3/market/alkanes/auction/confirm_batch_bid:
     post:
       operationId: confirmAlkanesBatchBid
+      x-sidebar-label: "Submit batch purchase"
       summary: Submit signed batch Alkanes purchases
       description: Confirms the signed batch bid PSBT and returns the settlement transaction id when the batch purchase is accepted.
       tags:

@@ -24,6 +24,7 @@ paths:
       tags:
         - BRC20-Prog Indexer
       operationId: getBestHeight
+      x-sidebar-label: "Indexer height"
       summary: "Get BRC20-Prog indexer height for Bitcoin"
       description: >-
         Returns the latest Bitcoin block height, block hash, and timestamp indexed for BRC20-Prog. Use it to check indexer freshness before querying 6-character BRC20-Prog tickers; this API is Bitcoin-only and should not be used for Classic BRC-20 tokens.
@@ -56,6 +57,7 @@ paths:
       tags:
         - BRC20-Prog Indexer
       operationId: getTickerList
+      x-sidebar-label: "Ticker list"
       summary: "List indexed 6-character BRC20-Prog tickers"
       description: >-
         Returns paginated BRC20-Prog ticker symbols with indexed height, total, and start offset. Use this for Bitcoin-only BRC20-Prog discovery and route Classic BRC-20 tickers such as ordi to the /v1/indexer/brc20/* APIs.
@@ -106,6 +108,7 @@ paths:
       tags:
         - BRC20-Prog Indexer
       operationId: getTickerStatus
+      x-sidebar-label: "Ticker status list"
       summary: "Search BRC20-Prog ticker status and mint state"
       description: >-
         Returns BRC20-Prog status records including deployment inscription, max supply, minted supply, holder and transaction counts, decimals, and mint completion state. Use it for 6-character ticker discovery, filtering, and ranking on Bitcoin; indexer data may lag new block confirmations.
@@ -182,6 +185,7 @@ paths:
       tags:
         - BRC20-Prog Indexer
       operationId: getTickerInfo
+      x-sidebar-label: "Ticker info"
       summary: "Get BRC20-Prog ticker deployment and supply details"
       description: >-
         Returns Bitcoin-only BRC20-Prog ticker metadata such as original tick, max supply, remaining supply, burned supply, decimals, deploy inscription, creator address, and mint counters. Use it for 6-character BRC20-Prog detail pages; Classic BRC-20 tickers are not supported here.
@@ -221,6 +225,7 @@ paths:
       tags:
         - BRC20-Prog Indexer
       operationId: getTickerHistoryByHeight
+      x-sidebar-label: "History by height"
       summary: "List BRC20-Prog events indexed at a Bitcoin height"
       description: >-
         Returns BRC20-Prog history events for one block height with ticker, transaction, event type, inscription, amount, balance, and validity data. Use it for Bitcoin block-level audits or backfills; data is read-only indexer state and may depend on confirmation progress.
@@ -279,6 +284,7 @@ paths:
       tags:
         - BRC20-Prog Indexer
       operationId: getTickerHolders
+      x-sidebar-label: "Holders by ticker"
       summary: "List holders and balances for a BRC20-Prog ticker"
       description: >-
         Returns holder addresses with overall, transferable, and available balances for a 6-character BRC20-Prog ticker. Use it for holder distribution and balance checks on Bitcoin; it reports indexed balances only and performs no signing or transfer action.
@@ -335,6 +341,7 @@ paths:
       tags:
         - BRC20-Prog Indexer
       operationId: getTickerHistory
+      x-sidebar-label: "History by ticker"
       summary: "List BRC20-Prog history events for a ticker"
       description: >-
         Returns deploy, mint, transfer, and BRC20-Prog withdrawal events for a 6-character ticker, including event type, block height, transaction, inscription, amount, balance, and validity fields. Use it for token activity feeds or reconciliation; this is read-only Bitcoin indexer data.
@@ -410,6 +417,7 @@ paths:
       tags:
         - BRC20-Prog Indexer
       operationId: getAddressTokenSummary
+      x-sidebar-label: "Balances by address"
       summary: "List an address's BRC20-Prog token balances"
       description: >-
         Returns paginated BRC20-Prog balance summaries for a Bitcoin address, including indexed height, module height, ticker, decimals, overall, transferable, available, and module balances. Use it for Bitcoin-only wallet portfolio views; Classic BRC-20 balances require the brc20 indexer API.
@@ -472,6 +480,7 @@ paths:
       tags:
         - BRC20-Prog Indexer
       operationId: getAddressTickerBalance
+      x-sidebar-label: "Address balance by ticker"
       summary: "Get an address's current BRC20-Prog ticker balance"
       description: >-
         Returns current indexed balance fields for one Bitcoin address and 6-character BRC20-Prog ticker, including overall, transferable, available, module balance, decimals, and self-mint state. Use it before displaying or preparing token actions; it reports state only and does not verify spend authorization.
@@ -517,6 +526,7 @@ paths:
       tags:
         - BRC20-Prog Indexer
       operationId: getAddressTickerBalanceByHeight
+      x-sidebar-label: "Address ticker balance at height"
       summary: "Get an address's BRC20-Prog ticker balance at a height"
       description: >-
         Returns historical indexed balance fields for one Bitcoin address and 6-character BRC20-Prog ticker at a specific block height, including overall, transferable, and available balances. Use it for snapshots or reconciliation; historical balances may not reflect current spendability.
@@ -568,6 +578,7 @@ paths:
       tags:
         - BRC20-Prog Indexer
       operationId: getAddressTickerTransferableInscriptions
+      x-sidebar-label: "Transferable inscriptions"
       summary: "List transferable BRC20-Prog inscriptions for an address"
       description: >-
         Returns unused transferable inscriptions for a Bitcoin address and 6-character BRC20-Prog ticker, including inscription id, amount, holder script or wallet, event id, block height, and inscription number. Use it to choose transfer candidates; callers must still validate UTXO ownership, confirmation policy, and signing context before spending.

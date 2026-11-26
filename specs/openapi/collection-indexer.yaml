@@ -21,6 +21,7 @@ paths:
       tags:
         - Collection Indexer
       operationId: getCollectionStatus
+      x-sidebar-label: "Indexer status"
       summary: "Get collection indexer height and collection count"
       description: >-
         Returns newest chain height, last handled indexer height, and total indexed collections. Use it to check freshness before reading collection metadata, holder lists, address collection summaries, or item ownership; this indexer is separate from marketplace listing and order state.
@@ -62,6 +63,7 @@ paths:
       tags:
         - Collection Indexer
       operationId: getCollectionInfo
+      x-sidebar-label: "Collection info"
       summary: "Get collection supply and holder summary"
       description: >-
         Returns a collection's indexed height, holder count, and total item count, optionally at a specified height. Use it for lightweight collection detail headers or historical snapshots; marketplace floor, listings, and order activity are not included.
@@ -114,6 +116,7 @@ paths:
       tags:
         - Collection Indexer
       operationId: getCollectionHolders
+      x-sidebar-label: "Collection holders"
       summary: "List collection holders and item counts"
       description: >-
         Returns paginated holder addresses and item counts for a collection, optionally at a specified height. Use it for holder distribution views and ownership analytics; it reflects indexed ownership only and does not include marketplace listing state.
@@ -182,6 +185,7 @@ paths:
       tags:
         - Collection Indexer
       operationId: getAddressCollectionList
+      x-sidebar-label: "Collections by address"
       summary: "List collections owned by an address"
       description: >-
         Returns paginated collection summaries for an address, including owned item count, collection name, icon inscription and URL, content type, supply, collection id, description, and social links. Use it for wallet collection portfolios; it does not report listing or order availability.
@@ -268,6 +272,7 @@ paths:
       tags:
         - Collection Indexer
       operationId: getCollectionItems
+      x-sidebar-label: "Collection items"
       summary: "List indexed items in a collection"
       description: >-
         Returns paginated collection item records with inscription id and number, item and inscription names, content metadata, indexed height, holder count, and collection totals. Use it for collection item grids or metadata backfills; content bodies may be untrusted and should be rendered safely.
@@ -356,6 +361,7 @@ paths:
       tags:
         - Collection Indexer
       operationId: getAddressCollectionSummary
+      x-sidebar-label: "Address collection summary"
       summary: "Get an address's ownership summary for a collection"
       description: >-
         Returns the address's item count plus collection name, icon, supply, collection id, description, and social links for one collection. Use it for wallet collection detail cards or ownership verification; marketplace order state and listing prices are not included.
@@ -429,6 +435,7 @@ paths:
       tags:
         - Collection Indexer
       operationId: getAddressCollectionItems
+      x-sidebar-label: "Address collection items"
       summary: "List collection items owned by an address"
       description: >-
         Returns paginated item records that an address owns within a collection, including inscription id and number, item name, content metadata, indexed height, and collection totals. Use it for wallet item galleries; ownership can change with new transfers, so recheck before signing or listing transactions.
@@ -522,6 +529,7 @@ paths:
       tags:
         - Collection Indexer
       operationId: getInscriptionCollectionList
+      x-sidebar-label: "Collections by inscription"
       summary: "List collections containing an inscription"
       description: >-
         Returns collection summaries associated with an inscription, including name, icon, supply, collection id, description, and social links. Use it to map an inscription to curated collection contexts; inscription ids or numbers may resolve differently across networks, so match the request to the intended chain.

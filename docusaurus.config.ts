@@ -4,8 +4,12 @@ import type * as Preset from "@docusaurus/preset-classic";
 
 // This runs in Node.js - Don't use client-side code here (browser APIs, JSX...)
 
-const releaseVersion = process.env.OPENAPI_VERSION || "dev";
-const shortGitCommit = (process.env.GITHUB_SHA || "unknown").slice(0, 7);
+const releaseVersion = process.env.OPENAPI_VERSION;
+const gitCommit = process.env.GITHUB_SHA;
+const footerBuildLabel = [
+  releaseVersion && releaseVersion !== "unknown" ? `Version ${releaseVersion}` : "",
+  gitCommit && gitCommit !== "unknown" ? gitCommit.slice(0, 7) : "",
+].filter(Boolean).join(" · ");
 
 const config: Config = {
   title: "UniSat API Documentation",
@@ -24,6 +28,7 @@ const config: Config = {
   // For GitHub pages deployment, it is often '/<projectName>/'
   baseUrl: "/",
   staticDirectories: ["static", ".generated/static"],
+  customFields: { footerBuildLabel },
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
@@ -100,10 +105,9 @@ const config: Config = {
       ],
     },
     footer: {
-      style: "dark",
       links: [
         {
-          title: "Docs",
+          title: "Documentation",
           items: [
             {
               label: "Open API",
@@ -113,6 +117,15 @@ const config: Config = {
               label: "UniSat Wallet Docs",
               to: "/docs/wallet-api/intro",
             },
+            {
+              label: "GitHub",
+              href: "https://github.com/unisat-wallet/unisat-dev-docs",
+            },
+          ],
+        },
+        {
+          title: "Developer Support",
+          items: [
             {
               label: "FAQ",
               to: "/docs/developer-support/faq",
@@ -131,28 +144,6 @@ const config: Config = {
             },
           ],
         },
-        // {
-        //   title: "Community",
-        //   items: [
-        //     {
-        //       label: "GitHub",
-        //       href: "https://github.com/unisat-wallet/unisat-dev-docs",
-        //     },
-        //   ],
-        // },
-        {
-          title: "More",
-          items: [
-            // {
-            //   label: "Blog",
-            //   to: "/blog",
-            // },
-            {
-              label: "GitHub",
-              href: "https://github.com/unisat-wallet/unisat-dev-docs",
-            },
-          ],
-        },
         {
           title: "Legal",
           items: [
@@ -167,11 +158,12 @@ const config: Config = {
           ],
         },
       ],
-      copyright: `Copyright © ${new Date().getFullYear()} UniSat. Version ${releaseVersion} · ${shortGitCommit}`,
+      copyright: `© ${new Date().getFullYear()} UniSat`,
     },
     prism: {
       theme: prismThemes.github,
       darkTheme: prismThemes.dracula,
+      additionalLanguages: ["http"],
     },
   } satisfies Preset.ThemeConfig,
 };

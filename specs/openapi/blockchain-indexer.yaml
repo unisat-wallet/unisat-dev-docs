@@ -28,6 +28,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getBlockchainInfo
+      x-sidebar-label: "Blockchain status"
       summary: Get chain tip, header height, and best block metadata
       description: >-
         Returns the indexed blockchain state, including chain name, block and header heights, best and previous block hashes, median time, and accumulated chainwork.
@@ -53,23 +54,32 @@ paths:
                     type: string
                     example: OK
                   data:
+                    description: Indexed blockchain state.
                     properties:
                       chain:
                         type: string
+                        description: Chain name.
                       blocks:
                         type: integer
+                        description: Indexed block height.
                       headers:
                         type: integer
+                        description: Indexed header height.
                       bestBlockHash:
                         type: string
+                        description: Hash of the best block.
                       prevBlockHash:
                         type: string
+                        description: Hash of the previous block.
                       medianTime:
                         type: integer
+                        description: Median block time.
                       chainwork:
                         type: string
+                        description: Accumulated chainwork.
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -79,6 +89,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getRecommendedFees
+      x-sidebar-label: "Recommended fee rates"
       summary: Get recommended Bitcoin fee rates by confirmation target
       description: >-
         Returns fee-rate estimates for fastest, half-hour, hour, economy, and minimum confirmation targets, together with the update timestamp for freshness checks.
@@ -119,6 +130,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -128,6 +140,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getBlockByHeight
+      x-sidebar-label: "Block by height"
       summary: Get block metadata by height
       description: >-
         Returns indexed block details such as hash links, transaction count, satoshi totals, coinbase output, timestamp, bits, and serialized size for the requested height.
@@ -164,6 +177,7 @@ paths:
                     $ref: "#/components/schemas/BlockInfo"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -173,6 +187,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getBlockById
+      x-sidebar-label: "Block by hash"
       summary: Get block metadata by block hash
       description: >-
         Returns the same indexed block model as height lookup, including chain links, transaction count, value totals, timestamp, difficulty bits, and block size.
@@ -208,6 +223,7 @@ paths:
                     $ref: "#/components/schemas/BlockInfo"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -217,6 +233,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getTxsByBlockHeight
+      x-sidebar-label: "Block transactions"
       summary: List indexed transactions in a block by height
       description: >-
         Returns paginated transaction summaries for a block, including each transaction's input/output counts, satoshi totals, locktime, size, block position, confirmations, and timestamp.
@@ -275,6 +292,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -284,6 +302,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getTxById
+      x-sidebar-label: "Transaction by txid"
       summary: Get indexed transaction summary by txid
       description: >-
         Returns transaction-level metadata such as input/output counts, satoshi totals, locktime, size, witness offset, block hash, confirmations, and timestamp.
@@ -319,6 +338,7 @@ paths:
                     $ref: "#/components/schemas/TxHistoryItem"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -328,6 +348,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getInputsByTxId
+      x-sidebar-label: "Transaction inputs"
       summary: List inputs spent by a transaction
       description: >-
         Returns paginated previous-output records consumed by a transaction, including address, script data, satoshi value, inscription metadata, source txid, vout, and indexed height fields.
@@ -424,6 +445,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -433,6 +455,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getOutputsByTxId
+      x-sidebar-label: "Transaction outputs"
       summary: List outputs created by a transaction
       description: >-
         Returns paginated transaction outputs with address, script type and scriptPubKey, satoshi value, inscription metadata, output index, and spend status fields when indexed.
@@ -508,6 +531,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -517,6 +541,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getRawTxById
+      x-sidebar-label: "Raw transaction hex"
       summary: Get raw transaction hex by txid
       description: >-
         Returns the serialized raw transaction hex for decoding, verification, rebroadcast analysis, or offline transaction inspection.
@@ -552,6 +577,7 @@ paths:
                     type: string
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -562,6 +588,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getUtxoByTxIdAndIndex
+      x-sidebar-label: "UTXO by outpoint"
       x-doc-notes: |-
         ### Notes
 
@@ -741,6 +768,7 @@ paths:
 
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -751,6 +779,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: localPushTx
+      x-sidebar-label: "Broadcast transaction"
       summary: Broadcast one raw transaction to the selected network
       description: >-
         Submits a signed transaction hex and optional maximum fee rate for local validation and propagation. This can move funds or assets and requires explicit confirmation before execution.
@@ -785,6 +814,7 @@ paths:
                     type: string
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -795,6 +825,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: localPushTxs
+      x-sidebar-label: "Broadcast transactions"
       summary: Broadcast multiple raw transactions to the selected network
       description: >-
         Submits a batch of signed transaction hex strings with optional maximum fee rate. Use only after validating order, dependencies, fees, and target network because each transaction may move funds or assets.
@@ -831,6 +862,7 @@ paths:
                       type: string
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -841,6 +873,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getBalanceByAddress
+      x-sidebar-label: "Address balance"
       summary: Get address balance split by BTC and inscription UTXOs
       description: >-
         Returns confirmed and pending satoshi totals plus UTXO counts for the address, separated into overall, plain BTC, and inscription-related balances.
@@ -896,6 +929,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -905,6 +939,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getTxHistoryByAddress
+      x-sidebar-label: "Address transaction history"
       summary: List indexed transaction history for an address
       description: >-
         Returns paginated transaction summaries involving the address, including transaction size, satoshi totals, block position, confirmations, and timestamp for wallet activity views.
@@ -962,6 +997,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -971,6 +1007,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getUtxoDataByAddress
+      x-sidebar-label: "Address UTXOs"
       summary: List UTXOs for an address
       description: >-
         Returns paginated UTXO records with confirmed, unconfirmed, and unconfirmed-spend totals. Each UTXO includes address, satoshi value, script data, inscriptions, RBF marker, and output coordinates.
@@ -1034,6 +1071,7 @@ paths:
                           $ref: "#/components/schemas/UTXO"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -1044,6 +1082,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getAllUtxoDataByAddress
+      x-sidebar-label: "All address UTXOs"
       summary: List all indexed UTXOs for an address
       description: >-
         Returns paginated UTXO records and aggregate totals across confirmed, unconfirmed, and unconfirmed-spend states, including inscription and low-fee metadata when indexed.
@@ -1107,6 +1146,7 @@ paths:
                           $ref: "#/components/schemas/UTXO"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -1117,6 +1157,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getAvailableBalanceByAddress
+      x-sidebar-label: "UTXO availability balances"
       summary: Get address balance grouped by available and unavailable UTXOs
       description: >-
         Returns total, available, and unavailable satoshi balances with matching UTXO counts. The optional low-fee flag controls whether UTXOs below 1 sat/vB are included in availability calculations.
@@ -1171,6 +1212,7 @@ paths:
                         type: integer
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -1181,6 +1223,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: getAvailableUtxoDataByAddress
+      x-sidebar-label: "Available UTXOs"
       summary: List available UTXOs for an address
       description: >-
         Returns paginated UTXOs considered available for spending, along with aggregate confirmed, unconfirmed, and unconfirmed-spend totals. The low-fee option controls inclusion of UTXOs below 1 sat/vB.
@@ -1251,6 +1294,7 @@ paths:
                           $ref: "#/components/schemas/UTXO"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -1261,6 +1305,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: prepareUnlockUnavailableUtxos
+      x-sidebar-label: "Prepare UTXO unlock"
       summary: Prepare a message for unlocking unavailable UTXOs
       description: >-
         Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Validates the requested UTXOs against the address's current lock state and returns the exact message and nonce that the wallet must sign. This step does not change UTXO availability. Unlocking is a high-risk action because protocol-asset UTXOs may subsequently be selected and spent as BTC.
@@ -1292,6 +1337,7 @@ paths:
                 $ref: "#/components/schemas/PrepareUTXOLockStateResponse"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -1302,6 +1348,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: unlockUnavailableUtxos
+      x-sidebar-label: "Unlock UTXOs"
       summary: Unlock unavailable UTXOs after wallet authorization
       description: >-
         Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Verifies the signed prepare message and marks eligible UTXOs as manually unlocked. Unlocked UTXOs may appear in available balance and available UTXO results even when they carry inscriptions or other protocol assets. Spending such UTXOs can transfer or destroy those assets; obtain explicit user confirmation before submitting this request.
@@ -1333,6 +1380,7 @@ paths:
                 $ref: "#/components/schemas/UTXOLockStateMutationResponse"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -1343,6 +1391,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: prepareLockUnavailableUtxos
+      x-sidebar-label: "Prepare UTXO lock"
       summary: Prepare a message for locking UTXOs
       description: >-
         Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Validates the requested UTXOs against the address's current unlock state and returns the exact message and nonce that the wallet must sign. This step does not change UTXO availability. Use the returned values with the lock execution endpoint.
@@ -1374,6 +1423,7 @@ paths:
                 $ref: "#/components/schemas/PrepareUTXOLockStateResponse"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -1384,6 +1434,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: lockUnavailableUtxos
+      x-sidebar-label: "Lock UTXOs"
       summary: Lock UTXOs after wallet authorization
       description: >-
         Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Verifies the signed prepare message and restores eligible UTXOs to the protected or unavailable set. Locked UTXOs are excluded from normal available balance and coin-selection results, helping prevent accidental spending of inscriptions and other protocol assets.
@@ -1415,6 +1466,7 @@ paths:
                 $ref: "#/components/schemas/UTXOLockStateMutationResponse"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:
@@ -1425,6 +1477,7 @@ paths:
       tags:
         - Indexer-Blockchain
       operationId: checkUtxosUnlocked
+      x-sidebar-label: "Manual UTXO unlock status"
       summary: Check whether UTXOs were manually unlocked
       description: >-
         Available only on Bitcoin Mainnet and Fractal Bitcoin Mainnet. Returns one boolean for each submitted outpoint, in the same order. true means the UTXO is present in the manual unlock history; false means it is not. This endpoint checks manual unlock state only and does not independently prove that a UTXO is unspent or currently spendable.
@@ -1462,6 +1515,7 @@ paths:
                 $ref: "#/components/schemas/CheckUTXOUnlockResponse"
         "403":
           description: Invalid API key or malformed Authorization header (gateway code -2002).
+          x-doc-shared-error: true
           content:
             application/json:
               schema:

@@ -1,3 +1,5 @@
+const { resolveOpenApiReference } = require("./openapi-spec");
+
 const constraints = {
   format: "Format",
   enum: "Allowed values",
@@ -15,20 +17,9 @@ const constraints = {
   pattern: "Pattern",
 };
 
-function resolveSchema(schema, schemas, seen = new Set()) {
-  if (!schema?.$ref) return schema;
-  const prefix = "#/components/schemas/";
-  const { $ref } = schema;
-  if (!$ref.startsWith(prefix) || seen.has($ref)) return undefined;
-  seen.add($ref);
-  const name = $ref.slice(prefix.length).replace(/~1/g, "/").replace(/~0/g, "~");
-  return Object.hasOwn(schemas, name) ? resolveSchema(schemas[name], schemas, seen) : undefined;
-}
-
-function schemaType(input, schemas) {
-  const schema = resolveSchema(input, schemas) || {};
+function schemaType(schema, bundle) {
   if (schema.type === "array" || schema.items) {
-    const item = resolveSchema(schema.items, schemas);
+    const item = resolveOpenApiReference(schema.items, bundle);
     const type = typeof item?.type === "string" ? item.type : item?.properties ? "object" : "any";
     return type === "array" ? "array" : `${type}[]`;
   }
@@ -53,27 +44,29 @@ function schemaDetails(schema) {
   return details;
 }
 
-function parameterRows(parameters, schemas) {
+function parameterRows(parameters, bundle) {
   return parameters.map((parameter) => {
-    const schema = resolveSchema(parameter.schema, schemas) || {};
+    const media = Object.values(parameter.content || {})[0];
+    const schema = resolveOpenApiReference(parameter.schema ?? media?.schema, bundle) || {};
+    const exampleSource = media ?? parameter;
     return {
       field: parameter.name,
-      type: schemaType(schema, schemas),
+      type: schemaType(schema, bundle),
       required: parameter.in === "path" || Boolean(parameter.required),
       description: parameter.description || schema.description,
       details: schemaDetails({
         ...schema,
-        example: Object.hasOwn(parameter, "example") ? parameter.example : schema.example,
+        example: Object.hasOwn(exampleSource, "example") ? exampleSource.example : schema.example,
       }),
     };
   });
 }
 
-function schemaRows(input, schemas, direction) {
+function schemaRows(input, bundle, direction) {
   const rows = [];
 
-  function visit(input, field, required, ancestors, extraDetails = []) {
-    const schema = resolveSchema(input, schemas);
+  function visit(input, { field, name, parentIndex }, required, ancestors, extraDetails = []) {
+    const schema = resolveOpenApiReference(input, bundle);
     if (!schema || (direction === "request" ? schema.readOnly : schema.writeOnly)) return;
     const recursive = ancestors.includes(schema);
     const choices = schema.oneOf || schema.anyOf || [];
@@ -84,23 +77,36 @@ function schemaRows(input, schemas, direction) {
       details.push({ label: "Variants", value: schema.oneOf ? "Exactly one option" : "One or more options" });
     }
     const plainObjectItem = field.endsWith("[]") && properties.length && !recursive;
+    let childParentIndex = parentIndex;
     if ((field && !plainObjectItem) || (!properties.length && !parts.length) || details.length || schema.description) {
-      rows.push({
+      const row = {
         field: field || "Body",
-        type: schemaType(schema, schemas),
+        type: schemaType(schema, bundle),
         required,
         description: recursive ? schema.description || "Recursive reference." : schema.description,
         details,
-      });
+      };
+      if (direction === "response") {
+        row.parentIndex = parentIndex ?? null;
+        row.name = name;
+      }
+      childParentIndex = rows.length;
+      rows.push(row);
     }
     if (recursive) return;
     const next = [...ancestors, schema];
-    const child = (name) => field ? `${field}.${name}` : name;
+    const child = (name) => ({
+      field: field ? `${field}.${name}` : name,
+      name,
+      parentIndex: childParentIndex,
+    });
 
-    for (const part of parts) visit(part, field, required, next);
+    for (const part of parts) {
+      visit(part, { field, name, parentIndex: childParentIndex }, required, next);
+    }
     for (const [name, definition] of properties) {
       const options = choices.flatMap((choice, index) =>
-        resolveSchema(choice, schemas)?.required?.includes(name) ? [`Option ${index + 1}`] : [],
+        resolveOpenApiReference(choice, bundle)?.required?.includes(name) ? [`Option ${index + 1}`] : [],
       );
       const isRequired = schema.required?.includes(name) || false;
       visit(
@@ -112,7 +118,7 @@ function schemaRows(input, schemas, direction) {
       );
     }
     for (const [index, choice] of choices.entries()) {
-      const variant = resolveSchema(choice, schemas);
+      const variant = resolveOpenApiReference(choice, bundle);
       if (!variant) continue;
       const option = `Option ${index + 1}`;
       const requirements = [];
@@ -121,14 +127,16 @@ function schemaRows(input, schemas, direction) {
       if (excluded.length) requirements.push({ label: "Excludes", value: excluded.join(", ") });
       visit(variant, child(option), undefined, next, requirements);
     }
-    if (schema.items) visit(schema.items, `${field}[]`, undefined, next);
+    if (schema.items) {
+      visit(schema.items, { field: `${field}[]`, name: "[]", parentIndex: childParentIndex }, undefined, next);
+    }
     if (typeof schema.additionalProperties === "object" && schema.additionalProperties) {
       visit(schema.additionalProperties, child("{key}"), undefined, next);
     }
   }
 
-  visit(input, "", undefined, []);
+  visit(input, { field: "", name: "Body" }, undefined, []);
   return rows;
 }
 
-module.exports = { resolveSchema, parameterRows, schemaRows };
+module.exports = { parameterRows, schemaRows };

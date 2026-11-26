@@ -24,7 +24,6 @@ import {
   BRC20HistoryItem,
   BRC20InfoItem,
   BlockInfo,
-  CAT20TokenStats,
   FractalSupply,
   InscriptionData,
   InscriptionEvent,
@@ -6828,104 +6827,6 @@ export class V1<
       void
     >({
       path: `/v1/public/address/rich-list`,
-      method: "GET",
-      query: query,
-      secure: true,
-      format: "json",
-      ...params,
-    });
-  /**
-   * @description Retrieves the current price of a CAT20 token. If the token has no trades in the last 30 days, it will return the last price.
-   *
-   * @tags CAT20-DEX
-   * @name GetTokenPrice
-   * @summary Get token price
-   * @request GET:/v1/cat20-dex/getTokenPrice
-   * @secure
-   */
-  getTokenPrice = (
-    query: {
-      /**
-       * tokenId
-       * @example "45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0"
-       */
-      tokenId: string;
-    },
-    params: RequestParams = {},
-  ) =>
-    this.request<
-      {
-        /** @format int32 */
-        code?: number;
-        /** @example "OK" */
-        msg?: string;
-        data?: {
-          askPrice?: number;
-          bidPrice?: number;
-          latestTradePrice?: number;
-          timestamp?: string;
-          height?: number;
-        };
-      },
-      void
-    >({
-      path: `/v1/cat20-dex/getTokenPrice`,
-      method: "GET",
-      query: query,
-      secure: true,
-      format: "json",
-      ...params,
-    });
-  /**
-   * @description Retrieves the market stats for all tokens which have trades in the last 30 days
-   *
-   * @tags CAT20-DEX
-   * @name GetMarketStats
-   * @summary Get the market stats
-   * @request GET:/v1/cat20-dex/getMarketStats
-   * @secure
-   */
-  getMarketStats = (
-    query?: {
-      /** The field to sort by ('volume', 'volume30d', 'volume7d', 'volume24h', 'volume6h') */
-      sortField?:
-        | "volume"
-        | "volume30d"
-        | "volume7d"
-        | "volume24h"
-        | "volume6h";
-      /**
-       * tokenId
-       * @example "45ee725c2c5993b3e4d308842d87e973bf1951f5f7a804b21e4dd964ecd12d6b_0"
-       */
-      tokenId?: string;
-      /**
-       * The offset to start from
-       * @example 0
-       */
-      offset?: number;
-      /**
-       * The limit of the stats (default 20, max 100)
-       * @example 20
-       */
-      limit?: number;
-    },
-    params: RequestParams = {},
-  ) =>
-    this.request<
-      {
-        /** @format int32 */
-        code?: number;
-        /** @example "OK" */
-        msg?: string;
-        data?: {
-          tokenStats?: CAT20TokenStats;
-          total?: number;
-        };
-      },
-      void
-    >({
-      path: `/v1/cat20-dex/getMarketStats`,
       method: "GET",
       query: query,
       secure: true,

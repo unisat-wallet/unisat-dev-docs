@@ -14,7 +14,7 @@
     "write-heading-ids": "docusaurus write-heading-ids",
     "typecheck": "tsc",
     "build:openapi-swagger": "node tools/build-swagger.js",
-    "build:openapi-doc": "node tools/build-doc.js",
+    "build:openapi-doc": "node tools/prepare-site.js --docs-only",
     "sdk:generate": "cd sdk/open-api && npm run generate",
     "sdk:build": "cd sdk/open-api && npm run build",
     "sdk": "npm run sdk:generate",
